@@ -22,7 +22,7 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--bg);color:va
 #sb-header h2{font-family:'Courier New',monospace;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
 .search-wrap{position:relative;}
 .search-wrap::before{content:"⌕";position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none;}
-#search{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:12.5px;padding:7px 10px 7px 30px;outline:none;font-family:inherit;transition:border-color .2s;}
+#search{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;padding:7px 10px 7px 30px;outline:none;font-family:inherit;transition:border-color .2s;}
 #search:focus{border-color:var(--accent);}
 #search::placeholder{color:var(--text3);}
 #search-hint{font-family:'Courier New',monospace;font-size:10px;color:var(--text3);margin-top:5px;text-align:right;}
@@ -159,7 +159,7 @@ td:first-child{font-weight:600;color:#93c5fd;min-width:110px;}
 
 /* ── Glosar ──────────────── */
 .glosar-search-wrap{display:flex;align-items:center;gap:12px;margin:16px 0;}
-#glosar-search{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;padding:8px 12px;outline:none;font-family:inherit;transition:border-color .2s;}
+#glosar-search{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:16px;padding:8px 12px;outline:none;font-family:inherit;transition:border-color .2s;}
 #glosar-search:focus{border-color:var(--accent);}
 #glosar-search::placeholder{color:var(--text3);}
 #glosar-count{font-family:'Courier New',monospace;font-size:11px;color:var(--text3);white-space:nowrap;}
