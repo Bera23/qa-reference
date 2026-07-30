@@ -1,0 +1,22 @@
+[
+  {"id":"s01","title":"1. Osnove i terminologija","icon":"📖","deo":"I"},
+  {"id":"s02","title":"2. SDLC i STLC","icon":"🔄","deo":"I"},
+  {"id":"s03","title":"3. Tipovi i nivoi testiranja","icon":"🧪","deo":"I"},
+  {"id":"s04","title":"4. Tehnike dizajniranja TC","icon":"🎯","deo":"I"},
+  {"id":"s05","title":"5. Pisanje test case-ova","icon":"📝","deo":"I"},
+  {"id":"s06","title":"6. Bug report i defect lifecycle","icon":"🐛","deo":"I"},
+  {"id":"s07","title":"7. Test plan i test strategija","icon":"📋","deo":"I"},
+  {"id":"s08","title":"8. Agile testiranje","icon":"⚡","deo":"I"},
+  {"id":"s09","title":"9. Test dokumentacija","icon":"📊","deo":"I"},
+  {"id":"s10","title":"10. Test okruzenje i podaci","icon":"🗄️","deo":"I"},
+  {"id":"s11","title":"11. Uvod u automatizaciju","icon":"🤖","deo":"II"},
+  {"id":"s12","title":"12. Selenium / WebDriver","icon":"🌐","deo":"II"},
+  {"id":"s13","title":"13. Page Object Model","icon":"🏗️","deo":"II"},
+  {"id":"s14","title":"14. API testiranje","icon":"🔌","deo":"II"},
+  {"id":"s15","title":"15. CI/CD integracija","icon":"⚙️","deo":"II"},
+  {"id":"s16","title":"16. Framework arhitektura","icon":"🔧","deo":"II"},
+  {"id":"s17","title":"17. Performance testing","icon":"📈","deo":"II"},
+  {"id":"s18","title":"18. Mobile testing (Appium)","icon":"📱","deo":"II"},
+  {"id":"s19","title":"19. AI u testiranju","icon":"🧠","deo":"II"},
+  {"id":"s20","title":"20. Glosar","icon":"📚","deo":"II"}
+]
