@@ -52,7 +52,7 @@ body{font-family:'Georgia','Times New Roman',serif;background:var(--bg);color:va
 #breadcrumb{font-size:12px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px;}
 #breadcrumb span{color:var(--accent2);}
 #topbar-right{display:flex;align-items:center;gap:5px;flex-shrink:0;position:relative;}
-.tb-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:12px;padding:5px 9px;border-radius:5px;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1;}
+.tb-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:12px;padding:5px 9px;border-radius:5px;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1;}
 .tb-btn:hover{border-color:var(--accent);color:var(--text);}
 
 /* ── Overflow menu ─────── */
