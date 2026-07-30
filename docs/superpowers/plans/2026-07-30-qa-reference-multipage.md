@@ -1327,14 +1327,14 @@ ${renderList(deoII)}
     BREADCRUMB: 'Pocetna',
     SIDEBAR_NAV: renderSidebarNav(sections, null),
     DEO_BANNER: '',
-    ACTIVE_ID: 'home',
+    ACTIVE_ID: 'index',
     ICON: '📘',
     TOPIC_TITLE: 'QA Referentni Dokument',
     SECTION_META: '',
     CONTENT: content,
     PREV_BTN: '<div></div>',
     NEXT_BTN: '<div></div>',
-    QA_PAGE_SCRIPT: `<script>window.QA_PAGE = ${JSON.stringify({ id: 'home', title: 'QA Referentni Dokument', prevUrl: null, nextUrl: sections[0].id + '.html' })};</script>`,
+    QA_PAGE_SCRIPT: `<script>window.QA_PAGE = ${JSON.stringify({ id: 'index', title: 'QA Referentni Dokument', prevUrl: null, nextUrl: sections[0].id + '.html' })};</script>`,
   });
 
   fs.writeFileSync(path.join(DIST_DIR, 'index.html'), html, 'utf8');
