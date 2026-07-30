@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📋 7. Test plan i test strategija — QA Referentni Dokument</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button id="menu-btn" onclick="toggleSidebar()">☰</button>
+<button id="read-exit" onclick="toggleReadingMode()">✕ Izlaz</button>
+<div id="share-toast">🔗 Link kopiran!</div>
+
+<div id="bm-panel">
+  <h3>Bookmarks <button id="bm-close" onclick="closeBmPanel()">✕</button></h3>
+  <div id="bm-list"><div id="bm-empty">Nema bookmarks-a.<br><small>Klikni ★ pored bilo kog podnaslova.</small></div></div>
+</div>
+
+<div id="sidebar">
+  <div id="sb-header">
+    <h2>QA Referentni Dokument</h2>
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="Pretrazi... (pritisni /)" oninput="searchDoc(this.value)">
+      <div id="search-results"></div>
+    </div>
+    <div id="search-hint">/ za pretragu &nbsp;·&nbsp; <span id="search-count"></span></div>
+  </div>
+  <nav id="nav">
+    <div class="nav-deo-wrap">
+      <span class="nav-deo">DEO I — Manualno</span>
+      <button class="nav-collapse" onclick="toggleGroup('g1')">▾</button>
+    </div>
+    <div class="nav-group" id="g1">
+      <a class="nav-item" href="s01.html"><span class="nav-icon">📖</span><span class="nav-item-text">1. Osnove i terminologija</span><span class="nav-check" onclick="toggleRead(event,'s01')"></span></a>
+      <a class="nav-item" href="s02.html"><span class="nav-icon">🔄</span><span class="nav-item-text">2. SDLC i STLC</span><span class="nav-check" onclick="toggleRead(event,'s02')"></span></a>
+      <a class="nav-item" href="s03.html"><span class="nav-icon">🧪</span><span class="nav-item-text">3. Tipovi i nivoi testiranja</span><span class="nav-check" onclick="toggleRead(event,'s03')"></span></a>
+      <a class="nav-item" href="s04.html"><span class="nav-icon">🎯</span><span class="nav-item-text">4. Tehnike dizajniranja TC</span><span class="nav-check" onclick="toggleRead(event,'s04')"></span></a>
+      <a class="nav-item" href="s05.html"><span class="nav-icon">📝</span><span class="nav-item-text">5. Pisanje test case-ova</span><span class="nav-check" onclick="toggleRead(event,'s05')"></span></a>
+      <a class="nav-item" href="s06.html"><span class="nav-icon">🐛</span><span class="nav-item-text">6. Bug report i defect lifecycle</span><span class="nav-check" onclick="toggleRead(event,'s06')"></span></a>
+      <a class="nav-item active" href="s07.html"><span class="nav-icon">📋</span><span class="nav-item-text">7. Test plan i test strategija</span><span class="nav-check" onclick="toggleRead(event,'s07')"></span></a>
+      <a class="nav-item" href="s08.html"><span class="nav-icon">⚡</span><span class="nav-item-text">8. Agile testiranje</span><span class="nav-check" onclick="toggleRead(event,'s08')"></span></a>
+      <a class="nav-item" href="s09.html"><span class="nav-icon">📊</span><span class="nav-item-text">9. Test dokumentacija</span><span class="nav-check" onclick="toggleRead(event,'s09')"></span></a>
+      <a class="nav-item" href="s10.html"><span class="nav-icon">🗄️</span><span class="nav-item-text">10. Test okruzenje i podaci</span><span class="nav-check" onclick="toggleRead(event,'s10')"></span></a>
+    </div>
+    <div class="nav-deo-wrap">
+      <span class="nav-deo">DEO II — Automatizacija</span>
+      <button class="nav-collapse" onclick="toggleGroup('g2')">▾</button>
+    </div>
+    <div class="nav-group" id="g2">
+      <a class="nav-item" href="s11.html"><span class="nav-icon">🤖</span><span class="nav-item-text">11. Uvod u automatizaciju</span><span class="nav-check" onclick="toggleRead(event,'s11')"></span></a>
+      <a class="nav-item" href="s12.html"><span class="nav-icon">🌐</span><span class="nav-item-text">12. Selenium / WebDriver</span><span class="nav-check" onclick="toggleRead(event,'s12')"></span></a>
+      <a class="nav-item" href="s13.html"><span class="nav-icon">🏗️</span><span class="nav-item-text">13. Page Object Model</span><span class="nav-check" onclick="toggleRead(event,'s13')"></span></a>
+      <a class="nav-item" href="s14.html"><span class="nav-icon">🔌</span><span class="nav-item-text">14. API testiranje</span><span class="nav-check" onclick="toggleRead(event,'s14')"></span></a>
+      <a class="nav-item" href="s15.html"><span class="nav-icon">⚙️</span><span class="nav-item-text">15. CI/CD integracija</span><span class="nav-check" onclick="toggleRead(event,'s15')"></span></a>
+      <a class="nav-item" href="s16.html"><span class="nav-icon">🔧</span><span class="nav-item-text">16. Framework arhitektura</span><span class="nav-check" onclick="toggleRead(event,'s16')"></span></a>
+      <a class="nav-item" href="s17.html"><span class="nav-icon">📈</span><span class="nav-item-text">17. Performance testing</span><span class="nav-check" onclick="toggleRead(event,'s17')"></span></a>
+      <a class="nav-item" href="s18.html"><span class="nav-icon">📱</span><span class="nav-item-text">18. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
+      <a class="nav-item" href="s19.html"><span class="nav-icon">🧠</span><span class="nav-item-text">19. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
+      <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+    </div>
+  </nav>
+</div>
+
+<div id="main">
+
+<div id="topbar">
+  <div id="topbar-left">
+    <span id="topbar-meta">QA Ref · v2.0 · 2026</span>
+    <span id="breadcrumb"><span>📋 7. Test plan i test strategija</span></span>
+  </div>
+  <div id="topbar-right">
+    <button class="tb-btn" onclick="toggleQuickRef()" title="Quick Reference">⚡</button>
+    <button class="tb-btn" onclick="openBmPanel()" title="Bookmarks">★ <span id="bm-count" style="display:none">0</span></button>
+    <button class="tb-btn" onclick="toggleReadingMode()" id="read-btn" title="Rezim citanja">🔖</button>
+    <button class="tb-btn" id="theme-btn" onclick="toggleTheme()" title="Tema">☀</button>
+    <button class="tb-btn" id="overflow-btn" onclick="toggleOverflow()" title="Vise opcija">···</button>
+    <div id="overflow-menu">
+      <div class="ov-label">Velicina fonta</div>
+      <div class="ov-row">
+        <button class="fs-btn" onclick="changeFont(-1)">A−</button>
+        <span class="fs-display" id="fs-display">–</span>
+        <button class="fs-btn" onclick="changeFont(1)">A+</button>
+      </div>
+      <div class="ov-divider"></div>
+      <button class="ov-item" onclick="shareSection()">🔗 Kopiraj link na stranicu</button>
+      <button class="ov-item" onclick="printDoc()">🖨 Stampa / Export PDF</button>
+    </div>
+  </div>
+</div>
+
+  <div id="content">
+<div class="deo-banner">DEO I — MANUALNO TESTIRANJE</div>
+<div class="section" id="s07">
+<h1 class="sec-title" id="t-s07">📋 7. Test plan i test strategija<span class="read-badge">✓ Procitano</span></h1>
+<div class="section-meta"><span class="read-time">⏱ ~2 min citanja</span><button class="mark-read-btn" id="mrb-s07" onclick="markRead('s07')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">7.1 Test strategija vs. Test plan</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Test strategija</td><td>Dokument visokog nivoa koji definise KAKO organizacija pristupa testiranju uopste. Pise se jednom. Autor: QA Lead.</td></tr>
+<tr><td>Test plan</td><td>Dokument nizeg nivoa koji definise STA, KO, KADA i KAKO se testira za konkretan release. Pise se za svaki release. Autor: QA inzenjer.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">7.2 Test plan — IEEE 829 struktura</h2>
+<div class="tbl-wrap tall"><table><thead><tr><th>Sekcija</th><th>Sadrzaj</th></tr></thead><tbody>
+<tr><td>1. Test Plan ID</td><td>Jedinstven identifikator dokumenta i verzija.</td></tr>
+<tr><td>2. Introduction</td><td>Svrha, scope i referentni dokumenti.</td></tr>
+<tr><td>3. Test Items</td><td>Sta se testira — feature-i, moduli, build verzija.</td></tr>
+<tr><td>4. Features to Test</td><td>Konkretne funkcionalnosti u scope-u.</td></tr>
+<tr><td>5. Features Not to Test</td><td>Eksplicitno isljucene oblasti i razlog — jednako vazno kao scope.</td></tr>
+<tr><td>6. Approach</td><td>Tehnika testiranja, tipovi testova, nivo automatizacije.</td></tr>
+<tr><td>7. Entry/Exit Criteria</td><td>Uslovi pocetka i zavrsetka testiranja za ovaj ciklus.</td></tr>
+<tr><td>8. Test Deliverables</td><td>Artefakti: test case-ovi, izvestaji, defect log.</td></tr>
+<tr><td>9. Testing Tasks</td><td>Konkretne aktivnosti, ko je odgovoran, redosled.</td></tr>
+<tr><td>10. Environmental Needs</td><td>Okruzenja, podaci, alati, pristup, mock servisi.</td></tr>
+<tr><td>11. Responsibilities</td><td>RACI matrica.</td></tr>
+<tr><td>12. Schedule</td><td>Vremenski plan — milestone-i i trajanje svake faze.</td></tr>
+<tr><td>13. Risks & Mitigation</td><td>Potencijalni rizici i planovi za ublazavanje.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">7.3 Risk-based testing</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Risk Score = Probability of Failure x Business Impact
+
+  Visok rizik   ->  testirati prvo i najdetaljnije
+  Srednji rizik ->  standardna pokrivenost
+  Nizak rizik   ->  smoke level ili izostaviti
+
+Faktori visokog rizika:
+  - Novi ili znacajno izmenjeni moduli
+  - Kriticna funkcionalna oblast (payment, auth, data migration)
+  - Oblasti sa istorijski visokim brojem defekata
+  - Kod bez code review-a ili unit testova</pre></div>
+<h2 class="sub-title">7.4 Test estimation — tehnike</h2>
+<h3 class="sub-sub-title">Work Breakdown Structure (WBS)</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  Pisanje test case-ova:     8h
+  Priprema test podataka:    2h
+  Setup okruzenja:           1h
+  Manuelno izvrsavanje:     16h
+  Regression:                4h
+  Defect reporting/retest:   3h
+  ----------------------------
+  Ukupno:                   34h</pre></div>
+<h3 class="sub-sub-title">Three-Point Estimation</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Expected = (O + 4M + P) / 6
+  O = Optimistic  |  M = Most likely  |  P = Pessimistic
+
+  Primer: O=3h, M=5h, P=10h  ->  Expected = 5.5h
+
+Uvek ukljuciti: review TC-ova, retest nakon bugfix-ova,
+regression, buffer za okruzenje (min 10-20%).</pre></div>
+<h2 class="sub-title">7.5 Test Closure Report</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Sekcija</th><th>Sadrzaj</th></tr></thead><tbody>
+<tr><td>Test Summary</td><td>Ukupan broj TC-ova, pass/fail/blocked/skipped, pokrivenost scope-a.</td></tr>
+<tr><td>Defect Metrics</td><td>Ukupno prijavljenih, otvorenih, zatvorenih, deferred. Distribucija po Severity-ju.</td></tr>
+<tr><td>Coverage</td><td>Koji zahtevi su pokriveni, koji nisu i zasto. RTM status.</td></tr>
+<tr><td>Open Defects</td><td>Lista otvorenih defekata sa Severity, Priority i obrazlozenjem.</td></tr>
+<tr><td>Lessons Learned</td><td>Sta je islo dobro, sta lose, sta promeniti u sledecem ciklusu.</td></tr>
+<tr><td>Go / No-Go preporuka</td><td>Eksplicitna QA preporuka za release na osnovu rezultata i rizika.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Go/No-Go primer:
+  '94% TC-ova prolazi (45/48). 0 Blocker, 0 Critical otvoreno.
+   2 Major defekta deferred uz saglasnost PM-a (BUG-089, BUG-092).
+   Regression suite: 100% pass.
+   QA preporuka: GO za release uz monitoring deferred defekata.'</pre></div>
+
+<div class="section-nav"><a class="snav-btn" href="s06.html"><span class="snav-label">← Prethodna</span><span class="snav-title">6. Bug report i defect lifecycle</span></a><a class="snav-btn next" href="s08.html"><span class="snav-label">Sledeca →</span><span class="snav-title">8. Agile testiranje</span></a></div>
+</div>
+  </div>
+
+<div id="quickref">
+  <h3>⚡ Quick Reference <button id="qr-close" onclick="toggleQuickRef()">✕</button></h3>
+  <div class="qr-grid">
+    <div class="qr-card"><h4>Severity nivoi</h4>
+      <div class="qr-item"><span class="qr-key">Blocker</span><span class="qr-tooltip">Sistem se ne moze koristiti. Testiranje je blokirano. Nema workaround-a.</span><span class="qr-val">Sistem ne radi, nema workaround-a</span></div>
+      <div class="qr-item"><span class="qr-key">Critical</span><span class="qr-tooltip">Kriticna funkcionalnost je slomljena. Korisnik ne moze da dovrsi kljucni task.</span><span class="qr-val">Kriticna funkcionalnost slomljena</span></div>
+      <div class="qr-item"><span class="qr-key">Major</span><span class="qr-tooltip">Znacajna funkcionalnost ostecena. Workaround postoji ali je neudoban.</span><span class="qr-val">Znacajna funkcionalnost ostecena</span></div>
+      <div class="qr-item"><span class="qr-key">Minor</span><span class="qr-tooltip">Manja funkcionalnost ostecena. Prihvatljiv workaround postoji.</span><span class="qr-val">Manja funkcionalnost, postoji workaround</span></div>
+      <div class="qr-item"><span class="qr-key">Trivial</span><span class="qr-tooltip">Estetski problem — UI, tekst, formatiranje. Nema funkcionalnog uticaja.</span><span class="qr-val">Estetski problem, bez funkcionalnog uticaja</span></div>
+    </div>
+    <div class="qr-card"><h4>HTTP status kodovi</h4>
+      <div class="qr-item"><span class="qr-key">200 OK</span><span class="qr-tooltip">Uspesno obradjen zahtev. Vraca se za GET i za akcije koje ne kreiraju resurs.</span><span class="qr-val">Uspesno</span></div>
+      <div class="qr-item"><span class="qr-key">201 Created</span><span class="qr-tooltip">Resurs je kreiran. Vraca se za uspesni POST. Obicno ukljucuje Location header.</span><span class="qr-val">Resurs kreiran (POST)</span></div>
+      <div class="qr-item"><span class="qr-key">401</span><span class="qr-tooltip">Token nedostaje ili je neispravan. Klijent treba da se autentifikuje.</span><span class="qr-val">Nedostaje token</span></div>
+      <div class="qr-item"><span class="qr-key">403</span><span class="qr-tooltip">Autentifikacija je ok, ali korisnik nema prava na ovaj resurs.</span><span class="qr-val">Token validan, nema dozvolu</span></div>
+      <div class="qr-item"><span class="qr-key">404</span><span class="qr-tooltip">Resurs ne postoji na ovoj URL-i.</span><span class="qr-val">Resurs ne postoji</span></div>
+      <div class="qr-item"><span class="qr-key">422</span><span class="qr-tooltip">Format zahteva je ok, ali semanticki nije validan (narusena biznis pravila).</span><span class="qr-val">Semanticki nevalidan zahtev</span></div>
+      <div class="qr-item"><span class="qr-key">500</span><span class="qr-tooltip">Greska na serveru. Uvek je defekt — developer mora da je ispravi.</span><span class="qr-val">Greska na serveru — uvek defekt</span></div>
+    </div>
+    <div class="qr-card"><h4>Selenium exception-i</h4>
+      <div class="qr-item"><span class="qr-key">NoSuchElement</span><span class="qr-tooltip">Element nije pronadjen u DOM-u. Proveriti lokator i dodati Explicit Wait.</span><span class="qr-val">Proveriti lokator + dodati Wait</span></div>
+      <div class="qr-item"><span class="qr-key">StaleElement</span><span class="qr-tooltip">Element pronadjen ali DOM se promenio pre interakcije. Re-locate element.</span><span class="qr-val">Re-locate element</span></div>
+      <div class="qr-item"><span class="qr-key">NotInteractable</span><span class="qr-tooltip">Element postoji ali je skriven, disabled ili prekriven drugim elementom.</span><span class="qr-val">Cekati na clickability</span></div>
+      <div class="qr-item"><span class="qr-key">ClickIntercepted</span><span class="qr-tooltip">Drugi element (modal, overlay) prekriva ciljni element pri kliku.</span><span class="qr-val">Sacekati da overlay nestane</span></div>
+      <div class="qr-item"><span class="qr-key">Timeout</span><span class="qr-tooltip">Explicit Wait nije pronasao ocekivani uslov u zadatom vremenskom okviru.</span><span class="qr-val">Povecati timeout / proveriti lokator</span></div>
+    </div>
+    <div class="qr-card"><h4>Smoke / Sanity / Regression</h4>
+      <div class="qr-item"><span class="qr-key">Smoke</span><span class="qr-tooltip">Broad + Shallow. Pokrece se na svakom novom build-u. Go/No-Go odluka za dalji QA.</span><span class="qr-val">Broad + Shallow · svaki build</span></div>
+      <div class="qr-item"><span class="qr-key">Sanity</span><span class="qr-tooltip">Narrow + Deep. Pokrece se nakon specificnog bugfix-a ili nove funkcionalnosti.</span><span class="qr-val">Narrow + Deep · nakon fix-a</span></div>
+      <div class="qr-item"><span class="qr-key">Regression</span><span class="qr-tooltip">Broad + Deep. Pokrece se pre svakog release-a. Pokriva ceo scope.</span><span class="qr-val">Broad + Deep · pre release-a</span></div>
+      <div class="qr-item"><span class="qr-key">Retesting</span><span class="qr-tooltip">Ponovo se izvrsava konkretan TC koji je prethodno failovao, nakon bugfix-a.</span><span class="qr-val">Konkretan TC koji je failovao</span></div>
+    </div>
+    <div class="qr-card"><h4>Test case checklist</h4>
+      <div class="qr-item"><span class="qr-key">✓ Naziv</span><span class="qr-val">Method_State_Expected format</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Atomican</span><span class="qr-val">Testira tacno jednu stvar</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Nezavistan</span><span class="qr-val">Ne zavisi od redosleda</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Preconditions</span><span class="qr-val">Potpuni i precizni</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Expected Result</span><span class="qr-val">Verifikabilan i nedvosmislen</span></div>
+    </div>
+    <div class="qr-card"><h4>DoD — QA stavke</h4>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Acceptance criteria ispunjena i verifikovana</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Test case-ovi napisani i odobreni</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">High/Critical defekti zatvoreni</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Regression suite prolazi</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Testirano na staging okruzenju</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>window.QA_PAGE = {"id":"s07","title":"7. Test plan i test strategija","prevUrl":"s06.html","nextUrl":"s08.html"};</script>
+<script src="script.js"></script>
+</body>
+</html>

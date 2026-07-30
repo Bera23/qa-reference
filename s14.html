@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔌 14. API testiranje — QA Referentni Dokument</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button id="menu-btn" onclick="toggleSidebar()">☰</button>
+<button id="read-exit" onclick="toggleReadingMode()">✕ Izlaz</button>
+<div id="share-toast">🔗 Link kopiran!</div>
+
+<div id="bm-panel">
+  <h3>Bookmarks <button id="bm-close" onclick="closeBmPanel()">✕</button></h3>
+  <div id="bm-list"><div id="bm-empty">Nema bookmarks-a.<br><small>Klikni ★ pored bilo kog podnaslova.</small></div></div>
+</div>
+
+<div id="sidebar">
+  <div id="sb-header">
+    <h2>QA Referentni Dokument</h2>
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="Pretrazi... (pritisni /)" oninput="searchDoc(this.value)">
+      <div id="search-results"></div>
+    </div>
+    <div id="search-hint">/ za pretragu &nbsp;·&nbsp; <span id="search-count"></span></div>
+  </div>
+  <nav id="nav">
+    <div class="nav-deo-wrap">
+      <span class="nav-deo">DEO I — Manualno</span>
+      <button class="nav-collapse" onclick="toggleGroup('g1')">▾</button>
+    </div>
+    <div class="nav-group" id="g1">
+      <a class="nav-item" href="s01.html"><span class="nav-icon">📖</span><span class="nav-item-text">1. Osnove i terminologija</span><span class="nav-check" onclick="toggleRead(event,'s01')"></span></a>
+      <a class="nav-item" href="s02.html"><span class="nav-icon">🔄</span><span class="nav-item-text">2. SDLC i STLC</span><span class="nav-check" onclick="toggleRead(event,'s02')"></span></a>
+      <a class="nav-item" href="s03.html"><span class="nav-icon">🧪</span><span class="nav-item-text">3. Tipovi i nivoi testiranja</span><span class="nav-check" onclick="toggleRead(event,'s03')"></span></a>
+      <a class="nav-item" href="s04.html"><span class="nav-icon">🎯</span><span class="nav-item-text">4. Tehnike dizajniranja TC</span><span class="nav-check" onclick="toggleRead(event,'s04')"></span></a>
+      <a class="nav-item" href="s05.html"><span class="nav-icon">📝</span><span class="nav-item-text">5. Pisanje test case-ova</span><span class="nav-check" onclick="toggleRead(event,'s05')"></span></a>
+      <a class="nav-item" href="s06.html"><span class="nav-icon">🐛</span><span class="nav-item-text">6. Bug report i defect lifecycle</span><span class="nav-check" onclick="toggleRead(event,'s06')"></span></a>
+      <a class="nav-item" href="s07.html"><span class="nav-icon">📋</span><span class="nav-item-text">7. Test plan i test strategija</span><span class="nav-check" onclick="toggleRead(event,'s07')"></span></a>
+      <a class="nav-item" href="s08.html"><span class="nav-icon">⚡</span><span class="nav-item-text">8. Agile testiranje</span><span class="nav-check" onclick="toggleRead(event,'s08')"></span></a>
+      <a class="nav-item" href="s09.html"><span class="nav-icon">📊</span><span class="nav-item-text">9. Test dokumentacija</span><span class="nav-check" onclick="toggleRead(event,'s09')"></span></a>
+      <a class="nav-item" href="s10.html"><span class="nav-icon">🗄️</span><span class="nav-item-text">10. Test okruzenje i podaci</span><span class="nav-check" onclick="toggleRead(event,'s10')"></span></a>
+    </div>
+    <div class="nav-deo-wrap">
+      <span class="nav-deo">DEO II — Automatizacija</span>
+      <button class="nav-collapse" onclick="toggleGroup('g2')">▾</button>
+    </div>
+    <div class="nav-group" id="g2">
+      <a class="nav-item" href="s11.html"><span class="nav-icon">🤖</span><span class="nav-item-text">11. Uvod u automatizaciju</span><span class="nav-check" onclick="toggleRead(event,'s11')"></span></a>
+      <a class="nav-item" href="s12.html"><span class="nav-icon">🌐</span><span class="nav-item-text">12. Selenium / WebDriver</span><span class="nav-check" onclick="toggleRead(event,'s12')"></span></a>
+      <a class="nav-item" href="s13.html"><span class="nav-icon">🏗️</span><span class="nav-item-text">13. Page Object Model</span><span class="nav-check" onclick="toggleRead(event,'s13')"></span></a>
+      <a class="nav-item active" href="s14.html"><span class="nav-icon">🔌</span><span class="nav-item-text">14. API testiranje</span><span class="nav-check" onclick="toggleRead(event,'s14')"></span></a>
+      <a class="nav-item" href="s15.html"><span class="nav-icon">⚙️</span><span class="nav-item-text">15. CI/CD integracija</span><span class="nav-check" onclick="toggleRead(event,'s15')"></span></a>
+      <a class="nav-item" href="s16.html"><span class="nav-icon">🔧</span><span class="nav-item-text">16. Framework arhitektura</span><span class="nav-check" onclick="toggleRead(event,'s16')"></span></a>
+      <a class="nav-item" href="s17.html"><span class="nav-icon">📈</span><span class="nav-item-text">17. Performance testing</span><span class="nav-check" onclick="toggleRead(event,'s17')"></span></a>
+      <a class="nav-item" href="s18.html"><span class="nav-icon">📱</span><span class="nav-item-text">18. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
+      <a class="nav-item" href="s19.html"><span class="nav-icon">🧠</span><span class="nav-item-text">19. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
+      <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+    </div>
+  </nav>
+</div>
+
+<div id="main">
+
+<div id="topbar">
+  <div id="topbar-left">
+    <span id="topbar-meta">QA Ref · v2.0 · 2026</span>
+    <span id="breadcrumb"><span>🔌 14. API testiranje</span></span>
+  </div>
+  <div id="topbar-right">
+    <button class="tb-btn" onclick="toggleQuickRef()" title="Quick Reference">⚡</button>
+    <button class="tb-btn" onclick="openBmPanel()" title="Bookmarks">★ <span id="bm-count" style="display:none">0</span></button>
+    <button class="tb-btn" onclick="toggleReadingMode()" id="read-btn" title="Rezim citanja">🔖</button>
+    <button class="tb-btn" id="theme-btn" onclick="toggleTheme()" title="Tema">☀</button>
+    <button class="tb-btn" id="overflow-btn" onclick="toggleOverflow()" title="Vise opcija">···</button>
+    <div id="overflow-menu">
+      <div class="ov-label">Velicina fonta</div>
+      <div class="ov-row">
+        <button class="fs-btn" onclick="changeFont(-1)">A−</button>
+        <span class="fs-display" id="fs-display">–</span>
+        <button class="fs-btn" onclick="changeFont(1)">A+</button>
+      </div>
+      <div class="ov-divider"></div>
+      <button class="ov-item" onclick="shareSection()">🔗 Kopiraj link na stranicu</button>
+      <button class="ov-item" onclick="printDoc()">🖨 Stampa / Export PDF</button>
+    </div>
+  </div>
+</div>
+
+  <div id="content">
+<div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
+<div class="section" id="s14">
+<h1 class="sec-title" id="t-s14">🔌 14. API testiranje<span class="read-badge">✓ Procitano</span></h1>
+<div class="section-meta"><span class="read-time">⏱ ~2 min citanja</span><button class="mark-read-btn" id="mrb-s14" onclick="markRead('s14')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">14.1 HTTP metode</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Metoda</th><th>Svrha</th><th>Idempotentna</th><th>Safe</th></tr></thead><tbody>
+<tr><td>GET</td><td>Citanje resursa. Bez side-effecta.</td><td>Da</td><td>Da</td></tr>
+<tr><td>POST</td><td>Kreiranje novog resursa.</td><td>Ne</td><td>Ne</td></tr>
+<tr><td>PUT</td><td>Potpuna zamena postojeceg resursa.</td><td>Da</td><td>Ne</td></tr>
+<tr><td>PATCH</td><td>Parcijalna izmena resursa.</td><td>Ne</td><td>Ne</td></tr>
+<tr><td>DELETE</td><td>Brisanje resursa.</td><td>Da</td><td>Ne</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">14.2 HTTP status kodovi</h2>
+<div class="tbl-wrap tall"><table><thead><tr><th>Status</th><th>Znacenje</th></tr></thead><tbody>
+<tr><td>200 OK</td><td>Zahtev uspesno obradjen. Standardni odgovor za GET.</td></tr>
+<tr><td>201 Created</td><td>Resurs je kreiran. Za uspesni POST, obicno sa Location headerom.</td></tr>
+<tr><td>204 No Content</td><td>Uspesno, bez tela odgovora. Tipicno za DELETE.</td></tr>
+<tr><td>400 Bad Request</td><td>Nevalidan zahtev — los JSON, nedostaju obavezna polja.</td></tr>
+<tr><td>401 Unauthorized</td><td>Nedostaje ili je nevazeci autentifikacioni token.</td></tr>
+<tr><td>403 Forbidden</td><td>Token validan, ali nema dozvolu za resurs.</td></tr>
+<tr><td>404 Not Found</td><td>Resurs ne postoji.</td></tr>
+<tr><td>409 Conflict</td><td>Konflikt — kreiranje korisnika sa emailom koji vec postoji.</td></tr>
+<tr><td>422 Unprocessable</td><td>Semanticki nevalidan — format ok, ali biznis pravila narusena.</td></tr>
+<tr><td>429 Too Many Requests</td><td>Rate limiting.</td></tr>
+<tr><td>500 Internal Server Error</td><td>Greska na serveru. Uvek defekt.</td></tr>
+<tr><td>502 Bad Gateway</td><td>Upstream servis ne odgovara.</td></tr>
+<tr><td>503 Service Unavailable</td><td>Servis trenutno nedostupan.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">14.3 Sta testirati na API-ju</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Sta testirati</th><th>Detalj</th></tr></thead><tbody>
+<tr><td>Status kod</td><td>Da li je odgovor ispravan? 200 vs. 201 vs. 400 — svaki ima specificno znacenje.</td></tr>
+<tr><td>Response body</td><td>Da li JSON odgovara ocekivanom kontraktu? Da li su sva polja prisutna?</td></tr>
+<tr><td>Auth/Authz</td><td>Bez tokena -> 401. Sa pogresnim pravima -> 403. Validan token -> 200.</td></tr>
+<tr><td>Response time</td><td>Da li API odgovara u prihvatljivom roku? (< 2000ms)</td></tr>
+<tr><td>Idempotencija</td><td>Visestruki GET/PUT/DELETE ne smeju da menjaju stanje sistema.</td></tr>
+<tr><td>Schema validacija</td><td>Struktura odgovora vs. OpenAPI/Swagger kontrakt.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">14.4 Postman test skripta — primeri</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>pm.test('Status code is 200', () => {
+    pm.response.to.have.status(200);
+});
+
+pm.test('Token saved', () => {
+    const token = pm.response.json().access_token;
+    pm.expect(token).to.be.a('string').and.not.empty;
+    pm.environment.set('auth_token', token);
+});
+
+pm.test('Response time is acceptable', () => {
+    pm.expect(pm.response.responseTime).to.be.below(2000);
+});</pre></div>
+<h2 class="sub-title">14.5 Newman — Postman u CI/CD-u</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>npm install -g newman newman-reporter-htmlextra
+
+newman run collection.json
+  --environment staging.json
+  --reporters cli,htmlextra
+  --reporter-htmlextra-export reports/api-report.html</pre></div>
+<h2 class="sub-title">14.6 Contract testing — Pact framework</h2>
+<p class="body-text">Contract testing resava problem koji se javlja u mikroservisnim arhitekturama: tim A menja API koji tim B koristi, i breaking change prolazi nezapazeno sve do produkcije.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Tok:
+  1. Consumer pise pact — definise sta ocekuje od providera
+  2. Pact se cuva u Pact Broker
+  3. Provider verifikuje kontrakt u svom CI/CD pipeline-u
+  4. Ako provider promeni API na nacin koji krsi kontrakt,
+     verifikacija pada pre deploymenta
+
+  Rezultat: breaking change je uhvacen u CI/CD, ne na produkciji.</pre></div>
+
+<div class="section-nav"><a class="snav-btn" href="s13.html"><span class="snav-label">← Prethodna</span><span class="snav-title">13. Page Object Model</span></a><a class="snav-btn next" href="s15.html"><span class="snav-label">Sledeca →</span><span class="snav-title">15. CI/CD integracija</span></a></div>
+</div>
+  </div>
+
+<div id="quickref">
+  <h3>⚡ Quick Reference <button id="qr-close" onclick="toggleQuickRef()">✕</button></h3>
+  <div class="qr-grid">
+    <div class="qr-card"><h4>Severity nivoi</h4>
+      <div class="qr-item"><span class="qr-key">Blocker</span><span class="qr-tooltip">Sistem se ne moze koristiti. Testiranje je blokirano. Nema workaround-a.</span><span class="qr-val">Sistem ne radi, nema workaround-a</span></div>
+      <div class="qr-item"><span class="qr-key">Critical</span><span class="qr-tooltip">Kriticna funkcionalnost je slomljena. Korisnik ne moze da dovrsi kljucni task.</span><span class="qr-val">Kriticna funkcionalnost slomljena</span></div>
+      <div class="qr-item"><span class="qr-key">Major</span><span class="qr-tooltip">Znacajna funkcionalnost ostecena. Workaround postoji ali je neudoban.</span><span class="qr-val">Znacajna funkcionalnost ostecena</span></div>
+      <div class="qr-item"><span class="qr-key">Minor</span><span class="qr-tooltip">Manja funkcionalnost ostecena. Prihvatljiv workaround postoji.</span><span class="qr-val">Manja funkcionalnost, postoji workaround</span></div>
+      <div class="qr-item"><span class="qr-key">Trivial</span><span class="qr-tooltip">Estetski problem — UI, tekst, formatiranje. Nema funkcionalnog uticaja.</span><span class="qr-val">Estetski problem, bez funkcionalnog uticaja</span></div>
+    </div>
+    <div class="qr-card"><h4>HTTP status kodovi</h4>
+      <div class="qr-item"><span class="qr-key">200 OK</span><span class="qr-tooltip">Uspesno obradjen zahtev. Vraca se za GET i za akcije koje ne kreiraju resurs.</span><span class="qr-val">Uspesno</span></div>
+      <div class="qr-item"><span class="qr-key">201 Created</span><span class="qr-tooltip">Resurs je kreiran. Vraca se za uspesni POST. Obicno ukljucuje Location header.</span><span class="qr-val">Resurs kreiran (POST)</span></div>
+      <div class="qr-item"><span class="qr-key">401</span><span class="qr-tooltip">Token nedostaje ili je neispravan. Klijent treba da se autentifikuje.</span><span class="qr-val">Nedostaje token</span></div>
+      <div class="qr-item"><span class="qr-key">403</span><span class="qr-tooltip">Autentifikacija je ok, ali korisnik nema prava na ovaj resurs.</span><span class="qr-val">Token validan, nema dozvolu</span></div>
+      <div class="qr-item"><span class="qr-key">404</span><span class="qr-tooltip">Resurs ne postoji na ovoj URL-i.</span><span class="qr-val">Resurs ne postoji</span></div>
+      <div class="qr-item"><span class="qr-key">422</span><span class="qr-tooltip">Format zahteva je ok, ali semanticki nije validan (narusena biznis pravila).</span><span class="qr-val">Semanticki nevalidan zahtev</span></div>
+      <div class="qr-item"><span class="qr-key">500</span><span class="qr-tooltip">Greska na serveru. Uvek je defekt — developer mora da je ispravi.</span><span class="qr-val">Greska na serveru — uvek defekt</span></div>
+    </div>
+    <div class="qr-card"><h4>Selenium exception-i</h4>
+      <div class="qr-item"><span class="qr-key">NoSuchElement</span><span class="qr-tooltip">Element nije pronadjen u DOM-u. Proveriti lokator i dodati Explicit Wait.</span><span class="qr-val">Proveriti lokator + dodati Wait</span></div>
+      <div class="qr-item"><span class="qr-key">StaleElement</span><span class="qr-tooltip">Element pronadjen ali DOM se promenio pre interakcije. Re-locate element.</span><span class="qr-val">Re-locate element</span></div>
+      <div class="qr-item"><span class="qr-key">NotInteractable</span><span class="qr-tooltip">Element postoji ali je skriven, disabled ili prekriven drugim elementom.</span><span class="qr-val">Cekati na clickability</span></div>
+      <div class="qr-item"><span class="qr-key">ClickIntercepted</span><span class="qr-tooltip">Drugi element (modal, overlay) prekriva ciljni element pri kliku.</span><span class="qr-val">Sacekati da overlay nestane</span></div>
+      <div class="qr-item"><span class="qr-key">Timeout</span><span class="qr-tooltip">Explicit Wait nije pronasao ocekivani uslov u zadatom vremenskom okviru.</span><span class="qr-val">Povecati timeout / proveriti lokator</span></div>
+    </div>
+    <div class="qr-card"><h4>Smoke / Sanity / Regression</h4>
+      <div class="qr-item"><span class="qr-key">Smoke</span><span class="qr-tooltip">Broad + Shallow. Pokrece se na svakom novom build-u. Go/No-Go odluka za dalji QA.</span><span class="qr-val">Broad + Shallow · svaki build</span></div>
+      <div class="qr-item"><span class="qr-key">Sanity</span><span class="qr-tooltip">Narrow + Deep. Pokrece se nakon specificnog bugfix-a ili nove funkcionalnosti.</span><span class="qr-val">Narrow + Deep · nakon fix-a</span></div>
+      <div class="qr-item"><span class="qr-key">Regression</span><span class="qr-tooltip">Broad + Deep. Pokrece se pre svakog release-a. Pokriva ceo scope.</span><span class="qr-val">Broad + Deep · pre release-a</span></div>
+      <div class="qr-item"><span class="qr-key">Retesting</span><span class="qr-tooltip">Ponovo se izvrsava konkretan TC koji je prethodno failovao, nakon bugfix-a.</span><span class="qr-val">Konkretan TC koji je failovao</span></div>
+    </div>
+    <div class="qr-card"><h4>Test case checklist</h4>
+      <div class="qr-item"><span class="qr-key">✓ Naziv</span><span class="qr-val">Method_State_Expected format</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Atomican</span><span class="qr-val">Testira tacno jednu stvar</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Nezavistan</span><span class="qr-val">Ne zavisi od redosleda</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Preconditions</span><span class="qr-val">Potpuni i precizni</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Expected Result</span><span class="qr-val">Verifikabilan i nedvosmislen</span></div>
+    </div>
+    <div class="qr-card"><h4>DoD — QA stavke</h4>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Acceptance criteria ispunjena i verifikovana</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Test case-ovi napisani i odobreni</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">High/Critical defekti zatvoreni</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Regression suite prolazi</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Testirano na staging okruzenju</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>window.QA_PAGE = {"id":"s14","title":"14. API testiranje","prevUrl":"s13.html","nextUrl":"s15.html"};</script>
+<script src="script.js"></script>
+</body>
+</html>

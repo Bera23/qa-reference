@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌐 12. Selenium / WebDriver — QA Referentni Dokument</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button id="menu-btn" onclick="toggleSidebar()">☰</button>
+<button id="read-exit" onclick="toggleReadingMode()">✕ Izlaz</button>
+<div id="share-toast">🔗 Link kopiran!</div>
+
+<div id="bm-panel">
+  <h3>Bookmarks <button id="bm-close" onclick="closeBmPanel()">✕</button></h3>
+  <div id="bm-list"><div id="bm-empty">Nema bookmarks-a.<br><small>Klikni ★ pored bilo kog podnaslova.</small></div></div>
+</div>
+
+<div id="sidebar">
+  <div id="sb-header">
+    <h2>QA Referentni Dokument</h2>
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="Pretrazi... (pritisni /)" oninput="searchDoc(this.value)">
+      <div id="search-results"></div>
+    </div>
+    <div id="search-hint">/ za pretragu &nbsp;·&nbsp; <span id="search-count"></span></div>
+  </div>
+  <nav id="nav">
+    <div class="nav-deo-wrap">
+      <span class="nav-deo">DEO I — Manualno</span>
+      <button class="nav-collapse" onclick="toggleGroup('g1')">▾</button>
+    </div>
+    <div class="nav-group" id="g1">
+      <a class="nav-item" href="s01.html"><span class="nav-icon">📖</span><span class="nav-item-text">1. Osnove i terminologija</span><span class="nav-check" onclick="toggleRead(event,'s01')"></span></a>
+      <a class="nav-item" href="s02.html"><span class="nav-icon">🔄</span><span class="nav-item-text">2. SDLC i STLC</span><span class="nav-check" onclick="toggleRead(event,'s02')"></span></a>
+      <a class="nav-item" href="s03.html"><span class="nav-icon">🧪</span><span class="nav-item-text">3. Tipovi i nivoi testiranja</span><span class="nav-check" onclick="toggleRead(event,'s03')"></span></a>
+      <a class="nav-item" href="s04.html"><span class="nav-icon">🎯</span><span class="nav-item-text">4. Tehnike dizajniranja TC</span><span class="nav-check" onclick="toggleRead(event,'s04')"></span></a>
+      <a class="nav-item" href="s05.html"><span class="nav-icon">📝</span><span class="nav-item-text">5. Pisanje test case-ova</span><span class="nav-check" onclick="toggleRead(event,'s05')"></span></a>
+      <a class="nav-item" href="s06.html"><span class="nav-icon">🐛</span><span class="nav-item-text">6. Bug report i defect lifecycle</span><span class="nav-check" onclick="toggleRead(event,'s06')"></span></a>
+      <a class="nav-item" href="s07.html"><span class="nav-icon">📋</span><span class="nav-item-text">7. Test plan i test strategija</span><span class="nav-check" onclick="toggleRead(event,'s07')"></span></a>
+      <a class="nav-item" href="s08.html"><span class="nav-icon">⚡</span><span class="nav-item-text">8. Agile testiranje</span><span class="nav-check" onclick="toggleRead(event,'s08')"></span></a>
+      <a class="nav-item" href="s09.html"><span class="nav-icon">📊</span><span class="nav-item-text">9. Test dokumentacija</span><span class="nav-check" onclick="toggleRead(event,'s09')"></span></a>
+      <a class="nav-item" href="s10.html"><span class="nav-icon">🗄️</span><span class="nav-item-text">10. Test okruzenje i podaci</span><span class="nav-check" onclick="toggleRead(event,'s10')"></span></a>
+    </div>
+    <div class="nav-deo-wrap">
+      <span class="nav-deo">DEO II — Automatizacija</span>
+      <button class="nav-collapse" onclick="toggleGroup('g2')">▾</button>
+    </div>
+    <div class="nav-group" id="g2">
+      <a class="nav-item" href="s11.html"><span class="nav-icon">🤖</span><span class="nav-item-text">11. Uvod u automatizaciju</span><span class="nav-check" onclick="toggleRead(event,'s11')"></span></a>
+      <a class="nav-item active" href="s12.html"><span class="nav-icon">🌐</span><span class="nav-item-text">12. Selenium / WebDriver</span><span class="nav-check" onclick="toggleRead(event,'s12')"></span></a>
+      <a class="nav-item" href="s13.html"><span class="nav-icon">🏗️</span><span class="nav-item-text">13. Page Object Model</span><span class="nav-check" onclick="toggleRead(event,'s13')"></span></a>
+      <a class="nav-item" href="s14.html"><span class="nav-icon">🔌</span><span class="nav-item-text">14. API testiranje</span><span class="nav-check" onclick="toggleRead(event,'s14')"></span></a>
+      <a class="nav-item" href="s15.html"><span class="nav-icon">⚙️</span><span class="nav-item-text">15. CI/CD integracija</span><span class="nav-check" onclick="toggleRead(event,'s15')"></span></a>
+      <a class="nav-item" href="s16.html"><span class="nav-icon">🔧</span><span class="nav-item-text">16. Framework arhitektura</span><span class="nav-check" onclick="toggleRead(event,'s16')"></span></a>
+      <a class="nav-item" href="s17.html"><span class="nav-icon">📈</span><span class="nav-item-text">17. Performance testing</span><span class="nav-check" onclick="toggleRead(event,'s17')"></span></a>
+      <a class="nav-item" href="s18.html"><span class="nav-icon">📱</span><span class="nav-item-text">18. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
+      <a class="nav-item" href="s19.html"><span class="nav-icon">🧠</span><span class="nav-item-text">19. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
+      <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+    </div>
+  </nav>
+</div>
+
+<div id="main">
+
+<div id="topbar">
+  <div id="topbar-left">
+    <span id="topbar-meta">QA Ref · v2.0 · 2026</span>
+    <span id="breadcrumb"><span>🌐 12. Selenium / WebDriver</span></span>
+  </div>
+  <div id="topbar-right">
+    <button class="tb-btn" onclick="toggleQuickRef()" title="Quick Reference">⚡</button>
+    <button class="tb-btn" onclick="openBmPanel()" title="Bookmarks">★ <span id="bm-count" style="display:none">0</span></button>
+    <button class="tb-btn" onclick="toggleReadingMode()" id="read-btn" title="Rezim citanja">🔖</button>
+    <button class="tb-btn" id="theme-btn" onclick="toggleTheme()" title="Tema">☀</button>
+    <button class="tb-btn" id="overflow-btn" onclick="toggleOverflow()" title="Vise opcija">···</button>
+    <div id="overflow-menu">
+      <div class="ov-label">Velicina fonta</div>
+      <div class="ov-row">
+        <button class="fs-btn" onclick="changeFont(-1)">A−</button>
+        <span class="fs-display" id="fs-display">–</span>
+        <button class="fs-btn" onclick="changeFont(1)">A+</button>
+      </div>
+      <div class="ov-divider"></div>
+      <button class="ov-item" onclick="shareSection()">🔗 Kopiraj link na stranicu</button>
+      <button class="ov-item" onclick="printDoc()">🖨 Stampa / Export PDF</button>
+    </div>
+  </div>
+</div>
+
+  <div id="content">
+<div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
+<div class="section" id="s12">
+<h1 class="sec-title" id="t-s12">🌐 12. Selenium / WebDriver<span class="read-badge">✓ Procitano</span></h1>
+<div class="section-meta"><span class="read-time">⏱ ~2 min citanja</span><button class="mark-read-btn" id="mrb-s12" onclick="markRead('s12')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">12.1 Selenium arhitektura i W3C protokol</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [Test kod (C#/Java/Python)]
+          |  WebDriver API pozivi
+          v
+  [Browser Driver (chromedriver / geckodriver / msedgedriver)]
+          |  W3C WebDriver Protocol (HTTP/JSON Wire)
+          v
+  [Browser (Chrome / Firefox / Edge)]
+
+  Selenium Manager (4.x): automatski preuzima kompatibilni driver.
+  Selenium Grid: paralelno izvrsavanje na vise masina i browser-a.</pre></div>
+<h2 class="sub-title">12.2 Lokatori elemenata — hijerarhija stabilnosti</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Lokator</th><th>Preporuka</th><th>C# primer</th></tr></thead><tbody>
+<tr><td>ID</td><td>Uvek koristiti kada je dostupan. Najbrzi i najstabilniji.</td><td>By.Id(btn)</td></tr>
+<tr><td>data-testid</td><td>Atribut koji tim dodaje iskljucivo za testove. Idealan.</td><td>By.CssSelector([data-testid=login-btn])</td></tr>
+<tr><td>Name</td><td>Korisno za forme.</td><td>By.Name(username)</td></tr>
+<tr><td>CSS Selector</td><td>Fleksibilan, brz, citljiv. Preferovati nad XPath-om.</td><td>By.CssSelector(.btn-primary)</td></tr>
+<tr><td>XPath</td><td>Najfleksibilniji, sporiji i krhkiji. Za kompleksne slucajeve.</td><td>By.XPath(//button[text()])</td></tr>
+<tr><td>Class Name</td><td>Nestabilan ako je CSS class deljeni. Izbegavati.</td><td>By.ClassName(btn)</td></tr>
+</tbody></table></div>
+<div class="note">Dogovoriti se sa development timom da dodaju data-testid atribute na kljucne elemente. Izbegavati XPath sa indeksima (//div[3]/span[2]) — krhak pri svakoj UI promeni.</div>
+<h2 class="sub-title">12.3 Waits — sinhronizacija sa browser-om</h2>
+<div class="warning">Thread.Sleep() nije wait strategija. Uvodi fiksna kasnjenja i cini testove sporim i nestabilnim.</div>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Implicit Wait</td><td>Globalno podesavanje na svaki FindElement poziv. Lose — moze maskirati probleme i usporiti testove. Izbegavati.</td></tr>
+<tr><td>Explicit Wait</td><td>Ceka na konkretan uslov za konkretan element. Preporuceni pristup.</td></tr>
+<tr><td>Fluent Wait</td><td>Explicit wait sa konfigurabilnim polling intervalom i ignorisanjem odredjenih exception-a.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Explicit Wait — preporuceno
+var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+var el = wait.Until(ExpectedConditions.ElementIsVisible(By.Id(btn)));
+
+// Korisne ExpectedConditions metode:
+//   ElementIsVisible, ElementToBeClickable, InvisibilityOfElement,
+//   TextToBePresentInElement, UrlContains</pre></div>
+<h2 class="sub-title">12.4 Cesti exception-i i resenja</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Exception</th><th>Uzrok</th><th>Resenje</th></tr></thead><tbody>
+<tr><td>NoSuchElementException</td><td>Element nije pronadjen u trenutku pretrage.</td><td>Proveriti lokator. Dodati Explicit Wait.</td></tr>
+<tr><td>StaleElementReferenceException</td><td>Element pronadjen ali DOM promenjen pre interakcije.</td><td>Re-locate element. Retry logika.</td></tr>
+<tr><td>ElementNotInteractableException</td><td>Element skriven, disabled ili prekriven.</td><td>Cekati na clickability. JS executor kao fallback.</td></tr>
+<tr><td>ElementClickInterceptedException</td><td>Drugi element prekriva ciljni (modal, overlay).</td><td>Sacekati da overlay nestane. Scroll do elementa.</td></tr>
+<tr><td>TimeoutException</td><td>Explicit Wait nije pronasao uslov u zadatom vremenu.</td><td>Povecati timeout ili proveriti lokator.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">12.5 Actions klasa</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>var actions = new Actions(driver);
+
+actions.MoveToElement(menuItem).Perform();      // Hover
+actions.ContextClick(element).Perform();         // Right-click
+actions.DoubleClick(element).Perform();          // Double-click
+actions.DragAndDrop(source, target).Perform();   // Drag and drop
+actions.KeyDown(Keys.Control).SendKeys(a)
+       .KeyUp(Keys.Control).Perform();           // Ctrl+A</pre></div>
+<h2 class="sub-title">12.6 File upload i download</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// File Upload — SendKeys direktno na input[type=file]
+// Zaobilazi file dialog, radi i u headless modu
+var fileInput = driver.FindElement(By.CssSelector(input[type=file]));
+fileInput.SendKeys(C:\TestData\test-image.jpg);
+
+// Verifikacija da je fajl preuzet
+var filePath = Path.Combine(downloadPath, export.csv);
+wait.Until(_ => File.Exists(filePath));</pre></div>
+<h2 class="sub-title">12.7 Screenshot i headless mode</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Screenshot na failovanom testu
+var screenshot = ((ITakesScreenshot)driver).GetScreenshot();
+screenshot.SaveAsFile(path/fail_testname_timestamp.png);
+
+// Headless Chrome za CI/CD
+var options = new ChromeOptions();
+options.AddArgument(--headless=new);
+options.AddArgument(--no-sandbox);
+options.AddArgument(--window-size=1920x1080);</pre></div>
+
+<div class="section-nav"><a class="snav-btn" href="s11.html"><span class="snav-label">← Prethodna</span><span class="snav-title">11. Uvod u automatizaciju</span></a><a class="snav-btn next" href="s13.html"><span class="snav-label">Sledeca →</span><span class="snav-title">13. Page Object Model</span></a></div>
+</div>
+  </div>
+
+<div id="quickref">
+  <h3>⚡ Quick Reference <button id="qr-close" onclick="toggleQuickRef()">✕</button></h3>
+  <div class="qr-grid">
+    <div class="qr-card"><h4>Severity nivoi</h4>
+      <div class="qr-item"><span class="qr-key">Blocker</span><span class="qr-tooltip">Sistem se ne moze koristiti. Testiranje je blokirano. Nema workaround-a.</span><span class="qr-val">Sistem ne radi, nema workaround-a</span></div>
+      <div class="qr-item"><span class="qr-key">Critical</span><span class="qr-tooltip">Kriticna funkcionalnost je slomljena. Korisnik ne moze da dovrsi kljucni task.</span><span class="qr-val">Kriticna funkcionalnost slomljena</span></div>
+      <div class="qr-item"><span class="qr-key">Major</span><span class="qr-tooltip">Znacajna funkcionalnost ostecena. Workaround postoji ali je neudoban.</span><span class="qr-val">Znacajna funkcionalnost ostecena</span></div>
+      <div class="qr-item"><span class="qr-key">Minor</span><span class="qr-tooltip">Manja funkcionalnost ostecena. Prihvatljiv workaround postoji.</span><span class="qr-val">Manja funkcionalnost, postoji workaround</span></div>
+      <div class="qr-item"><span class="qr-key">Trivial</span><span class="qr-tooltip">Estetski problem — UI, tekst, formatiranje. Nema funkcionalnog uticaja.</span><span class="qr-val">Estetski problem, bez funkcionalnog uticaja</span></div>
+    </div>
+    <div class="qr-card"><h4>HTTP status kodovi</h4>
+      <div class="qr-item"><span class="qr-key">200 OK</span><span class="qr-tooltip">Uspesno obradjen zahtev. Vraca se za GET i za akcije koje ne kreiraju resurs.</span><span class="qr-val">Uspesno</span></div>
+      <div class="qr-item"><span class="qr-key">201 Created</span><span class="qr-tooltip">Resurs je kreiran. Vraca se za uspesni POST. Obicno ukljucuje Location header.</span><span class="qr-val">Resurs kreiran (POST)</span></div>
+      <div class="qr-item"><span class="qr-key">401</span><span class="qr-tooltip">Token nedostaje ili je neispravan. Klijent treba da se autentifikuje.</span><span class="qr-val">Nedostaje token</span></div>
+      <div class="qr-item"><span class="qr-key">403</span><span class="qr-tooltip">Autentifikacija je ok, ali korisnik nema prava na ovaj resurs.</span><span class="qr-val">Token validan, nema dozvolu</span></div>
+      <div class="qr-item"><span class="qr-key">404</span><span class="qr-tooltip">Resurs ne postoji na ovoj URL-i.</span><span class="qr-val">Resurs ne postoji</span></div>
+      <div class="qr-item"><span class="qr-key">422</span><span class="qr-tooltip">Format zahteva je ok, ali semanticki nije validan (narusena biznis pravila).</span><span class="qr-val">Semanticki nevalidan zahtev</span></div>
+      <div class="qr-item"><span class="qr-key">500</span><span class="qr-tooltip">Greska na serveru. Uvek je defekt — developer mora da je ispravi.</span><span class="qr-val">Greska na serveru — uvek defekt</span></div>
+    </div>
+    <div class="qr-card"><h4>Selenium exception-i</h4>
+      <div class="qr-item"><span class="qr-key">NoSuchElement</span><span class="qr-tooltip">Element nije pronadjen u DOM-u. Proveriti lokator i dodati Explicit Wait.</span><span class="qr-val">Proveriti lokator + dodati Wait</span></div>
+      <div class="qr-item"><span class="qr-key">StaleElement</span><span class="qr-tooltip">Element pronadjen ali DOM se promenio pre interakcije. Re-locate element.</span><span class="qr-val">Re-locate element</span></div>
+      <div class="qr-item"><span class="qr-key">NotInteractable</span><span class="qr-tooltip">Element postoji ali je skriven, disabled ili prekriven drugim elementom.</span><span class="qr-val">Cekati na clickability</span></div>
+      <div class="qr-item"><span class="qr-key">ClickIntercepted</span><span class="qr-tooltip">Drugi element (modal, overlay) prekriva ciljni element pri kliku.</span><span class="qr-val">Sacekati da overlay nestane</span></div>
+      <div class="qr-item"><span class="qr-key">Timeout</span><span class="qr-tooltip">Explicit Wait nije pronasao ocekivani uslov u zadatom vremenskom okviru.</span><span class="qr-val">Povecati timeout / proveriti lokator</span></div>
+    </div>
+    <div class="qr-card"><h4>Smoke / Sanity / Regression</h4>
+      <div class="qr-item"><span class="qr-key">Smoke</span><span class="qr-tooltip">Broad + Shallow. Pokrece se na svakom novom build-u. Go/No-Go odluka za dalji QA.</span><span class="qr-val">Broad + Shallow · svaki build</span></div>
+      <div class="qr-item"><span class="qr-key">Sanity</span><span class="qr-tooltip">Narrow + Deep. Pokrece se nakon specificnog bugfix-a ili nove funkcionalnosti.</span><span class="qr-val">Narrow + Deep · nakon fix-a</span></div>
+      <div class="qr-item"><span class="qr-key">Regression</span><span class="qr-tooltip">Broad + Deep. Pokrece se pre svakog release-a. Pokriva ceo scope.</span><span class="qr-val">Broad + Deep · pre release-a</span></div>
+      <div class="qr-item"><span class="qr-key">Retesting</span><span class="qr-tooltip">Ponovo se izvrsava konkretan TC koji je prethodno failovao, nakon bugfix-a.</span><span class="qr-val">Konkretan TC koji je failovao</span></div>
+    </div>
+    <div class="qr-card"><h4>Test case checklist</h4>
+      <div class="qr-item"><span class="qr-key">✓ Naziv</span><span class="qr-val">Method_State_Expected format</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Atomican</span><span class="qr-val">Testira tacno jednu stvar</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Nezavistan</span><span class="qr-val">Ne zavisi od redosleda</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Preconditions</span><span class="qr-val">Potpuni i precizni</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Expected Result</span><span class="qr-val">Verifikabilan i nedvosmislen</span></div>
+    </div>
+    <div class="qr-card"><h4>DoD — QA stavke</h4>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Acceptance criteria ispunjena i verifikovana</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Test case-ovi napisani i odobreni</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">High/Critical defekti zatvoreni</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Regression suite prolazi</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Testirano na staging okruzenju</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>window.QA_PAGE = {"id":"s12","title":"12. Selenium / WebDriver","prevUrl":"s11.html","nextUrl":"s13.html"};</script>
+<script src="script.js"></script>
+</body>
+</html>
