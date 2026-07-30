@@ -44,7 +44,7 @@ ${rows}
 }
 
 function renderNavButton(section, direction) {
-  if (!section) return '<div></div>';
+  if (!section) return '';
   const cls = direction === 'next' ? 'snav-btn next' : 'snav-btn';
   const label = direction === 'next' ? 'Sledeca →' : '← Prethodna';
   return `<a class="${cls}" href="${section.id}.html"><span class="snav-label">${label}</span><span class="snav-title">${section.title}</span></a>`;
