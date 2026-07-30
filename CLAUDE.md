@@ -20,13 +20,12 @@ testing (Deo I, 10 topics) and automation (Deo II, 10 topics: C#/Selenium/API/CI
 AI-testing) — written to match Uros's real day-to-day work (see "User" below) so it doubles as
 active interview/refresher study material, not generic textbook content.
 
-**Current state:** a single self-contained file, `QA_Referentni_Dokument.html` (dark theme,
-sidebar nav, search, bookmarks, reading-progress tracking — all client-side JS/CSS inline).
-
-**Agreed direction (proposed, not yet implemented as of 2026-07-30):** restructure into a small
-multi-page static site built from per-topic source files, and publish it to GitHub Pages so it's
-reachable from any browser/device without opening a local file — no more emailing/copying the HTML
-file around.
+**Status (2026-07-30): implemented and live** at https://bera23.github.io/qa-reference/. Original
+direction was to restructure into a small multi-page static site built from per-topic source
+files, and publish it to GitHub Pages so it's reachable from any browser/device without opening a
+local file — no more emailing/copying the HTML file around. `QA_Referentni_Dokument.html` (the
+original single-file document) stays in the repo as historical reference; it's no longer the
+source of truth — edit `sections/*.html` instead.
 
 ## Tech Stack (target architecture)
 
