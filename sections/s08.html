@@ -1,0 +1,74 @@
+<h2 class="sub-title">8.1 QA uloga u svakom delu sprinta</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Sprint Faza</th><th>QA Aktivnost</th></tr></thead><tbody>
+<tr><td>Sprint Refinement</td><td>Postavljanje pitanja koja developer i PO nisu postavili: edge case-ovi, ponasanje pri gresakama external API-ja. Shift-left u praksi.</td></tr>
+<tr><td>Sprint Planning</td><td>Review user story-ja: da li je story testabilan, da li AC postoje i da li su precizni. Procena QA effort-a za sprint.</td></tr>
+<tr><td>Development</td><td>Paralelno pisanje test case-ova. Priprema test podataka. Setup ili verifikacija test okruzenja.</td></tr>
+<tr><td>Testing</td><td>Manuelno izvrsavanje TC-ova. Exploratory testiranje. Prijava defekata. Retest. Regression.</td></tr>
+<tr><td>Sprint Review</td><td>Verifikacija acceptance criteria zajedno sa PO-om. QA verifikuje da ono sto je prikazano zaista radi.</td></tr>
+<tr><td>Retrospective</td><td>Sta je blokiralo testiranje, gde smo imali defect leakage, sta treba promeniti u procesu.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">8.2 Definition of Done (DoD)</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer DoD stavki relevantnih za QA:
+
+  [ ] Svi acceptance criteria su ispunjeni i verifikovani od strane QA
+  [ ] Test case-ovi su napisani i odobreni
+  [ ] Sve High i Critical severity greske su zatvorene
+  [ ] Regression suite prolazi bez novih gresaka
+  [ ] Funkcionalnost je testirana na staging okruzenju
+  [ ] API kontrakt je verifikovan (ako postoji API promena)</pre></div>
+<h2 class="sub-title">8.3 Definition of Ready (DoR)</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer DoR stavki relevantnih za QA:
+
+  [ ] User story ima jasne acceptance criteria
+  [ ] Acceptance criteria su testabilni (precizni, merljivi)
+  [ ] UI mockup ili dizajn je dostupan (ako postoji)
+  [ ] Zavisnosti su identifikovane i razresene
+  [ ] Test podaci su definisani ili postoji plan za njihovu pripremu</pre></div>
+<h2 class="sub-title">8.4 Acceptance Criteria — pisanje i verifikacija</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Lose AC:  'Korisnik moze da se uloguje u sistem.'
+
+Dobro (Given/When/Then format):
+  Given: Korisnik je na login stranici i nije ulogovan
+  When:  Unese validan email i password i klikne Login
+  Then:  Biva preusmerеn na /dashboard
+         I header prikazuje njegovo ime
+         I sesija traje 30 minuta neaktivnosti</pre></div>
+<h2 class="sub-title">8.5 Three Amigos sesija</h2>
+<p class="body-text">Three Amigos je kratka sesija pre razvoja feature-a. Ucestvuju Product Owner (biznis), Developer (tehnika) i QA (kvalitet). Cilj: zajednicki razgovor koji otkriva nesuglasice i edge case-ove pre nego sto developer napise liniju koda.</p>
+<h2 class="sub-title">8.6 BDD — Behavior-Driven Development</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Feature: User Login
+
+  Scenario: Successful login with valid credentials
+    Given the user is on the login page
+    When  the user enters email 'user@test.com'
+    And   the user enters password 'Test1234!'
+    Then  the user is redirected to the dashboard
+    And   the header displays the user's name
+
+  Alati: Cucumber (Java), SpecFlow (C#), Behave (Python)</pre></div>
+<h2 class="sub-title">8.7 Agile Testing Quadrants (Brian Marick)</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>                    Business-facing
+                          |
+      Q2 (supports team)  |  Q3 (critiques product)
+  Funkcionalni testovi    |  Exploratory testiranje
+  BDD scenariji           |  Usability testiranje
+  Story testovi           |  UAT / Alpha / Beta
+  (manuelno i auto)       |  (manuelno)
+                          |
+  ─────────────────────── + ───────────────────────
+                          |
+      Q1 (supports team)  |  Q4 (critiques product)
+  Unit testovi            |  Performance testiranje
+  Component testovi       |  Security testiranje
+  Integration testovi     |  Load testiranje
+  (automatizovano)        |  (alati)</pre></div>
+<h2 class="sub-title">8.8 QA metrike u Agile-u</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Metrika</th><th>Opis</th><th>Zasto je bitna</th></tr></thead><tbody>
+<tr><td>Defect Density</td><td>Broj defekata / velicina funkcionalnosti.</td><td>Indikator kvaliteta koda po modulu.</td></tr>
+<tr><td>Defect Leakage</td><td>% defekata nasenih na produkciji vs. ukupno.</td><td>Efikasnost QA procesa.</td></tr>
+<tr><td>Escaped Defects</td><td>Defekti koje su nasli korisnici.</td><td>Kljucna KPI za ceo tim.</td></tr>
+<tr><td>Pass Rate</td><td>% TC-ova koji prolaze po sprintu.</td><td>Trend kvaliteta kroz sprint.</td></tr>
+<tr><td>Test Coverage</td><td>% user story-ja pokrivenih TC-ovima.</td><td>Rizik nepokrivenih oblasti.</td></tr>
+<tr><td>Reopen Rate</td><td>% bugova koji se ponovo otvaraju.</td><td>Kvalitet bugfix-ova.</td></tr>
+<tr><td>Automation Coverage</td><td>% regression suite-a koji je automatizovan.</td><td>Dugorocna odrzivost.</td></tr>
+</tbody></table></div>

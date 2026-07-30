@@ -1,0 +1,58 @@
+<h2 class="sub-title">9.1 Tipovi test izvestaja</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Test Execution Report</td><td>Operativni — pise se tokom ili odmah nakon izvrsavanja testova. Namenjen QA timu i tech lead-u.</td></tr>
+<tr><td>Test Summary Report</td><td>Takticki — pise se na kraju test ciklusa ili sprinta. Namenjen timu i project manager-u.</td></tr>
+<tr><td>Test Closure Report</td><td>Strateski — pise se na kraju release-a. Namenjen stakeholderima i menadzmentu.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">9.2 Test Execution Report — sadrzaj</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Test Execution Report — Sprint 14, Dan 3
+
+Period:   15.01.2026 — 17.01.2026
+Build:    3.2.1-rc2  |  Okruzenje: Staging
+
+Izvrseno:  38 / 52 TC (73%)
+Pass: 34 (89%)  |  Fail: 3 (8%)  |  Blocked: 1 (3%)
+
+Novo prijavljeni defekti:
+  BUG-112  [Major]    Upload avatara vraca 500 za PNG > 5MB
+  BUG-113  [Minor]    Dropdown se ne zatvara klikom van njega na Firefox
+  BUG-114  [Critical] Sesija ne istice nakon 30 min neaktivnosti
+
+Blocker:
+  BUG-111 — payment modul nedostupan na staging-u. Ceka fix od DevOps tima.</pre></div>
+<h2 class="sub-title">9.3 Defect metrike i trendovi</h2>
+<p class="body-text">Metrike same po sebi nisu korisne — korisni su trendovi kroz vreme i poredjenje izmedju sprintova.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Distribucija po Severity-ju:
+  Sprint 14:  Blocker:0  Critical:1  Major:4  Minor:7  Trivial:2
+  Sprint 13:  Blocker:1  Critical:2  Major:6  Minor:5  Trivial:3
+  Trend: broj Critical defekata opada — pozitivan signal.
+
+Defect Leakage:
+  Ukupno defekata Sprint 14:  14
+  Pronadjeno u QA:             12  (86%)
+  Pronadjeno na produkciji:     2  (14%) <- escaped defects
+  Cilj: escaped defects < 5%  ->  potrebna akcija
+
+Reopen Rate:
+  Zatvorenih: 18  |  Ponovo otvorenih: 3  (17%)
+  Uzrok: bugfix-ovi nisu dovoljno testirani pre oznacavanja kao Fixed.</pre></div>
+<h2 class="sub-title">9.4 Kako prezentovati QA status stakeholderima</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Lose:
+  'Izvrsili smo 47 TC-ova, 41 je proslo, 4 failovala, 2 blocked.'
+
+Dobro:
+  'Sistem je stabilan i spreman za release uz jedan rizik koji
+   zahteva vasu odluku: postoje 2 Minor defekta na checkout stranici
+   koji se javljaju samo na Safari browser-u (3% nasih korisnika).
+   Preporuka: releasovati sada, fiksirati u hotfix-u sledece nedelje.'
+
+Princip: QA daje cinjenice + preporuku + opcije. Stakeholder donosi odluku.</pre></div>
+<h2 class="sub-title">9.5 Azure DevOps Test Plans — kljucne funkcionalnosti</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Funkcionalnost</th><th>Opis</th></tr></thead><tbody>
+<tr><td>Test Plans</td><td>Kontejner za organizovanje test suite-ova po release-u ili sprintu.</td></tr>
+<tr><td>Test Suites</td><td>Grupisanje TC-ova po modulu, funkcionalnosti ili tipu (regression, smoke).</td></tr>
+<tr><td>Test Cases</td><td>Work item tip koji cuva korake, expected result, attachments.</td></tr>
+<tr><td>Test Runs</td><td>Izvrsavanje test suite-a — belezi ko je izvrsio, kada i sa kojim rezultatom.</td></tr>
+<tr><td>Charts</td><td>Vizuelizacija rezultata — pie chart pass/fail, trend kroz vreme.</td></tr>
+<tr><td>Traceability</td><td>Direktna veza izmedju Test Case work item-a i User Story / Bug work item-a.</td></tr>
+</tbody></table></div>

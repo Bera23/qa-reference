@@ -1,0 +1,60 @@
+<h2 class="sub-title">15.1 Sta je CI/CD i uloga QA-a</h2>
+<p class="body-text">CI (Continuous Integration) je praksa automatskog build-ovanja i testiranja koda pri svakom commit-u. CD (Continuous Delivery) prosiruje CI automatskim deploy-om na visa okruzenja.</p>
+<p class="body-text">QA uloga: automatizovani testovi su gatekeeper koji sprecava isporuku defektnog koda. Svaki failovani test blokira pipeline.</p>
+<h2 class="sub-title">15.2 Tipicna struktura CI/CD pipeline-a</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Code Commit (git push / PR)
+       |
+  [1] Build       — kompajliranje, dependency restore
+  [2] Unit Tests  — brzi, izolovani. Fail -> pipeline staje.
+  [3] Static Analysis — linting, code coverage threshold
+  [4] Deploy na Test okruzenje
+  [5] Integration Tests — API, DB integracija
+  [6] E2E / UI Tests   — Selenium, kriticni happy path scenariji
+  [7] Deploy na Staging
+  [8] Smoke Tests na Staging
+  [9] Deploy na Produkciju
+  [10] Smoke Tests na Produkciji</pre></div>
+<h2 class="sub-title">15.3 Azure DevOps YAML pipeline — Selenium C# primer</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>trigger:
+  branches:
+    include: [ main, develop ]
+
+pool:
+  vmImage: windows-latest
+
+steps:
+- script: dotnet restore
+- script: dotnet build --configuration Release
+- script: |
+    dotnet test --configuration Release
+             --logger trx
+             --results-directory $(Agent.TempDirectory)/TestResults
+  env:
+    BASE_URL:  $(STAGING_URL)
+    HEADLESS:  true
+
+- task: PublishTestResults@2
+  condition: always()
+  inputs:
+    testResultsFormat: VSTest
+    testResultsFiles: $(Agent.TempDirectory)/TestResults/*.trx</pre></div>
+<h2 class="sub-title">15.4 Secrets i environment variables</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre># Lose — hardkodovano u YAML-u
+env:
+  DB_PASSWORD: MySecret123
+
+# Dobro — secret variable iz pipeline settings
+env:
+  DB_PASSWORD: $(db-password)   # Secret u ADO Variable Groups
+  BASE_URL:    $(staging-url)   # Moze se razlikovati po okruzenju
+
+# Variable Groups: kreira se jednom, referencira u vise pipeline-ova
+# Secret variables su enkriptovane i ne prikazuju se u logovima</pre></div>
+<h2 class="sub-title">15.5 Best practices za testove u CI/CD-u</h2>
+<ul><li class="bullet-item">Testovi moraju biti deterministicki — isti ulaz, isti rezultat uvek.</li>
+<li class="bullet-item">Paralelizacija: grupisati testove da se izvrsavaju paralelno.</li>
+<li class="bullet-item">Flaky testovi moraju biti izolovani i oznaceni, ne ignorisani.</li>
+<li class="bullet-item">Koristiti headless mode za browser testove u CI.</li>
+<li class="bullet-item">Cuvati screenshots i logove samo za failovane testove.</li>
+<li class="bullet-item">Retry logika samo za infrastrukturne greske, ne za legitimne failove.</li>
+</ul>

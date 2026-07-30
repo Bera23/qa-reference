@@ -1,0 +1,61 @@
+<h2 class="sub-title">19.1 Kako AI menja QA</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Oblast</th><th>Opis</th></tr></thead><tbody>
+<tr><td>Generisanje test case-ova</td><td>AI analizira specifikaciju ili user story i predlaze test case-ove, posebno edge case-ove koje je lako propustiti.</td></tr>
+<tr><td>Vizuelna regresija</td><td>AI poredi screenshotove i detektuje vizuelne promene (Applitools, Percy).</td></tr>
+<tr><td>Generisanje test podataka</td><td>LLM-ovi generisu realisticne, raznovrsne test podatke za data-driven scenarije.</td></tr>
+<tr><td>Analiza defekata</td><td>AI analizira log fajlove, stack trace-ove i sugerise root cause.</td></tr>
+<tr><td>Odrzavanje lokatorima</td><td>Healenium automatski azurira lokatore kada se UI promeni.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">19.2 LLM za generisanje Selenium C# test skripti</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer prompta:
+
+  'Ti si senior QA automation inzenjer koji pise Selenium C# testove.
+   Koristi NUnit, Page Object Model i FluentAssertions.
+   Generiši test klasu za sledeci scenario:
+
+   Feature:  Forgot Password funkcionalnost
+   URL:      /forgot-password
+   Elementi: input[name=email], button[type=submit], .success-message
+
+   Scenariji:
+   1. Validan email -> prikazuje se success poruka
+   2. Nevalidan email format -> prikazuje se validaciona greska
+   3. Nepostojeci email -> prikazuje se ista success poruka (security by design)
+
+   Koristi BasePage sa WaitForVisible metodom.
+   Naming konvencija: MethodName_StateUnderTest_ExpectedBehavior'
+
+Workflow:
+  LLM generise skelet -> QA proverava lokatore -> QA dodaje specificne
+  test podatke -> QA verifikuje Expected Result-e -> QA pokrecepokalno.</pre></div>
+<div class="note">LLM stedi 60-70% vremena na boilerplate kodu. Ostatak — domain znanje, specificnosti aplikacije, edge case-ovi — ostaje iskljucivo odgovornost QA inzenjera.</div>
+<h2 class="sub-title">19.3 Vizuelna regresija</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Applitools Eyes</td><td>AI-powered vizuelni testing. Koristi ML da razlikuje significantne vizuelne promene od nebitnih (anti-aliasing, font rendering razlike). Integracija sa Selenium, Cypress, Playwright.</td></tr>
+<tr><td>Percy (BrowserStack)</td><td>Vizuelna regresija integrisana sa CI/CD pipeline-om. Svaki PR dobija vizuelni diff review.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">19.4 Granice i rizici AI u testiranju</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Rizik</th><th>Objasnjenje</th></tr></thead><tbody>
+<tr><td>Hallucination</td><td>LLM-ovi mogu generisati plausibilne ali pogresne test case-ove ili nepostojece API endpoint-e. Uvek review-ovati output.</td></tr>
+<tr><td>Nedostatak konteksta</td><td>AI ne zna biznis pravila, istoriju projekta ni specificnosti sistema.</td></tr>
+<tr><td>False confidence</td><td>Vizuelni AI alati mogu propustiti relevantne promene ili prijaviti lazne pozitive.</td></tr>
+<tr><td>Odgovornost</td><td>AI generisani test case-ovi su QA odgovornost. Nema opravdanja 'AI je to generisao'.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">19.5 Generisanje Selenium C# koda</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// LLM generisani skelet — potrebna QA revizija
+public class ForgotPasswordPage : BasePage
+{
+ private By EmailField   => By.CssSelector(input[name=email]);
+ private By SubmitButton => By.CssSelector(button[type=submit]);
+ private By SuccessMsg  => By.CssSelector(.success-message);
+
+    [Test]
+    public void ValidEmail_ShouldShowSuccessMessage()
+    {
+ var page = new ForgotPasswordPage(Driver);
+ page.Navigate();
+ page.EnterEmail(user@test.com);  // QA dodaje: konkretni test email
+ page.Submit();
+ Assert.That(page.GetSuccessMessage(), Does.Contain(Check your email));
+    }
+}</pre></div>

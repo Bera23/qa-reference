@@ -1,0 +1,65 @@
+<h2 class="sub-title">7.1 Test strategija vs. Test plan</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Test strategija</td><td>Dokument visokog nivoa koji definise KAKO organizacija pristupa testiranju uopste. Pise se jednom. Autor: QA Lead.</td></tr>
+<tr><td>Test plan</td><td>Dokument nizeg nivoa koji definise STA, KO, KADA i KAKO se testira za konkretan release. Pise se za svaki release. Autor: QA inzenjer.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">7.2 Test plan — IEEE 829 struktura</h2>
+<div class="tbl-wrap tall"><table><thead><tr><th>Sekcija</th><th>Sadrzaj</th></tr></thead><tbody>
+<tr><td>1. Test Plan ID</td><td>Jedinstven identifikator dokumenta i verzija.</td></tr>
+<tr><td>2. Introduction</td><td>Svrha, scope i referentni dokumenti.</td></tr>
+<tr><td>3. Test Items</td><td>Sta se testira — feature-i, moduli, build verzija.</td></tr>
+<tr><td>4. Features to Test</td><td>Konkretne funkcionalnosti u scope-u.</td></tr>
+<tr><td>5. Features Not to Test</td><td>Eksplicitno isljucene oblasti i razlog — jednako vazno kao scope.</td></tr>
+<tr><td>6. Approach</td><td>Tehnika testiranja, tipovi testova, nivo automatizacije.</td></tr>
+<tr><td>7. Entry/Exit Criteria</td><td>Uslovi pocetka i zavrsetka testiranja za ovaj ciklus.</td></tr>
+<tr><td>8. Test Deliverables</td><td>Artefakti: test case-ovi, izvestaji, defect log.</td></tr>
+<tr><td>9. Testing Tasks</td><td>Konkretne aktivnosti, ko je odgovoran, redosled.</td></tr>
+<tr><td>10. Environmental Needs</td><td>Okruzenja, podaci, alati, pristup, mock servisi.</td></tr>
+<tr><td>11. Responsibilities</td><td>RACI matrica.</td></tr>
+<tr><td>12. Schedule</td><td>Vremenski plan — milestone-i i trajanje svake faze.</td></tr>
+<tr><td>13. Risks & Mitigation</td><td>Potencijalni rizici i planovi za ublazavanje.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">7.3 Risk-based testing</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Risk Score = Probability of Failure x Business Impact
+
+  Visok rizik   ->  testirati prvo i najdetaljnije
+  Srednji rizik ->  standardna pokrivenost
+  Nizak rizik   ->  smoke level ili izostaviti
+
+Faktori visokog rizika:
+  - Novi ili znacajno izmenjeni moduli
+  - Kriticna funkcionalna oblast (payment, auth, data migration)
+  - Oblasti sa istorijski visokim brojem defekata
+  - Kod bez code review-a ili unit testova</pre></div>
+<h2 class="sub-title">7.4 Test estimation — tehnike</h2>
+<h3 class="sub-sub-title">Work Breakdown Structure (WBS)</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  Pisanje test case-ova:     8h
+  Priprema test podataka:    2h
+  Setup okruzenja:           1h
+  Manuelno izvrsavanje:     16h
+  Regression:                4h
+  Defect reporting/retest:   3h
+  ----------------------------
+  Ukupno:                   34h</pre></div>
+<h3 class="sub-sub-title">Three-Point Estimation</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Expected = (O + 4M + P) / 6
+  O = Optimistic  |  M = Most likely  |  P = Pessimistic
+
+  Primer: O=3h, M=5h, P=10h  ->  Expected = 5.5h
+
+Uvek ukljuciti: review TC-ova, retest nakon bugfix-ova,
+regression, buffer za okruzenje (min 10-20%).</pre></div>
+<h2 class="sub-title">7.5 Test Closure Report</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Sekcija</th><th>Sadrzaj</th></tr></thead><tbody>
+<tr><td>Test Summary</td><td>Ukupan broj TC-ova, pass/fail/blocked/skipped, pokrivenost scope-a.</td></tr>
+<tr><td>Defect Metrics</td><td>Ukupno prijavljenih, otvorenih, zatvorenih, deferred. Distribucija po Severity-ju.</td></tr>
+<tr><td>Coverage</td><td>Koji zahtevi su pokriveni, koji nisu i zasto. RTM status.</td></tr>
+<tr><td>Open Defects</td><td>Lista otvorenih defekata sa Severity, Priority i obrazlozenjem.</td></tr>
+<tr><td>Lessons Learned</td><td>Sta je islo dobro, sta lose, sta promeniti u sledecem ciklusu.</td></tr>
+<tr><td>Go / No-Go preporuka</td><td>Eksplicitna QA preporuka za release na osnovu rezultata i rizika.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Go/No-Go primer:
+  '94% TC-ova prolazi (45/48). 0 Blocker, 0 Critical otvoreno.
+   2 Major defekta deferred uz saglasnost PM-a (BUG-089, BUG-092).
+   Regression suite: 100% pass.
+   QA preporuka: GO za release uz monitoring deferred defekata.'</pre></div>

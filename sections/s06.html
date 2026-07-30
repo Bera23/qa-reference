@@ -1,0 +1,85 @@
+<h2 class="sub-title">6.1 Struktura profesionalnog bug reporta</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>ID</td><td>Automatski generisan u alatu (JIRA, Azure DevOps).</td></tr>
+<tr><td>Title</td><td>Kratak, koncizan opis — Sta + Gde + Pod kojim uslovom.</td></tr>
+<tr><td>Environment</td><td>OS, browser i verzija, okruzenje (Staging/UAT), build broj, rezolucija.</td></tr>
+<tr><td>Preconditions</td><td>Stanje sistema pre reprodukcije.</td></tr>
+<tr><td>Steps to Reproduce</td><td>Numerisani, atomski koraci. Svaki mora biti neophodan.</td></tr>
+<tr><td>Actual Result</td><td>Precizno sta se desilo. Screenshot/video ako je moguce.</td></tr>
+<tr><td>Expected Result</td><td>Sta bi sistem trebalo da uradi — po zahtevima ili zdravom razumu.</td></tr>
+<tr><td>Severity</td><td>Tehnicki uticaj na sistem.</td></tr>
+<tr><td>Priority</td><td>Poslovni uticaj i hitnost korekcije.</td></tr>
+<tr><td>Attachments</td><td>Screenshot, video, log, HAR fajl, console errors.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">6.2 Title — kako pisati</h2>
+<p class="body-text">Format: [Sta se desava] + [Gde] + [Pod kojim uslovom]</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Lose:
+  'Bug na login-u'  |  'Ne radi'  |  'Problem sa formom'
+
+Dobro:
+  'Login forma se submituje bez greske pri praznom password polju'
+  'Upload avatara vraca 500 gresku za PNG fajlove vece od 5MB'
+  'Dropdown za drzavu ne prikazuje opcije na Safari 17 / macOS Sonoma'</pre></div>
+<h2 class="sub-title">6.3 Severity vs. Priority — sve kombinacije</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Kombinacija</th><th>Scenario</th></tr></thead><tbody>
+<tr><td>High Severity / High Priority</td><td>Crash na checkout-u u produkciji. Hitno, odmah.</td></tr>
+<tr><td>High Severity / Low Priority</td><td>Crash na admin stranici koju koristi 1 osoba mesecno. Vazno, ali ne hitno.</td></tr>
+<tr><td>Low Severity / High Priority</td><td>Logo klijenta pogresno napisan dan pre prezentacije. Kosmeticko, ali hitno.</td></tr>
+<tr><td>Low Severity / Low Priority</td><td>Typo u footer-u. Fiksirati kad bude prilike.</td></tr>
+</tbody></table></div>
+<h3 class="sub-sub-title">Severity nivoi (ISTQB)</h3>
+<div class="tbl-wrap"><table><thead><tr><th>Nivo</th><th>Definicija</th></tr></thead><tbody>
+<tr><td>Blocker</td><td>Sistem se ne moze koristiti. Testiranje je blokirano. Nema workaround-a.</td></tr>
+<tr><td>Critical</td><td>Kriticna funkcionalnost je slomljena. Workaround ne postoji ili je neprihvatljiv.</td></tr>
+<tr><td>Major</td><td>Znacajna funkcionalnost je ostecena. Workaround postoji ali je neudoban.</td></tr>
+<tr><td>Minor</td><td>Manja funkcionalnost je ostecena. Prihvatljiv workaround postoji.</td></tr>
+<tr><td>Trivial</td><td>Estetski problem — UI, tekst, formatiranje. Bez funkcionalnog uticaja.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">6.4 Zivotni ciklus defekta</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [New] -> [Assigned] -> [In Progress] -> [Fixed] -> [Ready for Retest]
+                                                             |
+                                                         [Retest]
+                                                         /      \
+                                                   [Closed]  [Reopened]
+                                                                 |
+                                                         [In Progress] ...</pre></div>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Rejected</td><td>Nije defekt. By design, bug u test case-u, ili nije reproducibilno. QA treba da ospori ako se ne slaze.</td></tr>
+<tr><td>Deferred</td><td>Validno, ali se odlaze za kasniji release. Bug ostaje otvoren i vraca se u backlog.</td></tr>
+<tr><td>Duplicate</td><td>Isti defekt je vec prijavljen. Linkuje se sa originalnim i zatvara.</td></tr>
+<tr><td>Cannot Reproduce</td><td>Developer nije mogao da reprodukuje. Nije isto sto i Rejected. QA proverava steps, environment, dostavlja vise dokaza.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">6.5 Bug Triage</h2>
+<p class="body-text">Bug triage je proces evaluacije i prioritizacije prijavljenih defekta. Odrzava se redovno — obicno jednom po sprintu ili nedeljno.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Ko ucestvuje</th><th>Uloga</th></tr></thead><tbody>
+<tr><td>QA</td><td>Predstavlja tehnicki uticaj i kontekst defekta.</td></tr>
+<tr><td>Product Owner / PM</td><td>Procenjuje poslovni uticaj i prioritet.</td></tr>
+<tr><td>Tech Lead / Developer</td><td>Procenjuje effort korekcije i tehnicku kompleksnost.</td></tr>
+</tbody></table></div>
+<div class="note">QA ne odredjuje Priority — to je poslovni poziv PM-a. QA odredjuje Severity — to je tehnicki poziv koji QA mora da odbrani.</div>
+<h2 class="sub-title">6.6 Primer kompletnog bug reporta</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Title:
+  Login forma se submituje bez greske pri unosu praznog password polja
+
+Environment:
+  OS: Windows 11 | Browser: Chrome 124.0.6367.91
+  Okruzenje: Staging | Build: 3.2.1-rc1
+
+Preconditions:
+  - Korisnik nije ulogovan
+  - Login stranica je otvorena na: https://staging.app.com/login
+
+Steps to Reproduce:
+  1. Uneti validan email: user@test.com
+  2. Ostaviti Password polje prazno
+  3. Kliknuti dugme 'Login'
+
+Actual Result:
+  Forma se submituje. Stranica se reload-uje i korisnik ostaje na
+  login stranici bez ikakve povratne poruke. HTTP Status: 200.
+
+Expected Result:
+  Ispod Password polja prikazuje se: 'Password is required'
+  Forma se ne submituje.
+
+Severity:    Major  |  Priority:    High</pre></div>

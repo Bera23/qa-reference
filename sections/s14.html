@@ -1,0 +1,64 @@
+<h2 class="sub-title">14.1 HTTP metode</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Metoda</th><th>Svrha</th><th>Idempotentna</th><th>Safe</th></tr></thead><tbody>
+<tr><td>GET</td><td>Citanje resursa. Bez side-effecta.</td><td>Da</td><td>Da</td></tr>
+<tr><td>POST</td><td>Kreiranje novog resursa.</td><td>Ne</td><td>Ne</td></tr>
+<tr><td>PUT</td><td>Potpuna zamena postojeceg resursa.</td><td>Da</td><td>Ne</td></tr>
+<tr><td>PATCH</td><td>Parcijalna izmena resursa.</td><td>Ne</td><td>Ne</td></tr>
+<tr><td>DELETE</td><td>Brisanje resursa.</td><td>Da</td><td>Ne</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">14.2 HTTP status kodovi</h2>
+<div class="tbl-wrap tall"><table><thead><tr><th>Status</th><th>Znacenje</th></tr></thead><tbody>
+<tr><td>200 OK</td><td>Zahtev uspesno obradjen. Standardni odgovor za GET.</td></tr>
+<tr><td>201 Created</td><td>Resurs je kreiran. Za uspesni POST, obicno sa Location headerom.</td></tr>
+<tr><td>204 No Content</td><td>Uspesno, bez tela odgovora. Tipicno za DELETE.</td></tr>
+<tr><td>400 Bad Request</td><td>Nevalidan zahtev — los JSON, nedostaju obavezna polja.</td></tr>
+<tr><td>401 Unauthorized</td><td>Nedostaje ili je nevazeci autentifikacioni token.</td></tr>
+<tr><td>403 Forbidden</td><td>Token validan, ali nema dozvolu za resurs.</td></tr>
+<tr><td>404 Not Found</td><td>Resurs ne postoji.</td></tr>
+<tr><td>409 Conflict</td><td>Konflikt — kreiranje korisnika sa emailom koji vec postoji.</td></tr>
+<tr><td>422 Unprocessable</td><td>Semanticki nevalidan — format ok, ali biznis pravila narusena.</td></tr>
+<tr><td>429 Too Many Requests</td><td>Rate limiting.</td></tr>
+<tr><td>500 Internal Server Error</td><td>Greska na serveru. Uvek defekt.</td></tr>
+<tr><td>502 Bad Gateway</td><td>Upstream servis ne odgovara.</td></tr>
+<tr><td>503 Service Unavailable</td><td>Servis trenutno nedostupan.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">14.3 Sta testirati na API-ju</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Sta testirati</th><th>Detalj</th></tr></thead><tbody>
+<tr><td>Status kod</td><td>Da li je odgovor ispravan? 200 vs. 201 vs. 400 — svaki ima specificno znacenje.</td></tr>
+<tr><td>Response body</td><td>Da li JSON odgovara ocekivanom kontraktu? Da li su sva polja prisutna?</td></tr>
+<tr><td>Auth/Authz</td><td>Bez tokena -> 401. Sa pogresnim pravima -> 403. Validan token -> 200.</td></tr>
+<tr><td>Response time</td><td>Da li API odgovara u prihvatljivom roku? (< 2000ms)</td></tr>
+<tr><td>Idempotencija</td><td>Visestruki GET/PUT/DELETE ne smeju da menjaju stanje sistema.</td></tr>
+<tr><td>Schema validacija</td><td>Struktura odgovora vs. OpenAPI/Swagger kontrakt.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">14.4 Postman test skripta — primeri</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>pm.test('Status code is 200', () => {
+    pm.response.to.have.status(200);
+});
+
+pm.test('Token saved', () => {
+    const token = pm.response.json().access_token;
+    pm.expect(token).to.be.a('string').and.not.empty;
+    pm.environment.set('auth_token', token);
+});
+
+pm.test('Response time is acceptable', () => {
+    pm.expect(pm.response.responseTime).to.be.below(2000);
+});</pre></div>
+<h2 class="sub-title">14.5 Newman — Postman u CI/CD-u</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>npm install -g newman newman-reporter-htmlextra
+
+newman run collection.json
+  --environment staging.json
+  --reporters cli,htmlextra
+  --reporter-htmlextra-export reports/api-report.html</pre></div>
+<h2 class="sub-title">14.6 Contract testing — Pact framework</h2>
+<p class="body-text">Contract testing resava problem koji se javlja u mikroservisnim arhitekturama: tim A menja API koji tim B koristi, i breaking change prolazi nezapazeno sve do produkcije.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Tok:
+  1. Consumer pise pact — definise sta ocekuje od providera
+  2. Pact se cuva u Pact Broker
+  3. Provider verifikuje kontrakt u svom CI/CD pipeline-u
+  4. Ako provider promeni API na nacin koji krsi kontrakt,
+     verifikacija pada pre deploymenta
+
+  Rezultat: breaking change je uhvacen u CI/CD, ne na produkciji.</pre></div>

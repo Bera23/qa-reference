@@ -1,0 +1,70 @@
+<h2 class="sub-title">5.1 Struktura profesionalnog test case-a</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>ID</td><td>Jedinstven identifikator (TC-001, LOGIN-TC-003). Koristiti prefiks modula.</td></tr>
+<tr><td>Title</td><td>Koncizan naziv koji opisuje STA se testira i POD KOJIM USLOVOM. Ne 'Test login'.</td></tr>
+<tr><td>Priority</td><td>High / Medium / Low — utice na redosled izvrsavanja.</td></tr>
+<tr><td>Preconditions</td><td>Stanje sistema, podaci i okruzenje koji moraju biti ispunjeni pre pocetka.</td></tr>
+<tr><td>Test Data</td><td>Konkretne vrednosti koje se koriste (email, password, iznos).</td></tr>
+<tr><td>Steps</td><td>Numerisani, atomski koraci — svaki korak = jedna akcija.</td></tr>
+<tr><td>Expected Result</td><td>Precizno definisano ponasanje sistema. Mora biti verifikabilno i nedvosmisleno.</td></tr>
+<tr><td>Actual Result</td><td>Popunjava se tokom izvrsavanja. Prazno dok se ne izvrsi.</td></tr>
+<tr><td>Status</td><td>Pass / Fail / Blocked / Skipped.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">5.2 Status — razlika Blocked vs Skipped</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Pass</td><td>Test case je izvrsen i sistem se ponasa kako je definisano u Expected Result-u.</td></tr>
+<tr><td>Fail</td><td>Test case je izvrsen i sistem se NE ponasa kako je definisano. Defekt se prijavljuje.</td></tr>
+<tr><td>Blocked</td><td>Nije moglo da se izvrsi zbog spoljne prepreke: environment pao, blocker bug, test podaci nisu pripremljeni. Nije QA odluka.</td></tr>
+<tr><td>Skipped</td><td>Svesna odluka da se TC ne izvrsi: out of scope, deferred. QA ili lead donosi odluku svesno.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">5.3 Title — kako pisati</h2>
+<p class="body-text">Format koji uvek radi: [Akcija] + [Uslov/Ulaz] + [Ocekivani ishod].</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Lose:
+  'Test login'  |  'Ne radi'  |  'Problem sa formom'
+
+Dobro:
+  'Login sa validnim kredencijalima preusmjerava korisnika na dashboard'
+  'Login sa pogresnim passwordom prikazuje error poruku'
+  'Login sa praznim email poljem prikazuje validacionu gresku'</pre></div>
+<h2 class="sub-title">5.4 Happy path, edge case, negative path</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Happy path</td><td>Idealni scenario, sve je validno, korisnik radi tacno ono sto se ocekuje. Mora uvek biti pokriven.</td></tr>
+<tr><td>Edge case</td><td>Granicna vrednost ili ekstremni uslov koji je tehnicki validan ali neuobicajen: maksimalni unos, prazna lista, 10.000 elemenata.</td></tr>
+<tr><td>Negative path</td><td>Nevalidni ulazi i neocekivane akcije: pogresni tipovi podataka, nedostajuca obavezna polja, akcije bez dozvola.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">5.5 Granularnost — kada deliti, kada spajati</h2>
+<h3 class="sub-sub-title">Kada DELITI:</h3>
+<ul><li class="bullet-item">Svaki korak ima sopstveni expected result koji je bitan sam po sebi.</li>
+<li class="bullet-item">Fail jednog dela ne znaci nuzno fail celog flowa.</li>
+<li class="bullet-item">Razliciti TC-ovi imaju razlicite preconditions ili test podatke.</li>
+</ul>
+<h3 class="sub-sub-title">Kada SPAJATI:</h3>
+<ul><li class="bullet-item">Koraci su strogo sekvencijalni i bez prethodnog nema smisla testirati sledeci.</li>
+<li class="bullet-item">Radi se o end-to-end flow verifikaciji (npr. celokupan checkout proces kao smoke TC).</li>
+</ul>
+<h2 class="sub-title">5.6 RTM — Requirements Traceability Matrix</h2>
+<p class="body-text">RTM mapira zahteve na test case-ove i defekte. Omogucava odgovor na pitanje: 'Koji zahtevi su pokriveni testovima i koji imaju otvorene defekte?'</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Zahtev ID | Opis                        | TC ID(s)       | Status      | Defekti
+----------+-----------------------------+----------------+-------------+---------
+REQ-001   | Korisnik moze da se uloguje | TC-001,TC-002, | In Progress | BUG-045
+          |                             | TC-003,TC-004  |             |
+REQ-002   | Reset passworda             | TC-010, TC-011 | Pass        | -
+REQ-003   | Sesija istice nakon 30 min  | TC-015         | Blocked     | BUG-051</pre></div>
+<h2 class="sub-title">5.7 Primer test case-a</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Title:         Login sa validnim email-om i passwordom preusmjerava na dashboard
+
+Preconditions:
+  - Aplikacija dostupna na test okruzenju
+  - Postoji aktivan nalog: user@test.com / Test1234!
+  - Korisnik nije ulogovan
+
+Steps:
+  1. Otvoriti login stranicu
+  2. Uneti email u polje Email
+  3. Uneti password u polje Password
+  4. Kliknuti dugme Login
+
+Expected Result:
+  - Korisnik je preusmerеn na /dashboard
+  - Header prikazuje korisnicko ime ili avatar
+  - Ne prikazuje se poruka o gresci</pre></div>

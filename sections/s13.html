@@ -1,0 +1,52 @@
+<h2 class="sub-title">13.1 Sta je POM i zasto postoji</h2>
+<p class="body-text">Page Object Model je design pattern koji enkapsulira UI lokatore i interakcije za odredjenu stranicu u posebnu klasu. Test kod komunicira sa stranicom iskljucivo kroz metode te klase — nikad direktno sa lokatorima.</p>
+<ul><li class="bullet-item">Separacija brige — lokatori i UI logika odvojeni od test logike.</li>
+<li class="bullet-item">Odrzivost — promena lokacije elementa zahteva izmenu samo u Page klasi.</li>
+<li class="bullet-item">Citljivost — testovi opisuju ponasanje, ne implementacione detalje.</li>
+<li class="bullet-item">Ponovna upotreba — iste metode se koriste u vise testova.</li>
+</ul>
+<h2 class="sub-title">13.2 Struktura POM projekta (C#)</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>TestProject/
+  Pages/
+    BasePage.cs           // Zajednička logika svih stranica
+    LoginPage.cs          // Lokatori + metode za Login stranicu
+    DashboardPage.cs
+  Tests/
+    BaseTest.cs           // Setup/TearDown, driver inicijalizacija
+    LoginTests.cs
+  Helpers/
+    DriverFactory.cs      // Kreiranje WebDriver instance
+    TestDataBuilder.cs
+  Config/
+    appsettings.Test.json
+    appsettings.CI.json</pre></div>
+<h2 class="sub-title">13.3 Implementacija Page klase</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public class LoginPage : BasePage
+{
+ private By EmailField    => By.CssSelector(input[name=email]);
+ private By PasswordField => By.CssSelector(input[name=password]);
+ private By LoginButton   => By.CssSelector(button[type=submit]);
+ private By ErrorMessage  => By.CssSelector(.alert-error);
+
+    public LoginPage(IWebDriver driver) : base(driver) { }
+
+    public void EnterEmail(string email)
+        => WaitForVisible(EmailField).SendKeys(email);
+
+    // High-level composite akcija
+    public DashboardPage LoginAs(string email, string password)
+    {
+        EnterEmail(email); EnterPassword(password);
+        return ClickLogin();  // vraca sledecu stranicu
+    }
+}</pre></div>
+<h2 class="sub-title">13.4 Page Factory</h2>
+<p class="body-text">Alternativni nacin definisanja lokatorima — koristi [FindsBy] atribute i PageFactory.InitElements(). Cest u starijim C# i Java projektima.</p>
+<div class="warning">Page Factory se NE preporucuje u novim projektima. Interno koristi lazy initialization sa implicit wait logikom — moze maskirati probleme i ponasati se neocekivano sa StaleElementReferenceException.</div>
+<h2 class="sub-title">13.5 Kada POM postaje problem</h2>
+<ul><li class="bullet-item">Over-engineering na jednostavnim projektima — 10 TC-ova ne zahtevaju punu POM arhitekturu.</li>
+<li class="bullet-item">Page klase postaju prevelike — ako LoginPage ima 50 metoda, pokriva previse odgovornosti.</li>
+<li class="bullet-item">Teske za odrzavanje pri cestim UI promenama.</li>
+<li class="bullet-item">Ugnjezdeni Page objekti — navigacija postaje komplikovana.</li>
+</ul>
+<div class="note">Alternativa za kompleksne scenarije: Screenplay pattern — modelira interakcije kao User + Abilities + Tasks + Questions.</div>

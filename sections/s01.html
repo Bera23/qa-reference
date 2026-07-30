@@ -1,0 +1,50 @@
+<h2 class="sub-title">1.1 Error, Defect, Failure — precizna razlika</h2>
+<p class="body-text">Error je ljudska greska — pogresna pretpostavka, nedostatak razumevanja zahteva, ili propust developera. Postoji iskljucivo u glavi ili u kodu, nije jos vidljiva u sistemu.</p>
+<p class="body-text">Defect (Bug) je materijalizovani error — error koji je usao u kod ili dokumentaciju. Sistem sadrzi defekt, ali korisnik ga mozda jos nije susreo.</p>
+<p class="body-text">Failure je vidljivi simptom defekta u runtime-u — sistem se ponasa drugacije od ocekivanog. Svaki failure je posledica defekta, ali nije svaki defekt odmah failure (moze biti u dead code-u).</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Developer pogresno razume zahtev          ->  Error
+         |
+Pise pogresan kod koji ulazi u sistem     ->  Defect
+         |
+Korisnik ili test pogodi taj code path    ->  Failure
+
+Kada prijavis bug, prijavis Failure (sta si video).
+Defect je ono sto developer ispravi u kodu.</pre></div>
+<h2 class="sub-title">1.2 Verification vs. Validation</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Verification</td><td>Da li gradimo stvar kako treba? Staticna aktivnost — radi se bez izvrsavanja softvera: code review, design review, inspekcija dokumentacije.</td></tr>
+<tr><td>Validation</td><td>Da li gradimo pravu stvar? Dinamicna aktivnost — izvrsava se softver: UAT, beta testiranje, demo sa korisnikom.</td></tr>
+</tbody></table></div>
+<div class="note">Moze se desiti da sistem prodje Verification (tacno implementuje specifikaciju) ali padne Validation — specifikacija je bila pogresna. Oba su odgovornost QA-a da pokrije.</div>
+<h2 class="sub-title">1.3 Quality Assurance vs. Quality Control</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>QC — Quality Control</td><td>Reaktivan — pronalazi defekte u gotovom ili polu-gotovom proizvodu. Fokus je na proizvodu. Izvrsavanje test case-ova, prijava bugova.</td></tr>
+<tr><td>QA — Quality Assurance</td><td>Proaktivan — popravljanje procesa da bi se sprecilo nastajanje defekata. Fokus je na procesu. Definisanje standarda, test strategije, process review.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">1.4 Static vs. Dynamic testiranje</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Static testiranje</td><td>Softver se ne izvrsava. Analizira se artefakt direktno: kod, dokumentacija, zahtevi. Alati: linters, SonarQube, peer review.</td></tr>
+<tr><td>Dynamic testiranje</td><td>Softver se izvrsava sa odredjenim ulazima i posmatraju se izlazi. Sve sto zovemo 'testiranjem' u svakodnevnom smislu.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">1.5 7 ISTQB principa testiranja</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Princip</th><th>Objasnjenje</th></tr></thead><tbody>
+<tr><td>1. Testiranje pokazuje prisustvo defekata</td><td>Ne mozes reci da softvera nema gresaka. Mozes samo reci koliko si gresaka nasao.</td></tr>
+<tr><td>2. Iscrpno testiranje nije moguce</td><td>Kombinatoricka eksplozija — broj mogucih ulaza je prakticno beskonacan. Resenje: risk-based prioritizacija.</td></tr>
+<tr><td>3. Rano testiranje stedi novac</td><td>Boehm-ova kriva: $1 u requirements, $10 u dizajnu, $100 u implementaciji, $1000 nakon deploymenta.</td></tr>
+<tr><td>4. Grupisanje defekata (Pareto)</td><td>80% defekata je u 20% modula — stari, kompleksni, cesto menjani moduli bez testova.</td></tr>
+<tr><td>5. Paradoks pesticida</td><td>Isti set testova vremenom prestaje da hvata nove defekte. Resenje: redovni review i prosirenje suite-a.</td></tr>
+<tr><td>6. Testiranje zavisi od konteksta</td><td>Nije isti pristup za pacemaker software i za marketing landing page.</td></tr>
+<tr><td>7. Odsustvo gresaka je zabluda</td><td>Sistem koji nema bugove ali ne resava pravi problem — ne prolazi. Validation je jednako vazna kao Verification.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">1.6 Kljucni pojmovi</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Test Oracle</td><td>Mehanizam kojim odredjujes da li je rezultat testa ispravan — specifikacija, iskustvo korisnika, drugi sistem.</td></tr>
+<tr><td>Test Basis</td><td>Sve sto se koristi kao osnova za dizajn test case-ova: zahtevi, user stories, kod, standardi.</td></tr>
+<tr><td>Test Coverage</td><td>Procenat test basis-a (zahteva, koda, funkcionalnosti) pokriven testovima.</td></tr>
+<tr><td>Regression vs. Retesting</td><td>Retesting = ponavljanje failovanog TC nakon bugfix-a. Regression = provera da bugfix nije pokvario nesto drugo.</td></tr>
+<tr><td>Test Harness</td><td>Infrastruktura koja podrzava izvrsavanje testova: runner, stubs, drivers, konfiguracija.</td></tr>
+<tr><td>Stub</td><td>Lazna implementacija koja vraca predefinisani odgovor. Ne verifikuje kako je pozvana.</td></tr>
+<tr><td>Mock</td><td>Napredniji od stub-a — verifikuje i kako je pozvana: koliko puta, sa kojim argumentima.</td></tr>
+<tr><td>Spy</td><td>Omotac oko realne implementacije koji belezi pozive za naknadnu verifikaciju.</td></tr>
+<tr><td>RTM</td><td>Requirements Traceability Matrix — tabela koja mapira zahteve na test case-ove i defekte.</td></tr>
+</tbody></table></div>

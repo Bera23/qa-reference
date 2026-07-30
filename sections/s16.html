@@ -1,0 +1,73 @@
+<h2 class="sub-title">16.1 Komponente robustnog test framework-a</h2>
+<div class="tbl-wrap tall"><table><thead><tr><th>Komponenta</th><th>Opis</th></tr></thead><tbody>
+<tr><td>Driver Management</td><td>Centralizovana inicijalizacija i teardown WebDriver-a. DriverFactory.</td></tr>
+<tr><td>Page Objects (POM)</td><td>Enkapsulacija UI lokatorima i interakcija po stranicama.</td></tr>
+<tr><td>Base Test Class</td><td>Zajednicki setUp/tearDown, driver inicijalizacija, logging.</td></tr>
+<tr><td>Configuration Layer</td><td>Upravljanje okruzenjima (URL, credentials) via config fajlovi ili environment variables.</td></tr>
+<tr><td>Test Data Management</td><td>Separacija test podataka od test logike. JSON, CSV, Database ili builder pattern.</td></tr>
+<tr><td>Utility / Helper Layer</td><td>Reusable metode: screenshot, JS executor, file reader, waits.</td></tr>
+<tr><td>Reporting</td><td>Allure ili ExtentReports — screenshots za failove, step-by-step log.</td></tr>
+<tr><td>Logging</td><td>NLog, log4net — tracing toka testa za debugging.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">16.2 Design patterns u test automatizaciji</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Pattern</th><th>Svrha</th><th>Primer</th></tr></thead><tbody>
+<tr><td>Page Object Model</td><td>Enkapsulacija UI po stranicama. Standardni pattern za Selenium.</td><td>Videti Sekciju 13.</td></tr>
+<tr><td>Factory Pattern</td><td>Kreiranje WebDriver instanci bez eksplicitnog navodjenja tipa.</td><td>DriverFactory.Create(chrome)</td></tr>
+<tr><td>Builder Pattern</td><td>Fleksibilno kreiranje test objekata korak po korak.</td><td>new UserBuilder().WithEmail().WithRole(admin).Build()</td></tr>
+<tr><td>Singleton / ThreadLocal</td><td>Osigurava jednu instancu driver-a po thread-u.</td><td>ThreadLocal<IWebDriver></td></tr>
+<tr><td>Fluent Interface</td><td>Method chaining za citljiviji test kod.</td><td>page.EnterEmail().EnterPass().Submit()</td></tr>
+<tr><td>Strategy Pattern</td><td>Zamenjive strategije (razliciti browser-i, okruzenja).</td><td>IBrowserStrategy -> ChromeStrategy</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">16.3 Data-driven testing — NUnit primeri</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[TestCase(user@test.com, Test1234!, true)]
+[TestCase(invalid@test.com, Wrong, false)]
+[TestCase(, Test1234!, false)]
+public void Login_WithCredentials_ReturnsExpectedResult(
+    string email, string password, bool expectedSuccess)
+{
+ var result = new LoginPage(Driver).LoginAs(email, password);
+ Assert.That(result.IsSuccessful, Is.EqualTo(expectedSuccess));
+}</pre></div>
+<h2 class="sub-title">16.4 Test naming konvencija</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Format: MethodName_StateUnderTest_ExpectedBehavior
+
+Login_WithValidCredentials_ShouldRedirectToDashboard()
+Login_WithEmptyPassword_ShouldShowRequiredError()
+GetUser_WithNonExistentId_ShouldReturn404()
+
+// Izbegavati:
+Test1()      // bez konteksta
+LoginTest()  // nema state i expected result</pre></div>
+<h2 class="sub-title">16.5 Reporting — Allure i ExtentReports</h2>
+<h3 class="sub-sub-title">Allure</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[Test]
+[AllureFeature(Login)]
+[AllureSeverity(SeverityLevel.Critical)]
+public void ValidCredentials_ShouldRedirectToDashboard()
+{
+ AllureApi.Step(Open login page, () => Driver.Navigate().GoToUrl(url));
+ AllureApi.Step(Verify dashboard, () =>
+ Assert.That(Driver.Url, Does.Contain(/dashboard)));
+}</pre></div>
+<h3 class="sub-sub-title">ExtentReports</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[TearDown]
+public void EndTest()
+{
+ var status = TestContext.CurrentContext.Result.Outcome.Status;
+ if (status == TestStatus.Failed)
+ {
+ var screenshot = ((ITakesScreenshot)Driver).GetScreenshot();
+ _test.Fail(msg).AddScreenCaptureFromPath(path);
+ }
+ else _test.Pass(Test passed);
+ _extent.Flush();
+}</pre></div>
+<h2 class="sub-title">16.6 Pre-commit checklist za automatizovani test</h2>
+<ul><li class="bullet-item">Test ima jasan naziv po konvenciji (Method_State_Expected).</li>
+<li class="bullet-item">Testuje tacno jednu stvar.</li>
+<li class="bullet-item">Nezavistan od redosleda izvrsavanja i od stanja koje ostavljaju drugi testovi.</li>
+<li class="bullet-item">Koristi Explicit Wait, ne Thread.Sleep().</li>
+<li class="bullet-item">Lokatori su stabilni (data-testid, ID, CSS — ne pun XPath sa indeksima).</li>
+<li class="bullet-item">Test podaci su parametrizovani, ne hard-coded u kodu.</li>
+<li class="bullet-item">Test prolazi lokalno i u CI okruzenju.</li>
+</ul>

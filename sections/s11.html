@@ -1,0 +1,63 @@
+<h2 class="sub-title">11.1 Kada automatizovati, kada ne</h2>
+<h3 class="sub-sub-title">Dobri kandidati:</h3>
+<ul><li class="bullet-item">Regression testovi koji se izvrsavaju cesto — svaki sprint ili svaki build.</li>
+<li class="bullet-item">Smoke i sanity testovi koji blokiraju dalji rad ako failuju.</li>
+<li class="bullet-item">Testovi sa velikim brojem iteracija podataka (data-driven scenariji).</li>
+<li class="bullet-item">Repetitivni, vremenski intenzivni manuelni testovi.</li>
+<li class="bullet-item">Cross-browser i cross-platform testovi.</li>
+</ul>
+<h3 class="sub-sub-title">Losi kandidati:</h3>
+<ul><li class="bullet-item">Jednokratni testovi ili scenariji koji se retko izvrsavaju.</li>
+<li class="bullet-item">Exploratory testiranje — zahteva kognitivni rad i adaptaciju.</li>
+<li class="bullet-item">UI testovi na veoma nestabilnom UI-u sa cestim layout promenama.</li>
+<li class="bullet-item">Feature koji ce se menjati u sledecoj iteraciji.</li>
+</ul>
+<h2 class="sub-title">11.2 ROI automatizacije</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Breakeven = Vreme pisanja / Manuelno vreme po run-u
+
+  Primer: Manuelno 2h, Pisanje 8h -> Breakeven = 4 run-a
+  Pokretanje jednom mesecno -> isplati se (breakeven za 4 meseca).
+  Pokretanje jednom godisnje -> ne isplati se.</pre></div>
+<div class="note">Odrzavanje je skriveni trosak koji se najcesce podcenjuje — nestabilan UI, promene lokatorima, refaktoring aplikacije. Senior QA mora da ga ukljuci u procenu od pocetka.</div>
+<h2 class="sub-title">11.3 Test automation piramida i trofej</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Piramida (Mike Cohn):
+            ^
+           /E2E/           <- Mali broj, sporiji
+          /Integra/         <- Srednji nivo, API testovi
+         /  Unit   /        <- Najveci broj, brzi
+
+Trofej (Kent C. Dodds):
+            ^
+           /E2E/            <- Malo (kriticni happy path)
+          /Integra/          <- Najveci deo
+         /  Unit  /          <- Manje nego u piramidi
+        / Static  /          <- TypeScript, linting</pre></div>
+<div class="warning">Anti-pattern — Ice Cream Cone: mnogo E2E testova, malo unit testova. Testovi su spori, krhki i skupi za odrzavanje.</div>
+<h2 class="sub-title">11.4 Flaky testovi — uzroci i strategije</h2>
+<h3 class="sub-sub-title">Najcesti uzroci:</h3>
+<ul><li class="bullet-item">Hardkodovana cekanja (Thread.Sleep) umesto Explicit Wait.</li>
+<li class="bullet-item">Zavisnost od redosleda izvrsavanja testova.</li>
+<li class="bullet-item">Race condition — test je brzi od UI-ja ili API-ja.</li>
+<li class="bullet-item">Dinamicki lokatori koji se menjaju izmedju run-ova.</li>
+</ul>
+<h3 class="sub-sub-title">Strategije resavanja:</h3>
+<ul><li class="bullet-item">Izolovati flaky testove odmah — oznaciti tagom, ne ignorisati.</li>
+<li class="bullet-item">Analizirati failure pattern — pada li samo u CI, samo u odredjeno vreme?</li>
+<li class="bullet-item">Retry logika samo za infrastrukturne greske, ne za legitimne failove.</li>
+<li class="bullet-item">Svaki flaky test tretirati kao bug — uci u backlog.</li>
+</ul>
+<h2 class="sub-title">11.5 Mock, Stub i Spy — razlika</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Stub</td><td>Lazna implementacija koja vraca predefinisani odgovor. Ne verifikuje kako je pozvana — samo zamenjuje zavisnost.</td></tr>
+<tr><td>Mock</td><td>Verifikuje i kako je pozvana: koliko puta, sa kojim argumentima. Ako ocekivanje nije ispunjeno, test pada.</td></tr>
+<tr><td>Spy</td><td>Omotac oko realne implementacije. Poziva pravu metodu, ali belezi pozive za naknadnu verifikaciju.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Stub — vraca vrednost, ne proverava poziv
+var stub = new Mock<IPaymentService>();
+stub.Setup(p => p.Charge(It.IsAny<decimal>())).Returns(new Result { Success = true });
+
+// Mock — verifikuje da je metoda pozvana tacno jednom
+var mock = new Mock<IPaymentService>();
+mock.Setup(p => p.Charge(99.99m)).Returns(new Result { Success = true });
+// ... izvrsiti kod ...
+mock.Verify(p => p.Charge(99.99m), Times.Once);</pre></div>

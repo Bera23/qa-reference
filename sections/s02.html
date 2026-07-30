@@ -1,0 +1,41 @@
+<h2 class="sub-title">2.1 SDLC — faze i QA uloga</h2>
+<div class="tbl-wrap"><table><thead><tr><th>SDLC Faza</th><th>QA Aktivnost</th></tr></thead><tbody>
+<tr><td>Requirements</td><td>Review zahteva, identifikacija ambiguiteta, procena testabilnosti.</td></tr>
+<tr><td>System Design</td><td>Review dizajna, priprema test strategije, identifikacija rizika.</td></tr>
+<tr><td>Implementation</td><td>Pisanje test case-ova paralelno sa razvojem, setup test okruzenja.</td></tr>
+<tr><td>Testing</td><td>Izvrsavanje testova, logovanje rezultata, prijava i retest defekata.</td></tr>
+<tr><td>Deployment</td><td>Smoke test u prod okruzenju, verifikacija konfiguracije.</td></tr>
+<tr><td>Maintenance</td><td>Regression testing nakon svakog bugfix-a ili nove verzije.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">2.2 V-Model</h2>
+<p class="body-text">V-Model je prosirenje waterfall SDLC-a koje eksplicitno mapira svaku razvojnu fazu na odgovarajuci nivo testiranja.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  Requirements        <---------------------->  Acceptance Testing (UAT)
+      System Design   <----------------->  System Testing
+          Architecture<-------------->  Integration Testing
+              Coding  <----------->  Unit Testing
+
+  Kljucna vrednost: test case-ovi za visi nivo se pisu
+  u odgovarajucoj razvojnoj fazi — ne ceka se kraj projekta.</pre></div>
+<h2 class="sub-title">2.3 Shift-Left testiranje</h2>
+<p class="body-text">Shift-left znaci pomeranje QA aktivnosti sto ranije u SDLC-u.</p>
+<ul><li class="bullet-item">QA ucestuje u requirements review-u i refinementu, ne tek kad feature bude gotov.</li>
+<li class="bullet-item">Test case-ovi se pisu paralelno sa razvojem, ne nakon.</li>
+<li class="bullet-item">Static analiza i code review su deo procesa od prvog dana.</li>
+<li class="bullet-item">Defekti u zahtevima se hvataju pre nego sto developer napise liniju koda.</li>
+</ul>
+<div class="note">Cena korekcije defekta eksponencijalno raste kako projekat odmice (Boehm-ova kriva). Defekt u zahtevima uhvacen na refinementu kosta par minuta razgovora. Isti defekt na produkciji kosta hotfix, deployment i komunikaciju sa korisnicima.</div>
+<h2 class="sub-title">2.4 STLC — faze sa entry/exit kriterijumima</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Faza</th><th>Aktivnost</th><th>Entry Criteria</th><th>Exit Criteria</th></tr></thead><tbody>
+<tr><td>1. Requirement Analysis</td><td>Razumevanje sta se testira, identifikacija testabilnih zahteva.</td><td>Dostupni zahtevi / user stories.</td><td>RTM nacrt, lista pitanja.</td></tr>
+<tr><td>2. Test Planning</td><td>Definisanje scope-a, resursa, rasporeda, rizika i alata.</td><td>Odobreni zahtevi.</td><td>Potpisan Test Plan.</td></tr>
+<tr><td>3. Test Case Design</td><td>Pisanje test case-ova, definisanje test podataka, priprema RTM-a.</td><td>Potpuni zahtevi, odobren Test Plan.</td><td>Odobreni TC-ovi, pripremljeni podaci.</td></tr>
+<tr><td>4. Environment Setup</td><td>Instalacija i konfiguracija okruzenja, deployovanje build-a.</td><td>Test plan, infrastruktura dostupna.</td><td>Go/No-Go, smoke test prolazi.</td></tr>
+<tr><td>5. Test Execution</td><td>Pokretanje testova, logovanje Pass/Fail/Blocked, prijava defekata, retest, regression.</td><td>Okruzenje dostupno, TC odobreni, build deployovan.</td><td>Svi TC izvrseni, defekti prijavljeni.</td></tr>
+<tr><td>6. Test Closure</td><td>Analiza metrika, lessons learned, arhiviranje, finalni izvestaj.</td><td>Exit criteria ispunjena.</td><td>Test Closure Report odobren.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">2.5 Entry i Exit Criteria — zasto su bitni</h2>
+<p class="body-text">Entry i exit criteria nisu birokratija — to su dogovori koji stite QA tim.</p>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Entry Criteria (Test Execution)</td><td>Build uspesno deployovan. Smoke test prolazi (bar 90%). Nema otvorenih Blocker defekata. Test case-ovi su odobreni. Test podaci su pripremljeni.</td></tr>
+<tr><td>Exit Criteria (Test Execution)</td><td>95%+ TC izvrseno. 100% Blocker i Critical zatvoreno. Preostali Major defekti dokumentovani i prihvaceni od PO-a. Regression suite prolazi.</td></tr>
+</tbody></table></div>

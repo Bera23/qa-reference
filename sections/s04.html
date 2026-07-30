@@ -1,0 +1,71 @@
+<h2 class="sub-title">4.1 Equivalence Partitioning (EP)</h2>
+<p class="body-text">Deli ulazni skup na particije unutar kojih se sistem ponasa identicno. Testira se jedan reprezentativni element iz svake particije — i validnih i nevalidnih.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer: Polje 'Godine' — validno: 18-65
+
+  Particija 1 — ispod minimuma (nevalidna):  vrednost 10
+  Particija 2 — validni opseg:               vrednost 30
+  Particija 3 — iznad maksimuma (nevalidna): vrednost 80
+
+Umesto testiranja svakog broja od 1 do 100, dovoljno su 3 test case-a.</pre></div>
+<h2 class="sub-title">4.2 Boundary Value Analysis (BVA)</h2>
+<p class="body-text">Defekti se statisticki najcesce javljaju na granicama particija — off-by-one greske. BVA testira na granici, jedan ispod i jedan iznad.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer: Polje 'Godine' — validno: 18-65
+  17  ->  nevalidno  (jedan ispod donje granice)
+  18  ->  validno    (donja granica)
+  19  ->  validno    (jedan iznad donje granice)
+  64  ->  validno    (jedan ispod gornje granice)
+  65  ->  validno    (gornja granica)
+  66  ->  nevalidno  (jedan iznad gornje granice)</pre></div>
+<h2 class="sub-title">4.3 Decision Table Testing</h2>
+<p class="body-text">Koristi se kada postoje kombinacije uslova koji rezultiraju razlicitim akcijama. Svaka kolona tabele je jedan test case.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer: Popust na osnovu statusa i iznosa narudzbine
+
+  Uslov                     | TC1 | TC2 | TC3 | TC4
+  ---------------------------------------------------
+  Premium clan              |  Y  |  Y  |  N  |  N
+  Iznos > 5000 RSD          |  Y  |  N  |  Y  |  N
+  ---------------------------------------------------
+  Popust 20%                |  X  |     |     |
+  Popust 10%                |     |  X  |  X  |
+  Bez popusta               |     |     |     |  X</pre></div>
+<h2 class="sub-title">4.4 State Transition Testing</h2>
+<p class="body-text">Modelira ponasanje sistema kao skup stanja i prelaza izmedju njih.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [Draft] -> [Submitted] -> [Approved] -> [Shipped] -> [Delivered]
+                  |               |
+            [Cancelled]      [Rejected]
+
+  Testirati: svaki validni prelaz + pokusaj nevalidnog prelaza (Draft -> Shipped direktno)</pre></div>
+<h2 class="sub-title">4.5 Pairwise / All-pairs testiranje</h2>
+<p class="body-text">Resava problem kombinatoricke eksplozije kada imas vise parametara. Statisticki, vecina defekata se manifestuje pri interakciji dva parametra, ne svih N.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  OS: Windows, macOS, Linux  (3 vrednosti)
+  Browser: Chrome, Firefox, Safari  (3 vrednosti)
+  Jezik: EN, DE, FR  (3 vrednosti)
+
+  Sve kombinacije:  3 x 3 x 3 = 27 test case-ova
+  Pairwise:         ~9 test case-ova uz visoku stopu detekcije</pre></div>
+<h2 class="sub-title">4.6 Error Guessing</h2>
+<p class="body-text">Iskustvena tehnika — QA na osnovu domain znanja pogadja gde su defekti najverovantniji. Nije zamena za formalne tehnike, dopuna je.</p>
+<ul><li class="bullet-item">Prazna polja i null vrednosti.</li>
+<li class="bullet-item">Specijalni karakteri i unicode u text input-ima.</li>
+<li class="bullet-item">Maksimalna duzina stringa (ponasanje na 256+ karaktera).</li>
+<li class="bullet-item">Duplikati (isti email pri registraciji).</li>
+<li class="bullet-item">Istovremene akcije (double-click na submit).</li>
+<li class="bullet-item">Expired session tokom popunjavanja forme.</li>
+</ul>
+<h2 class="sub-title">4.7 White-box tehnike</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Tehnika</th><th>Opis</th><th>Napomena</th></tr></thead><tbody>
+<tr><td>Statement Coverage</td><td>Svaka linija koda izvrsena bar jednom.</td><td>Najslabija — ne pokriva grane.</td></tr>
+<tr><td>Branch Coverage</td><td>Svaka grana (if/else, switch) pokrivena.</td><td>Jaca od statement coverage.</td></tr>
+<tr><td>Condition Coverage</td><td>Svaki boolean uslov mora biti true i false bar jednom.</td><td>Jaca od branch coverage.</td></tr>
+<tr><td>Path Coverage</td><td>Svaki moguci put kroz program.</td><td>Najpotpunija, eksponencijalno skupa za kompleksne funkcije.</td></tr>
+<tr><td>MC/DC Coverage</td><td>Modified Condition/Decision Coverage — svaki uslov nezavisno utice na odluku.</td><td>Industrijski standard za safety-critical sisteme (avijacija, medicina).</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">4.8 Kada koristiti koju tehniku</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Situacija</th><th>Preporucena tehnika</th></tr></thead><tbody>
+<tr><td>Numericka polja, datumi, opsezi</td><td>EP + BVA</td></tr>
+<tr><td>Kompleksna biznis pravila sa vise uslova</td><td>Decision Table</td></tr>
+<tr><td>Workflow, statusi, multi-step procesi</td><td>State Transition</td></tr>
+<tr><td>Vise parametara, compatibility matrice</td><td>Pairwise / All-pairs</td></tr>
+<tr><td>Novi feature, nedovoljna specifikacija</td><td>Exploratory Testing</td></tr>
+<tr><td>Iskusan QA na poznatom domenu</td><td>Error Guessing (kao dopuna)</td></tr>
+</tbody></table></div>

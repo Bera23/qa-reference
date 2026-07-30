@@ -1,0 +1,41 @@
+<h2 class="sub-title">10.1 Test environment vs. produkcija</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Aspekt</th><th>Test okruzenje</th><th>Produkcija</th></tr></thead><tbody>
+<tr><td>Podaci</td><td>Sinteticki ili anonimizovani</td><td>Realni korisnici</td></tr>
+<tr><td>Konfiguracija</td><td>Moze se razlikovati</td><td>Referentna tacka</td></tr>
+<tr><td>Dostupnost</td><td>Moze biti nestabilno</td><td>24/7</td></tr>
+<tr><td>Verzija</td><td>RC build koji se testira</td><td>Poslednji stabilni release</td></tr>
+<tr><td>Integracije</td><td>Mock servisi ili sandbox</td><td>Realni external servisi</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Tipicna hijerarhija okruzenja:
+
+  [Dev]  ->  [Test/QA]  ->  [Staging]  ->  [Production]</pre></div>
+<h2 class="sub-title">10.2 Test data management strategije</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Strategija</th><th>Opis</th><th>Napomena</th></tr></thead><tbody>
+<tr><td>Static test data</td><td>Unapred pripremljeni, fiksni podaci.</td><td>Brzi za upotrebu. Mogu postati zaprljani.</td></tr>
+<tr><td>Generated (on-the-fly)</td><td>Podaci se kreiraju neposredno pre testa i brisu nakon.</td><td>Svaki test ima sveze, izolovan set podataka.</td></tr>
+<tr><td>Anonymized prod data</td><td>Kopija produkcijskih podataka sa uklonjenjem PII.</td><td>Najrealisticniji podaci, zahteva GDPR compliance.</td></tr>
+<tr><td>External sources</td><td>JSON/CSV fajlovi, Excel, baza podataka.</td><td>Korisno za data-driven testiranje.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">10.3 Dependency management — mock servisi i stubovi</h2>
+<p class="body-text">Vecina modernih aplikacija zavisi od eksternih servisa: payment gateway, email servis, SMS provajder, third-party API.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Pristup</th><th>Opis</th></tr></thead><tbody>
+<tr><td>Sandbox / test mode</td><td>Provajder nudi posebno okruzenje (Stripe, PayPal, Twilio). Ponasanje je identicno produkciji, ali nema realnih transakcija.</td></tr>
+<tr><td>Mock servis</td><td>Interni servis koji simulira ponasanje eksternog. Potpuna kontrola — simulirati 500 gresku, timeout, spor odgovor.</td></tr>
+<tr><td>WireMock / MockServer</td><td>Alati za kreiranje HTTP mock servera. Definisu se request/response parovi u JSON konfiguraciji.</td></tr>
+</tbody></table></div>
+<div class="note">Strategija: Unit/Integration = mock sve; System testing = sandbox provajdera; UAT/pre-prod = realne integracije sa test nalozima.</div>
+<h2 class="sub-title">10.4 PII i GDPR u test podacima</h2>
+<ul><li class="bullet-item">Nikad ne kopirati produkcijske podatke bez anonimizacije.</li>
+<li class="bullet-item">Test emailovi uvek na domenu koji ne postoji u produkciji (npr. @test.internal).</li>
+<li class="bullet-item">Kartice — koristiti test brojeve koje payment provajder daje za sandbox.</li>
+<li class="bullet-item">Koristiti Faker biblioteke za generisanje realisticnih ali laznih podataka.</li>
+</ul>
+<h2 class="sub-title">10.5 Environment checklist — pre pocetka testiranja</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [ ] Build je deployovan i verzija je verifikovana
+  [ ] Seed data je prisutna i ispravna
+  [ ] External mock servisi / sandbox su dostupni
+  [ ] Test nalozi postoje i pristupni podaci su ispravni
+  [ ] Baza podataka je u ocekivanom stanju (nije zaprljana)
+  [ ] Konfiguracija okruzenja odgovara ocekivanoj (env vars, feature flags)
+  [ ] Smoke test okruzenja prolazi pre pocetka punog test run-a
+  [ ] Monitoring i logovi su dostupni za debugging</pre></div>

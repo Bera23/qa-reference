@@ -1,0 +1,71 @@
+<h2 class="sub-title">12.1 Selenium arhitektura i W3C protokol</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [Test kod (C#/Java/Python)]
+          |  WebDriver API pozivi
+          v
+  [Browser Driver (chromedriver / geckodriver / msedgedriver)]
+          |  W3C WebDriver Protocol (HTTP/JSON Wire)
+          v
+  [Browser (Chrome / Firefox / Edge)]
+
+  Selenium Manager (4.x): automatski preuzima kompatibilni driver.
+  Selenium Grid: paralelno izvrsavanje na vise masina i browser-a.</pre></div>
+<h2 class="sub-title">12.2 Lokatori elemenata — hijerarhija stabilnosti</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Lokator</th><th>Preporuka</th><th>C# primer</th></tr></thead><tbody>
+<tr><td>ID</td><td>Uvek koristiti kada je dostupan. Najbrzi i najstabilniji.</td><td>By.Id(btn)</td></tr>
+<tr><td>data-testid</td><td>Atribut koji tim dodaje iskljucivo za testove. Idealan.</td><td>By.CssSelector([data-testid=login-btn])</td></tr>
+<tr><td>Name</td><td>Korisno za forme.</td><td>By.Name(username)</td></tr>
+<tr><td>CSS Selector</td><td>Fleksibilan, brz, citljiv. Preferovati nad XPath-om.</td><td>By.CssSelector(.btn-primary)</td></tr>
+<tr><td>XPath</td><td>Najfleksibilniji, sporiji i krhkiji. Za kompleksne slucajeve.</td><td>By.XPath(//button[text()])</td></tr>
+<tr><td>Class Name</td><td>Nestabilan ako je CSS class deljeni. Izbegavati.</td><td>By.ClassName(btn)</td></tr>
+</tbody></table></div>
+<div class="note">Dogovoriti se sa development timom da dodaju data-testid atribute na kljucne elemente. Izbegavati XPath sa indeksima (//div[3]/span[2]) — krhak pri svakoj UI promeni.</div>
+<h2 class="sub-title">12.3 Waits — sinhronizacija sa browser-om</h2>
+<div class="warning">Thread.Sleep() nije wait strategija. Uvodi fiksna kasnjenja i cini testove sporim i nestabilnim.</div>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Implicit Wait</td><td>Globalno podesavanje na svaki FindElement poziv. Lose — moze maskirati probleme i usporiti testove. Izbegavati.</td></tr>
+<tr><td>Explicit Wait</td><td>Ceka na konkretan uslov za konkretan element. Preporuceni pristup.</td></tr>
+<tr><td>Fluent Wait</td><td>Explicit wait sa konfigurabilnim polling intervalom i ignorisanjem odredjenih exception-a.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Explicit Wait — preporuceno
+var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+var el = wait.Until(ExpectedConditions.ElementIsVisible(By.Id(btn)));
+
+// Korisne ExpectedConditions metode:
+//   ElementIsVisible, ElementToBeClickable, InvisibilityOfElement,
+//   TextToBePresentInElement, UrlContains</pre></div>
+<h2 class="sub-title">12.4 Cesti exception-i i resenja</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Exception</th><th>Uzrok</th><th>Resenje</th></tr></thead><tbody>
+<tr><td>NoSuchElementException</td><td>Element nije pronadjen u trenutku pretrage.</td><td>Proveriti lokator. Dodati Explicit Wait.</td></tr>
+<tr><td>StaleElementReferenceException</td><td>Element pronadjen ali DOM promenjen pre interakcije.</td><td>Re-locate element. Retry logika.</td></tr>
+<tr><td>ElementNotInteractableException</td><td>Element skriven, disabled ili prekriven.</td><td>Cekati na clickability. JS executor kao fallback.</td></tr>
+<tr><td>ElementClickInterceptedException</td><td>Drugi element prekriva ciljni (modal, overlay).</td><td>Sacekati da overlay nestane. Scroll do elementa.</td></tr>
+<tr><td>TimeoutException</td><td>Explicit Wait nije pronasao uslov u zadatom vremenu.</td><td>Povecati timeout ili proveriti lokator.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">12.5 Actions klasa</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>var actions = new Actions(driver);
+
+actions.MoveToElement(menuItem).Perform();      // Hover
+actions.ContextClick(element).Perform();         // Right-click
+actions.DoubleClick(element).Perform();          // Double-click
+actions.DragAndDrop(source, target).Perform();   // Drag and drop
+actions.KeyDown(Keys.Control).SendKeys(a)
+       .KeyUp(Keys.Control).Perform();           // Ctrl+A</pre></div>
+<h2 class="sub-title">12.6 File upload i download</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// File Upload — SendKeys direktno na input[type=file]
+// Zaobilazi file dialog, radi i u headless modu
+var fileInput = driver.FindElement(By.CssSelector(input[type=file]));
+fileInput.SendKeys(C:\TestData\test-image.jpg);
+
+// Verifikacija da je fajl preuzet
+var filePath = Path.Combine(downloadPath, export.csv);
+wait.Until(_ => File.Exists(filePath));</pre></div>
+<h2 class="sub-title">12.7 Screenshot i headless mode</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Screenshot na failovanom testu
+var screenshot = ((ITakesScreenshot)driver).GetScreenshot();
+screenshot.SaveAsFile(path/fail_testname_timestamp.png);
+
+// Headless Chrome za CI/CD
+var options = new ChromeOptions();
+options.AddArgument(--headless=new);
+options.AddArgument(--no-sandbox);
+options.AddArgument(--window-size=1920x1080);</pre></div>

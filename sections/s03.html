@@ -1,0 +1,49 @@
+<h2 class="sub-title">3.1 Nivoi testiranja</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Nivo</th><th>Sta se testira</th><th>Ko testira</th><th>Tipicni alati</th></tr></thead><tbody>
+<tr><td>Unit Testing</td><td>Individualna funkcija ili metoda u izolaciji.</td><td>Developer</td><td>NUnit, xUnit, pytest</td></tr>
+<tr><td>Integration Testing</td><td>Interakcija izmedju dve ili vise komponenti.</td><td>Dev / QA</td><td>Postman, TestContainers</td></tr>
+<tr><td>System Testing</td><td>Celokupan sistem prema funkcionalnim i nefunkcionalnim zahtevima.</td><td>QA</td><td>Selenium, Cypress, Playwright</td></tr>
+<tr><td>Acceptance Testing</td><td>Validacija od strane krajnjeg korisnika ili Product Owner-a.</td><td>Business / QA</td><td>Manuelno, BDD alati</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">3.2 Black-box, White-box, Grey-box testiranje</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Pristup</th><th>Opis</th><th>Tipicna primena</th></tr></thead><tbody>
+<tr><td>Black-box</td><td>Tester ne zna nista o internoj implementaciji. Testira se samo ulaz i izlaz.</td><td>Funkcionalno testiranje, UAT, exploratory.</td></tr>
+<tr><td>White-box</td><td>Tester ima pun uvid u kod, arhitekturu i logiku. Testovi se pisu na osnovu poznavanja internih putanja.</td><td>Unit testiranje, code coverage analiza. Uglavnom developer/SDET.</td></tr>
+<tr><td>Grey-box</td><td>Delimicno poznavanje internih detalja — npr. QA zna strukturu baze, API kontrakt ili arhitekturu, ali ne i detalje implementacije.</td><td>API testiranje, integration testiranje. Najcesci scenario u praksi za iskusnog QA-a.</td></tr>
+</tbody></table></div>
+<div class="note">U praksi, iskusan QA radi grey-box testiranje cak i kad formalno testira black-box — poznavanje arhitekture i API-ja direktno poboljsava kvalitet test case-ova.</div>
+<h2 class="sub-title">3.3 Smoke vs. Sanity vs. Regression — precizna razlika</h2>
+<div class="warning">Najcesce pitanje na QA intervjuima i najcesce pogresno objasnjeno. Smoke = broad & shallow, Sanity = narrow & deep, Regression = broad & deep.</div>
+<div class="tbl-wrap"><table><thead><tr><th></th><th>Smoke</th><th>Sanity</th><th>Regression</th></tr></thead><tbody>
+<tr><td>Sirina</td><td>Broad — ceo sistem</td><td>Narrow — jedna oblast</td><td>Broad — ceo sistem</td></tr>
+<tr><td>Dubina</td><td>Shallow</td><td>Deep</td><td>Deep</td></tr>
+<tr><td>Kada</td><td>Svaki novi build</td><td>Nakon specificnog fix-a</td><td>Pre svakog release-a</td></tr>
+<tr><td>Trajanje</td><td>Kratko (minuti)</td><td>Kratko do srednje</td><td>Dugo</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer: deployovan je novi build sa fix-om za bug na login-u.
+
+  Smoke:      Da li aplikacija ucitava? Da li login postoji?
+  Sanity:     Da li je konkretan login bug ispravljen?
+  Regression: Da li je login fix pokvario registraciju, password reset, session?</pre></div>
+<h2 class="sub-title">3.4 Nefunkcionalni tipovi testiranja</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Performance Testing</td><td>Load (normalno opterecenje), Stress (iznad kapaciteta), Spike (nagli skok), Endurance/Soak (duzi period — trazi memory leak-ove).</td></tr>
+<tr><td>Security Testing</td><td>OWASP Top 10 — SQL Injection, XSS, CSRF, Broken Auth. Autentifikacija i autorizacija. Insecure Direct Object Reference.</td></tr>
+<tr><td>Usability Testing</td><td>Procena korisnickog iskustva — da li je sistem intuitivan, razumljiv i efikasan. Sprovodi se sa realnim korisnicima.</td></tr>
+<tr><td>Compatibility Testing</td><td>Browser-i (Chrome, Firefox, Safari, Edge), OS (Windows, macOS, Linux, iOS, Android), rezolucije i uredjaji.</td></tr>
+<tr><td>Accessibility Testing</td><td>WCAG 2.1 standardi — keyboard navigation, screen reader, kontrast teksta (min 4.5:1), alt tekst. Alati: axe DevTools, Lighthouse.</td></tr>
+<tr><td>Localization / I18n</td><td>I18n: da li je aplikacija dizajnirana da podrzi vise jezika? L10n: da li je konkretna lokalizacija ispravna?</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">3.5 Positive vs. Negative testiranje</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Tip</th><th>Opis</th><th>Primeri</th></tr></thead><tbody>
+<tr><td>Positive</td><td>Testiranje sa validnim ulazima i ocekivanim tokom. Sistem radi ono za sta je dizajniran.</td><td>Login sa validnim kredencijalima treba da otvori dashboard.</td></tr>
+<tr><td>Negative</td><td>Testiranje sa nevalidnim ulazima, granicnim vrednostima, nedostajucim podacima i neocekivanim akcijama.</td><td>Login sa pogresnim passwordom treba da vrati error, ne crash.</td></tr>
+</tbody></table></div>
+<div class="note">Senior QA mindset: negative testiranje je jednako vazno kao positive. Korisnici ne koriste sistem onako kako je zamislijen — greske, slucajni unosi i neocekivane akcije su svakodnevica.</div>
+<h2 class="sub-title">3.6 Alpha vs. Beta testiranje</h2>
+<div class="tbl-wrap"><table><thead><tr><th></th><th>Alpha</th><th>Beta</th></tr></thead><tbody>
+<tr><td>Ko testira</td><td>Interni tim (QA, dev, zaposleni)</td><td>Externi korisnici — ogranicena grupa</td></tr>
+<tr><td>Okruzenje</td><td>Kontrolisano, interna infrastruktura</td><td>Realno okruzenje korisnika</td></tr>
+<tr><td>Faza</td><td>Pre Beta, pre javnog release-a</td><td>Pre finalnog release-a</td></tr>
+<tr><td>Cilj</td><td>Pronaci sto vise defekata</td><td>Validacija u realnom kontekstu, feedback</td></tr>
+</tbody></table></div>
