@@ -200,7 +200,7 @@ body.light .note{background:#eff6ff;color:#1d4ed8;}
 body.light .warning{background:#fffbeb;color:#92400e;}
 
 /* ── Mobile ───────────────── */
-#menu-btn{display:none;position:fixed;top:52px;left:12px;z-index:200;background:var(--accent);color:#fff;border:none;border-radius:6px;padding:7px 11px;font-size:17px;cursor:pointer;}
+#menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:5px;padding:5px 9px;font-size:15px;line-height:1;cursor:pointer;flex-shrink:0;}
 @media(max-width:768px){
   #menu-btn{display:block;}
   #sidebar{transform:translateX(-100%);}
