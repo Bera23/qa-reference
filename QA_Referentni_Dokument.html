@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA Referentni Dokument</title>
+<style>
+:root {
+  --bg:#0d1117; --bg2:#161b27; --bg3:#1e2535; --border:#2a3350;
+  --accent:#4f8ef7; --accent2:#7eb3ff;
+  --text:#e2e8f4; --text2:#8b96b0; --text3:#5a6478;
+  --h1c:#ffffff; --h2c:#7eb3ff; --h3c:#a8c4ff;
+  --code-bg:#0d1117; --code-text:#e6edf3;
+  --code-cm:#7ee787; --code-kw:#ff7b72; --code-st:#a5d6ff;
+  --tbl-head:#1a2540; --tbl-alt:#161b27;
+  --read-clr:#22c55e; --bm-clr:#f59e0b;
+  --sw:272px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Georgia','Times New Roman',serif;background:var(--bg);color:var(--text);line-height:1.72;font-size:var(--fs,15px);}
+
+/* ── Progress bar ─────── */
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#4f8ef7,#7eb3ff);width:0;z-index:1000;transition:width .1s;}
+
+/* ── Sidebar ──────────── */
+#sidebar{position:fixed;top:0;left:0;width:var(--sw);height:100vh;background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;z-index:100;display:flex;flex-direction:column;transition:transform .3s;}
+#sb-header{padding:16px 14px 12px;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:10;}
+#sb-header h2{font-family:'Courier New',monospace;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+.search-wrap{position:relative;}
+.search-wrap::before{content:"⌕";position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none;}
+#search{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:12.5px;padding:7px 10px 7px 30px;outline:none;font-family:inherit;transition:border-color .2s;}
+#search:focus{border-color:var(--accent);}
+#search::placeholder{color:var(--text3);}
+#search-hint{font-family:'Courier New',monospace;font-size:10px;color:var(--text3);margin-top:5px;text-align:right;}
+#nav{padding:6px 0 20px;}
+.nav-deo-wrap{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 4px;}
+.nav-deo{font-family:'Courier New',monospace;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);opacity:.75;}
+.nav-collapse{background:none;border:none;color:var(--text3);cursor:pointer;font-size:11px;padding:2px 4px;border-radius:3px;transition:color .2s;}
+.nav-collapse:hover{color:var(--text);}
+.nav-group{overflow:hidden;transition:max-height .3s ease;}
+.nav-group.collapsed{max-height:0!important;}
+.nav-item{display:flex;align-items:center;padding:4px 14px 4px 18px;font-size:12px;color:var(--text2);text-decoration:none;border-left:2px solid transparent;transition:all .15s;gap:6px;}
+.nav-item:hover{color:var(--text);border-left-color:var(--accent);background:rgba(79,142,247,.06);}
+.nav-item.active{color:var(--accent2);border-left-color:var(--accent);background:rgba(79,142,247,.1);font-weight:600;}
+.nav-item-text{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px;}
+.nav-icon{font-size:11px;flex-shrink:0;}
+.nav-check{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--text3);cursor:pointer;flex-shrink:0;transition:all .2s;display:flex;align-items:center;justify-content:center;font-size:8px;}
+.nav-check.done{background:var(--read-clr);border-color:var(--read-clr);color:#fff;}
+
+/* ── Main ─────────────── */
+#main{margin-left:var(--sw);min-height:100vh;}
+#content{max-width:880px;margin:0 auto;padding:36px 40px 80px;}
+
+/* ── Topbar ───────────── */
+#topbar{position:sticky;top:0;background:rgba(13,17,23,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:9px 20px 9px 32px;display:flex;align-items:center;justify-content:space-between;z-index:50;gap:12px;}
+#topbar-left{display:flex;align-items:center;gap:10px;min-width:0;flex:1;}
+#topbar-meta{font-family:'Courier New',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);white-space:nowrap;}
+#breadcrumb{font-size:12px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px;}
+#breadcrumb span{color:var(--accent2);}
+#topbar-right{display:flex;align-items:center;gap:5px;flex-shrink:0;position:relative;}
+.tb-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:12px;padding:5px 9px;border-radius:5px;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1;}
+.tb-btn:hover{border-color:var(--accent);color:var(--text);}
+
+/* ── Overflow menu ─────── */
+#overflow-menu{display:none;position:absolute;top:calc(100% + 8px);right:0;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;min-width:210px;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.45);}
+#overflow-menu.open{display:block;}
+.ov-label{font-family:'Courier New',monospace;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.ov-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
+.ov-divider{height:1px;background:var(--border);margin:8px 0;}
+.ov-item{display:block;width:100%;text-align:left;background:none;border:none;color:var(--text2);font-size:13px;padding:7px 10px;border-radius:5px;cursor:pointer;transition:all .15s;font-family:inherit;}
+.ov-item:hover{background:var(--bg3);color:var(--text);}
+.fs-group{display:flex;align-items:center;gap:4px;}
+.fs-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:13px;width:28px;height:28px;border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;padding:0;}
+.fs-btn:hover{border-color:var(--accent);color:var(--text);}
+.fs-display{font-family:'Courier New',monospace;font-size:10px;color:var(--text3);min-width:24px;text-align:center;}
+
+/* ── DEO banner ─────────── */
+.deo-banner{background:linear-gradient(135deg,#0f3460 0%,#1a1a2e 100%);border-left:4px solid var(--accent);padding:12px 20px;margin:40px 0 0;border-radius:4px;font-family:'Courier New',monospace;font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent2);}
+
+/* ── Sections ───────────── */
+.section{padding-top:16px;}
+h1.sec-title{font-size:26px;font-weight:700;color:var(--h1c);padding:24px 0 10px;border-bottom:2px solid var(--accent);margin-bottom:8px;font-family:'Georgia',serif;letter-spacing:-.02em;}
+.read-badge{font-size:10px;font-weight:400;font-family:'Courier New',monospace;background:var(--read-clr);color:#fff;padding:2px 7px;border-radius:10px;letter-spacing:.05em;display:none;margin-left:8px;vertical-align:middle;}
+.read-badge.visible{display:inline;}
+.section-meta{display:flex;align-items:center;gap:14px;margin-bottom:18px;font-family:'Courier New',monospace;font-size:11px;color:var(--text3);}
+.mark-read-btn{background:none;border:1px solid var(--border);color:var(--text3);font-size:11px;padding:3px 10px;border-radius:12px;cursor:pointer;transition:all .2s;font-family:'Courier New',monospace;}
+.mark-read-btn:hover{border-color:var(--read-clr);color:var(--read-clr);}
+.mark-read-btn.done{background:var(--read-clr);border-color:var(--read-clr);color:#fff;}
+h2.sub-title{font-size:16.5px;font-weight:600;color:var(--h2c);padding-top:26px;margin-bottom:8px;font-family:'Georgia',serif;border-bottom:1px solid var(--border);padding-bottom:5px;display:flex;align-items:center;gap:6px;}
+.anchor{font-size:12px;color:var(--text3);text-decoration:none;opacity:0;transition:opacity .2s;font-family:'Courier New',monospace;margin-left:auto;}
+h2.sub-title:hover .anchor{opacity:1;}
+.anchor:hover{color:var(--accent);}
+h3.sub-sub-title{font-size:13.5px;font-weight:600;color:var(--h3c);padding-top:16px;margin-bottom:7px;font-family:'Courier New',monospace;letter-spacing:.02em;}
+.body-text{color:var(--text);margin-bottom:10px;line-height:1.78;text-align:justify;}
+.bullet-item{color:var(--text);margin:3px 0 3px 16px;line-height:1.65;list-style:none;}
+.bullet-item::before{content:"•";color:var(--accent);margin-right:8px;font-weight:700;}
+
+/* ── Note / Warning ──────── */
+.note{background:#0d1f3c;border-left:3px solid #3b82f6;padding:10px 14px 10px 40px;margin:12px 0;font-size:13px;color:#93c5fd;font-style:italic;border-radius:0 4px 4px 0;position:relative;}
+.note::before{content:"ℹ";position:absolute;left:12px;top:10px;font-style:normal;font-size:16px;color:#3b82f6;}
+.warning{background:#2a1a00;border-left:3px solid #f59e0b;padding:10px 14px 10px 40px;margin:12px 0;font-size:13px;color:#fcd34d;border-radius:0 4px 4px 0;position:relative;}
+.warning::before{content:"⚠";position:absolute;left:11px;top:10px;font-size:15px;}
+
+/* ── Bookmark btn ────────── */
+.bm-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 4px;border-radius:3px;transition:all .2s;}
+.bm-btn:hover,.bm-btn.active{color:var(--bm-clr);}
+
+/* ── Code block ──────────── */
+.code-block{background:var(--code-bg);border:1px solid #2a3a50;border-left:3px solid var(--accent);border-radius:6px;padding:14px 16px;margin:12px 0;overflow-x:auto;position:relative;}
+.code-block pre{font-family:'Courier New',monospace;font-size:13px;color:var(--code-text);line-height:1.65;white-space:pre;}
+.copy-btn{position:absolute;top:8px;right:8px;background:#1e2d40;border:1px solid #2a3a50;color:var(--text3);font-size:10.5px;padding:3px 9px;border-radius:4px;cursor:pointer;font-family:'Courier New',monospace;opacity:0;transition:all .2s;}
+.code-block:hover .copy-btn{opacity:1;}
+.copy-btn:hover{color:var(--text);}
+.copy-btn.copied{color:var(--read-clr);border-color:var(--read-clr);}
+.cm{color:var(--code-cm);} .kw{color:var(--code-kw);} .st{color:var(--code-st);}
+
+/* ── Tables ──────────────── */
+.tbl-wrap{overflow-x:auto;margin:12px 0;border-radius:6px;border:1px solid var(--border);}
+.tbl-wrap.tall{max-height:480px;overflow-y:auto;}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:360px;}
+thead th{background:var(--tbl-head);color:#c8d8ff;font-weight:700;text-align:left;padding:9px 12px;border-bottom:1px solid var(--border);font-family:'Courier New',monospace;font-size:12px;letter-spacing:.04em;}
+.tbl-wrap.tall thead{position:sticky;top:0;z-index:5;}
+tbody tr:nth-child(even){background:#192033;}
+tbody tr:nth-child(odd){background:#1c2540;}
+tbody tr:hover{background:#1e2e50;}
+td{padding:8px 12px;border-bottom:1px solid rgba(42,51,80,.4);vertical-align:top;line-height:1.6;color:#dce8ff;}
+td:first-child{font-weight:600;color:#93c5fd;min-width:110px;}
+
+/* ── Quick Ref (floating) ─── */
+#quickref{position:fixed;top:56px;right:-520px;width:500px;max-width:calc(100vw - 20px);max-height:calc(100vh - 80px);overflow-y:auto;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px;z-index:250;transition:right .3s;box-shadow:0 8px 32px rgba(0,0,0,.5);}
+#quickref.visible{right:10px;}
+#quickref h3{font-family:'Courier New',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+#qr-close{background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;line-height:1;}
+#qr-close:hover{color:var(--text);}
+.qr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
+.qr-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:12px;}
+.qr-card h4{font-size:11.5px;font-weight:700;color:var(--h3c);margin-bottom:8px;font-family:'Courier New',monospace;}
+.qr-item{display:flex;justify-content:space-between;align-items:flex-start;padding:4px 0;border-bottom:1px solid rgba(42,51,80,.4);gap:8px;font-size:11.5px;position:relative;}
+.qr-item:last-child{border-bottom:none;}
+.qr-key{color:var(--accent2);font-weight:600;flex-shrink:0;}
+.qr-val{color:var(--text2);text-align:right;font-size:11px;}
+.qr-tooltip{display:none;position:absolute;bottom:calc(100% + 6px);left:0;background:var(--bg);border:1px solid var(--accent);border-radius:6px;padding:8px 12px;font-size:11.5px;color:var(--text);width:220px;z-index:50;box-shadow:0 4px 16px rgba(0,0,0,.4);line-height:1.5;pointer-events:none;}
+.qr-item:hover .qr-tooltip{display:block;}
+
+/* ── Bookmarks panel ─────── */
+#bm-panel{position:fixed;top:0;right:-340px;width:320px;height:100vh;background:var(--bg2);border-left:1px solid var(--border);z-index:200;transition:right .3s;overflow-y:auto;padding:20px;}
+#bm-panel.open{right:0;}
+#bm-panel h3{font-family:'Courier New',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
+#bm-close{background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;}
+.bm-entry{padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;margin-bottom:8px;cursor:pointer;transition:border-color .2s;}
+.bm-entry:hover{border-color:var(--bm-clr);}
+.bm-entry-title{font-size:12.5px;color:var(--text);margin-bottom:3px;}
+.bm-entry-section{font-size:11px;color:var(--text3);font-family:'Courier New',monospace;}
+.bm-entry-del{float:right;background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;}
+.bm-entry-del:hover{color:#ff7b72;}
+#bm-empty{color:var(--text3);font-size:13px;text-align:center;margin-top:40px;}
+
+/* ── Section nav ─────────── */
+.section-nav{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid var(--border);gap:12px;}
+.snav-btn{flex:1;background:var(--bg2);border:1px solid var(--border);color:var(--text2);padding:12px 16px;border-radius:8px;cursor:pointer;transition:all .2s;text-align:left;font-size:13px;font-family:'Georgia',serif;}
+.snav-btn:hover{border-color:var(--accent);color:var(--text);background:var(--bg3);}
+.snav-btn.next{text-align:right;}
+.snav-label{font-family:'Courier New',monospace;font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:3px;}
+.snav-title{color:var(--accent2);}
+
+/* ── Glosar ──────────────── */
+.glosar-search-wrap{display:flex;align-items:center;gap:12px;margin:16px 0;}
+#glosar-search{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;padding:8px 12px;outline:none;font-family:inherit;transition:border-color .2s;}
+#glosar-search:focus{border-color:var(--accent);}
+#glosar-search::placeholder{color:var(--text3);}
+#glosar-count{font-family:'Courier New',monospace;font-size:11px;color:var(--text3);white-space:nowrap;}
+.glosar-letter-group{margin-bottom:8px;}
+.glosar-letter{font-family:'Courier New',monospace;font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;padding:10px 0 4px;border-bottom:1px solid var(--border);margin-bottom:4px;}
+.glosar-item{display:flex;gap:14px;padding:7px 8px;border-radius:4px;transition:background .15s;align-items:flex-start;}
+.glosar-item:hover{background:var(--bg3);}
+.glosar-item.hidden{display:none;}
+.glosar-term{font-weight:600;color:var(--accent2);min-width:150px;flex-shrink:0;font-size:13px;}
+.glosar-def{color:var(--text2);font-size:13px;line-height:1.55;}
+
+/* ── Reading mode ────────── */
+body.reading #sidebar{transform:translateX(-100%);}
+body.reading #main{margin-left:0;}
+body.reading #topbar{opacity:0;pointer-events:none;transition:opacity .3s;}
+body.reading #topbar:hover{opacity:1;pointer-events:all;}
+body.reading #content{max-width:720px;padding:48px 32px 80px;}
+#read-exit{display:none;position:fixed;bottom:24px;left:24px;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;z-index:200;}
+body.reading #read-exit{display:block;}
+
+/* ── Back to top ──────────── */
+#back-top{position:fixed;bottom:24px;right:24px;background:var(--accent);color:#fff;border:none;border-radius:8px;width:40px;height:40px;font-size:18px;cursor:pointer;opacity:0;transition:opacity .3s;z-index:50;}
+#back-top.visible{opacity:1;}
+
+/* ── Share toast ─────────── */
+#share-toast{position:fixed;bottom:70px;right:24px;background:var(--read-clr);color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;}
+#share-toast.show{opacity:1;}
+
+/* ── Light theme ─────────── */
+body.light{--bg:#f8f9fc;--bg2:#fff;--bg3:#f0f2f7;--border:#d0d7e8;--accent:#1a56db;--accent2:#1e429f;--text:#1e293b;--text2:#475569;--text3:#94a3b8;--h1c:#0f172a;--h2c:#1a56db;--h3c:#2563eb;--code-bg:#0d1117;--code-text:#e6edf3;--tbl-head:#dbeafe;--tbl-alt:#f0f6ff;}
+body.light #topbar{background:rgba(248,249,252,.95);}
+body.light tbody tr:nth-child(even){background:#f0f6ff;}
+body.light tbody tr:nth-child(odd){background:#f8faff;}
+body.light tbody tr:hover{background:#e0eeff;}
+body.light td{color:#1e293b;}
+body.light td:first-child{color:#1e429f;}
+body.light .note{background:#eff6ff;color:#1d4ed8;}
+body.light .warning{background:#fffbeb;color:#92400e;}
+
+/* ── Mobile ───────────────── */
+#menu-btn{display:none;position:fixed;top:52px;left:12px;z-index:200;background:var(--accent);color:#fff;border:none;border-radius:6px;padding:7px 11px;font-size:17px;cursor:pointer;}
+@media(max-width:768px){
+  #menu-btn{display:block;}
+  #sidebar{transform:translateX(-100%);}
+  #sidebar.open{transform:translateX(0);}
+  #main{margin-left:0;}
+  #content{padding:16px 14px 60px;}
+  #topbar{padding:8px 10px;}
+  #topbar-meta,#breadcrumb{display:none;}
+  #topbar-right{gap:3px;}
+  .tb-btn{padding:5px 7px;font-size:12px;}
+  h1.sec-title{font-size:21px;}
+  h2.sub-title{font-size:15px;}
+  .code-block pre{font-size:11.5px;}
+  table{font-size:12px;}
+  .glosar-item{flex-direction:column;gap:3px;}
+  .glosar-term{min-width:0;}
+  .section-nav{flex-direction:column;}
+  #quickref{width:calc(100vw - 16px);right:-100vw;}
+  #quickref.visible{right:8px;}
+  .qr-grid{grid-template-columns:1fr;}
+  #overflow-menu{right:0;}
+}
+
+/* ── Print ────────────────── */
+@media print{
+  #sidebar,#topbar,#progress-bar,#back-top,#bm-panel,#menu-btn,
+  #read-exit,.copy-btn,.bm-btn,.mark-read-btn,.section-nav,#quickref{display:none!important;}
+  #main{margin-left:0!important;}
+  body{background:#fff!important;color:#000!important;font-size:11pt;}
+  h1.sec-title{color:#000!important;border-bottom:2pt solid #000!important;font-size:17pt;}
+  h2.sub-title{color:#1a56db!important;font-size:13pt;}
+  .deo-banner{background:#1a2e5a!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  td{color:#000!important;} td:first-child{color:#1a56db!important;}
+  thead th{background:#dbeafe!important;color:#1e3a8a!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .code-block{background:#f4f4f4!important;border:1pt solid #ccc!important;}
+  .code-block pre{color:#000!important;font-size:9pt;}
+  h1.sec-title{page-break-before:always;}
+}
+
+/* ── Scrollbar ────────────── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--accent);}
+mark{background:rgba(79,142,247,.28);color:inherit;border-radius:2px;padding:0 2px;}
+.section{opacity:1;transform:translateY(0);transition:opacity .25s,transform .25s;}
+.section.fading{opacity:0;transform:translateY(10px);}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button id="menu-btn" onclick="toggleSidebar()">☰</button>
+<button id="read-exit" onclick="toggleReadingMode()">✕ Izlaz</button>
+<div id="share-toast">🔗 Link kopiran!</div>
+
+<div id="bm-panel">
+  <h3>Bookmarks <button id="bm-close" onclick="closeBmPanel()">✕</button></h3>
+  <div id="bm-list"><div id="bm-empty">Nema bookmarks-a.<br><small>Klikni ★ pored bilo kog podnaslova.</small></div></div>
+</div>
+
+
+<div id="sidebar">
+  <div id="sb-header">
+    <h2>QA Referentni Dokument</h2>
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="Pretrazi... (pritisni /)" oninput="searchDoc(this.value)">
+    </div>
+    <div id="search-hint">/ za pretragu &nbsp;·&nbsp; <span id="search-count"></span></div>
+  </div>
+  <nav id="nav">
+    <div class="nav-deo-wrap">
+      <span class="nav-deo">DEO I — Manualno</span>
+      <button class="nav-collapse" onclick="toggleGroup('g1')">▾</button>
+    </div>
+    <div class="nav-group" id="g1">
+      <a class="nav-item" href="#s01"><span class="nav-icon">📖</span><span class="nav-item-text">1. Osnove i terminologija</span><span class="nav-check" onclick="toggleRead(event,'s01')"></span></a>
+      <a class="nav-item" href="#s02"><span class="nav-icon">🔄</span><span class="nav-item-text">2. SDLC i STLC</span><span class="nav-check" onclick="toggleRead(event,'s02')"></span></a>
+      <a class="nav-item" href="#s03"><span class="nav-icon">🧪</span><span class="nav-item-text">3. Tipovi i nivoi testiranja</span><span class="nav-check" onclick="toggleRead(event,'s03')"></span></a>
+      <a class="nav-item" href="#s04"><span class="nav-icon">🎯</span><span class="nav-item-text">4. Tehnike dizajniranja TC</span><span class="nav-check" onclick="toggleRead(event,'s04')"></span></a>
+      <a class="nav-item" href="#s05"><span class="nav-icon">📝</span><span class="nav-item-text">5. Pisanje test case-ova</span><span class="nav-check" onclick="toggleRead(event,'s05')"></span></a>
+      <a class="nav-item" href="#s06"><span class="nav-icon">🐛</span><span class="nav-item-text">6. Bug report i defect lifecycle</span><span class="nav-check" onclick="toggleRead(event,'s06')"></span></a>
+      <a class="nav-item" href="#s07"><span class="nav-icon">📋</span><span class="nav-item-text">7. Test plan i test strategija</span><span class="nav-check" onclick="toggleRead(event,'s07')"></span></a>
+      <a class="nav-item" href="#s08"><span class="nav-icon">⚡</span><span class="nav-item-text">8. Agile testiranje</span><span class="nav-check" onclick="toggleRead(event,'s08')"></span></a>
+      <a class="nav-item" href="#s09"><span class="nav-icon">📊</span><span class="nav-item-text">9. Test dokumentacija</span><span class="nav-check" onclick="toggleRead(event,'s09')"></span></a>
+      <a class="nav-item" href="#s10"><span class="nav-icon">🗄️</span><span class="nav-item-text">10. Test okruzenje i podaci</span><span class="nav-check" onclick="toggleRead(event,'s10')"></span></a>
+    </div>
+    <div class="nav-deo-wrap">
+      <span class="nav-deo">DEO II — Automatizacija</span>
+      <button class="nav-collapse" onclick="toggleGroup('g2')">▾</button>
+    </div>
+    <div class="nav-group" id="g2">
+      <a class="nav-item" href="#s11"><span class="nav-icon">🤖</span><span class="nav-item-text">11. Uvod u automatizaciju</span><span class="nav-check" onclick="toggleRead(event,'s11')"></span></a>
+      <a class="nav-item" href="#s12"><span class="nav-icon">🌐</span><span class="nav-item-text">12. Selenium / WebDriver</span><span class="nav-check" onclick="toggleRead(event,'s12')"></span></a>
+      <a class="nav-item" href="#s13"><span class="nav-icon">🏗️</span><span class="nav-item-text">13. Page Object Model</span><span class="nav-check" onclick="toggleRead(event,'s13')"></span></a>
+      <a class="nav-item" href="#s14"><span class="nav-icon">🔌</span><span class="nav-item-text">14. API testiranje</span><span class="nav-check" onclick="toggleRead(event,'s14')"></span></a>
+      <a class="nav-item" href="#s15"><span class="nav-icon">⚙️</span><span class="nav-item-text">15. CI/CD integracija</span><span class="nav-check" onclick="toggleRead(event,'s15')"></span></a>
+      <a class="nav-item" href="#s16"><span class="nav-icon">🔧</span><span class="nav-item-text">16. Framework arhitektura</span><span class="nav-check" onclick="toggleRead(event,'s16')"></span></a>
+      <a class="nav-item" href="#s17"><span class="nav-icon">📈</span><span class="nav-item-text">17. Performance testing</span><span class="nav-check" onclick="toggleRead(event,'s17')"></span></a>
+      <a class="nav-item" href="#s18"><span class="nav-icon">📱</span><span class="nav-item-text">18. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
+      <a class="nav-item" href="#s19"><span class="nav-icon">🧠</span><span class="nav-item-text">19. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
+      <a class="nav-item" href="#s20"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+    </div>
+  </nav>
+</div>
+
+
+<div id="main">
+  
+<div id="topbar">
+  <div id="topbar-left">
+    <span id="topbar-meta">QA Ref · v1.1 · 2026</span>
+    <span id="breadcrumb"></span>
+  </div>
+  <div id="topbar-right">
+    <button class="tb-btn" onclick="toggleQuickRef()" title="Quick Reference">⚡</button>
+    <button class="tb-btn" onclick="openBmPanel()" title="Bookmarks">★ <span id="bm-count" style="display:none">0</span></button>
+    <button class="tb-btn" onclick="toggleReadingMode()" id="read-btn" title="Rezim citanja">🔖</button>
+    <button class="tb-btn" id="theme-btn" onclick="toggleTheme()" title="Tema">☀</button>
+    <button class="tb-btn" id="overflow-btn" onclick="toggleOverflow()" title="Vise opcija">···</button>
+    <div id="overflow-menu">
+      <div class="ov-label">Velicina fonta</div>
+      <div class="ov-row">
+        <button class="fs-btn" onclick="changeFont(-1)">A−</button>
+        <span class="fs-display" id="fs-display">–</span>
+        <button class="fs-btn" onclick="changeFont(1)">A+</button>
+      </div>
+      <div class="ov-divider"></div>
+      <button class="ov-item" onclick="shareSection()">🔗 Kopiraj link na sekciju</button>
+      <button class="ov-item" onclick="printDoc()">🖨 Stampa / Export PDF</button>
+    </div>
+  </div>
+</div>
+
+  <div id="content">
+<div class="deo-banner">DEO I — MANUALNO TESTIRANJE</div>
+<div class="section" id="s01">
+<h1 class="sec-title" id="t-s01">📖 1. Osnove i terminologija</h1>
+<div class="section-meta"><span class="read-time">⏱ ~5 min</span><button class="mark-read-btn" id="mrb-s01" onclick="markRead('s01')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">1.1 Error, Defect, Failure — precizna razlika</h2>
+<p class="body-text">Error je ljudska greska — pogresna pretpostavka, nedostatak razumevanja zahteva, ili propust developera. Postoji iskljucivo u glavi ili u kodu, nije jos vidljiva u sistemu.</p>
+<p class="body-text">Defect (Bug) je materijalizovani error — error koji je usao u kod ili dokumentaciju. Sistem sadrzi defekt, ali korisnik ga mozda jos nije susreo.</p>
+<p class="body-text">Failure je vidljivi simptom defekta u runtime-u — sistem se ponasa drugacije od ocekivanog. Svaki failure je posledica defekta, ali nije svaki defekt odmah failure (moze biti u dead code-u).</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Developer pogresno razume zahtev          ->  Error
+         |
+Pise pogresan kod koji ulazi u sistem     ->  Defect
+         |
+Korisnik ili test pogodi taj code path    ->  Failure
+
+Kada prijavis bug, prijavis Failure (sta si video).
+Defect je ono sto developer ispravi u kodu.</pre></div>
+<h2 class="sub-title">1.2 Verification vs. Validation</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Verification</td><td>Da li gradimo stvar kako treba? Staticna aktivnost — radi se bez izvrsavanja softvera: code review, design review, inspekcija dokumentacije.</td></tr>
+<tr><td>Validation</td><td>Da li gradimo pravu stvar? Dinamicna aktivnost — izvrsava se softver: UAT, beta testiranje, demo sa korisnikom.</td></tr>
+</tbody></table></div>
+<div class="note">Moze se desiti da sistem prodje Verification (tacno implementuje specifikaciju) ali padne Validation — specifikacija je bila pogresna. Oba su odgovornost QA-a da pokrije.</div>
+<h2 class="sub-title">1.3 Quality Assurance vs. Quality Control</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>QC — Quality Control</td><td>Reaktivan — pronalazi defekte u gotovom ili polu-gotovom proizvodu. Fokus je na proizvodu. Izvrsavanje test case-ova, prijava bugova.</td></tr>
+<tr><td>QA — Quality Assurance</td><td>Proaktivan — popravljanje procesa da bi se sprecilo nastajanje defekata. Fokus je na procesu. Definisanje standarda, test strategije, process review.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">1.4 Static vs. Dynamic testiranje</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Static testiranje</td><td>Softver se ne izvrsava. Analizira se artefakt direktno: kod, dokumentacija, zahtevi. Alati: linters, SonarQube, peer review.</td></tr>
+<tr><td>Dynamic testiranje</td><td>Softver se izvrsava sa odredjenim ulazima i posmatraju se izlazi. Sve sto zovemo 'testiranjem' u svakodnevnom smislu.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">1.5 7 ISTQB principa testiranja</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Princip</th><th>Objasnjenje</th></tr></thead><tbody>
+<tr><td>1. Testiranje pokazuje prisustvo defekata</td><td>Ne mozes reci da softvera nema gresaka. Mozes samo reci koliko si gresaka nasao.</td></tr>
+<tr><td>2. Iscrpno testiranje nije moguce</td><td>Kombinatoricka eksplozija — broj mogucih ulaza je prakticno beskonacan. Resenje: risk-based prioritizacija.</td></tr>
+<tr><td>3. Rano testiranje stedi novac</td><td>Boehm-ova kriva: $1 u requirements, $10 u dizajnu, $100 u implementaciji, $1000 nakon deploymenta.</td></tr>
+<tr><td>4. Grupisanje defekata (Pareto)</td><td>80% defekata je u 20% modula — stari, kompleksni, cesto menjani moduli bez testova.</td></tr>
+<tr><td>5. Paradoks pesticida</td><td>Isti set testova vremenom prestaje da hvata nove defekte. Resenje: redovni review i prosirenje suite-a.</td></tr>
+<tr><td>6. Testiranje zavisi od konteksta</td><td>Nije isti pristup za pacemaker software i za marketing landing page.</td></tr>
+<tr><td>7. Odsustvo gresaka je zabluda</td><td>Sistem koji nema bugove ali ne resava pravi problem — ne prolazi. Validation je jednako vazna kao Verification.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">1.6 Kljucni pojmovi</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Test Oracle</td><td>Mehanizam kojim odredjujes da li je rezultat testa ispravan — specifikacija, iskustvo korisnika, drugi sistem.</td></tr>
+<tr><td>Test Basis</td><td>Sve sto se koristi kao osnova za dizajn test case-ova: zahtevi, user stories, kod, standardi.</td></tr>
+<tr><td>Test Coverage</td><td>Procenat test basis-a (zahteva, koda, funkcionalnosti) pokriven testovima.</td></tr>
+<tr><td>Regression vs. Retesting</td><td>Retesting = ponavljanje failovanog TC nakon bugfix-a. Regression = provera da bugfix nije pokvario nesto drugo.</td></tr>
+<tr><td>Test Harness</td><td>Infrastruktura koja podrzava izvrsavanje testova: runner, stubs, drivers, konfiguracija.</td></tr>
+<tr><td>Stub</td><td>Lazna implementacija koja vraca predefinisani odgovor. Ne verifikuje kako je pozvana.</td></tr>
+<tr><td>Mock</td><td>Napredniji od stub-a — verifikuje i kako je pozvana: koliko puta, sa kojim argumentima.</td></tr>
+<tr><td>Spy</td><td>Omotac oko realne implementacije koji belezi pozive za naknadnu verifikaciju.</td></tr>
+<tr><td>RTM</td><td>Requirements Traceability Matrix — tabela koja mapira zahteve na test case-ove i defekte.</td></tr>
+</tbody></table></div>
+</div>
+<div class="section" id="s02">
+<h1 class="sec-title" id="t-s02">🔄 2. SDLC i STLC</h1>
+<div class="section-meta"><span class="read-time">⏱ ~4 min</span><button class="mark-read-btn" id="mrb-s02" onclick="markRead('s02')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">2.1 SDLC — faze i QA uloga</h2>
+<div class="tbl-wrap"><table><thead><tr><th>SDLC Faza</th><th>QA Aktivnost</th></tr></thead><tbody>
+<tr><td>Requirements</td><td>Review zahteva, identifikacija ambiguiteta, procena testabilnosti.</td></tr>
+<tr><td>System Design</td><td>Review dizajna, priprema test strategije, identifikacija rizika.</td></tr>
+<tr><td>Implementation</td><td>Pisanje test case-ova paralelno sa razvojem, setup test okruzenja.</td></tr>
+<tr><td>Testing</td><td>Izvrsavanje testova, logovanje rezultata, prijava i retest defekata.</td></tr>
+<tr><td>Deployment</td><td>Smoke test u prod okruzenju, verifikacija konfiguracije.</td></tr>
+<tr><td>Maintenance</td><td>Regression testing nakon svakog bugfix-a ili nove verzije.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">2.2 V-Model</h2>
+<p class="body-text">V-Model je prosirenje waterfall SDLC-a koje eksplicitno mapira svaku razvojnu fazu na odgovarajuci nivo testiranja.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  Requirements        <---------------------->  Acceptance Testing (UAT)
+      System Design   <----------------->  System Testing
+          Architecture<-------------->  Integration Testing
+              Coding  <----------->  Unit Testing
+
+  Kljucna vrednost: test case-ovi za visi nivo se pisu
+  u odgovarajucoj razvojnoj fazi — ne ceka se kraj projekta.</pre></div>
+<h2 class="sub-title">2.3 Shift-Left testiranje</h2>
+<p class="body-text">Shift-left znaci pomeranje QA aktivnosti sto ranije u SDLC-u.</p>
+<ul><li class="bullet-item">QA ucestuje u requirements review-u i refinementu, ne tek kad feature bude gotov.</li>
+<li class="bullet-item">Test case-ovi se pisu paralelno sa razvojem, ne nakon.</li>
+<li class="bullet-item">Static analiza i code review su deo procesa od prvog dana.</li>
+<li class="bullet-item">Defekti u zahtevima se hvataju pre nego sto developer napise liniju koda.</li>
+</ul>
+<div class="note">Cena korekcije defekta eksponencijalno raste kako projekat odmice (Boehm-ova kriva). Defekt u zahtevima uhvacen na refinementu kosta par minuta razgovora. Isti defekt na produkciji kosta hotfix, deployment i komunikaciju sa korisnicima.</div>
+<h2 class="sub-title">2.4 STLC — faze sa entry/exit kriterijumima</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Faza</th><th>Aktivnost</th><th>Entry Criteria</th><th>Exit Criteria</th></tr></thead><tbody>
+<tr><td>1. Requirement Analysis</td><td>Razumevanje sta se testira, identifikacija testabilnih zahteva.</td><td>Dostupni zahtevi / user stories.</td><td>RTM nacrt, lista pitanja.</td></tr>
+<tr><td>2. Test Planning</td><td>Definisanje scope-a, resursa, rasporeda, rizika i alata.</td><td>Odobreni zahtevi.</td><td>Potpisan Test Plan.</td></tr>
+<tr><td>3. Test Case Design</td><td>Pisanje test case-ova, definisanje test podataka, priprema RTM-a.</td><td>Potpuni zahtevi, odobren Test Plan.</td><td>Odobreni TC-ovi, pripremljeni podaci.</td></tr>
+<tr><td>4. Environment Setup</td><td>Instalacija i konfiguracija okruzenja, deployovanje build-a.</td><td>Test plan, infrastruktura dostupna.</td><td>Go/No-Go, smoke test prolazi.</td></tr>
+<tr><td>5. Test Execution</td><td>Pokretanje testova, logovanje Pass/Fail/Blocked, prijava defekata, retest, regression.</td><td>Okruzenje dostupno, TC odobreni, build deployovan.</td><td>Svi TC izvrseni, defekti prijavljeni.</td></tr>
+<tr><td>6. Test Closure</td><td>Analiza metrika, lessons learned, arhiviranje, finalni izvestaj.</td><td>Exit criteria ispunjena.</td><td>Test Closure Report odobren.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">2.5 Entry i Exit Criteria — zasto su bitni</h2>
+<p class="body-text">Entry i exit criteria nisu birokratija — to su dogovori koji stite QA tim.</p>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Entry Criteria (Test Execution)</td><td>Build uspesno deployovan. Smoke test prolazi (bar 90%). Nema otvorenih Blocker defekata. Test case-ovi su odobreni. Test podaci su pripremljeni.</td></tr>
+<tr><td>Exit Criteria (Test Execution)</td><td>95%+ TC izvrseno. 100% Blocker i Critical zatvoreno. Preostali Major defekti dokumentovani i prihvaceni od PO-a. Regression suite prolazi.</td></tr>
+</tbody></table></div>
+</div>
+<div class="section" id="s03">
+<h1 class="sec-title" id="t-s03">🧪 3. Tipovi i nivoi testiranja</h1>
+<div class="section-meta"><span class="read-time">⏱ ~6 min</span><button class="mark-read-btn" id="mrb-s03" onclick="markRead('s03')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">3.1 Nivoi testiranja</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Nivo</th><th>Sta se testira</th><th>Ko testira</th><th>Tipicni alati</th></tr></thead><tbody>
+<tr><td>Unit Testing</td><td>Individualna funkcija ili metoda u izolaciji.</td><td>Developer</td><td>NUnit, xUnit, pytest</td></tr>
+<tr><td>Integration Testing</td><td>Interakcija izmedju dve ili vise komponenti.</td><td>Dev / QA</td><td>Postman, TestContainers</td></tr>
+<tr><td>System Testing</td><td>Celokupan sistem prema funkcionalnim i nefunkcionalnim zahtevima.</td><td>QA</td><td>Selenium, Cypress, Playwright</td></tr>
+<tr><td>Acceptance Testing</td><td>Validacija od strane krajnjeg korisnika ili Product Owner-a.</td><td>Business / QA</td><td>Manuelno, BDD alati</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">3.2 Black-box, White-box, Grey-box testiranje</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Pristup</th><th>Opis</th><th>Tipicna primena</th></tr></thead><tbody>
+<tr><td>Black-box</td><td>Tester ne zna nista o internoj implementaciji. Testira se samo ulaz i izlaz.</td><td>Funkcionalno testiranje, UAT, exploratory.</td></tr>
+<tr><td>White-box</td><td>Tester ima pun uvid u kod, arhitekturu i logiku. Testovi se pisu na osnovu poznavanja internih putanja.</td><td>Unit testiranje, code coverage analiza. Uglavnom developer/SDET.</td></tr>
+<tr><td>Grey-box</td><td>Delimicno poznavanje internih detalja — npr. QA zna strukturu baze, API kontrakt ili arhitekturu, ali ne i detalje implementacije.</td><td>API testiranje, integration testiranje. Najcesci scenario u praksi za iskusnog QA-a.</td></tr>
+</tbody></table></div>
+<div class="note">U praksi, iskusan QA radi grey-box testiranje cak i kad formalno testira black-box — poznavanje arhitekture i API-ja direktno poboljsava kvalitet test case-ova.</div>
+<h2 class="sub-title">3.3 Smoke vs. Sanity vs. Regression — precizna razlika</h2>
+<div class="warning">Najcesce pitanje na QA intervjuima i najcesce pogresno objasnjeno. Smoke = broad & shallow, Sanity = narrow & deep, Regression = broad & deep.</div>
+<div class="tbl-wrap"><table><thead><tr><th></th><th>Smoke</th><th>Sanity</th><th>Regression</th></tr></thead><tbody>
+<tr><td>Sirina</td><td>Broad — ceo sistem</td><td>Narrow — jedna oblast</td><td>Broad — ceo sistem</td></tr>
+<tr><td>Dubina</td><td>Shallow</td><td>Deep</td><td>Deep</td></tr>
+<tr><td>Kada</td><td>Svaki novi build</td><td>Nakon specificnog fix-a</td><td>Pre svakog release-a</td></tr>
+<tr><td>Trajanje</td><td>Kratko (minuti)</td><td>Kratko do srednje</td><td>Dugo</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer: deployovan je novi build sa fix-om za bug na login-u.
+
+  Smoke:      Da li aplikacija ucitava? Da li login postoji?
+  Sanity:     Da li je konkretan login bug ispravljen?
+  Regression: Da li je login fix pokvario registraciju, password reset, session?</pre></div>
+<h2 class="sub-title">3.4 Nefunkcionalni tipovi testiranja</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Performance Testing</td><td>Load (normalno opterecenje), Stress (iznad kapaciteta), Spike (nagli skok), Endurance/Soak (duzi period — trazi memory leak-ove).</td></tr>
+<tr><td>Security Testing</td><td>OWASP Top 10 — SQL Injection, XSS, CSRF, Broken Auth. Autentifikacija i autorizacija. Insecure Direct Object Reference.</td></tr>
+<tr><td>Usability Testing</td><td>Procena korisnickog iskustva — da li je sistem intuitivan, razumljiv i efikasan. Sprovodi se sa realnim korisnicima.</td></tr>
+<tr><td>Compatibility Testing</td><td>Browser-i (Chrome, Firefox, Safari, Edge), OS (Windows, macOS, Linux, iOS, Android), rezolucije i uredjaji.</td></tr>
+<tr><td>Accessibility Testing</td><td>WCAG 2.1 standardi — keyboard navigation, screen reader, kontrast teksta (min 4.5:1), alt tekst. Alati: axe DevTools, Lighthouse.</td></tr>
+<tr><td>Localization / I18n</td><td>I18n: da li je aplikacija dizajnirana da podrzi vise jezika? L10n: da li je konkretna lokalizacija ispravna?</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">3.5 Positive vs. Negative testiranje</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Tip</th><th>Opis</th><th>Primeri</th></tr></thead><tbody>
+<tr><td>Positive</td><td>Testiranje sa validnim ulazima i ocekivanim tokom. Sistem radi ono za sta je dizajniran.</td><td>Login sa validnim kredencijalima treba da otvori dashboard.</td></tr>
+<tr><td>Negative</td><td>Testiranje sa nevalidnim ulazima, granicnim vrednostima, nedostajucim podacima i neocekivanim akcijama.</td><td>Login sa pogresnim passwordom treba da vrati error, ne crash.</td></tr>
+</tbody></table></div>
+<div class="note">Senior QA mindset: negative testiranje je jednako vazno kao positive. Korisnici ne koriste sistem onako kako je zamislijen — greske, slucajni unosi i neocekivane akcije su svakodnevica.</div>
+<h2 class="sub-title">3.6 Alpha vs. Beta testiranje</h2>
+<div class="tbl-wrap"><table><thead><tr><th></th><th>Alpha</th><th>Beta</th></tr></thead><tbody>
+<tr><td>Ko testira</td><td>Interni tim (QA, dev, zaposleni)</td><td>Externi korisnici — ogranicena grupa</td></tr>
+<tr><td>Okruzenje</td><td>Kontrolisano, interna infrastruktura</td><td>Realno okruzenje korisnika</td></tr>
+<tr><td>Faza</td><td>Pre Beta, pre javnog release-a</td><td>Pre finalnog release-a</td></tr>
+<tr><td>Cilj</td><td>Pronaci sto vise defekata</td><td>Validacija u realnom kontekstu, feedback</td></tr>
+</tbody></table></div>
+</div>
+<div class="section" id="s04">
+<h1 class="sec-title" id="t-s04">🎯 4. Tehnike dizajniranja TC</h1>
+<div class="section-meta"><span class="read-time">⏱ ~5 min</span><button class="mark-read-btn" id="mrb-s04" onclick="markRead('s04')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">4.1 Equivalence Partitioning (EP)</h2>
+<p class="body-text">Deli ulazni skup na particije unutar kojih se sistem ponasa identicno. Testira se jedan reprezentativni element iz svake particije — i validnih i nevalidnih.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer: Polje 'Godine' — validno: 18-65
+
+  Particija 1 — ispod minimuma (nevalidna):  vrednost 10
+  Particija 2 — validni opseg:               vrednost 30
+  Particija 3 — iznad maksimuma (nevalidna): vrednost 80
+
+Umesto testiranja svakog broja od 1 do 100, dovoljno su 3 test case-a.</pre></div>
+<h2 class="sub-title">4.2 Boundary Value Analysis (BVA)</h2>
+<p class="body-text">Defekti se statisticki najcesce javljaju na granicama particija — off-by-one greske. BVA testira na granici, jedan ispod i jedan iznad.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer: Polje 'Godine' — validno: 18-65
+  17  ->  nevalidno  (jedan ispod donje granice)
+  18  ->  validno    (donja granica)
+  19  ->  validno    (jedan iznad donje granice)
+  64  ->  validno    (jedan ispod gornje granice)
+  65  ->  validno    (gornja granica)
+  66  ->  nevalidno  (jedan iznad gornje granice)</pre></div>
+<h2 class="sub-title">4.3 Decision Table Testing</h2>
+<p class="body-text">Koristi se kada postoje kombinacije uslova koji rezultiraju razlicitim akcijama. Svaka kolona tabele je jedan test case.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer: Popust na osnovu statusa i iznosa narudzbine
+
+  Uslov                     | TC1 | TC2 | TC3 | TC4
+  ---------------------------------------------------
+  Premium clan              |  Y  |  Y  |  N  |  N
+  Iznos > 5000 RSD          |  Y  |  N  |  Y  |  N
+  ---------------------------------------------------
+  Popust 20%                |  X  |     |     |
+  Popust 10%                |     |  X  |  X  |
+  Bez popusta               |     |     |     |  X</pre></div>
+<h2 class="sub-title">4.4 State Transition Testing</h2>
+<p class="body-text">Modelira ponasanje sistema kao skup stanja i prelaza izmedju njih.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [Draft] -> [Submitted] -> [Approved] -> [Shipped] -> [Delivered]
+                  |               |
+            [Cancelled]      [Rejected]
+
+  Testirati: svaki validni prelaz + pokusaj nevalidnog prelaza (Draft -> Shipped direktno)</pre></div>
+<h2 class="sub-title">4.5 Pairwise / All-pairs testiranje</h2>
+<p class="body-text">Resava problem kombinatoricke eksplozije kada imas vise parametara. Statisticki, vecina defekata se manifestuje pri interakciji dva parametra, ne svih N.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  OS: Windows, macOS, Linux  (3 vrednosti)
+  Browser: Chrome, Firefox, Safari  (3 vrednosti)
+  Jezik: EN, DE, FR  (3 vrednosti)
+
+  Sve kombinacije:  3 x 3 x 3 = 27 test case-ova
+  Pairwise:         ~9 test case-ova uz visoku stopu detekcije</pre></div>
+<h2 class="sub-title">4.6 Error Guessing</h2>
+<p class="body-text">Iskustvena tehnika — QA na osnovu domain znanja pogadja gde su defekti najverovantniji. Nije zamena za formalne tehnike, dopuna je.</p>
+<ul><li class="bullet-item">Prazna polja i null vrednosti.</li>
+<li class="bullet-item">Specijalni karakteri i unicode u text input-ima.</li>
+<li class="bullet-item">Maksimalna duzina stringa (ponasanje na 256+ karaktera).</li>
+<li class="bullet-item">Duplikati (isti email pri registraciji).</li>
+<li class="bullet-item">Istovremene akcije (double-click na submit).</li>
+<li class="bullet-item">Expired session tokom popunjavanja forme.</li>
+</ul>
+<h2 class="sub-title">4.7 White-box tehnike</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Tehnika</th><th>Opis</th><th>Napomena</th></tr></thead><tbody>
+<tr><td>Statement Coverage</td><td>Svaka linija koda izvrsena bar jednom.</td><td>Najslabija — ne pokriva grane.</td></tr>
+<tr><td>Branch Coverage</td><td>Svaka grana (if/else, switch) pokrivena.</td><td>Jaca od statement coverage.</td></tr>
+<tr><td>Condition Coverage</td><td>Svaki boolean uslov mora biti true i false bar jednom.</td><td>Jaca od branch coverage.</td></tr>
+<tr><td>Path Coverage</td><td>Svaki moguci put kroz program.</td><td>Najpotpunija, eksponencijalno skupa za kompleksne funkcije.</td></tr>
+<tr><td>MC/DC Coverage</td><td>Modified Condition/Decision Coverage — svaki uslov nezavisno utice na odluku.</td><td>Industrijski standard za safety-critical sisteme (avijacija, medicina).</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">4.8 Kada koristiti koju tehniku</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Situacija</th><th>Preporucena tehnika</th></tr></thead><tbody>
+<tr><td>Numericka polja, datumi, opsezi</td><td>EP + BVA</td></tr>
+<tr><td>Kompleksna biznis pravila sa vise uslova</td><td>Decision Table</td></tr>
+<tr><td>Workflow, statusi, multi-step procesi</td><td>State Transition</td></tr>
+<tr><td>Vise parametara, compatibility matrice</td><td>Pairwise / All-pairs</td></tr>
+<tr><td>Novi feature, nedovoljna specifikacija</td><td>Exploratory Testing</td></tr>
+<tr><td>Iskusan QA na poznatom domenu</td><td>Error Guessing (kao dopuna)</td></tr>
+</tbody></table></div>
+</div>
+<div class="section" id="s05">
+<h1 class="sec-title" id="t-s05">📝 5. Pisanje test case-ova</h1>
+<div class="section-meta"><span class="read-time">⏱ ~5 min</span><button class="mark-read-btn" id="mrb-s05" onclick="markRead('s05')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">5.1 Struktura profesionalnog test case-a</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>ID</td><td>Jedinstven identifikator (TC-001, LOGIN-TC-003). Koristiti prefiks modula.</td></tr>
+<tr><td>Title</td><td>Koncizan naziv koji opisuje STA se testira i POD KOJIM USLOVOM. Ne 'Test login'.</td></tr>
+<tr><td>Priority</td><td>High / Medium / Low — utice na redosled izvrsavanja.</td></tr>
+<tr><td>Preconditions</td><td>Stanje sistema, podaci i okruzenje koji moraju biti ispunjeni pre pocetka.</td></tr>
+<tr><td>Test Data</td><td>Konkretne vrednosti koje se koriste (email, password, iznos).</td></tr>
+<tr><td>Steps</td><td>Numerisani, atomski koraci — svaki korak = jedna akcija.</td></tr>
+<tr><td>Expected Result</td><td>Precizno definisano ponasanje sistema. Mora biti verifikabilno i nedvosmisleno.</td></tr>
+<tr><td>Actual Result</td><td>Popunjava se tokom izvrsavanja. Prazno dok se ne izvrsi.</td></tr>
+<tr><td>Status</td><td>Pass / Fail / Blocked / Skipped.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">5.2 Status — razlika Blocked vs Skipped</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Pass</td><td>Test case je izvrsen i sistem se ponasa kako je definisano u Expected Result-u.</td></tr>
+<tr><td>Fail</td><td>Test case je izvrsen i sistem se NE ponasa kako je definisano. Defekt se prijavljuje.</td></tr>
+<tr><td>Blocked</td><td>Nije moglo da se izvrsi zbog spoljne prepreke: environment pao, blocker bug, test podaci nisu pripremljeni. Nije QA odluka.</td></tr>
+<tr><td>Skipped</td><td>Svesna odluka da se TC ne izvrsi: out of scope, deferred. QA ili lead donosi odluku svesno.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">5.3 Title — kako pisati</h2>
+<p class="body-text">Format koji uvek radi: [Akcija] + [Uslov/Ulaz] + [Ocekivani ishod].</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Lose:
+  'Test login'  |  'Ne radi'  |  'Problem sa formom'
+
+Dobro:
+  'Login sa validnim kredencijalima preusmjerava korisnika na dashboard'
+  'Login sa pogresnim passwordom prikazuje error poruku'
+  'Login sa praznim email poljem prikazuje validacionu gresku'</pre></div>
+<h2 class="sub-title">5.4 Happy path, edge case, negative path</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Happy path</td><td>Idealni scenario, sve je validno, korisnik radi tacno ono sto se ocekuje. Mora uvek biti pokriven.</td></tr>
+<tr><td>Edge case</td><td>Granicna vrednost ili ekstremni uslov koji je tehnicki validan ali neuobicajen: maksimalni unos, prazna lista, 10.000 elemenata.</td></tr>
+<tr><td>Negative path</td><td>Nevalidni ulazi i neocekivane akcije: pogresni tipovi podataka, nedostajuca obavezna polja, akcije bez dozvola.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">5.5 Granularnost — kada deliti, kada spajati</h2>
+<h3 class="sub-sub-title">Kada DELITI:</h3>
+<ul><li class="bullet-item">Svaki korak ima sopstveni expected result koji je bitan sam po sebi.</li>
+<li class="bullet-item">Fail jednog dela ne znaci nuzno fail celog flowa.</li>
+<li class="bullet-item">Razliciti TC-ovi imaju razlicite preconditions ili test podatke.</li>
+</ul>
+<h3 class="sub-sub-title">Kada SPAJATI:</h3>
+<ul><li class="bullet-item">Koraci su strogo sekvencijalni i bez prethodnog nema smisla testirati sledeci.</li>
+<li class="bullet-item">Radi se o end-to-end flow verifikaciji (npr. celokupan checkout proces kao smoke TC).</li>
+</ul>
+<h2 class="sub-title">5.6 RTM — Requirements Traceability Matrix</h2>
+<p class="body-text">RTM mapira zahteve na test case-ove i defekte. Omogucava odgovor na pitanje: 'Koji zahtevi su pokriveni testovima i koji imaju otvorene defekte?'</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Zahtev ID | Opis                        | TC ID(s)       | Status      | Defekti
+----------+-----------------------------+----------------+-------------+---------
+REQ-001   | Korisnik moze da se uloguje | TC-001,TC-002, | In Progress | BUG-045
+          |                             | TC-003,TC-004  |             |
+REQ-002   | Reset passworda             | TC-010, TC-011 | Pass        | -
+REQ-003   | Sesija istice nakon 30 min  | TC-015         | Blocked     | BUG-051</pre></div>
+<h2 class="sub-title">5.7 Primer test case-a</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Title:         Login sa validnim email-om i passwordom preusmjerava na dashboard
+
+Preconditions:
+  - Aplikacija dostupna na test okruzenju
+  - Postoji aktivan nalog: user@test.com / Test1234!
+  - Korisnik nije ulogovan
+
+Steps:
+  1. Otvoriti login stranicu
+  2. Uneti email u polje Email
+  3. Uneti password u polje Password
+  4. Kliknuti dugme Login
+
+Expected Result:
+  - Korisnik je preusmerеn na /dashboard
+  - Header prikazuje korisnicko ime ili avatar
+  - Ne prikazuje se poruka o gresci</pre></div>
+</div>
+<div class="section" id="s06">
+<h1 class="sec-title" id="t-s06">🐛 6. Bug report i defect lifecycle</h1>
+<div class="section-meta"><span class="read-time">⏱ ~5 min</span><button class="mark-read-btn" id="mrb-s06" onclick="markRead('s06')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">6.1 Struktura profesionalnog bug reporta</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>ID</td><td>Automatski generisan u alatu (JIRA, Azure DevOps).</td></tr>
+<tr><td>Title</td><td>Kratak, koncizan opis — Sta + Gde + Pod kojim uslovom.</td></tr>
+<tr><td>Environment</td><td>OS, browser i verzija, okruzenje (Staging/UAT), build broj, rezolucija.</td></tr>
+<tr><td>Preconditions</td><td>Stanje sistema pre reprodukcije.</td></tr>
+<tr><td>Steps to Reproduce</td><td>Numerisani, atomski koraci. Svaki mora biti neophodan.</td></tr>
+<tr><td>Actual Result</td><td>Precizno sta se desilo. Screenshot/video ako je moguce.</td></tr>
+<tr><td>Expected Result</td><td>Sta bi sistem trebalo da uradi — po zahtevima ili zdravom razumu.</td></tr>
+<tr><td>Severity</td><td>Tehnicki uticaj na sistem.</td></tr>
+<tr><td>Priority</td><td>Poslovni uticaj i hitnost korekcije.</td></tr>
+<tr><td>Attachments</td><td>Screenshot, video, log, HAR fajl, console errors.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">6.2 Title — kako pisati</h2>
+<p class="body-text">Format: [Sta se desava] + [Gde] + [Pod kojim uslovom]</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Lose:
+  'Bug na login-u'  |  'Ne radi'  |  'Problem sa formom'
+
+Dobro:
+  'Login forma se submituje bez greske pri praznom password polju'
+  'Upload avatara vraca 500 gresku za PNG fajlove vece od 5MB'
+  'Dropdown za drzavu ne prikazuje opcije na Safari 17 / macOS Sonoma'</pre></div>
+<h2 class="sub-title">6.3 Severity vs. Priority — sve kombinacije</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Kombinacija</th><th>Scenario</th></tr></thead><tbody>
+<tr><td>High Severity / High Priority</td><td>Crash na checkout-u u produkciji. Hitno, odmah.</td></tr>
+<tr><td>High Severity / Low Priority</td><td>Crash na admin stranici koju koristi 1 osoba mesecno. Vazno, ali ne hitno.</td></tr>
+<tr><td>Low Severity / High Priority</td><td>Logo klijenta pogresno napisan dan pre prezentacije. Kosmeticko, ali hitno.</td></tr>
+<tr><td>Low Severity / Low Priority</td><td>Typo u footer-u. Fiksirati kad bude prilike.</td></tr>
+</tbody></table></div>
+<h3 class="sub-sub-title">Severity nivoi (ISTQB)</h3>
+<div class="tbl-wrap"><table><thead><tr><th>Nivo</th><th>Definicija</th></tr></thead><tbody>
+<tr><td>Blocker</td><td>Sistem se ne moze koristiti. Testiranje je blokirano. Nema workaround-a.</td></tr>
+<tr><td>Critical</td><td>Kriticna funkcionalnost je slomljena. Workaround ne postoji ili je neprihvatljiv.</td></tr>
+<tr><td>Major</td><td>Znacajna funkcionalnost je ostecena. Workaround postoji ali je neudoban.</td></tr>
+<tr><td>Minor</td><td>Manja funkcionalnost je ostecena. Prihvatljiv workaround postoji.</td></tr>
+<tr><td>Trivial</td><td>Estetski problem — UI, tekst, formatiranje. Bez funkcionalnog uticaja.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">6.4 Zivotni ciklus defekta</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [New] -> [Assigned] -> [In Progress] -> [Fixed] -> [Ready for Retest]
+                                                             |
+                                                         [Retest]
+                                                         /      \
+                                                   [Closed]  [Reopened]
+                                                                 |
+                                                         [In Progress] ...</pre></div>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Rejected</td><td>Nije defekt. By design, bug u test case-u, ili nije reproducibilno. QA treba da ospori ako se ne slaze.</td></tr>
+<tr><td>Deferred</td><td>Validno, ali se odlaze za kasniji release. Bug ostaje otvoren i vraca se u backlog.</td></tr>
+<tr><td>Duplicate</td><td>Isti defekt je vec prijavljen. Linkuje se sa originalnim i zatvara.</td></tr>
+<tr><td>Cannot Reproduce</td><td>Developer nije mogao da reprodukuje. Nije isto sto i Rejected. QA proverava steps, environment, dostavlja vise dokaza.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">6.5 Bug Triage</h2>
+<p class="body-text">Bug triage je proces evaluacije i prioritizacije prijavljenih defekta. Odrzava se redovno — obicno jednom po sprintu ili nedeljno.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Ko ucestvuje</th><th>Uloga</th></tr></thead><tbody>
+<tr><td>QA</td><td>Predstavlja tehnicki uticaj i kontekst defekta.</td></tr>
+<tr><td>Product Owner / PM</td><td>Procenjuje poslovni uticaj i prioritet.</td></tr>
+<tr><td>Tech Lead / Developer</td><td>Procenjuje effort korekcije i tehnicku kompleksnost.</td></tr>
+</tbody></table></div>
+<div class="note">QA ne odredjuje Priority — to je poslovni poziv PM-a. QA odredjuje Severity — to je tehnicki poziv koji QA mora da odbrani.</div>
+<h2 class="sub-title">6.6 Primer kompletnog bug reporta</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Title:
+  Login forma se submituje bez greske pri unosu praznog password polja
+
+Environment:
+  OS: Windows 11 | Browser: Chrome 124.0.6367.91
+  Okruzenje: Staging | Build: 3.2.1-rc1
+
+Preconditions:
+  - Korisnik nije ulogovan
+  - Login stranica je otvorena na: https://staging.app.com/login
+
+Steps to Reproduce:
+  1. Uneti validan email: user@test.com
+  2. Ostaviti Password polje prazno
+  3. Kliknuti dugme 'Login'
+
+Actual Result:
+  Forma se submituje. Stranica se reload-uje i korisnik ostaje na
+  login stranici bez ikakve povratne poruke. HTTP Status: 200.
+
+Expected Result:
+  Ispod Password polja prikazuje se: 'Password is required'
+  Forma se ne submituje.
+
+Severity:    Major  |  Priority:    High</pre></div>
+</div>
+<div class="section" id="s07">
+<h1 class="sec-title" id="t-s07">📋 7. Test plan i test strategija</h1>
+<div class="section-meta"><span class="read-time">⏱ ~4 min</span><button class="mark-read-btn" id="mrb-s07" onclick="markRead('s07')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">7.1 Test strategija vs. Test plan</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Test strategija</td><td>Dokument visokog nivoa koji definise KAKO organizacija pristupa testiranju uopste. Pise se jednom. Autor: QA Lead.</td></tr>
+<tr><td>Test plan</td><td>Dokument nizeg nivoa koji definise STA, KO, KADA i KAKO se testira za konkretan release. Pise se za svaki release. Autor: QA inzenjer.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">7.2 Test plan — IEEE 829 struktura</h2>
+<div class="tbl-wrap tall"><table><thead><tr><th>Sekcija</th><th>Sadrzaj</th></tr></thead><tbody>
+<tr><td>1. Test Plan ID</td><td>Jedinstven identifikator dokumenta i verzija.</td></tr>
+<tr><td>2. Introduction</td><td>Svrha, scope i referentni dokumenti.</td></tr>
+<tr><td>3. Test Items</td><td>Sta se testira — feature-i, moduli, build verzija.</td></tr>
+<tr><td>4. Features to Test</td><td>Konkretne funkcionalnosti u scope-u.</td></tr>
+<tr><td>5. Features Not to Test</td><td>Eksplicitno isljucene oblasti i razlog — jednako vazno kao scope.</td></tr>
+<tr><td>6. Approach</td><td>Tehnika testiranja, tipovi testova, nivo automatizacije.</td></tr>
+<tr><td>7. Entry/Exit Criteria</td><td>Uslovi pocetka i zavrsetka testiranja za ovaj ciklus.</td></tr>
+<tr><td>8. Test Deliverables</td><td>Artefakti: test case-ovi, izvestaji, defect log.</td></tr>
+<tr><td>9. Testing Tasks</td><td>Konkretne aktivnosti, ko je odgovoran, redosled.</td></tr>
+<tr><td>10. Environmental Needs</td><td>Okruzenja, podaci, alati, pristup, mock servisi.</td></tr>
+<tr><td>11. Responsibilities</td><td>RACI matrica.</td></tr>
+<tr><td>12. Schedule</td><td>Vremenski plan — milestone-i i trajanje svake faze.</td></tr>
+<tr><td>13. Risks & Mitigation</td><td>Potencijalni rizici i planovi za ublazavanje.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">7.3 Risk-based testing</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Risk Score = Probability of Failure x Business Impact
+
+  Visok rizik   ->  testirati prvo i najdetaljnije
+  Srednji rizik ->  standardna pokrivenost
+  Nizak rizik   ->  smoke level ili izostaviti
+
+Faktori visokog rizika:
+  - Novi ili znacajno izmenjeni moduli
+  - Kriticna funkcionalna oblast (payment, auth, data migration)
+  - Oblasti sa istorijski visokim brojem defekata
+  - Kod bez code review-a ili unit testova</pre></div>
+<h2 class="sub-title">7.4 Test estimation — tehnike</h2>
+<h3 class="sub-sub-title">Work Breakdown Structure (WBS)</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  Pisanje test case-ova:     8h
+  Priprema test podataka:    2h
+  Setup okruzenja:           1h
+  Manuelno izvrsavanje:     16h
+  Regression:                4h
+  Defect reporting/retest:   3h
+  ----------------------------
+  Ukupno:                   34h</pre></div>
+<h3 class="sub-sub-title">Three-Point Estimation</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Expected = (O + 4M + P) / 6
+  O = Optimistic  |  M = Most likely  |  P = Pessimistic
+
+  Primer: O=3h, M=5h, P=10h  ->  Expected = 5.5h
+
+Uvek ukljuciti: review TC-ova, retest nakon bugfix-ova,
+regression, buffer za okruzenje (min 10-20%).</pre></div>
+<h2 class="sub-title">7.5 Test Closure Report</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Sekcija</th><th>Sadrzaj</th></tr></thead><tbody>
+<tr><td>Test Summary</td><td>Ukupan broj TC-ova, pass/fail/blocked/skipped, pokrivenost scope-a.</td></tr>
+<tr><td>Defect Metrics</td><td>Ukupno prijavljenih, otvorenih, zatvorenih, deferred. Distribucija po Severity-ju.</td></tr>
+<tr><td>Coverage</td><td>Koji zahtevi su pokriveni, koji nisu i zasto. RTM status.</td></tr>
+<tr><td>Open Defects</td><td>Lista otvorenih defekata sa Severity, Priority i obrazlozenjem.</td></tr>
+<tr><td>Lessons Learned</td><td>Sta je islo dobro, sta lose, sta promeniti u sledecem ciklusu.</td></tr>
+<tr><td>Go / No-Go preporuka</td><td>Eksplicitna QA preporuka za release na osnovu rezultata i rizika.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Go/No-Go primer:
+  '94% TC-ova prolazi (45/48). 0 Blocker, 0 Critical otvoreno.
+   2 Major defekta deferred uz saglasnost PM-a (BUG-089, BUG-092).
+   Regression suite: 100% pass.
+   QA preporuka: GO za release uz monitoring deferred defekata.'</pre></div>
+</div>
+<div class="section" id="s08">
+<h1 class="sec-title" id="t-s08">⚡ 8. Agile testiranje</h1>
+<div class="section-meta"><span class="read-time">⏱ ~5 min</span><button class="mark-read-btn" id="mrb-s08" onclick="markRead('s08')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">8.1 QA uloga u svakom delu sprinta</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Sprint Faza</th><th>QA Aktivnost</th></tr></thead><tbody>
+<tr><td>Sprint Refinement</td><td>Postavljanje pitanja koja developer i PO nisu postavili: edge case-ovi, ponasanje pri gresakama external API-ja. Shift-left u praksi.</td></tr>
+<tr><td>Sprint Planning</td><td>Review user story-ja: da li je story testabilan, da li AC postoje i da li su precizni. Procena QA effort-a za sprint.</td></tr>
+<tr><td>Development</td><td>Paralelno pisanje test case-ova. Priprema test podataka. Setup ili verifikacija test okruzenja.</td></tr>
+<tr><td>Testing</td><td>Manuelno izvrsavanje TC-ova. Exploratory testiranje. Prijava defekata. Retest. Regression.</td></tr>
+<tr><td>Sprint Review</td><td>Verifikacija acceptance criteria zajedno sa PO-om. QA verifikuje da ono sto je prikazano zaista radi.</td></tr>
+<tr><td>Retrospective</td><td>Sta je blokiralo testiranje, gde smo imali defect leakage, sta treba promeniti u procesu.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">8.2 Definition of Done (DoD)</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer DoD stavki relevantnih za QA:
+
+  [ ] Svi acceptance criteria su ispunjeni i verifikovani od strane QA
+  [ ] Test case-ovi su napisani i odobreni
+  [ ] Sve High i Critical severity greske su zatvorene
+  [ ] Regression suite prolazi bez novih gresaka
+  [ ] Funkcionalnost je testirana na staging okruzenju
+  [ ] API kontrakt je verifikovan (ako postoji API promena)</pre></div>
+<h2 class="sub-title">8.3 Definition of Ready (DoR)</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer DoR stavki relevantnih za QA:
+
+  [ ] User story ima jasne acceptance criteria
+  [ ] Acceptance criteria su testabilni (precizni, merljivi)
+  [ ] UI mockup ili dizajn je dostupan (ako postoji)
+  [ ] Zavisnosti su identifikovane i razresene
+  [ ] Test podaci su definisani ili postoji plan za njihovu pripremu</pre></div>
+<h2 class="sub-title">8.4 Acceptance Criteria — pisanje i verifikacija</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Lose AC:  'Korisnik moze da se uloguje u sistem.'
+
+Dobro (Given/When/Then format):
+  Given: Korisnik je na login stranici i nije ulogovan
+  When:  Unese validan email i password i klikne Login
+  Then:  Biva preusmerеn na /dashboard
+         I header prikazuje njegovo ime
+         I sesija traje 30 minuta neaktivnosti</pre></div>
+<h2 class="sub-title">8.5 Three Amigos sesija</h2>
+<p class="body-text">Three Amigos je kratka sesija pre razvoja feature-a. Ucestvuju Product Owner (biznis), Developer (tehnika) i QA (kvalitet). Cilj: zajednicki razgovor koji otkriva nesuglasice i edge case-ove pre nego sto developer napise liniju koda.</p>
+<h2 class="sub-title">8.6 BDD — Behavior-Driven Development</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Feature: User Login
+
+  Scenario: Successful login with valid credentials
+    Given the user is on the login page
+    When  the user enters email 'user@test.com'
+    And   the user enters password 'Test1234!'
+    Then  the user is redirected to the dashboard
+    And   the header displays the user's name
+
+  Alati: Cucumber (Java), SpecFlow (C#), Behave (Python)</pre></div>
+<h2 class="sub-title">8.7 Agile Testing Quadrants (Brian Marick)</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>                    Business-facing
+                          |
+      Q2 (supports team)  |  Q3 (critiques product)
+  Funkcionalni testovi    |  Exploratory testiranje
+  BDD scenariji           |  Usability testiranje
+  Story testovi           |  UAT / Alpha / Beta
+  (manuelno i auto)       |  (manuelno)
+                          |
+  ─────────────────────── + ───────────────────────
+                          |
+      Q1 (supports team)  |  Q4 (critiques product)
+  Unit testovi            |  Performance testiranje
+  Component testovi       |  Security testiranje
+  Integration testovi     |  Load testiranje
+  (automatizovano)        |  (alati)</pre></div>
+<h2 class="sub-title">8.8 QA metrike u Agile-u</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Metrika</th><th>Opis</th><th>Zasto je bitna</th></tr></thead><tbody>
+<tr><td>Defect Density</td><td>Broj defekata / velicina funkcionalnosti.</td><td>Indikator kvaliteta koda po modulu.</td></tr>
+<tr><td>Defect Leakage</td><td>% defekata nasenih na produkciji vs. ukupno.</td><td>Efikasnost QA procesa.</td></tr>
+<tr><td>Escaped Defects</td><td>Defekti koje su nasli korisnici.</td><td>Kljucna KPI za ceo tim.</td></tr>
+<tr><td>Pass Rate</td><td>% TC-ova koji prolaze po sprintu.</td><td>Trend kvaliteta kroz sprint.</td></tr>
+<tr><td>Test Coverage</td><td>% user story-ja pokrivenih TC-ovima.</td><td>Rizik nepokrivenih oblasti.</td></tr>
+<tr><td>Reopen Rate</td><td>% bugova koji se ponovo otvaraju.</td><td>Kvalitet bugfix-ova.</td></tr>
+<tr><td>Automation Coverage</td><td>% regression suite-a koji je automatizovan.</td><td>Dugorocna odrzivost.</td></tr>
+</tbody></table></div>
+</div>
+<div class="section" id="s09">
+<h1 class="sec-title" id="t-s09">📊 9. Test dokumentacija</h1>
+<div class="section-meta"><span class="read-time">⏱ ~4 min</span><button class="mark-read-btn" id="mrb-s09" onclick="markRead('s09')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">9.1 Tipovi test izvestaja</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Test Execution Report</td><td>Operativni — pise se tokom ili odmah nakon izvrsavanja testova. Namenjen QA timu i tech lead-u.</td></tr>
+<tr><td>Test Summary Report</td><td>Takticki — pise se na kraju test ciklusa ili sprinta. Namenjen timu i project manager-u.</td></tr>
+<tr><td>Test Closure Report</td><td>Strateski — pise se na kraju release-a. Namenjen stakeholderima i menadzmentu.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">9.2 Test Execution Report — sadrzaj</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Test Execution Report — Sprint 14, Dan 3
+
+Period:   15.01.2026 — 17.01.2026
+Build:    3.2.1-rc2  |  Okruzenje: Staging
+
+Izvrseno:  38 / 52 TC (73%)
+Pass: 34 (89%)  |  Fail: 3 (8%)  |  Blocked: 1 (3%)
+
+Novo prijavljeni defekti:
+  BUG-112  [Major]    Upload avatara vraca 500 za PNG > 5MB
+  BUG-113  [Minor]    Dropdown se ne zatvara klikom van njega na Firefox
+  BUG-114  [Critical] Sesija ne istice nakon 30 min neaktivnosti
+
+Blocker:
+  BUG-111 — payment modul nedostupan na staging-u. Ceka fix od DevOps tima.</pre></div>
+<h2 class="sub-title">9.3 Defect metrike i trendovi</h2>
+<p class="body-text">Metrike same po sebi nisu korisne — korisni su trendovi kroz vreme i poredjenje izmedju sprintova.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Distribucija po Severity-ju:
+  Sprint 14:  Blocker:0  Critical:1  Major:4  Minor:7  Trivial:2
+  Sprint 13:  Blocker:1  Critical:2  Major:6  Minor:5  Trivial:3
+  Trend: broj Critical defekata opada — pozitivan signal.
+
+Defect Leakage:
+  Ukupno defekata Sprint 14:  14
+  Pronadjeno u QA:             12  (86%)
+  Pronadjeno na produkciji:     2  (14%) <- escaped defects
+  Cilj: escaped defects < 5%  ->  potrebna akcija
+
+Reopen Rate:
+  Zatvorenih: 18  |  Ponovo otvorenih: 3  (17%)
+  Uzrok: bugfix-ovi nisu dovoljno testirani pre oznacavanja kao Fixed.</pre></div>
+<h2 class="sub-title">9.4 Kako prezentovati QA status stakeholderima</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Lose:
+  'Izvrsili smo 47 TC-ova, 41 je proslo, 4 failovala, 2 blocked.'
+
+Dobro:
+  'Sistem je stabilan i spreman za release uz jedan rizik koji
+   zahteva vasu odluku: postoje 2 Minor defekta na checkout stranici
+   koji se javljaju samo na Safari browser-u (3% nasih korisnika).
+   Preporuka: releasovati sada, fiksirati u hotfix-u sledece nedelje.'
+
+Princip: QA daje cinjenice + preporuku + opcije. Stakeholder donosi odluku.</pre></div>
+<h2 class="sub-title">9.5 Azure DevOps Test Plans — kljucne funkcionalnosti</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Funkcionalnost</th><th>Opis</th></tr></thead><tbody>
+<tr><td>Test Plans</td><td>Kontejner za organizovanje test suite-ova po release-u ili sprintu.</td></tr>
+<tr><td>Test Suites</td><td>Grupisanje TC-ova po modulu, funkcionalnosti ili tipu (regression, smoke).</td></tr>
+<tr><td>Test Cases</td><td>Work item tip koji cuva korake, expected result, attachments.</td></tr>
+<tr><td>Test Runs</td><td>Izvrsavanje test suite-a — belezi ko je izvrsio, kada i sa kojim rezultatom.</td></tr>
+<tr><td>Charts</td><td>Vizuelizacija rezultata — pie chart pass/fail, trend kroz vreme.</td></tr>
+<tr><td>Traceability</td><td>Direktna veza izmedju Test Case work item-a i User Story / Bug work item-a.</td></tr>
+</tbody></table></div>
+</div>
+<div class="section" id="s10">
+<h1 class="sec-title" id="t-s10">🗄️ 10. Test okruzenje i podaci</h1>
+<div class="section-meta"><span class="read-time">⏱ ~4 min</span><button class="mark-read-btn" id="mrb-s10" onclick="markRead('s10')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">10.1 Test environment vs. produkcija</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Aspekt</th><th>Test okruzenje</th><th>Produkcija</th></tr></thead><tbody>
+<tr><td>Podaci</td><td>Sinteticki ili anonimizovani</td><td>Realni korisnici</td></tr>
+<tr><td>Konfiguracija</td><td>Moze se razlikovati</td><td>Referentna tacka</td></tr>
+<tr><td>Dostupnost</td><td>Moze biti nestabilno</td><td>24/7</td></tr>
+<tr><td>Verzija</td><td>RC build koji se testira</td><td>Poslednji stabilni release</td></tr>
+<tr><td>Integracije</td><td>Mock servisi ili sandbox</td><td>Realni external servisi</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Tipicna hijerarhija okruzenja:
+
+  [Dev]  ->  [Test/QA]  ->  [Staging]  ->  [Production]</pre></div>
+<h2 class="sub-title">10.2 Test data management strategije</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Strategija</th><th>Opis</th><th>Napomena</th></tr></thead><tbody>
+<tr><td>Static test data</td><td>Unapred pripremljeni, fiksni podaci.</td><td>Brzi za upotrebu. Mogu postati zaprljani.</td></tr>
+<tr><td>Generated (on-the-fly)</td><td>Podaci se kreiraju neposredno pre testa i brisu nakon.</td><td>Svaki test ima sveze, izolovan set podataka.</td></tr>
+<tr><td>Anonymized prod data</td><td>Kopija produkcijskih podataka sa uklonjenjem PII.</td><td>Najrealisticniji podaci, zahteva GDPR compliance.</td></tr>
+<tr><td>External sources</td><td>JSON/CSV fajlovi, Excel, baza podataka.</td><td>Korisno za data-driven testiranje.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">10.3 Dependency management — mock servisi i stubovi</h2>
+<p class="body-text">Vecina modernih aplikacija zavisi od eksternih servisa: payment gateway, email servis, SMS provajder, third-party API.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Pristup</th><th>Opis</th></tr></thead><tbody>
+<tr><td>Sandbox / test mode</td><td>Provajder nudi posebno okruzenje (Stripe, PayPal, Twilio). Ponasanje je identicno produkciji, ali nema realnih transakcija.</td></tr>
+<tr><td>Mock servis</td><td>Interni servis koji simulira ponasanje eksternog. Potpuna kontrola — simulirati 500 gresku, timeout, spor odgovor.</td></tr>
+<tr><td>WireMock / MockServer</td><td>Alati za kreiranje HTTP mock servera. Definisu se request/response parovi u JSON konfiguraciji.</td></tr>
+</tbody></table></div>
+<div class="note">Strategija: Unit/Integration = mock sve; System testing = sandbox provajdera; UAT/pre-prod = realne integracije sa test nalozima.</div>
+<h2 class="sub-title">10.4 PII i GDPR u test podacima</h2>
+<ul><li class="bullet-item">Nikad ne kopirati produkcijske podatke bez anonimizacije.</li>
+<li class="bullet-item">Test emailovi uvek na domenu koji ne postoji u produkciji (npr. @test.internal).</li>
+<li class="bullet-item">Kartice — koristiti test brojeve koje payment provajder daje za sandbox.</li>
+<li class="bullet-item">Koristiti Faker biblioteke za generisanje realisticnih ali laznih podataka.</li>
+</ul>
+<h2 class="sub-title">10.5 Environment checklist — pre pocetka testiranja</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [ ] Build je deployovan i verzija je verifikovana
+  [ ] Seed data je prisutna i ispravna
+  [ ] External mock servisi / sandbox su dostupni
+  [ ] Test nalozi postoje i pristupni podaci su ispravni
+  [ ] Baza podataka je u ocekivanom stanju (nije zaprljana)
+  [ ] Konfiguracija okruzenja odgovara ocekivanoj (env vars, feature flags)
+  [ ] Smoke test okruzenja prolazi pre pocetka punog test run-a
+  [ ] Monitoring i logovi su dostupni za debugging</pre></div>
+</div>
+<div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
+<div class="section" id="s11">
+<h1 class="sec-title" id="t-s11">🤖 11. Uvod u automatizaciju</h1>
+<div class="section-meta"><span class="read-time">⏱ ~5 min</span><button class="mark-read-btn" id="mrb-s11" onclick="markRead('s11')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">11.1 Kada automatizovati, kada ne</h2>
+<h3 class="sub-sub-title">Dobri kandidati:</h3>
+<ul><li class="bullet-item">Regression testovi koji se izvrsavaju cesto — svaki sprint ili svaki build.</li>
+<li class="bullet-item">Smoke i sanity testovi koji blokiraju dalji rad ako failuju.</li>
+<li class="bullet-item">Testovi sa velikim brojem iteracija podataka (data-driven scenariji).</li>
+<li class="bullet-item">Repetitivni, vremenski intenzivni manuelni testovi.</li>
+<li class="bullet-item">Cross-browser i cross-platform testovi.</li>
+</ul>
+<h3 class="sub-sub-title">Losi kandidati:</h3>
+<ul><li class="bullet-item">Jednokratni testovi ili scenariji koji se retko izvrsavaju.</li>
+<li class="bullet-item">Exploratory testiranje — zahteva kognitivni rad i adaptaciju.</li>
+<li class="bullet-item">UI testovi na veoma nestabilnom UI-u sa cestim layout promenama.</li>
+<li class="bullet-item">Feature koji ce se menjati u sledecoj iteraciji.</li>
+</ul>
+<h2 class="sub-title">11.2 ROI automatizacije</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Breakeven = Vreme pisanja / Manuelno vreme po run-u
+
+  Primer: Manuelno 2h, Pisanje 8h -> Breakeven = 4 run-a
+  Pokretanje jednom mesecno -> isplati se (breakeven za 4 meseca).
+  Pokretanje jednom godisnje -> ne isplati se.</pre></div>
+<div class="note">Odrzavanje je skriveni trosak koji se najcesce podcenjuje — nestabilan UI, promene lokatorima, refaktoring aplikacije. Senior QA mora da ga ukljuci u procenu od pocetka.</div>
+<h2 class="sub-title">11.3 Test automation piramida i trofej</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Piramida (Mike Cohn):
+            ^
+           /E2E/           <- Mali broj, sporiji
+          /Integra/         <- Srednji nivo, API testovi
+         /  Unit   /        <- Najveci broj, brzi
+
+Trofej (Kent C. Dodds):
+            ^
+           /E2E/            <- Malo (kriticni happy path)
+          /Integra/          <- Najveci deo
+         /  Unit  /          <- Manje nego u piramidi
+        / Static  /          <- TypeScript, linting</pre></div>
+<div class="warning">Anti-pattern — Ice Cream Cone: mnogo E2E testova, malo unit testova. Testovi su spori, krhki i skupi za odrzavanje.</div>
+<h2 class="sub-title">11.4 Flaky testovi — uzroci i strategije</h2>
+<h3 class="sub-sub-title">Najcesti uzroci:</h3>
+<ul><li class="bullet-item">Hardkodovana cekanja (Thread.Sleep) umesto Explicit Wait.</li>
+<li class="bullet-item">Zavisnost od redosleda izvrsavanja testova.</li>
+<li class="bullet-item">Race condition — test je brzi od UI-ja ili API-ja.</li>
+<li class="bullet-item">Dinamicki lokatori koji se menjaju izmedju run-ova.</li>
+</ul>
+<h3 class="sub-sub-title">Strategije resavanja:</h3>
+<ul><li class="bullet-item">Izolovati flaky testove odmah — oznaciti tagom, ne ignorisati.</li>
+<li class="bullet-item">Analizirati failure pattern — pada li samo u CI, samo u odredjeno vreme?</li>
+<li class="bullet-item">Retry logika samo za infrastrukturne greske, ne za legitimne failove.</li>
+<li class="bullet-item">Svaki flaky test tretirati kao bug — uci u backlog.</li>
+</ul>
+<h2 class="sub-title">11.5 Mock, Stub i Spy — razlika</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Stub</td><td>Lazna implementacija koja vraca predefinisani odgovor. Ne verifikuje kako je pozvana — samo zamenjuje zavisnost.</td></tr>
+<tr><td>Mock</td><td>Verifikuje i kako je pozvana: koliko puta, sa kojim argumentima. Ako ocekivanje nije ispunjeno, test pada.</td></tr>
+<tr><td>Spy</td><td>Omotac oko realne implementacije. Poziva pravu metodu, ali belezi pozive za naknadnu verifikaciju.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Stub — vraca vrednost, ne proverava poziv
+var stub = new Mock<IPaymentService>();
+stub.Setup(p => p.Charge(It.IsAny<decimal>())).Returns(new Result { Success = true });
+
+// Mock — verifikuje da je metoda pozvana tacno jednom
+var mock = new Mock<IPaymentService>();
+mock.Setup(p => p.Charge(99.99m)).Returns(new Result { Success = true });
+// ... izvrsiti kod ...
+mock.Verify(p => p.Charge(99.99m), Times.Once);</pre></div>
+</div>
+<div class="section" id="s12">
+<h1 class="sec-title" id="t-s12">🌐 12. Selenium / WebDriver</h1>
+<div class="section-meta"><span class="read-time">⏱ ~5 min</span><button class="mark-read-btn" id="mrb-s12" onclick="markRead('s12')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">12.1 Selenium arhitektura i W3C protokol</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [Test kod (C#/Java/Python)]
+          |  WebDriver API pozivi
+          v
+  [Browser Driver (chromedriver / geckodriver / msedgedriver)]
+          |  W3C WebDriver Protocol (HTTP/JSON Wire)
+          v
+  [Browser (Chrome / Firefox / Edge)]
+
+  Selenium Manager (4.x): automatski preuzima kompatibilni driver.
+  Selenium Grid: paralelno izvrsavanje na vise masina i browser-a.</pre></div>
+<h2 class="sub-title">12.2 Lokatori elemenata — hijerarhija stabilnosti</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Lokator</th><th>Preporuka</th><th>C# primer</th></tr></thead><tbody>
+<tr><td>ID</td><td>Uvek koristiti kada je dostupan. Najbrzi i najstabilniji.</td><td>By.Id(btn)</td></tr>
+<tr><td>data-testid</td><td>Atribut koji tim dodaje iskljucivo za testove. Idealan.</td><td>By.CssSelector([data-testid=login-btn])</td></tr>
+<tr><td>Name</td><td>Korisno za forme.</td><td>By.Name(username)</td></tr>
+<tr><td>CSS Selector</td><td>Fleksibilan, brz, citljiv. Preferovati nad XPath-om.</td><td>By.CssSelector(.btn-primary)</td></tr>
+<tr><td>XPath</td><td>Najfleksibilniji, sporiji i krhkiji. Za kompleksne slucajeve.</td><td>By.XPath(//button[text()])</td></tr>
+<tr><td>Class Name</td><td>Nestabilan ako je CSS class deljeni. Izbegavati.</td><td>By.ClassName(btn)</td></tr>
+</tbody></table></div>
+<div class="note">Dogovoriti se sa development timom da dodaju data-testid atribute na kljucne elemente. Izbegavati XPath sa indeksima (//div[3]/span[2]) — krhak pri svakoj UI promeni.</div>
+<h2 class="sub-title">12.3 Waits — sinhronizacija sa browser-om</h2>
+<div class="warning">Thread.Sleep() nije wait strategija. Uvodi fiksna kasnjenja i cini testove sporim i nestabilnim.</div>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Implicit Wait</td><td>Globalno podesavanje na svaki FindElement poziv. Lose — moze maskirati probleme i usporiti testove. Izbegavati.</td></tr>
+<tr><td>Explicit Wait</td><td>Ceka na konkretan uslov za konkretan element. Preporuceni pristup.</td></tr>
+<tr><td>Fluent Wait</td><td>Explicit wait sa konfigurabilnim polling intervalom i ignorisanjem odredjenih exception-a.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Explicit Wait — preporuceno
+var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+var el = wait.Until(ExpectedConditions.ElementIsVisible(By.Id(btn)));
+
+// Korisne ExpectedConditions metode:
+//   ElementIsVisible, ElementToBeClickable, InvisibilityOfElement,
+//   TextToBePresentInElement, UrlContains</pre></div>
+<h2 class="sub-title">12.4 Cesti exception-i i resenja</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Exception</th><th>Uzrok</th><th>Resenje</th></tr></thead><tbody>
+<tr><td>NoSuchElementException</td><td>Element nije pronadjen u trenutku pretrage.</td><td>Proveriti lokator. Dodati Explicit Wait.</td></tr>
+<tr><td>StaleElementReferenceException</td><td>Element pronadjen ali DOM promenjen pre interakcije.</td><td>Re-locate element. Retry logika.</td></tr>
+<tr><td>ElementNotInteractableException</td><td>Element skriven, disabled ili prekriven.</td><td>Cekati na clickability. JS executor kao fallback.</td></tr>
+<tr><td>ElementClickInterceptedException</td><td>Drugi element prekriva ciljni (modal, overlay).</td><td>Sacekati da overlay nestane. Scroll do elementa.</td></tr>
+<tr><td>TimeoutException</td><td>Explicit Wait nije pronasao uslov u zadatom vremenu.</td><td>Povecati timeout ili proveriti lokator.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">12.5 Actions klasa</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>var actions = new Actions(driver);
+
+actions.MoveToElement(menuItem).Perform();      // Hover
+actions.ContextClick(element).Perform();         // Right-click
+actions.DoubleClick(element).Perform();          // Double-click
+actions.DragAndDrop(source, target).Perform();   // Drag and drop
+actions.KeyDown(Keys.Control).SendKeys(a)
+       .KeyUp(Keys.Control).Perform();           // Ctrl+A</pre></div>
+<h2 class="sub-title">12.6 File upload i download</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// File Upload — SendKeys direktno na input[type=file]
+// Zaobilazi file dialog, radi i u headless modu
+var fileInput = driver.FindElement(By.CssSelector(input[type=file]));
+fileInput.SendKeys(C:\TestData\test-image.jpg);
+
+// Verifikacija da je fajl preuzet
+var filePath = Path.Combine(downloadPath, export.csv);
+wait.Until(_ => File.Exists(filePath));</pre></div>
+<h2 class="sub-title">12.7 Screenshot i headless mode</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Screenshot na failovanom testu
+var screenshot = ((ITakesScreenshot)driver).GetScreenshot();
+screenshot.SaveAsFile(path/fail_testname_timestamp.png);
+
+// Headless Chrome za CI/CD
+var options = new ChromeOptions();
+options.AddArgument(--headless=new);
+options.AddArgument(--no-sandbox);
+options.AddArgument(--window-size=1920x1080);</pre></div>
+</div>
+<div class="section" id="s13">
+<h1 class="sec-title" id="t-s13">🏗️ 13. Page Object Model</h1>
+<div class="section-meta"><span class="read-time">⏱ ~4 min</span><button class="mark-read-btn" id="mrb-s13" onclick="markRead('s13')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">13.1 Sta je POM i zasto postoji</h2>
+<p class="body-text">Page Object Model je design pattern koji enkapsulira UI lokatore i interakcije za odredjenu stranicu u posebnu klasu. Test kod komunicira sa stranicom iskljucivo kroz metode te klase — nikad direktno sa lokatorima.</p>
+<ul><li class="bullet-item">Separacija brige — lokatori i UI logika odvojeni od test logike.</li>
+<li class="bullet-item">Odrzivost — promena lokacije elementa zahteva izmenu samo u Page klasi.</li>
+<li class="bullet-item">Citljivost — testovi opisuju ponasanje, ne implementacione detalje.</li>
+<li class="bullet-item">Ponovna upotreba — iste metode se koriste u vise testova.</li>
+</ul>
+<h2 class="sub-title">13.2 Struktura POM projekta (C#)</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>TestProject/
+  Pages/
+    BasePage.cs           // Zajednička logika svih stranica
+    LoginPage.cs          // Lokatori + metode za Login stranicu
+    DashboardPage.cs
+  Tests/
+    BaseTest.cs           // Setup/TearDown, driver inicijalizacija
+    LoginTests.cs
+  Helpers/
+    DriverFactory.cs      // Kreiranje WebDriver instance
+    TestDataBuilder.cs
+  Config/
+    appsettings.Test.json
+    appsettings.CI.json</pre></div>
+<h2 class="sub-title">13.3 Implementacija Page klase</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public class LoginPage : BasePage
+{
+ private By EmailField    => By.CssSelector(input[name=email]);
+ private By PasswordField => By.CssSelector(input[name=password]);
+ private By LoginButton   => By.CssSelector(button[type=submit]);
+ private By ErrorMessage  => By.CssSelector(.alert-error);
+
+    public LoginPage(IWebDriver driver) : base(driver) { }
+
+    public void EnterEmail(string email)
+        => WaitForVisible(EmailField).SendKeys(email);
+
+    // High-level composite akcija
+    public DashboardPage LoginAs(string email, string password)
+    {
+        EnterEmail(email); EnterPassword(password);
+        return ClickLogin();  // vraca sledecu stranicu
+    }
+}</pre></div>
+<h2 class="sub-title">13.4 Page Factory</h2>
+<p class="body-text">Alternativni nacin definisanja lokatorima — koristi [FindsBy] atribute i PageFactory.InitElements(). Cest u starijim C# i Java projektima.</p>
+<div class="warning">Page Factory se NE preporucuje u novim projektima. Interno koristi lazy initialization sa implicit wait logikom — moze maskirati probleme i ponasati se neocekivano sa StaleElementReferenceException.</div>
+<h2 class="sub-title">13.5 Kada POM postaje problem</h2>
+<ul><li class="bullet-item">Over-engineering na jednostavnim projektima — 10 TC-ova ne zahtevaju punu POM arhitekturu.</li>
+<li class="bullet-item">Page klase postaju prevelike — ako LoginPage ima 50 metoda, pokriva previse odgovornosti.</li>
+<li class="bullet-item">Teske za odrzavanje pri cestim UI promenama.</li>
+<li class="bullet-item">Ugnjezdeni Page objekti — navigacija postaje komplikovana.</li>
+</ul>
+<div class="note">Alternativa za kompleksne scenarije: Screenplay pattern — modelira interakcije kao User + Abilities + Tasks + Questions.</div>
+</div>
+<div class="section" id="s14">
+<h1 class="sec-title" id="t-s14">🔌 14. API testiranje</h1>
+<div class="section-meta"><span class="read-time">⏱ ~5 min</span><button class="mark-read-btn" id="mrb-s14" onclick="markRead('s14')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">14.1 HTTP metode</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Metoda</th><th>Svrha</th><th>Idempotentna</th><th>Safe</th></tr></thead><tbody>
+<tr><td>GET</td><td>Citanje resursa. Bez side-effecta.</td><td>Da</td><td>Da</td></tr>
+<tr><td>POST</td><td>Kreiranje novog resursa.</td><td>Ne</td><td>Ne</td></tr>
+<tr><td>PUT</td><td>Potpuna zamena postojeceg resursa.</td><td>Da</td><td>Ne</td></tr>
+<tr><td>PATCH</td><td>Parcijalna izmena resursa.</td><td>Ne</td><td>Ne</td></tr>
+<tr><td>DELETE</td><td>Brisanje resursa.</td><td>Da</td><td>Ne</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">14.2 HTTP status kodovi</h2>
+<div class="tbl-wrap tall"><table><thead><tr><th>Status</th><th>Znacenje</th></tr></thead><tbody>
+<tr><td>200 OK</td><td>Zahtev uspesno obradjen. Standardni odgovor za GET.</td></tr>
+<tr><td>201 Created</td><td>Resurs je kreiran. Za uspesni POST, obicno sa Location headerom.</td></tr>
+<tr><td>204 No Content</td><td>Uspesno, bez tela odgovora. Tipicno za DELETE.</td></tr>
+<tr><td>400 Bad Request</td><td>Nevalidan zahtev — los JSON, nedostaju obavezna polja.</td></tr>
+<tr><td>401 Unauthorized</td><td>Nedostaje ili je nevazeci autentifikacioni token.</td></tr>
+<tr><td>403 Forbidden</td><td>Token validan, ali nema dozvolu za resurs.</td></tr>
+<tr><td>404 Not Found</td><td>Resurs ne postoji.</td></tr>
+<tr><td>409 Conflict</td><td>Konflikt — kreiranje korisnika sa emailom koji vec postoji.</td></tr>
+<tr><td>422 Unprocessable</td><td>Semanticki nevalidan — format ok, ali biznis pravila narusena.</td></tr>
+<tr><td>429 Too Many Requests</td><td>Rate limiting.</td></tr>
+<tr><td>500 Internal Server Error</td><td>Greska na serveru. Uvek defekt.</td></tr>
+<tr><td>502 Bad Gateway</td><td>Upstream servis ne odgovara.</td></tr>
+<tr><td>503 Service Unavailable</td><td>Servis trenutno nedostupan.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">14.3 Sta testirati na API-ju</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Sta testirati</th><th>Detalj</th></tr></thead><tbody>
+<tr><td>Status kod</td><td>Da li je odgovor ispravan? 200 vs. 201 vs. 400 — svaki ima specificno znacenje.</td></tr>
+<tr><td>Response body</td><td>Da li JSON odgovara ocekivanom kontraktu? Da li su sva polja prisutna?</td></tr>
+<tr><td>Auth/Authz</td><td>Bez tokena -> 401. Sa pogresnim pravima -> 403. Validan token -> 200.</td></tr>
+<tr><td>Response time</td><td>Da li API odgovara u prihvatljivom roku? (< 2000ms)</td></tr>
+<tr><td>Idempotencija</td><td>Visestruki GET/PUT/DELETE ne smeju da menjaju stanje sistema.</td></tr>
+<tr><td>Schema validacija</td><td>Struktura odgovora vs. OpenAPI/Swagger kontrakt.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">14.4 Postman test skripta — primeri</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>pm.test('Status code is 200', () => {
+    pm.response.to.have.status(200);
+});
+
+pm.test('Token saved', () => {
+    const token = pm.response.json().access_token;
+    pm.expect(token).to.be.a('string').and.not.empty;
+    pm.environment.set('auth_token', token);
+});
+
+pm.test('Response time is acceptable', () => {
+    pm.expect(pm.response.responseTime).to.be.below(2000);
+});</pre></div>
+<h2 class="sub-title">14.5 Newman — Postman u CI/CD-u</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>npm install -g newman newman-reporter-htmlextra
+
+newman run collection.json
+  --environment staging.json
+  --reporters cli,htmlextra
+  --reporter-htmlextra-export reports/api-report.html</pre></div>
+<h2 class="sub-title">14.6 Contract testing — Pact framework</h2>
+<p class="body-text">Contract testing resava problem koji se javlja u mikroservisnim arhitekturama: tim A menja API koji tim B koristi, i breaking change prolazi nezapazeno sve do produkcije.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Tok:
+  1. Consumer pise pact — definise sta ocekuje od providera
+  2. Pact se cuva u Pact Broker
+  3. Provider verifikuje kontrakt u svom CI/CD pipeline-u
+  4. Ako provider promeni API na nacin koji krsi kontrakt,
+     verifikacija pada pre deploymenta
+
+  Rezultat: breaking change je uhvacen u CI/CD, ne na produkciji.</pre></div>
+</div>
+<div class="section" id="s15">
+<h1 class="sec-title" id="t-s15">⚙️ 15. CI/CD integracija</h1>
+<div class="section-meta"><span class="read-time">⏱ ~4 min</span><button class="mark-read-btn" id="mrb-s15" onclick="markRead('s15')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">15.1 Sta je CI/CD i uloga QA-a</h2>
+<p class="body-text">CI (Continuous Integration) je praksa automatskog build-ovanja i testiranja koda pri svakom commit-u. CD (Continuous Delivery) prosiruje CI automatskim deploy-om na visa okruzenja.</p>
+<p class="body-text">QA uloga: automatizovani testovi su gatekeeper koji sprecava isporuku defektnog koda. Svaki failovani test blokira pipeline.</p>
+<h2 class="sub-title">15.2 Tipicna struktura CI/CD pipeline-a</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Code Commit (git push / PR)
+       |
+  [1] Build       — kompajliranje, dependency restore
+  [2] Unit Tests  — brzi, izolovani. Fail -> pipeline staje.
+  [3] Static Analysis — linting, code coverage threshold
+  [4] Deploy na Test okruzenje
+  [5] Integration Tests — API, DB integracija
+  [6] E2E / UI Tests   — Selenium, kriticni happy path scenariji
+  [7] Deploy na Staging
+  [8] Smoke Tests na Staging
+  [9] Deploy na Produkciju
+  [10] Smoke Tests na Produkciji</pre></div>
+<h2 class="sub-title">15.3 Azure DevOps YAML pipeline — Selenium C# primer</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>trigger:
+  branches:
+    include: [ main, develop ]
+
+pool:
+  vmImage: windows-latest
+
+steps:
+- script: dotnet restore
+- script: dotnet build --configuration Release
+- script: |
+    dotnet test --configuration Release
+             --logger trx
+             --results-directory $(Agent.TempDirectory)/TestResults
+  env:
+    BASE_URL:  $(STAGING_URL)
+    HEADLESS:  true
+
+- task: PublishTestResults@2
+  condition: always()
+  inputs:
+    testResultsFormat: VSTest
+    testResultsFiles: $(Agent.TempDirectory)/TestResults/*.trx</pre></div>
+<h2 class="sub-title">15.4 Secrets i environment variables</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre># Lose — hardkodovano u YAML-u
+env:
+  DB_PASSWORD: MySecret123
+
+# Dobro — secret variable iz pipeline settings
+env:
+  DB_PASSWORD: $(db-password)   # Secret u ADO Variable Groups
+  BASE_URL:    $(staging-url)   # Moze se razlikovati po okruzenju
+
+# Variable Groups: kreira se jednom, referencira u vise pipeline-ova
+# Secret variables su enkriptovane i ne prikazuju se u logovima</pre></div>
+<h2 class="sub-title">15.5 Best practices za testove u CI/CD-u</h2>
+<ul><li class="bullet-item">Testovi moraju biti deterministicki — isti ulaz, isti rezultat uvek.</li>
+<li class="bullet-item">Paralelizacija: grupisati testove da se izvrsavaju paralelno.</li>
+<li class="bullet-item">Flaky testovi moraju biti izolovani i oznaceni, ne ignorisani.</li>
+<li class="bullet-item">Koristiti headless mode za browser testove u CI.</li>
+<li class="bullet-item">Cuvati screenshots i logove samo za failovane testove.</li>
+<li class="bullet-item">Retry logika samo za infrastrukturne greske, ne za legitimne failove.</li>
+</ul>
+</div>
+<div class="section" id="s16">
+<h1 class="sec-title" id="t-s16">🔧 16. Framework arhitektura</h1>
+<div class="section-meta"><span class="read-time">⏱ ~5 min</span><button class="mark-read-btn" id="mrb-s16" onclick="markRead('s16')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">16.1 Komponente robustnog test framework-a</h2>
+<div class="tbl-wrap tall"><table><thead><tr><th>Komponenta</th><th>Opis</th></tr></thead><tbody>
+<tr><td>Driver Management</td><td>Centralizovana inicijalizacija i teardown WebDriver-a. DriverFactory.</td></tr>
+<tr><td>Page Objects (POM)</td><td>Enkapsulacija UI lokatorima i interakcija po stranicama.</td></tr>
+<tr><td>Base Test Class</td><td>Zajednicki setUp/tearDown, driver inicijalizacija, logging.</td></tr>
+<tr><td>Configuration Layer</td><td>Upravljanje okruzenjima (URL, credentials) via config fajlovi ili environment variables.</td></tr>
+<tr><td>Test Data Management</td><td>Separacija test podataka od test logike. JSON, CSV, Database ili builder pattern.</td></tr>
+<tr><td>Utility / Helper Layer</td><td>Reusable metode: screenshot, JS executor, file reader, waits.</td></tr>
+<tr><td>Reporting</td><td>Allure ili ExtentReports — screenshots za failove, step-by-step log.</td></tr>
+<tr><td>Logging</td><td>NLog, log4net — tracing toka testa za debugging.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">16.2 Design patterns u test automatizaciji</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Pattern</th><th>Svrha</th><th>Primer</th></tr></thead><tbody>
+<tr><td>Page Object Model</td><td>Enkapsulacija UI po stranicama. Standardni pattern za Selenium.</td><td>Videti Sekciju 13.</td></tr>
+<tr><td>Factory Pattern</td><td>Kreiranje WebDriver instanci bez eksplicitnog navodjenja tipa.</td><td>DriverFactory.Create(chrome)</td></tr>
+<tr><td>Builder Pattern</td><td>Fleksibilno kreiranje test objekata korak po korak.</td><td>new UserBuilder().WithEmail().WithRole(admin).Build()</td></tr>
+<tr><td>Singleton / ThreadLocal</td><td>Osigurava jednu instancu driver-a po thread-u.</td><td>ThreadLocal<IWebDriver></td></tr>
+<tr><td>Fluent Interface</td><td>Method chaining za citljiviji test kod.</td><td>page.EnterEmail().EnterPass().Submit()</td></tr>
+<tr><td>Strategy Pattern</td><td>Zamenjive strategije (razliciti browser-i, okruzenja).</td><td>IBrowserStrategy -> ChromeStrategy</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">16.3 Data-driven testing — NUnit primeri</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[TestCase(user@test.com, Test1234!, true)]
+[TestCase(invalid@test.com, Wrong, false)]
+[TestCase(, Test1234!, false)]
+public void Login_WithCredentials_ReturnsExpectedResult(
+    string email, string password, bool expectedSuccess)
+{
+ var result = new LoginPage(Driver).LoginAs(email, password);
+ Assert.That(result.IsSuccessful, Is.EqualTo(expectedSuccess));
+}</pre></div>
+<h2 class="sub-title">16.4 Test naming konvencija</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Format: MethodName_StateUnderTest_ExpectedBehavior
+
+Login_WithValidCredentials_ShouldRedirectToDashboard()
+Login_WithEmptyPassword_ShouldShowRequiredError()
+GetUser_WithNonExistentId_ShouldReturn404()
+
+// Izbegavati:
+Test1()      // bez konteksta
+LoginTest()  // nema state i expected result</pre></div>
+<h2 class="sub-title">16.5 Reporting — Allure i ExtentReports</h2>
+<h3 class="sub-sub-title">Allure</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[Test]
+[AllureFeature(Login)]
+[AllureSeverity(SeverityLevel.Critical)]
+public void ValidCredentials_ShouldRedirectToDashboard()
+{
+ AllureApi.Step(Open login page, () => Driver.Navigate().GoToUrl(url));
+ AllureApi.Step(Verify dashboard, () =>
+ Assert.That(Driver.Url, Does.Contain(/dashboard)));
+}</pre></div>
+<h3 class="sub-sub-title">ExtentReports</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[TearDown]
+public void EndTest()
+{
+ var status = TestContext.CurrentContext.Result.Outcome.Status;
+ if (status == TestStatus.Failed)
+ {
+ var screenshot = ((ITakesScreenshot)Driver).GetScreenshot();
+ _test.Fail(msg).AddScreenCaptureFromPath(path);
+ }
+ else _test.Pass(Test passed);
+ _extent.Flush();
+}</pre></div>
+<h2 class="sub-title">16.6 Pre-commit checklist za automatizovani test</h2>
+<ul><li class="bullet-item">Test ima jasan naziv po konvenciji (Method_State_Expected).</li>
+<li class="bullet-item">Testuje tacno jednu stvar.</li>
+<li class="bullet-item">Nezavistan od redosleda izvrsavanja i od stanja koje ostavljaju drugi testovi.</li>
+<li class="bullet-item">Koristi Explicit Wait, ne Thread.Sleep().</li>
+<li class="bullet-item">Lokatori su stabilni (data-testid, ID, CSS — ne pun XPath sa indeksima).</li>
+<li class="bullet-item">Test podaci su parametrizovani, ne hard-coded u kodu.</li>
+<li class="bullet-item">Test prolazi lokalno i u CI okruzenju.</li>
+</ul>
+</div>
+<div class="section" id="s17">
+<h1 class="sec-title" id="t-s17">📈 17. Performance testing osnove</h1>
+<div class="section-meta"><span class="read-time">⏱ ~4 min</span><button class="mark-read-btn" id="mrb-s17" onclick="markRead('s17')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">17.1 Tipovi performance testiranja</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Tip</th><th>Definicija</th><th>Kada koristiti</th></tr></thead><tbody>
+<tr><td>Load testing</td><td>Sistem se testira na ocekivanom normalnom opterecenju.</td><td>Redovno, pre svakog release-a.</td></tr>
+<tr><td>Stress testing</td><td>Sistem se gura iznad kapaciteta da bi se videlo kako puca i kako se oporavlja.</td><td>Kada treba utvrditi tacku loma sistema.</td></tr>
+<tr><td>Spike testing</td><td>Nagli kratki skok opterecenja (flash sale, viralni content).</td><td>Ocekivani nagli rast korisnika.</td></tr>
+<tr><td>Endurance/Soak</td><td>Sistem se drzi pod normalnim opterecenjem duzi period — trazi memory leak-ove i degradaciju performansi.</td><td>Detektovanje degradacije tokom vremena.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">17.2 Kljucne metrike</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Metrika</th><th>Opis</th></tr></thead><tbody>
+<tr><td>Response Time</td><td>Vreme od zahteva do prvog byte-a odgovora (TTFB).</td></tr>
+<tr><td>Throughput</td><td>Broj zahteva koje sistem obradjuje u jedinici vremena (req/s).</td></tr>
+<tr><td>Error Rate</td><td>Procenat failovanih zahteva. Cilj: < 1%.</td></tr>
+<tr><td>Percentili (p95, p99)</td><td>95% i 99% zahteva se obradjuje za manje od X ms. Bolji od proseka.</td></tr>
+<tr><td>Concurrent Users</td><td>Broj simultanih korisnika koje sistem moze da podnese.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">17.3 k6 — moderni load testing alat</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+export const options = {
+  stages: [
+    { duration: '2m', target: 100 },  // ramp up
+    { duration: '5m', target: 100 },  // stay at 100 users
+    { duration: '2m', target: 0 },    // ramp down
+  ],
+  thresholds: {
+    http_req_duration: ['p(95)<2000'],  // 95% pod 2s
+    http_req_failed:   ['rate<0.01'],   // error rate < 1%
+  },
+};
+
+export default function () {
+  const res = http.get('https://api.myapp.com/users');
+  check(res, { 'status is 200': (r) => r.status === 200 });
+  sleep(1);
+}</pre></div>
+<h2 class="sub-title">17.4 k6 vs JMeter — poredjenje</h2>
+<div class="tbl-wrap"><table><thead><tr><th></th><th>k6</th><th>JMeter</th></tr></thead><tbody>
+<tr><td>Skriptovanje</td><td>JavaScript (ES6+)</td><td>XML + GUI</td></tr>
+<tr><td>Kriva ucenja</td><td>Niska za developere</td><td>Visa, GUI-driven</td></tr>
+<tr><td>CI/CD integracija</td><td>Odlicna (CLI first)</td><td>Dobra (plugins)</td></tr>
+<tr><td>Izvestaji</td><td>k6 Cloud, Grafana</td><td>HTML izvestaji, plugins</td></tr>
+<tr><td>Open source</td><td>Da (Grafana Labs)</td><td>Da (Apache)</td></tr>
+</tbody></table></div>
+<div class="note">Preporuka: k6 za timove koji pisu kod i rade u CI/CD; JMeter za timove sa GUI navikama ili legacy projektima.</div>
+<h2 class="sub-title">17.5 QA uloga u performance testiranju</h2>
+<ul><li class="bullet-item">Definisanje realisticnih SLA sa stakeholderima pre testiranja.</li>
+<li class="bullet-item">Kreiranje reprezentativnih load scenarija — ne samo 'svi rade isti zahtev'.</li>
+<li class="bullet-item">Analiza rezultata: identifikovanje bottleneck-a (DB, API, mreza, memorija).</li>
+<li class="bullet-item">Baseline testing: merenje pre i posle svake relevantne izmene.</li>
+<li class="bullet-item">Performance regression u CI/CD-u sa failure thresholds.</li>
+</ul>
+</div>
+<div class="section" id="s18">
+<h1 class="sec-title" id="t-s18">📱 18. Mobile testing (Appium)</h1>
+<div class="section-meta"><span class="read-time">⏱ ~4 min</span><button class="mark-read-btn" id="mrb-s18" onclick="markRead('s18')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">18.1 Sta je Appium i kako funkcionise</h2>
+<p class="body-text">Appium je open-source alat za automatizaciju mobilnih aplikacija. Koristi WebDriver protokol — ista arhitektura kao Selenium, ali sa mobilnim driver-ima.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [Test kod (C#/Java/Python)]
+          |  WebDriver API pozivi
+          v
+  [Appium Server]
+          |  XCUITest (iOS) / UIAutomator2 (Android)
+          v
+  [Realni uredjaj / Emulator]</pre></div>
+<h2 class="sub-title">18.2 Tipovi mobilnih aplikacija</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Tip</th><th>Opis</th><th>Appium podrska</th></tr></thead><tbody>
+<tr><td>Native</td><td>Pisana u Swift/Kotlin, koristi native UI komponente.</td><td>Puna podrska. Pristup svim native elementima.</td></tr>
+<tr><td>Hybrid</td><td>Web view unutar native shell-a. React Native, Ionic.</td><td>Puna podrska. Context switching izmedju native i web.</td></tr>
+<tr><td>Mobile Web</td><td>Browser aplikacija — Safari, Chrome na mobilnom.</td><td>Podrska kroz mobile browser driver.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">18.3 Lokatori u Appium-u</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Lokator</th><th>iOS</th><th>Android</th></tr></thead><tbody>
+<tr><td>Accessibility ID</td><td>accessibilityIdentifier atribut</td><td>content-desc atribut — preporuceni</td></tr>
+<tr><td>XPath</td><td>Dostupan, ali sporiji</td><td>Dostupan, ali sporiji</td></tr>
+<tr><td>Class Name</td><td>XCUIElementTypeButton</td><td>android.widget.Button</td></tr>
+<tr><td>ID</td><td>Bez direktnog ekvivalenta</td><td>Resource ID (com.app:id/btn)</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">18.4 Realni uredaji vs. Emulatori</h2>
+<div class="tbl-wrap"><table><thead><tr><th></th><th>Emulatori / Simulatori</th><th>Realni uredaji</th></tr></thead><tbody>
+<tr><td>Brzina setup-a</td><td>Brzo, bez hardvera</td><td>Zahteva fizicki pristup</td></tr>
+<tr><td>Tacnost</td><td>Dobra za funkcionalne testove</td><td>Neophodna za hardware, senzore, performanse</td></tr>
+<tr><td>Cena</td><td>Besplatno</td><td>Kupovina ili cloud (BrowserStack, Sauce Labs)</td></tr>
+<tr><td>Interruptions</td><td>Ne simulira pozive, SMS</td><td>Realni interruptions</td></tr>
+<tr><td>Preporuka</td><td>Regression, funkcionalni testovi</td><td>Release testing, performance, UAT</td></tr>
+</tbody></table></div>
+<div class="note">Cloud device farme (BrowserStack, Sauce Labs, AWS Device Farm) nude stotine realnih uredaja bez kupovine — idealno za cross-device testing.</div>
+<h2 class="sub-title">18.5 Specificnosti mobilnog testiranja</h2>
+<ul><li class="bullet-item">Razlicite rezolucije i gustine piksela — testirati na vise uredjaja.</li>
+<li class="bullet-item">Interruptions: pozivi, notifikacije, low battery — sistem mora da se ponasa predvidivo.</li>
+<li class="bullet-item">Network conditions — testirati na 3G, 4G, offline modu.</li>
+<li class="bullet-item">Permissions — kamera, lokacija, kontakti — testirati scenarije odbijanja dozvola.</li>
+<li class="bullet-item">Orientation — portrait i landscape mod.</li>
+</ul>
+</div>
+<div class="section" id="s19">
+<h1 class="sec-title" id="t-s19">🧠 19. AI u testiranju</h1>
+<div class="section-meta"><span class="read-time">⏱ ~4 min</span><button class="mark-read-btn" id="mrb-s19" onclick="markRead('s19')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">19.1 Kako AI menja QA</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Oblast</th><th>Opis</th></tr></thead><tbody>
+<tr><td>Generisanje test case-ova</td><td>AI analizira specifikaciju ili user story i predlaze test case-ove, posebno edge case-ove koje je lako propustiti.</td></tr>
+<tr><td>Vizuelna regresija</td><td>AI poredi screenshotove i detektuje vizuelne promene (Applitools, Percy).</td></tr>
+<tr><td>Generisanje test podataka</td><td>LLM-ovi generisu realisticne, raznovrsne test podatke za data-driven scenarije.</td></tr>
+<tr><td>Analiza defekata</td><td>AI analizira log fajlove, stack trace-ove i sugerise root cause.</td></tr>
+<tr><td>Odrzavanje lokatorima</td><td>Healenium automatski azurira lokatore kada se UI promeni.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">19.2 LLM za generisanje Selenium C# test skripti</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer prompta:
+
+  'Ti si senior QA automation inzenjer koji pise Selenium C# testove.
+   Koristi NUnit, Page Object Model i FluentAssertions.
+   Generiši test klasu za sledeci scenario:
+
+   Feature:  Forgot Password funkcionalnost
+   URL:      /forgot-password
+   Elementi: input[name=email], button[type=submit], .success-message
+
+   Scenariji:
+   1. Validan email -> prikazuje se success poruka
+   2. Nevalidan email format -> prikazuje se validaciona greska
+   3. Nepostojeci email -> prikazuje se ista success poruka (security by design)
+
+   Koristi BasePage sa WaitForVisible metodom.
+   Naming konvencija: MethodName_StateUnderTest_ExpectedBehavior'
+
+Workflow:
+  LLM generise skelet -> QA proverava lokatore -> QA dodaje specificne
+  test podatke -> QA verifikuje Expected Result-e -> QA pokrecepokalno.</pre></div>
+<div class="note">LLM stedi 60-70% vremena na boilerplate kodu. Ostatak — domain znanje, specificnosti aplikacije, edge case-ovi — ostaje iskljucivo odgovornost QA inzenjera.</div>
+<h2 class="sub-title">19.3 Vizuelna regresija</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Applitools Eyes</td><td>AI-powered vizuelni testing. Koristi ML da razlikuje significantne vizuelne promene od nebitnih (anti-aliasing, font rendering razlike). Integracija sa Selenium, Cypress, Playwright.</td></tr>
+<tr><td>Percy (BrowserStack)</td><td>Vizuelna regresija integrisana sa CI/CD pipeline-om. Svaki PR dobija vizuelni diff review.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">19.4 Granice i rizici AI u testiranju</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Rizik</th><th>Objasnjenje</th></tr></thead><tbody>
+<tr><td>Hallucination</td><td>LLM-ovi mogu generisati plausibilne ali pogresne test case-ove ili nepostojece API endpoint-e. Uvek review-ovati output.</td></tr>
+<tr><td>Nedostatak konteksta</td><td>AI ne zna biznis pravila, istoriju projekta ni specificnosti sistema.</td></tr>
+<tr><td>False confidence</td><td>Vizuelni AI alati mogu propustiti relevantne promene ili prijaviti lazne pozitive.</td></tr>
+<tr><td>Odgovornost</td><td>AI generisani test case-ovi su QA odgovornost. Nema opravdanja 'AI je to generisao'.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">19.5 Generisanje Selenium C# koda</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// LLM generisani skelet — potrebna QA revizija
+public class ForgotPasswordPage : BasePage
+{
+ private By EmailField   => By.CssSelector(input[name=email]);
+ private By SubmitButton => By.CssSelector(button[type=submit]);
+ private By SuccessMsg  => By.CssSelector(.success-message);
+
+    [Test]
+    public void ValidEmail_ShouldShowSuccessMessage()
+    {
+ var page = new ForgotPasswordPage(Driver);
+ page.Navigate();
+ page.EnterEmail(user@test.com);  // QA dodaje: konkretni test email
+ page.Submit();
+ Assert.That(page.GetSuccessMessage(), Does.Contain(Check your email));
+    }
+}</pre></div>
+</div>
+<div class="section" id="s20">
+<h1 class="sec-title" id="t-s20">📚 20. Glosar</h1>
+<div class="section-meta"><span class="read-time">⏱ ~8 min</span><button class="mark-read-btn" id="mrb-s20" onclick="markRead('s20')">Oznaci kao procitano</button></div>
+<p class="body-text">Alfabetski pregled kljucnih termina. Koristite pretragu ispod za brzo pronalazenje.</p>
+<div class="glosar-search-wrap"><input type="text" id="glosar-search" placeholder="Filtriraj termine..." oninput="filterGlosar(this.value)"><span id="glosar-count"></span></div>
+<div id="glosar-content">
+<div class="glosar-letter-group" data-letter="A"><div class="glosar-letter">A</div>
+<div class="glosar-item"><span class="glosar-term">Acceptance Criteria</span><span class="glosar-def">Uslovi koje user story mora ispuniti da bi bio prihvacen od Product Owner-a.</span></div>
+<div class="glosar-item"><span class="glosar-term">Acceptance Testing (UAT)</span><span class="glosar-def">Testiranje od strane krajnjih korisnika ili PO-a sa ciljem validacije poslovnih zahteva.</span></div>
+<div class="glosar-item"><span class="glosar-term">Ad-hoc Testing</span><span class="glosar-def">Neformalno, bez dokumentacije i plana. Za razliku od exploratory testiranja, nema ni charter.</span></div>
+<div class="glosar-item"><span class="glosar-term">Agile</span><span class="glosar-def">Iterativni pristup razvoju softvera sa kratkim sprintovima i kontinualnim isporukama.</span></div>
+<div class="glosar-item"><span class="glosar-term">Allure</span><span class="glosar-def">Open-source alat za generisanje HTML test izvestaja sa timeline-om i screenshot integracijom.</span></div>
+<div class="glosar-item"><span class="glosar-term">Appium</span><span class="glosar-def">Open-source alat za automatizaciju mobilnih aplikacija koji koristi WebDriver protokol.</span></div>
+<div class="glosar-item"><span class="glosar-term">Assertion</span><span class="glosar-def">Provera da li je stvarni rezultat jednak ocekivanom. Osnova svakog automatizovanog testa.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="B"><div class="glosar-letter">B</div>
+<div class="glosar-item"><span class="glosar-term">BDD</span><span class="glosar-def">Behavior-Driven Development — pristup koji koristi Given/When/Then format za opis ponasanja.</span></div>
+<div class="glosar-item"><span class="glosar-term">Black-box Testing</span><span class="glosar-def">Testiranje bez uvida u internu implementaciju — samo ulaz i izlaz.</span></div>
+<div class="glosar-item"><span class="glosar-term">Blocker</span><span class="glosar-def">Defekt koji sprecava dalje testiranje ili koristenje sistema. Nema workaround-a.</span></div>
+<div class="glosar-item"><span class="glosar-term">BVA</span><span class="glosar-def">Boundary Value Analysis — tehnika koja testira vrednosti na granicama particija.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="C"><div class="glosar-letter">C</div>
+<div class="glosar-item"><span class="glosar-term">CI/CD</span><span class="glosar-def">Continuous Integration / Continuous Delivery — automatizovano build, test i deploy.</span></div>
+<div class="glosar-item"><span class="glosar-term">Contract Testing</span><span class="glosar-def">Testiranje da li consumer i provider API imaju usaglaseni kontrakt (Pact framework).</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="D"><div class="glosar-letter">D</div>
+<div class="glosar-item"><span class="glosar-term">Data-driven Testing</span><span class="glosar-def">Isti test scenario se izvrsava sa razlicitim skupovima ulaznih podataka.</span></div>
+<div class="glosar-item"><span class="glosar-term">Defect</span><span class="glosar-def">Diskrepancija izmedju stvarnog i ocekivanog ponasanja sistema.</span></div>
+<div class="glosar-item"><span class="glosar-term">Defect Density</span><span class="glosar-def">Broj defekata po jedinici velicine funkcionalnosti. Metrika kvaliteta koda.</span></div>
+<div class="glosar-item"><span class="glosar-term">Defect Leakage</span><span class="glosar-def">Procenat defekata koji su prosli QA a nadjeni su na produkciji.</span></div>
+<div class="glosar-item"><span class="glosar-term">Definition of Done</span><span class="glosar-def">Lista kriterijuma koje user story mora ispuniti da bi bio proglaseni Done.</span></div>
+<div class="glosar-item"><span class="glosar-term">Definition of Ready</span><span class="glosar-def">Lista kriterijuma koje user story mora ispuniti pre ulaska u sprint.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="E"><div class="glosar-letter">E</div>
+<div class="glosar-item"><span class="glosar-term">E2E Testing</span><span class="glosar-def">End-to-end testiranje — simulacija kompletnog korisnickog toka kroz sistem.</span></div>
+<div class="glosar-item"><span class="glosar-term">Entry Criteria</span><span class="glosar-def">Uslovi koji moraju biti ispunjeni da bi faza testiranja mogla da pocne.</span></div>
+<div class="glosar-item"><span class="glosar-term">EP</span><span class="glosar-def">Equivalence Partitioning — tehnika koja deli ulazni skup na particije.</span></div>
+<div class="glosar-item"><span class="glosar-term">Error</span><span class="glosar-def">Ljudska greska — pogresan pretpostavka ili propust developera u kodu.</span></div>
+<div class="glosar-item"><span class="glosar-term">Escaped Defects</span><span class="glosar-def">Defekti koje su pronasli korisnici na produkciji. Kljucna KPI za QA tim.</span></div>
+<div class="glosar-item"><span class="glosar-term">Exit Criteria</span><span class="glosar-def">Uslovi cijim ispunjenjem se testiranje smatra zavrsenim.</span></div>
+<div class="glosar-item"><span class="glosar-term">Exploratory Testing</span><span class="glosar-def">Simultano ucenje, dizajniranje i izvrsavanje testova bez unapred definisanih koraka.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="F"><div class="glosar-letter">F</div>
+<div class="glosar-item"><span class="glosar-term">Failure</span><span class="glosar-def">Vidljivi simptom defekta u runtime-u — sistem se ponasa drugacije od ocekivanog.</span></div>
+<div class="glosar-item"><span class="glosar-term">Flaky Test</span><span class="glosar-def">Test koji naizmenicno prolazi i pada bez promene koda.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="G"><div class="glosar-letter">G</div>
+<div class="glosar-item"><span class="glosar-term">Grey-box Testing</span><span class="glosar-def">Delimicno poznavanje internih detalja sistema. Najcesci scenario u praksi.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="H"><div class="glosar-letter">H</div>
+<div class="glosar-item"><span class="glosar-term">Happy Path</span><span class="glosar-def">Idealni scenario — svi ulazi su validni, korisnik radi ono sto se ocekuje.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="I"><div class="glosar-letter">I</div>
+<div class="glosar-item"><span class="glosar-term">IEEE 829</span><span class="glosar-def">Standard za dokumentaciju sofverskog testiranja — struktura test plana.</span></div>
+<div class="glosar-item"><span class="glosar-term">Integration Testing</span><span class="glosar-def">Testiranje interakcije izmedju dve ili vise komponenti sistema.</span></div>
+<div class="glosar-item"><span class="glosar-term">ISTQB</span><span class="glosar-def">International Software Testing Qualifications Board — globalna QA sertifikaciona organizacija.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="K"><div class="glosar-letter">K</div>
+<div class="glosar-item"><span class="glosar-term">k6</span><span class="glosar-def">Open-source alat za performance (load) testiranje. Skripte se pisu u JavaScript-u.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="L"><div class="glosar-letter">L</div>
+<div class="glosar-item"><span class="glosar-term">Load Testing</span><span class="glosar-def">Performance testiranje na ocekivanom normalnom opterecenju sistema.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="M"><div class="glosar-letter">M</div>
+<div class="glosar-item"><span class="glosar-term">Mock</span><span class="glosar-def">Zamena realne zavisnosti koja verifikuje i kako je pozvana, ne samo sta vraca.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="N"><div class="glosar-letter">N</div>
+<div class="glosar-item"><span class="glosar-term">Newman</span><span class="glosar-def">CLI alat za pokretanje Postman kolekcija u CI/CD pipeline-u.</span></div>
+<div class="glosar-item"><span class="glosar-term">NUnit</span><span class="glosar-def">.NET test framework koji se koristi sa Selenium C# za pisanje i pokretanje testova.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="P"><div class="glosar-letter">P</div>
+<div class="glosar-item"><span class="glosar-term">Page Object Model</span><span class="glosar-def">Design pattern koji enkapsulira UI lokatore i interakcije za stranicu u posebnu klasu.</span></div>
+<div class="glosar-item"><span class="glosar-term">Pairwise Testing</span><span class="glosar-def">Tehnika koja smanjuje broj test kombinacija pokrivanjem svih parova parametara.</span></div>
+<div class="glosar-item"><span class="glosar-term">PII</span><span class="glosar-def">Personally Identifiable Information — licni podaci koji se moraju anonimizovati u testovima.</span></div>
+<div class="glosar-item"><span class="glosar-term">Priority</span><span class="glosar-def">Hitnost korekcije defekta sa poslovnog aspekta (High/Medium/Low).</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="Q"><div class="glosar-letter">Q</div>
+<div class="glosar-item"><span class="glosar-term">QA</span><span class="glosar-def">Quality Assurance — proaktivni proces poboljsavanja procesa da bi se sprecilo nastajanje defekata.</span></div>
+<div class="glosar-item"><span class="glosar-term">QC</span><span class="glosar-def">Quality Control — reaktivna aktivnost pronalazenja defekata u gotovom proizvodu.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="R"><div class="glosar-letter">R</div>
+<div class="glosar-item"><span class="glosar-term">RACI</span><span class="glosar-def">Matrica odgovornosti: Responsible, Accountable, Consulted, Informed.</span></div>
+<div class="glosar-item"><span class="glosar-term">Regression Testing</span><span class="glosar-def">Provera da nove izmene nisu narusile postojecu funkcionalnost.</span></div>
+<div class="glosar-item"><span class="glosar-term">REST</span><span class="glosar-def">Representational State Transfer — arhitekturalni stil za dizajn web API-ja.</span></div>
+<div class="glosar-item"><span class="glosar-term">Retesting</span><span class="glosar-def">Ponovo izvrsavanje konkretnog TC koji je prethodno failovao, nakon bugfix-a.</span></div>
+<div class="glosar-item"><span class="glosar-term">Risk-based Testing</span><span class="glosar-def">Prioritizacija testova na osnovu verovatnoce i uticaja potencijalnog defekta.</span></div>
+<div class="glosar-item"><span class="glosar-term">RTM</span><span class="glosar-def">Requirements Traceability Matrix — tabela koja mapira zahteve na test case-ove i defekte.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="S"><div class="glosar-letter">S</div>
+<div class="glosar-item"><span class="glosar-term">Sanity Testing</span><span class="glosar-def">Fokusirana verifikacija konkretne promene bez punog regression run-a.</span></div>
+<div class="glosar-item"><span class="glosar-term">SDET</span><span class="glosar-def">Software Development Engineer in Test — QA koji pise produkcioni kod i framework.</span></div>
+<div class="glosar-item"><span class="glosar-term">Selenium</span><span class="glosar-def">Open-source framework za automatizaciju web browser-a.</span></div>
+<div class="glosar-item"><span class="glosar-term">Severity</span><span class="glosar-def">Tehnicki uticaj defekta na sistem (Blocker/Critical/Major/Minor/Trivial).</span></div>
+<div class="glosar-item"><span class="glosar-term">Smoke Testing</span><span class="glosar-def">Povrsinska provera kriticnih funkcionalnosti — Go/No-Go odluka za dalji QA.</span></div>
+<div class="glosar-item"><span class="glosar-term">Spy</span><span class="glosar-def">Omotac oko realne implementacije koji belezi pozive za naknadnu verifikaciju.</span></div>
+<div class="glosar-item"><span class="glosar-term">State Transition Testing</span><span class="glosar-def">Tehnika koja modelira ponasanje sistema kao skup stanja i prelaza izmedju njih.</span></div>
+<div class="glosar-item"><span class="glosar-term">Static Testing</span><span class="glosar-def">Testiranje bez izvrsavanja softvera — code review, inspekcija dokumentacije.</span></div>
+<div class="glosar-item"><span class="glosar-term">Stress Testing</span><span class="glosar-def">Performance testiranje sistema iznad normalnog kapaciteta.</span></div>
+<div class="glosar-item"><span class="glosar-term">Stub</span><span class="glosar-def">Lazna implementacija koja vraca predefinisani odgovor bez logike.</span></div>
+<div class="glosar-item"><span class="glosar-term">System Testing</span><span class="glosar-def">Testiranje celokupnog sistema kao jedinstvene celine prema zahtevima.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="T"><div class="glosar-letter">T</div>
+<div class="glosar-item"><span class="glosar-term">Test Basis</span><span class="glosar-def">Sve sto se koristi kao osnova za dizajn test case-ova: zahtevi, kod, standardi.</span></div>
+<div class="glosar-item"><span class="glosar-term">Test Case</span><span class="glosar-def">Dokumentovan skup koraka, ulaznih podataka i ocekivanih rezultata.</span></div>
+<div class="glosar-item"><span class="glosar-term">Test Coverage</span><span class="glosar-def">Procenat test basis-a (zahteva, koda, funkcionalnosti) pokriven testovima.</span></div>
+<div class="glosar-item"><span class="glosar-term">Test Harness</span><span class="glosar-def">Infrastruktura koja podrzava izvrsavanje testova: runner, stubs, drivers, konfiguracija.</span></div>
+<div class="glosar-item"><span class="glosar-term">Test Oracle</span><span class="glosar-def">Mehanizam kojim se odredjuje da li je rezultat testa ispravan.</span></div>
+<div class="glosar-item"><span class="glosar-term">Test Plan</span><span class="glosar-def">Dokument koji definise scope, pristup, resurse i raspored testiranja.</span></div>
+<div class="glosar-item"><span class="glosar-term">Three Amigos</span><span class="glosar-def">Sesija izmedju PO, developera i QA-a pre razvoja feature-a za razjasnjavanje zahteva.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="U"><div class="glosar-letter">U</div>
+<div class="glosar-item"><span class="glosar-term">UAT</span><span class="glosar-def">User Acceptance Testing — testiranje od strane krajnjih korisnika ili Product Owner-a.</span></div>
+<div class="glosar-item"><span class="glosar-term">Unit Testing</span><span class="glosar-def">Testiranje individualne funkcije ili metode u izolaciji.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="V"><div class="glosar-letter">V</div>
+<div class="glosar-item"><span class="glosar-term">V-Model</span><span class="glosar-def">SDLC model koji eksplicitno mapira svaku razvojnu fazu na odgovarajuci nivo testiranja.</span></div>
+<div class="glosar-item"><span class="glosar-term">Validation</span><span class="glosar-def">Provera da li sistem ispunjava stvarne potrebe korisnika.</span></div>
+<div class="glosar-item"><span class="glosar-term">Verification</span><span class="glosar-def">Provera da li je sistem izradjen u skladu sa specifikacijom.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="W"><div class="glosar-letter">W</div>
+<div class="glosar-item"><span class="glosar-term">WCAG</span><span class="glosar-def">Web Content Accessibility Guidelines — standard za pristupacnost web sadrzaja.</span></div>
+<div class="glosar-item"><span class="glosar-term">WebDriver</span><span class="glosar-def">W3C standard protokol koji Selenium koristi za komunikaciju sa browser-om.</span></div>
+<div class="glosar-item"><span class="glosar-term">White-box Testing</span><span class="glosar-def">Testiranje sa punim uvidom u internu implementaciju — kod, arhitekturu, logiku.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="X"><div class="glosar-letter">X</div>
+<div class="glosar-item"><span class="glosar-term">XPath</span><span class="glosar-def">Jezik za navigaciju kroz XML/HTML dokument — jedan od Selenium lokator tipova.</span></div>
+</div>
+</div>
+</div>
+<div id="quickref">
+  <h3>⚡ Quick Reference <button id="qr-close" onclick="toggleQuickRef()">✕</button></h3>
+  <div class="qr-grid">
+    <div class="qr-card"><h4>Severity nivoi</h4>
+      <div class="qr-item"><span class="qr-key">Blocker</span><span class="qr-tooltip">Sistem se ne moze koristiti. Testiranje je blokirano. Nema workaround-a.</span><span class="qr-val">Sistem ne radi, nema workaround-a</span></div>
+      <div class="qr-item"><span class="qr-key">Critical</span><span class="qr-tooltip">Kriticna funkcionalnost je slomljena. Korisnik ne moze da dovrsi kljucni task.</span><span class="qr-val">Kriticna funkcionalnost slomljena</span></div>
+      <div class="qr-item"><span class="qr-key">Major</span><span class="qr-tooltip">Znacajna funkcionalnost ostecena. Workaround postoji ali je neudoban.</span><span class="qr-val">Znacajna funkcionalnost ostecena</span></div>
+      <div class="qr-item"><span class="qr-key">Minor</span><span class="qr-tooltip">Manja funkcionalnost ostecena. Prihvatljiv workaround postoji.</span><span class="qr-val">Manja funkcionalnost, postoji workaround</span></div>
+      <div class="qr-item"><span class="qr-key">Trivial</span><span class="qr-tooltip">Estetski problem — UI, tekst, formatiranje. Nema funkcionalnog uticaja.</span><span class="qr-val">Estetski problem, bez funkcionalnog uticaja</span></div>
+    </div>
+    <div class="qr-card"><h4>HTTP status kodovi</h4>
+      <div class="qr-item"><span class="qr-key">200 OK</span><span class="qr-tooltip">Uspesno obradjen zahtev. Vraca se za GET i za akcije koje ne kreiraju resurs.</span><span class="qr-val">Uspesno</span></div>
+      <div class="qr-item"><span class="qr-key">201 Created</span><span class="qr-tooltip">Resurs je kreiran. Vraca se za uspesni POST. Obicno ukljucuje Location header.</span><span class="qr-val">Resurs kreiran (POST)</span></div>
+      <div class="qr-item"><span class="qr-key">401</span><span class="qr-tooltip">Token nedostaje ili je neispravan. Klijent treba da se autentifikuje.</span><span class="qr-val">Nedostaje token</span></div>
+      <div class="qr-item"><span class="qr-key">403</span><span class="qr-tooltip">Autentifikacija je ok, ali korisnik nema prava na ovaj resurs.</span><span class="qr-val">Token validan, nema dozvolu</span></div>
+      <div class="qr-item"><span class="qr-key">404</span><span class="qr-tooltip">Resurs ne postoji na ovoj URL-i.</span><span class="qr-val">Resurs ne postoji</span></div>
+      <div class="qr-item"><span class="qr-key">422</span><span class="qr-tooltip">Format zahteva je ok, ali semanticki nije validan (narusena biznis pravila).</span><span class="qr-val">Semanticki nevalidan zahtev</span></div>
+      <div class="qr-item"><span class="qr-key">500</span><span class="qr-tooltip">Greska na serveru. Uvek je defekt — developer mora da je ispravi.</span><span class="qr-val">Greska na serveru — uvek defekt</span></div>
+    </div>
+    <div class="qr-card"><h4>Selenium exception-i</h4>
+      <div class="qr-item"><span class="qr-key">NoSuchElement</span><span class="qr-tooltip">Element nije pronadjen u DOM-u. Proveriti lokator i dodati Explicit Wait.</span><span class="qr-val">Proveriti lokator + dodati Wait</span></div>
+      <div class="qr-item"><span class="qr-key">StaleElement</span><span class="qr-tooltip">Element pronadjen ali DOM se promenio pre interakcije. Re-locate element.</span><span class="qr-val">Re-locate element</span></div>
+      <div class="qr-item"><span class="qr-key">NotInteractable</span><span class="qr-tooltip">Element postoji ali je skriven, disabled ili prekriven drugim elementom.</span><span class="qr-val">Cekati na clickability</span></div>
+      <div class="qr-item"><span class="qr-key">ClickIntercepted</span><span class="qr-tooltip">Drugi element (modal, overlay) prekriva ciljni element pri kliku.</span><span class="qr-val">Sacekati da overlay nestane</span></div>
+      <div class="qr-item"><span class="qr-key">Timeout</span><span class="qr-tooltip">Explicit Wait nije pronasao ocekivani uslov u zadatom vremenskom okviru.</span><span class="qr-val">Povecati timeout / proveriti lokator</span></div>
+    </div>
+    <div class="qr-card"><h4>Smoke / Sanity / Regression</h4>
+      <div class="qr-item"><span class="qr-key">Smoke</span><span class="qr-tooltip">Broad + Shallow. Pokrece se na svakom novom build-u. Go/No-Go odluka za dalji QA.</span><span class="qr-val">Broad + Shallow · svaki build</span></div>
+      <div class="qr-item"><span class="qr-key">Sanity</span><span class="qr-tooltip">Narrow + Deep. Pokrece se nakon specificnog bugfix-a ili nove funkcionalnosti.</span><span class="qr-val">Narrow + Deep · nakon fix-a</span></div>
+      <div class="qr-item"><span class="qr-key">Regression</span><span class="qr-tooltip">Broad + Deep. Pokrece se pre svakog release-a. Pokriva ceo scope.</span><span class="qr-val">Broad + Deep · pre release-a</span></div>
+      <div class="qr-item"><span class="qr-key">Retesting</span><span class="qr-tooltip">Ponovo se izvrsava konkretan TC koji je prethodno failovao, nakon bugfix-a.</span><span class="qr-val">Konkretan TC koji je failovao</span></div>
+    </div>
+    <div class="qr-card"><h4>Test case checklist</h4>
+      <div class="qr-item"><span class="qr-key">✓ Naziv</span><span class="qr-val">Method_State_Expected format</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Atomican</span><span class="qr-val">Testira tacno jednu stvar</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Nezavistan</span><span class="qr-val">Ne zavisi od redosleda</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Preconditions</span><span class="qr-val">Potpuni i precizni</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Expected Result</span><span class="qr-val">Verifikabilan i nedvosmislen</span></div>
+    </div>
+    <div class="qr-card"><h4>DoD — QA stavke</h4>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Acceptance criteria ispunjena i verifikovana</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Test case-ovi napisani i odobreni</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">High/Critical defekti zatvoreni</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Regression suite prolazi</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Testirano na staging okruzenju</span></div>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+
+// ═══════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════
+const SECTIONS = [
+  {id:'s01',title:'1. Osnove i terminologija'},
+  {id:'s02',title:'2. SDLC i STLC'},
+  {id:'s03',title:'3. Tipovi i nivoi testiranja'},
+  {id:'s04',title:'4. Tehnike dizajniranja TC'},
+  {id:'s05',title:'5. Pisanje test case-ova'},
+  {id:'s06',title:'6. Bug report i defect lifecycle'},
+  {id:'s07',title:'7. Test plan i test strategija'},
+  {id:'s08',title:'8. Agile testiranje'},
+  {id:'s09',title:'9. Test dokumentacija'},
+  {id:'s10',title:'10. Test okruzenje i podaci'},
+  {id:'s11',title:'11. Uvod u automatizaciju'},
+  {id:'s12',title:'12. Selenium / WebDriver'},
+  {id:'s13',title:'13. Page Object Model'},
+  {id:'s14',title:'14. API testiranje'},
+  {id:'s15',title:'15. CI/CD integracija'},
+  {id:'s16',title:'16. Framework arhitektura'},
+  {id:'s17',title:'17. Performance testing'},
+  {id:'s18',title:'18. Mobile testing (Appium)'},
+  {id:'s19',title:'19. AI u testiranju'},
+  {id:'s20',title:'20. Glosar'},
+];
+
+const SECTION_ICONS = {
+  s01:'📖',s02:'🔄',s03:'🧪',s04:'🎯',s05:'📝',
+  s06:'🐛',s07:'📋',s08:'⚡',s09:'📊',s10:'🗄️',
+  s11:'🤖',s12:'🌐',s13:'🏗️',s14:'🔌',s15:'⚙️',
+  s16:'🔧',s17:'📈',s18:'📱',s19:'🧠',s20:'📚'
+};
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  addSectionMeta();
+  addIcons();
+  addAnchorLinks();
+  addBookmarkButtons();
+  addSectionNav();
+  restoreState();
+  initSyntaxHighlight();
+  updateBmCount();
+  initNavHeights();
+  filterGlosar('');
+});
+
+// ═══════════════════════════════════════════════════════
+// ICONS
+// ═══════════════════════════════════════════════════════
+function addIcons() {
+  SECTIONS.forEach(sec => {
+    const el = document.querySelector(`.section#${sec.id}`);
+    if (!el) return;
+    const h1 = el.querySelector('h1.sec-title');
+    if (!h1 || !SECTION_ICONS[sec.id]) return;
+    const icon = document.createElement('span');
+    icon.className = 'sec-icon';
+    icon.textContent = SECTION_ICONS[sec.id];
+    h1.prepend(icon);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// SECTION META — read time + mark read button
+// ═══════════════════════════════════════════════════════
+function addSectionMeta() {
+  document.querySelectorAll('.section').forEach(sec => {
+    const id = sec.id;
+    const words = sec.innerText.split(/\s+/).length;
+    const mins = Math.max(1, Math.round(words / 200));
+    const h1 = sec.querySelector('h1.sec-title');
+    if (!h1) return;
+    const badge = document.createElement('span');
+    badge.className = 'read-badge';
+    badge.textContent = '✓ Procitano';
+    h1.appendChild(badge);
+    const meta = document.createElement('div');
+    meta.className = 'section-meta';
+    meta.innerHTML = `
+      <span class="read-time">⏱ ~${mins} min citanja</span>
+      <button class="mark-read-btn" id="mrb-${id}" onclick="markRead('${id}')">
+        Oznaci kao procitano
+      </button>`;
+    h1.insertAdjacentElement('afterend', meta);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// ANCHOR LINKS on h2
+// ═══════════════════════════════════════════════════════
+function addAnchorLinks() {
+  document.querySelectorAll('h2.sub-title').forEach((h2, i) => {
+    const slug = 'h-' + i;
+    h2.id = slug;
+    const a = document.createElement('a');
+    a.className = 'anchor';
+    a.href = '#' + slug;
+    a.textContent = '#';
+    a.title = 'Kopiraj link';
+    a.onclick = (e) => {
+      e.preventDefault();
+      navigator.clipboard.writeText(location.href.split('#')[0] + '#' + slug);
+      a.textContent = '✓'; setTimeout(() => a.textContent = '#', 1500);
+    };
+    h2.appendChild(a);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// BOOKMARK BUTTONS on h2
+// ═══════════════════════════════════════════════════════
+function addBookmarkButtons() {
+  document.querySelectorAll('h2.sub-title').forEach(h2 => {
+    const slug = h2.id;
+    const secEl = h2.closest('.section');
+    const secId = secEl ? secEl.id : '';
+    const secTitle = SECTIONS.find(s => s.id === secId)?.title || '';
+    const title = h2.innerText.replace('#','').trim();
+    const btn = document.createElement('button');
+    btn.className = 'bm-btn';
+    btn.textContent = '★';
+    btn.title = 'Bookmark';
+    btn.dataset.slug = slug;
+    btn.dataset.title = title;
+    btn.dataset.section = secTitle;
+    btn.onclick = () => toggleBookmark(btn);
+    h2.insertBefore(btn, h2.querySelector('.anchor') || null);
+  });
+  refreshAllBmButtons();
+}
+
+// ═══════════════════════════════════════════════════════
+// PREV / NEXT with fade
+// ═══════════════════════════════════════════════════════
+function addSectionNav() {
+  SECTIONS.forEach((sec, i) => {
+    // Use querySelector to get the section DIV specifically, not any h1
+    const el = document.querySelector(`.section#${sec.id}`);
+    if (!el) return;
+    const prev = SECTIONS[i - 1];
+    const next = SECTIONS[i + 1];
+    const nav = document.createElement('div');
+    nav.className = 'section-nav';
+    nav.innerHTML = `
+      ${prev ? `<button class="snav-btn" onclick="navTo('${prev.id}')">
+        <span class="snav-label">← Prethodna</span>
+        <span class="snav-title">${prev.title}</span>
+      </button>` : '<div></div>'}
+      ${next ? `<button class="snav-btn next" onclick="navTo('${next.id}')">
+        <span class="snav-label">Sledeca →</span>
+        <span class="snav-title">${next.title}</span>
+      </button>` : '<div></div>'}`;
+    el.appendChild(nav);
+  });
+}
+
+function navTo(id) {
+  const target = document.getElementById(id);
+  if (!target) return;
+  // Fade current visible sections
+  document.querySelectorAll('.section').forEach(s => {
+    if (s.getBoundingClientRect().top < window.innerHeight && s.getBoundingClientRect().bottom > 0) {
+      s.classList.add('fading');
+    }
+  });
+  setTimeout(() => {
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+    setTimeout(() => document.querySelectorAll('.section.fading').forEach(s => s.classList.remove('fading')), 400);
+  }, 150);
+}
+
+// ═══════════════════════════════════════════════════════
+// PROGRESS + BREADCRUMB + SCROLL
+// ═══════════════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  const total = document.body.scrollHeight - window.innerHeight;
+  document.getElementById('progress-bar').style.width = (total > 0 ? window.scrollY/total*100 : 0) + '%';
+  document.getElementById('back-top').classList.toggle('visible', window.scrollY > 400);
+  let current = null;
+  SECTIONS.forEach(sec => {
+    const el = document.querySelector(`.section#${sec.id}`);
+    if (el && el.getBoundingClientRect().top <= 80) current = sec;
+  });
+  const bc = document.getElementById('breadcrumb');
+  bc.innerHTML = current ? `<span>${SECTION_ICONS[current.id]||''} ${current.title}</span>` : '';
+}, {passive: true});
+
+// ═══════════════════════════════════════════════════════
+// ACTIVE NAV
+// ═══════════════════════════════════════════════════════
+const navItems = document.querySelectorAll('.nav-item');
+const sectionEls = document.querySelectorAll('div.section');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navItems.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+    }
+  });
+}, {rootMargin: '-20% 0px -70% 0px'});
+sectionEls.forEach(s => observer.observe(s));
+
+// ═══════════════════════════════════════════════════════
+// MARK READ
+// ═══════════════════════════════════════════════════════
+function markRead(id) {
+  const reads = JSON.parse(localStorage.getItem('qa_reads') || '[]');
+  const idx = reads.indexOf(id);
+  if (idx === -1) reads.push(id); else reads.splice(idx, 1);
+  localStorage.setItem('qa_reads', JSON.stringify(reads));
+  applyReadState(id, reads.includes(id));
+}
+function toggleRead(e, id) { e.preventDefault(); e.stopPropagation(); markRead(id); }
+function applyReadState(id, isRead) {
+  const check = document.querySelector(`.nav-check[onclick*="${id}"]`);
+  if (check) { check.classList.toggle('done', isRead); check.textContent = isRead ? '✓' : ''; }
+  const btn = document.getElementById('mrb-' + id);
+  if (btn) { btn.classList.toggle('done', isRead); btn.textContent = isRead ? '✓ Procitano' : 'Oznaci kao procitano'; }
+  const badge = document.querySelector(`#t-${id} .read-badge`);
+  if (badge) badge.classList.toggle('visible', isRead);
+}
+
+// ═══════════════════════════════════════════════════════
+// BOOKMARKS
+// ═══════════════════════════════════════════════════════
+function getBookmarks() { return JSON.parse(localStorage.getItem('qa_bookmarks') || '[]'); }
+function saveBookmarks(bms) { localStorage.setItem('qa_bookmarks', JSON.stringify(bms)); }
+function refreshAllBmButtons() {
+  const slugSet = new Set(getBookmarks().map(b => b.slug));
+  document.querySelectorAll('.bm-btn').forEach(btn => btn.classList.toggle('active', slugSet.has(btn.dataset.slug)));
+}
+function toggleBookmark(btn) {
+  const {slug, title, section} = btn.dataset;
+  let bms = getBookmarks();
+  const idx = bms.findIndex(b => b.slug === slug);
+  if (idx === -1) bms.push({slug, title, section}); else bms.splice(idx, 1);
+  saveBookmarks(bms);
+  refreshAllBmButtons();
+  renderBookmarks();
+  updateBmCount();
+}
+function updateBmCount() {
+  const c = getBookmarks().length;
+  const el = document.getElementById('bm-count');
+  el.textContent = c; el.style.display = c > 0 ? 'inline' : 'none';
+}
+function renderBookmarks() {
+  const bms = getBookmarks();
+  const list = document.getElementById('bm-list');
+  if (bms.length === 0) {
+    list.innerHTML = '<div id="bm-empty">Nema bookmarks-a.<br><small>Klikni ★ pored bilo kog podnaslova.</small></div>';
+    return;
+  }
+  list.innerHTML = bms.map(b => `
+    <div class="bm-entry" onclick="goToAnchor('${b.slug}')">
+      <button class="bm-entry-del" onclick="removeBm(event,'${b.slug}')">✕</button>
+      <div class="bm-entry-title">${b.title}</div>
+      <div class="bm-entry-section">${b.section}</div>
+    </div>`).join('');
+}
+function removeBm(e, slug) {
+  e.stopPropagation();
+  let bms = getBookmarks().filter(b => b.slug !== slug);
+  saveBookmarks(bms);
+  refreshAllBmButtons();
+  renderBookmarks();
+  updateBmCount();
+}
+function goToAnchor(id) {
+  const el = document.getElementById(id);
+  if (el) { el.scrollIntoView({behavior:'smooth'}); closeBmPanel(); }
+}
+function openBmPanel() { renderBookmarks(); document.getElementById('bm-panel').classList.toggle('open'); }
+function closeBmPanel() { document.getElementById('bm-panel').classList.remove('open'); }
+
+// ═══════════════════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════════════════
+let searchTimeout;
+function searchDoc(query) {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    const content = document.getElementById('content');
+    content.querySelectorAll('mark').forEach(m => m.replaceWith(m.textContent));
+    const countEl = document.getElementById('search-count');
+    if (!query.trim()) { countEl.textContent = ''; return; }
+    const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    const re = new RegExp(query.replace(/[.*+?^${}()|\[\]\\]/g, '\$&'), 'gi');
+    let count = 0;
+    nodes.forEach(node => {
+      if (['SCRIPT','BUTTON','STYLE'].includes(node.parentNode.tagName)) return;
+      if (!re.test(node.textContent)) return;
+      re.lastIndex = 0;
+      const span = document.createElement('span');
+      const matches = node.textContent.match(re) || []; count += matches.length;
+      span.innerHTML = node.textContent.replace(re, m => `<mark>${m}</mark>`);
+      node.parentNode.replaceChild(span, node);
+    });
+    countEl.textContent = count > 0 ? `${count} pogodak${count===1?'':'a'}` : 'Nema';
+    const first = content.querySelector('mark');
+    if (first) first.scrollIntoView({behavior:'smooth', block:'center'});
+  }, 250);
+}
+
+// ═══════════════════════════════════════════════════════
+// COLLAPSE GROUPS
+// ═══════════════════════════════════════════════════════
+function initNavHeights() {
+  document.querySelectorAll('.nav-group').forEach(g => { g.style.maxHeight = g.scrollHeight + 'px'; });
+}
+function toggleGroup(id) {
+  const g = document.getElementById(id);
+  const collapsed = g.classList.toggle('collapsed');
+  const btn = g.previousElementSibling.querySelector('.nav-collapse');
+  btn.textContent = collapsed ? '▸' : '▾';
+  g.style.maxHeight = collapsed ? '0' : g.scrollHeight + 'px';
+}
+
+// ═══════════════════════════════════════════════════════
+// FONT SIZE
+// ═══════════════════════════════════════════════════════
+let fontSize = parseInt(localStorage.getItem('qa_fs') || '15');
+function applyFontSize() {
+  document.documentElement.style.setProperty('--fs', fontSize + 'px');
+  document.getElementById('fs-display').textContent = fontSize;
+  localStorage.setItem('qa_fs', fontSize);
+}
+function changeFont(delta) {
+  fontSize = Math.min(20, Math.max(12, fontSize + delta));
+  applyFontSize();
+}
+
+// ═══════════════════════════════════════════════════════
+// READING MODE
+// ═══════════════════════════════════════════════════════
+function toggleReadingMode() {
+  const isReading = document.body.classList.toggle('reading');
+  const btn = document.getElementById('read-btn');
+  const sidebar = document.getElementById('sidebar');
+  if (isReading) {
+    // Enter reading mode — hide sidebar
+    sidebar.style.transform = 'translateX(-100%)';
+    if (btn) btn.textContent = '✕ Citanje';
+  } else {
+    // Exit reading mode — restore sidebar based on screen width
+    sidebar.style.transform = window.innerWidth > 768 ? 'translateX(0)' : 'translateX(-100%)';
+    if (btn) btn.textContent = '🔖 Citanje';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// PRINT
+// ═══════════════════════════════════════════════════════
+function printDoc() { window.print(); }
+
+// ═══════════════════════════════════════════════════════
+// SHARE
+// ═══════════════════════════════════════════════════════
+function shareSection() {
+  let currentId = 's01';
+  SECTIONS.forEach(sec => {
+    const el = document.querySelector(`.section#${sec.id}`);
+    if (el && el.getBoundingClientRect().top <= 100) currentId = sec.id;
+  });
+  const url = location.href.split('#')[0] + '#' + currentId;
+  navigator.clipboard.writeText(url);
+  const toast = document.getElementById('share-toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ═══════════════════════════════════════════════════════
+// QUICK REF
+// ═══════════════════════════════════════════════════════
+function toggleQuickRef() { document.getElementById('quickref').classList.toggle('visible'); }
+
+// ═══════════════════════════════════════════════════════
+// THEME
+// ═══════════════════════════════════════════════════════
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  const isLight = document.body.classList.contains('light');
+  document.getElementById('theme-btn').textContent = isLight ? '☾' : '☀';
+  localStorage.setItem('qa_theme', isLight ? 'light' : 'dark');
+}
+
+// ═══════════════════════════════════════════════════════
+// SIDEBAR
+// ═══════════════════════════════════════════════════════
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+document.addEventListener('click', e => {
+  const sb = document.getElementById('sidebar');
+  const btn = document.getElementById('menu-btn');
+  if (sb.classList.contains('open') && !sb.contains(e.target) && e.target !== btn) sb.classList.remove('open');
+  if (document.getElementById('bm-panel').classList.contains('open') &&
+      !document.getElementById('bm-panel').contains(e.target) &&
+      !e.target.closest('.tb-btn')) {
+    closeBmPanel();
+  }
+});
+
+// ═══════════════════════════════════════════════════════
+// COPY CODE
+// ═══════════════════════════════════════════════════════
+function copyCode(btn) {
+  const pre = btn.nextElementSibling;
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    btn.textContent = '✓ copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// SYNTAX HIGHLIGHT
+// ═══════════════════════════════════════════════════════
+function initSyntaxHighlight() {
+  document.querySelectorAll('.code-block pre').forEach(pre => {
+    let lines = pre.innerHTML.split('\n');
+    lines = lines.map(line => {
+      // Comments
+      if (line.trimStart().startsWith('//') || line.trimStart().startsWith('#')) {
+        return '<span class="cm">' + line + '</span>';
+      }
+      // Keywords
+      line = line.replace(/\b(public|private|static|void|class|new|return|var|string|bool|int|if|else|true|false|null|this|using|namespace|override|abstract|readonly|const|async|await|foreach)\b/g, '<span class="kw">$1</span>');
+      // Strings in single quotes
+      line = line.replace(/('[^']*')/g, '<span class="st">$1</span>');
+      return line;
+    });
+    pre.innerHTML = lines.join('\n');
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// KEYBOARD
+// ═══════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') {
+    if (e.key === 'Escape') { e.target.blur(); searchDoc(''); }
+    return;
+  }
+  if (e.key === '/') { e.preventDefault(); document.getElementById('search').focus(); return; }
+  if (e.key === 'Escape') { closeBmPanel(); return; }
+  // J/K section navigation
+  if (e.key === 'j' || e.key === 'J') {
+    const cur = getCurrentSection();
+    if (cur === null) navTo(SECTIONS[0].id);
+    else if (cur + 1 < SECTIONS.length) navTo(SECTIONS[cur + 1].id);
+  }
+  if (e.key === 'k' || e.key === 'K') {
+    const cur = getCurrentSection();
+    if (cur !== null && cur > 0) navTo(SECTIONS[cur - 1].id);
+  }
+  // R = reading mode, P = print
+  if (e.key === 'r' || e.key === 'R') toggleReadingMode();
+  if (e.key === 'p' || e.key === 'P') printDoc();
+});
+function getCurrentSection() {
+  let idx = null;
+  SECTIONS.forEach((sec, i) => {
+    const el = document.querySelector(`.section#${sec.id}`);
+    if (el && el.getBoundingClientRect().top <= 80) idx = i;
+  });
+  return idx;
+}
+
+// ═══════════════════════════════════════════════════════
+// RESTORE STATE
+// ═══════════════════════════════════════════════════════
+function restoreState() {
+  if (localStorage.getItem('qa_theme') === 'light') {
+    document.body.classList.add('light');
+    document.getElementById('theme-btn').textContent = '☾';
+  }
+  applyFontSize();
+  const reads = JSON.parse(localStorage.getItem('qa_reads') || '[]');
+  reads.forEach(id => applyReadState(id, true));
+}
+
+// Back to top
+document.getElementById('back-top').addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+
+function toggleOverflow() {
+  document.getElementById('overflow-menu').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  var menu = document.getElementById('overflow-menu');
+  var btn  = document.getElementById('overflow-btn');
+  if (menu && menu.classList.contains('open') &&
+      !menu.contains(e.target) && e.target !== btn) {
+    menu.classList.remove('open');
+  }
+}, true);
+
+function filterGlosar(q) {
+  var items  = document.querySelectorAll('.glosar-item');
+  var groups = document.querySelectorAll('.glosar-letter-group');
+  var query  = q.trim().toLowerCase();
+  var visible = 0;
+  items.forEach(function(item) {
+    var term = item.querySelector('.glosar-term').textContent.toLowerCase();
+    var def  = item.querySelector('.glosar-def').textContent.toLowerCase();
+    var match = !query || term.indexOf(query) >= 0 || def.indexOf(query) >= 0;
+    item.classList.toggle('hidden', !match);
+    if (match) visible++;
+  });
+  groups.forEach(function(g) {
+    var hasVisible = Array.from(g.querySelectorAll('.glosar-item'))
+      .some(function(i) { return !i.classList.contains('hidden'); });
+    g.style.display = hasVisible ? '' : 'none';
+  });
+  var el = document.getElementById('glosar-count');
+  if (el) el.textContent = query ? (visible + ' od ' + items.length) : (items.length + ' termina');
+}
+
+</script>
+</body>
+</html>
