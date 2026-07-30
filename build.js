@@ -87,7 +87,7 @@ function buildTopicPage(sections, index, template) {
 
 function buildIndexPage(sections, template) {
   function renderList(items) {
-    return items.map(s => `<li class="bullet-item"><a href="${s.id}.html">${s.icon} ${s.title}</a></li>`).join('\n');
+    return items.map(s => `<li class="bullet-item"><a class="toc-link" href="${s.id}.html">${s.icon} ${s.title}</a></li>`).join('\n');
   }
   const deoI = sections.filter(s => s.deo === 'I');
   const deoII = sections.filter(s => s.deo === 'II');
