@@ -421,7 +421,7 @@ function extractSectionOuter(html, id) {
 function stripHeaderAndMeta(sectionHtml) {
   const h1Close = sectionHtml.indexOf('</h1>');
   if (h1Close === -1) throw new Error('no </h1> found in section');
-  let rest = sectionHtml.slice(h1Close + '</h1>'.length);
+  let rest = sectionHtml.slice(h1Close + '</h1>'.length).replace(/^\s+/, '');
   if (rest.startsWith('<div class="section-meta">')) {
     const metaEnd = rest.indexOf('</div>');
     rest = rest.slice(metaEnd + '</div>'.length);
