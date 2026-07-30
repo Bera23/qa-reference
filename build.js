@@ -85,6 +85,48 @@ function buildTopicPage(sections, index, template) {
   fs.writeFileSync(path.join(DIST_DIR, `${s.id}.html`), html, 'utf8');
 }
 
+function buildIndexPage(sections, template) {
+  function renderList(items) {
+    return items.map(s => `<li class="bullet-item"><a href="${s.id}.html">${s.icon} ${s.title}</a></li>`).join('\n');
+  }
+  const deoI = sections.filter(s => s.deo === 'I');
+  const deoII = sections.filter(s => s.deo === 'II');
+  const content = `<p class="body-text">Licni referentni materijal za manuelno i automatizovano testiranje — izaberi temu iz liste levo, ili ispod.</p>
+<h2 class="sub-title">Deo I — Manualno testiranje</h2>
+<ul>
+${renderList(deoI)}
+</ul>
+<h2 class="sub-title">Deo II — Automatizacija</h2>
+<ul>
+${renderList(deoII)}
+</ul>`;
+
+  const html = fillTemplate(template, {
+    PAGE_TITLE: '📘 QA Referentni Dokument',
+    BREADCRUMB: 'Pocetna',
+    SIDEBAR_NAV: renderSidebarNav(sections, null),
+    DEO_BANNER: '',
+    ACTIVE_ID: 'home',
+    ICON: '📘',
+    TOPIC_TITLE: 'QA Referentni Dokument',
+    SECTION_META: '',
+    CONTENT: content,
+    PREV_BTN: '<div></div>',
+    NEXT_BTN: '<div></div>',
+    QA_PAGE_SCRIPT: `<script>window.QA_PAGE = ${JSON.stringify({ id: 'home', title: 'QA Referentni Dokument', prevUrl: null, nextUrl: sections[0].id + '.html' })};</script>`,
+  });
+
+  fs.writeFileSync(path.join(DIST_DIR, 'index.html'), html, 'utf8');
+}
+
+function buildSearchIndex(sections) {
+  const index = sections.map(s => {
+    const body = fs.readFileSync(path.join(SECTIONS_DIR, `${s.id}.html`), 'utf8');
+    return { id: s.id, title: s.title, deo: s.deo, url: `${s.id}.html`, text: stripTags(body) };
+  });
+  fs.writeFileSync(path.join(DIST_DIR, 'search-index.json'), JSON.stringify(index), 'utf8');
+}
+
 function copyAssets() {
   fs.copyFileSync(path.join(ASSETS_DIR, 'style.css'), path.join(DIST_DIR, 'style.css'));
   fs.copyFileSync(path.join(ASSETS_DIR, 'script.js'), path.join(DIST_DIR, 'script.js'));
@@ -95,8 +137,10 @@ function main() {
   const sections = readSections();
   const template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
   sections.forEach((_, i) => buildTopicPage(sections, i, template));
+  buildIndexPage(sections, template);
+  buildSearchIndex(sections);
   copyAssets();
-  console.log(`Built ${sections.length} topic pages into dist/`);
+  console.log(`Built ${sections.length} topic pages + index.html + search-index.json into dist/`);
 }
 
 if (require.main === module) main();
