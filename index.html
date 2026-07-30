@@ -13,7 +13,7 @@
 <div id="share-toast">🔗 Link kopiran!</div>
 
 <div id="bm-panel">
-  <h3>Bookmarks <button id="bm-close" onclick="closeBmPanel()">✕</button></h3>
+  <h3>Bookmarks <button id="bm-close" onclick="closeBmPanel()" aria-label="Zatvori">✕</button></h3>
   <div id="bm-list"><div id="bm-empty">Nema bookmarks-a.<br><small>Klikni ★ pored bilo kog podnaslova.</small></div></div>
 </div>
 
@@ -66,16 +66,16 @@
 
 <div id="topbar">
   <div id="topbar-left">
-    <button id="menu-btn" class="tb-btn" onclick="toggleSidebar()" title="Meni">☰</button>
+    <button id="menu-btn" class="tb-btn" onclick="toggleSidebar()" title="Meni" aria-label="Meni">☰</button>
     <span id="topbar-meta">QA Ref · v2.0 · 2026</span>
     <span id="breadcrumb"><span>Pocetna</span></span>
   </div>
   <div id="topbar-right">
-    <button class="tb-btn" onclick="toggleQuickRef()" title="Quick Reference">⚡</button>
-    <button class="tb-btn" onclick="openBmPanel()" title="Bookmarks">★ <span id="bm-count" style="display:none">0</span></button>
-    <button class="tb-btn" onclick="toggleReadingMode()" id="read-btn" title="Rezim citanja">🔖</button>
-    <button class="tb-btn" id="theme-btn" onclick="toggleTheme()" title="Tema">☀</button>
-    <button class="tb-btn" id="overflow-btn" onclick="toggleOverflow()" title="Vise opcija">···</button>
+    <button class="tb-btn" onclick="toggleQuickRef()" title="Quick Reference" aria-label="Quick Reference">⚡</button>
+    <button class="tb-btn" onclick="openBmPanel()" title="Bookmarks" aria-label="Bookmarks">★ <span id="bm-count" style="display:none">0</span></button>
+    <button class="tb-btn" onclick="toggleReadingMode()" id="read-btn" title="Rezim citanja" aria-label="Rezim citanja">🔖</button>
+    <button class="tb-btn" id="theme-btn" onclick="toggleTheme()" title="Tema" aria-label="Tema">☀</button>
+    <button class="tb-btn" id="overflow-btn" onclick="toggleOverflow()" title="Vise opcija" aria-label="Vise opcija">···</button>
     <div id="overflow-menu">
       <div class="ov-label">Velicina fonta</div>
       <div class="ov-row">
@@ -127,7 +127,7 @@
   </div>
 
 <div id="quickref">
-  <h3>⚡ Quick Reference <button id="qr-close" onclick="toggleQuickRef()">✕</button></h3>
+  <h3>⚡ Quick Reference <button id="qr-close" onclick="toggleQuickRef()" aria-label="Zatvori">✕</button></h3>
   <div class="qr-grid">
     <div class="qr-card"><h4>Severity nivoi</h4>
       <div class="qr-item"><span class="qr-key">Blocker</span><span class="qr-tooltip">Sistem se ne moze koristiti. Testiranje je blokirano. Nema workaround-a.</span><span class="qr-val">Sistem ne radi, nema workaround-a</span></div>
