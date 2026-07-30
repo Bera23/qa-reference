@@ -459,7 +459,8 @@ ids.forEach(id => {
   if (c.includes('sec-title')) throw new Error(id + ' still has the h1');
   if (c.includes('section-meta')) throw new Error(id + ' still has the meta block');
   if (c.trim().length < 20) throw new Error(id + ' looks empty');
-  if (!c.trimStart().startsWith('<h2')) throw new Error(id + ' does not start with an h2');
+  if (id !== 's20' && !c.trimStart().startsWith('<h2')) throw new Error(id + ' does not start with an h2');
+  if (id === 's20' && !c.trimStart().startsWith('<p')) throw new Error(id + ' (Glosar) does not start with its intro <p>');
 });
 console.log('OK all 20 files clean');
 "
