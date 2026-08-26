@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📱 18. Mobile testing (Appium) — QA Referentni Dokument</title>
+<title>⚡ 22. Cheat Sheet — QA Referentni Dokument</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -55,11 +55,11 @@
       <a class="nav-item" href="s15.html"><span class="nav-icon">⚙️</span><span class="nav-item-text">15. CI/CD integracija</span><span class="nav-check" onclick="toggleRead(event,'s15')"></span></a>
       <a class="nav-item" href="s16.html"><span class="nav-icon">🔧</span><span class="nav-item-text">16. Framework arhitektura</span><span class="nav-check" onclick="toggleRead(event,'s16')"></span></a>
       <a class="nav-item" href="s17.html"><span class="nav-icon">📈</span><span class="nav-item-text">17. Performance testing</span><span class="nav-check" onclick="toggleRead(event,'s17')"></span></a>
-      <a class="nav-item active" href="s18.html"><span class="nav-icon">📱</span><span class="nav-item-text">18. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
+      <a class="nav-item" href="s18.html"><span class="nav-icon">📱</span><span class="nav-item-text">18. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
       <a class="nav-item" href="s19.html"><span class="nav-icon">🧠</span><span class="nav-item-text">19. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
       <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
       <a class="nav-item" href="s21.html"><span class="nav-icon">🎤</span><span class="nav-item-text">21. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
-      <a class="nav-item" href="s22.html"><span class="nav-icon">⚡</span><span class="nav-item-text">22. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s22')"></span></a>
+      <a class="nav-item active" href="s22.html"><span class="nav-icon">⚡</span><span class="nav-item-text">22. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s22')"></span></a>
     </div>
   </nav>
 </div>
@@ -71,7 +71,7 @@
     <button id="menu-btn" class="tb-btn" onclick="toggleSidebar()" title="Meni" aria-label="Meni">☰</button>
     <a class="tb-btn" href="index.html" title="Pocetna" aria-label="Pocetna">🏠</a>
     <span id="topbar-meta">QA Ref · v2.0 · 2026</span>
-    <span id="breadcrumb"><span>📱 18. Mobile testing (Appium)</span></span>
+    <span id="breadcrumb"><span>⚡ 22. Cheat Sheet</span></span>
   </div>
   <div id="topbar-right">
     <button class="tb-btn" onclick="toggleQuickRef()" title="Quick Reference" aria-label="Quick Reference">⚡</button>
@@ -95,114 +95,128 @@
 
   <div id="content">
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
-<div class="section" id="s18">
-<h1 class="sec-title" id="t-s18">📱 18. Mobile testing (Appium)<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~2 min citanja</span><button class="mark-read-btn" id="mrb-s18" onclick="markRead('s18')">Oznaci kao procitano</button></div>
-<h2 class="sub-title">18.1 Sta je Appium i kako funkcionise</h2>
-<p class="body-text">Appium je open-source alat za automatizaciju mobilnih aplikacija. Koristi WebDriver protokol — ista arhitektura kao Selenium, ali sa mobilnim driver-ima.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [Test kod (C#/Java/Python)]
-          |  WebDriver API pozivi
-          v
-  [Appium Server]
-          |  XCUITest (iOS) / UIAutomator2 (Android)
-          v
-  [Realni uredjaj / Emulator]</pre></div>
-<h2 class="sub-title">18.2 Tipovi mobilnih aplikacija</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Tip</th><th>Opis</th><th>Appium podrska</th></tr></thead><tbody>
-<tr><td>Native</td><td>Pisana u Swift/Kotlin, koristi native UI komponente.</td><td>Puna podrska. Pristup svim native elementima.</td></tr>
-<tr><td>Hybrid</td><td>Web view unutar native shell-a. React Native, Ionic.</td><td>Puna podrska. Context switching izmedju native i web.</td></tr>
-<tr><td>Mobile Web</td><td>Browser aplikacija — Safari, Chrome na mobilnom.</td><td>Podrska kroz mobile browser driver.</td></tr>
+<div class="section" id="s22">
+<h1 class="sec-title" id="t-s22">⚡ 22. Cheat Sheet<span class="read-badge">✓ Procitano</span></h1>
+<div class="section-meta"><span class="read-time">⏱ ~3 min citanja</span><button class="mark-read-btn" id="mrb-s22" onclick="markRead('s22')">Oznaci kao procitano</button></div>
+<p class="body-text">Kompaktni pregled najvaznijih komandi, pattern-a i formula — za brzi podsetnik pre intervjua ili tokom rada. Svaki red linkuje na detaljnu sekciju.</p>
+
+<h2 class="sub-title">22.1 Selenium / WebDriver</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Pattern</th><th>C# primer</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Explicit Wait</td><td><code>new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(ExpectedConditions.ElementIsVisible(By.Id("btn")))</code></td><td>s12.3</td></tr>
+<tr><td>Lokator prioritet</td><td>ID &gt; data-testid &gt; CSS &gt; XPath (izbegavati pozicione)</td><td>s12.2</td></tr>
+<tr><td>Screenshot</td><td><code>((ITakesScreenshot)driver).GetScreenshot().SaveAsFile(path)</code></td><td>s12.7</td></tr>
+<tr><td>Hover</td><td><code>new Actions(driver).MoveToElement(el).Perform()</code></td><td>s12.5</td></tr>
+<tr><td>Headless</td><td><code>options.AddArgument("--headless=new")</code></td><td>s12.7</td></tr>
+<tr><td>File Upload</td><td><code>FindElement(By.CssSelector("input[type=file]")).SendKeys(path)</code></td><td>s12.6</td></tr>
+<tr><td>StaleElement fix</td><td>Re-locate element pre interakcije (re-find pattern)</td><td>s12.4</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">18.3 Appium C# — setup i osnovni test</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Capabilities i driver inicijalizacija (Android)
-var options = new AppiumOptions();
-options.PlatformName = "Android";
-options.AutomationName = "UIAutomator2";
-options.DeviceName = "emulator-5554";
-options.App = "/path/to/app.apk";
 
-var driver = new AndroidDriver(
-    new Uri("http://localhost:4723"), options);
-
-// Lociranje elementa i interakcija
-var loginBtn = driver.FindElement(
-    MobileBy.AccessibilityId("loginButton"));
-loginBtn.Click();
-
-// Assertion (xUnit)
-var welcomeMsg = driver.FindElement(
-    MobileBy.AccessibilityId("welcomeLabel"));
-Assert.Equal("Dobrodosli", welcomeMsg.Text);</pre></div>
-<div class="note">Ista WebDriver arhitektura kao Selenium (videti Sekciju 12) — poznavanje lokator strategija i wait mehanizama se direktno prenosi.</div>
-<h2 class="sub-title">18.4 Lokatori u Appium-u</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Lokator</th><th>iOS</th><th>Android</th></tr></thead><tbody>
-<tr><td>Accessibility ID</td><td>accessibilityIdentifier atribut</td><td>content-desc atribut — preporuceni</td></tr>
-<tr><td>XPath</td><td>Dostupan, ali sporiji</td><td>Dostupan, ali sporiji</td></tr>
-<tr><td>Class Name</td><td>XCUIElementTypeButton</td><td>android.widget.Button</td></tr>
-<tr><td>ID</td><td>Bez direktnog ekvivalenta</td><td>Resource ID (com.app:id/btn)</td></tr>
+<h2 class="sub-title">22.2 xUnit</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Koncept</th><th>Kod</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Jedan test</td><td><code>[Fact] public void Method_State_Expected() { ... }</code></td><td>s16.3</td></tr>
+<tr><td>Data-driven</td><td><code>[Theory] [InlineData("a", 1)] public void Test(string x, int y)</code></td><td>s16.3</td></tr>
+<tr><td>Jednakost</td><td><code>Assert.Equal(expected, actual)</code></td><td>s16</td></tr>
+<tr><td>Sadrzi</td><td><code>Assert.Contains(substring, fullString)</code></td><td>s16</td></tr>
+<tr><td>Teardown</td><td><code>IDisposable</code> — <code>Dispose()</code> umesto <code>[TearDown]</code></td><td>s16.5</td></tr>
+<tr><td>Conditional skip</td><td><code>Skip.If(!Config.HasFeature, "reason")</code></td><td>s10.6</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">18.5 Gesture akcije u C#</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Swipe gore (scroll down)
-var size = driver.Manage().Window.Size;
-var finger = new PointerInputDevice(PointerKind.Touch, "finger");
-var swipe = new ActionSequence(finger);
-swipe.AddAction(finger.CreatePointerMove(
-    CoordinateOrigin.Viewport, size.Width / 2, size.Height * 3 / 4));
-swipe.AddAction(finger.CreatePointerDown(MouseButton.Left));
-swipe.AddAction(finger.CreatePointerMove(
-    CoordinateOrigin.Viewport, size.Width / 2, size.Height / 4,
-    TimeSpan.FromMilliseconds(500)));
-swipe.AddAction(finger.CreatePointerUp(MouseButton.Left));
-driver.PerformActions(new List&lt;ActionSequence&gt; { swipe });
 
-// Tap na koordinate
-var tap = new ActionSequence(finger);
-tap.AddAction(finger.CreatePointerMove(
-    CoordinateOrigin.Viewport, 200, 400));
-tap.AddAction(finger.CreatePointerDown(MouseButton.Left));
-tap.AddAction(finger.CreatePointerUp(MouseButton.Left));
-driver.PerformActions(new List&lt;ActionSequence&gt; { tap });</pre></div>
-<h2 class="sub-title">18.6 Page Object Model za mobilne aplikacije</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// POM za Appium — isti princip kao web (videti Sekciju 13)
-public class LoginScreen
-{
- private readonly AndroidDriver _driver;
-
- private AppiumElement UsernameField =>
-  _driver.FindElement(MobileBy.AccessibilityId("username"));
- private AppiumElement PasswordField =>
-  _driver.FindElement(MobileBy.AccessibilityId("password"));
- private AppiumElement LoginButton =>
-  _driver.FindElement(MobileBy.AccessibilityId("loginBtn"));
-
- public LoginScreen(AndroidDriver driver) => _driver = driver;
-
- public HomeScreen LoginAs(string user, string pass)
- {
-  UsernameField.SendKeys(user);
-  PasswordField.SendKeys(pass);
-  LoginButton.Click();
-  return new HomeScreen(_driver);
- }
-}</pre></div>
-<h2 class="sub-title">18.7 Realni uredaji vs. Emulatori</h2>
-<div class="tbl-wrap"><table><thead><tr><th></th><th>Emulatori / Simulatori</th><th>Realni uredaji</th></tr></thead><tbody>
-<tr><td>Brzina setup-a</td><td>Brzo, bez hardvera</td><td>Zahteva fizicki pristup</td></tr>
-<tr><td>Tacnost</td><td>Dobra za funkcionalne testove</td><td>Neophodna za hardware, senzore, performanse</td></tr>
-<tr><td>Cena</td><td>Besplatno</td><td>Kupovina ili cloud (BrowserStack, Sauce Labs)</td></tr>
-<tr><td>Interruptions</td><td>Ne simulira pozive, SMS</td><td>Realni interruptions</td></tr>
-<tr><td>Preporuka</td><td>Regression, funkcionalni testovi</td><td>Release testing, performance, UAT</td></tr>
+<h2 class="sub-title">22.3 Page Object Model</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Sloj</th><th>Odgovornost</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Wrapper</td><td>Apstrakcija WebDriver poziva — kontrole, wait, retry</td><td>s13, s16</td></tr>
+<tr><td>GuiLayer (Page Object)</td><td>Biznis-level akcije: <code>page.CreateSpecification("title")</code></td><td>s13</td></tr>
+<tr><td>GuiCustomizationLayer</td><td>Tenant/version override lokatorima i flow koraka</td><td>s10.6, s13</td></tr>
+<tr><td>RegressionPlan (Test)</td><td>Intent-level scenariji sa xUnit asercijama</td><td>s16</td></tr>
 </tbody></table></div>
-<div class="note">Cloud device farme (BrowserStack, Sauce Labs, AWS Device Farm) nude stotine realnih uredaja bez kupovine — idealno za cross-device testing.</div>
-<h2 class="sub-title">18.8 Specificnosti mobilnog testiranja</h2>
-<ul><li class="bullet-item">Razlicite rezolucije i gustine piksela — testirati na vise uredjaja.</li>
-<li class="bullet-item">Interruptions: pozivi, notifikacije, low battery — sistem mora da se ponasa predvidivo.</li>
-<li class="bullet-item">Network conditions — testirati na 3G, 4G, offline modu.</li>
-<li class="bullet-item">Permissions — kamera, lokacija, kontakti — testirati scenarije odbijanja dozvola.</li>
-<li class="bullet-item">Orientation — portrait i landscape mod.</li>
-</ul>
 
-<div class="section-nav"><a class="snav-btn" href="s17.html"><span class="snav-label">← Prethodna</span><span class="snav-title">17. Performance testing</span></a><a class="snav-btn next" href="s19.html"><span class="snav-label">Sledeca →</span><span class="snav-title">19. AI u testiranju</span></a></div>
+<h2 class="sub-title">22.4 API testiranje</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Akcija</th><th>Kod / Pattern</th><th>Ref</th></tr></thead><tbody>
+<tr><td>RestSharp GET</td><td><code>var response = client.Execute&lt;UserDto&gt;(new RestRequest("/users/1", Method.Get))</code></td><td>s14.5</td></tr>
+<tr><td>RestSharp POST</td><td><code>request.AddJsonBody(new { Email = "x@test.com" })</code></td><td>s14.5</td></tr>
+<tr><td>Postman assert</td><td><code>pm.response.to.have.status(200)</code></td><td>s14.4</td></tr>
+<tr><td>Auth matrix</td><td>no token→401, expired→401, wrong role→403, valid→200</td><td>s14.8</td></tr>
+<tr><td>Contract</td><td>Consumer Pact → Pact Broker → Provider verifikacija</td><td>s14.7</td></tr>
+<tr><td>Newman CI</td><td><code>newman run collection.json --environment staging.json</code></td><td>s14.6</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">22.5 CI/CD (Azure DevOps)</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Tip pipeline-a</th><th>YAML kljuc</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Standard CI</td><td><code>trigger: branches: include: [main, develop]</code></td><td>s15.3</td></tr>
+<tr><td>Gated Build (PR)</td><td><code>trigger: none</code> + <code>pr: branches: include: [main]</code></td><td>s15.6</td></tr>
+<tr><td>Nightly Scheduled</td><td><code>schedules: - cron: "0 2 * * *"</code></td><td>s15.6</td></tr>
+<tr><td>Test results</td><td><code>PublishTestResults@2</code> sa TRX formatom</td><td>s15.3</td></tr>
+<tr><td>Secrets</td><td><code>$(db-password)</code> iz Variable Groups</td><td>s15.4</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">22.6 SQL verifikacija</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Faza</th><th>SQL</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Seed</td><td><code>INSERT INTO Users (Email, Role) VALUES ('qa@test.internal', 'QA')</code></td><td>s10.5</td></tr>
+<tr><td>Assert</td><td><code>SELECT Status FROM Specifications WHERE SpecId = @id</code></td><td>s10.5</td></tr>
+<tr><td>Cleanup</td><td><code>DELETE FROM ...</code> (obrnut redosled) ili <code>ROLLBACK</code></td><td>s10.5</td></tr>
+<tr><td>C# integracija</td><td><code>new SqlConnection(connStr)</code> → <code>SqlCommand</code> → <code>ExecuteScalar()</code></td><td>s10.5</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">22.7 Appium / Mobile</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Akcija</th><th>C# primer</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Setup</td><td><code>new AppiumOptions(); options["platformName"] = "Android"</code></td><td>s18.3</td></tr>
+<tr><td>Lokator</td><td><code>MobileBy.AccessibilityId("login_button")</code></td><td>s18.3</td></tr>
+<tr><td>Swipe</td><td><code>PointerInputDevice</code> + <code>ActionSequence</code></td><td>s18.5</td></tr>
+<tr><td>Mobile POM</td><td>Isti princip kao web — <code>LoginScreen</code> klasa sa <code>AppiumElement</code></td><td>s18.6</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">22.8 Performance</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Alat / Metrika</th><th>Detalj</th><th>Ref</th></tr></thead><tbody>
+<tr><td>NBomber</td><td><code>Scenario.Create("name", async ctx => { ... })</code> — .NET native</td><td>s17.5</td></tr>
+<tr><td>k6</td><td>JavaScript skripte, open-source, laksi za API load</td><td>s17.6</td></tr>
+<tr><td>p95 / p99</td><td>95% (99%) zahteva &lt; X ms — bolji od proseka</td><td>s17</td></tr>
+<tr><td>Throughput</td><td>req/s — koliko zahteva sistem obradjuje</td><td>s17</td></tr>
+<tr><td>TTFB</td><td>Time To First Byte — server-side latency</td><td>s17</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">22.9 Git za QA</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Komanda</th><th>QA kontekst</th><th>Ref</th></tr></thead><tbody>
+<tr><td><code>git pull origin develop</code></td><td>Sync sa poslednjim promenama — svako jutro</td><td>s15.7</td></tr>
+<tr><td><code>git checkout -b fix/lov-stale</code></td><td>Nova grana za fix ili feature</td><td>s15.7</td></tr>
+<tr><td><code>git add Pages/X.cs Tests/X.cs</code></td><td>Stage samo relevantne fajlove</td><td>s15.7</td></tr>
+<tr><td><code>git commit -m "Fix: ..."</code></td><td>Atomski commit — jedan fix, jedna poruka</td><td>s15.7</td></tr>
+<tr><td><code>git push origin fix/lov-stale</code></td><td>Push → PR → code review → merge</td><td>s15.7</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">22.10 AI testiranje</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Dimenzija</th><th>Sta proveriti</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Relevantnost</td><td>Odgovor adresira temu iz prompta</td><td>s19.6</td></tr>
+<tr><td>Grounding</td><td>Podaci iz dozvoljenih izvora, bez fabriciranja</td><td>s19.6</td></tr>
+<tr><td>Permissions</td><td>RBAC postovan — nema data leak-a kroz AI</td><td>s19.6</td></tr>
+<tr><td>Format</td><td>Output prati ocekivanu strukturu / schema</td><td>s19.6</td></tr>
+<tr><td>Latency</td><td>Response &lt; SLA, nema fallback greske</td><td>s19.6</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">22.11 JIRA / Bug tracking</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Akcija</th><th>Detalj</th><th>Ref</th></tr></thead><tbody>
+<tr><td>JQL filter</td><td><code>project = PLM AND type = Bug AND status != Closed</code></td><td>s09.6</td></tr>
+<tr><td>Workflow</td><td>Open → In Progress → Fixed → Verified → Closed</td><td>s09.6</td></tr>
+<tr><td>Triage kategorije</td><td>App regresija / Script issue / Environment issue</td><td>s06</td></tr>
+<tr><td>Bug report</td><td>Summary + Steps + Expected/Actual + Screenshot + Severity</td><td>s06</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">22.12 Kljucne formule i pravila</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Formula / Pravilo</th><th>Objasnjenje</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Automation ROI</td><td>Breakeven = Vreme pisanja skripta / Manuelno vreme po run-u</td><td>s11</td></tr>
+<tr><td>Risk</td><td>Rizik = Verovatnoca × Uticaj → prioritizacija testova</td><td>s07</td></tr>
+<tr><td>Test Piramida</td><td>Mnogo Unit &gt; srednje Integration &gt; malo E2E</td><td>s16</td></tr>
+<tr><td>Pareto (80/20)</td><td>80% bagova dolazi iz 20% modula</td><td>s01</td></tr>
+<tr><td>LLM boilerplate</td><td>AI stedi 60-70% na boilerplate, QA review obavezan</td><td>s19.2</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">22.13 DevTools brzi pregled</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Tab</th><th>Sta traziti</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Network</td><td>Status kod, payload, response body, "nema zahteva = UI bug"</td><td>s12.8</td></tr>
+<tr><td>Console</td><td>CORS, 401, unhandled rejection, mixed content</td><td>s12.8</td></tr>
+<tr><td>Elements</td><td>data-testid atributi, aria-*, live CSS edit</td><td>s12.8</td></tr>
+<tr><td>Copy as cURL</td><td>Brza reprodukcija API poziva bez UI-ja</td><td>s12.8</td></tr>
+</tbody></table></div>
+
+<div class="section-nav"><a class="snav-btn" href="s21.html"><span class="snav-label">← Prethodna</span><span class="snav-title">21. Pitanja i odgovori</span></a></div>
 </div>
   </div>
 
@@ -259,7 +273,7 @@ public class LoginScreen
 
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<script>window.QA_PAGE = {"id":"s18","title":"18. Mobile testing (Appium)","prevUrl":"s17.html","nextUrl":"s19.html"};</script>
+<script>window.QA_PAGE = {"id":"s22","title":"22. Cheat Sheet","prevUrl":"s21.html","nextUrl":null};</script>
 <script src="script.js"></script>
 </body>
 </html>
