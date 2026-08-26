@@ -58,6 +58,7 @@
       <a class="nav-item" href="s18.html"><span class="nav-icon">📱</span><span class="nav-item-text">18. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
       <a class="nav-item" href="s19.html"><span class="nav-icon">🧠</span><span class="nav-item-text">19. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
       <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+      <a class="nav-item" href="s21.html"><span class="nav-icon">🎤</span><span class="nav-item-text">21. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
     </div>
   </nav>
 </div>
@@ -95,7 +96,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s15">
 <h1 class="sec-title" id="t-s15">⚙️ 15. CI/CD integracija<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~2 min citanja</span><button class="mark-read-btn" id="mrb-s15" onclick="markRead('s15')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~3 min citanja</span><button class="mark-read-btn" id="mrb-s15" onclick="markRead('s15')">Oznaci kao procitano</button></div>
 <h2 class="sub-title">15.1 Sta je CI/CD i uloga QA-a</h2>
 <p class="body-text">CI (Continuous Integration) je praksa automatskog build-ovanja i testiranja koda pri svakom commit-u. CD (Continuous Delivery) prosiruje CI automatskim deploy-om na visa okruzenja.</p>
 <p class="body-text">QA uloga: automatizovani testovi su gatekeeper koji sprecava isporuku defektnog koda. Svaki failovani test blokira pipeline.</p>
@@ -148,6 +149,7 @@ env:
 
 # Variable Groups: kreira se jednom, referencira u vise pipeline-ova
 # Secret variables su enkriptovane i ne prikazuju se u logovima</pre></div>
+<div class="note">U pipeline-u se izvrsavaju Selenium UI testovi (Sekcija 12), API testovi (Sekcija 14) i unit testovi — sve strukturirano po framework arhitekturi iz Sekcije 16.</div>
 <h2 class="sub-title">15.5 Best practices za testove u CI/CD-u</h2>
 <ul><li class="bullet-item">Testovi moraju biti deterministicki — isti ulaz, isti rezultat uvek.</li>
 <li class="bullet-item">Paralelizacija: grupisati testove da se izvrsavaju paralelno.</li>
@@ -156,6 +158,45 @@ env:
 <li class="bullet-item">Cuvati screenshots i logove samo za failovane testove.</li>
 <li class="bullet-item">Retry logika samo za infrastrukturne greske, ne za legitimne failove.</li>
 </ul>
+<h2 class="sub-title">15.6 Tipovi pipeline-a — Scheduled vs. Gated Build</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Tip</th><th>Trigger</th><th>Svrha</th><th>Kad se koristi</th></tr></thead><tbody>
+<tr><td>Scheduled (Nightly)</td><td>Vremenski — svake noci u definisano vreme</td><td>Full regression suite — svi testovi, sva okruzenja</td><td>Nightly build za kompletan pregled stanja sistema.</td></tr>
+<tr><td>Gated Build (PR validation)</td><td>Pull Request kreiran ili azuriran</td><td>Brzi smoke/sanity — blokira merge ako testovi padnu</td><td>Svaki PR pre merge-a u main/develop granu.</td></tr>
+<tr><td>Standard Build (CI)</td><td>Svaki push na definisanu granu</td><td>Build + unit testovi — brzi feedback loop</td><td>Kontinualna integracija tokom dana.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre># Azure DevOps — Gated Build (PR validation pipeline)
+trigger: none    # ne triggeruje se na push
+
+pr:
+  branches:
+    include: [ main, develop ]
+
+steps:
+- script: dotnet build --configuration Release
+- script: dotnet test --filter "Category=Smoke"
+          --logger trx
+  displayName: "Run Smoke Tests (PR gate)"</pre></div>
+<div class="note">Gated Build drzi kvalitet pre merge-a — nijedan PR ne moze proci ako smoke testovi padnu. Nightly suite pokriva sve ostalo. Kombinacija oba je standard u enterprise timovima.</div>
+<h2 class="sub-title">15.7 Git workflow za QA</h2>
+<p class="body-text">QA automation inzenjer radi sa Git-om svakodnevno — check-in automation skripti, branching za nove test suite-ove, PR review test koda. Osnovni koncepti:</p>
+<div class="tbl-wrap"><table><thead><tr><th>Koncept</th><th>QA kontekst</th></tr></thead><tbody>
+<tr><td>Branch</td><td>Feature branch za novi test suite ili fix: <code>fix/login-flaky-locator</code>, <code>feature/checkout-regression</code></td></tr>
+<tr><td>Commit</td><td>Atomski commit — jedan fix ili jedan novi test. Poruka: "Fix: stabilize LOV overlay wait in MaterialPage"</td></tr>
+<tr><td>Pull Request</td><td>Code review za test kod pre merge-a u main. Reviewer proverava naming, lokatore, wait strategiju.</td></tr>
+<tr><td>Merge conflict</td><td>Nastaje kad dva QA inzenjera menjaju isti Page Object. Resava se rucno u Visual Studio.</td></tr>
+<tr><td>Changeset</td><td>Jedinica rada — obicno 2-4 fajla: lokator update + Page Object fix + test scenario azuriranje.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre># Tipican QA daily Git workflow
+git pull origin develop           # sync sa poslednjim promenama
+git checkout -b fix/material-lov  # nova grana za fix
+
+# ... edit Page Object, fix lokator, run locally ...
+
+git add Pages/MaterialPage.cs Tests/MaterialTests.cs
+git commit -m "Fix: re-find LOV overlay before click to prevent stale ref"
+git push origin fix/material-lov
+
+# Kreirati PR → code review → merge → nightly suite pokuplja promenu</pre></div>
 
 <div class="section-nav"><a class="snav-btn" href="s14.html"><span class="snav-label">← Prethodna</span><span class="snav-title">14. API testiranje</span></a><a class="snav-btn next" href="s16.html"><span class="snav-label">Sledeca →</span><span class="snav-title">16. Framework arhitektura</span></a></div>
 </div>

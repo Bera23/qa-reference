@@ -58,6 +58,7 @@
       <a class="nav-item" href="s18.html"><span class="nav-icon">📱</span><span class="nav-item-text">18. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
       <a class="nav-item" href="s19.html"><span class="nav-icon">🧠</span><span class="nav-item-text">19. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
       <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+      <a class="nav-item" href="s21.html"><span class="nav-icon">🎤</span><span class="nav-item-text">21. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
     </div>
   </nav>
 </div>
@@ -95,7 +96,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s13">
 <h1 class="sec-title" id="t-s13">🏗️ 13. Page Object Model<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~1 min citanja</span><button class="mark-read-btn" id="mrb-s13" onclick="markRead('s13')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~2 min citanja</span><button class="mark-read-btn" id="mrb-s13" onclick="markRead('s13')">Oznaci kao procitano</button></div>
 <h2 class="sub-title">13.1 Sta je POM i zasto postoji</h2>
 <p class="body-text">Page Object Model je design pattern koji enkapsulira UI lokatore i interakcije za odredjenu stranicu u posebnu klasu. Test kod komunicira sa stranicom iskljucivo kroz metode te klase — nikad direktno sa lokatorima.</p>
 <ul><li class="bullet-item">Separacija brige — lokatori i UI logika odvojeni od test logike.</li>
@@ -103,6 +104,7 @@
 <li class="bullet-item">Citljivost — testovi opisuju ponasanje, ne implementacione detalje.</li>
 <li class="bullet-item">Ponovna upotreba — iste metode se koriste u vise testova.</li>
 </ul>
+<div class="note">POM koristi Selenium WebDriver lokatore i wait mehanizme (videti Sekciju 12). Za pozicioniranje POM-a u okviru kompletnog framework-a videti Sekciju 16.</div>
 <h2 class="sub-title">13.2 Struktura POM projekta (C#)</h2>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>TestProject/
   Pages/

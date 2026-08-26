@@ -58,6 +58,7 @@
       <a class="nav-item" href="s18.html"><span class="nav-icon">📱</span><span class="nav-item-text">18. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
       <a class="nav-item" href="s19.html"><span class="nav-icon">🧠</span><span class="nav-item-text">19. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
       <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+      <a class="nav-item" href="s21.html"><span class="nav-icon">🎤</span><span class="nav-item-text">21. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
     </div>
   </nav>
 </div>
@@ -95,7 +96,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s12">
 <h1 class="sec-title" id="t-s12">🌐 12. Selenium / WebDriver<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~2 min citanja</span><button class="mark-read-btn" id="mrb-s12" onclick="markRead('s12')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~3 min citanja</span><button class="mark-read-btn" id="mrb-s12" onclick="markRead('s12')">Oznaci kao procitano</button></div>
 <h2 class="sub-title">12.1 Selenium arhitektura i W3C protokol</h2>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [Test kod (C#/Java/Python)]
           |  WebDriver API pozivi
@@ -167,6 +168,40 @@ var options = new ChromeOptions();
 options.AddArgument(--headless=new);
 options.AddArgument(--no-sandbox);
 options.AddArgument(--window-size=1920x1080);</pre></div>
+<h2 class="sub-title">12.8 Browser DevTools za QA debugging</h2>
+<p class="body-text">Browser DevTools (F12) su svakodnevni alat za QA — ne samo za developere. Tri tab-a su najkorisnija za testiranje:</p>
+<div class="tbl-wrap"><table><thead><tr><th>Tab</th><th>QA upotreba</th></tr></thead><tbody>
+<tr><td>Network</td><td>Praćenje HTTP zahteva: status kodovi, response body, trajanje, payload. Provera da li UI šalje ispravne API pozive.</td></tr>
+<tr><td>Console</td><td>JavaScript greške, console.log poruke, unhandled promise rejections. Često otkriva greške koje UI ne prikazuje.</td></tr>
+<tr><td>Elements</td><td>Inspekcija DOM-a, provera atributa (data-testid, aria-*), live CSS editing za reprodukciju layout bagova.</td></tr>
+</tbody></table></div>
+<h3 class="sub-sub-title">Network tab — šta QA traži</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Scenario: klik na "Save" dugme ne prikazuje grešku, ali podatak
+         nije sačuvan u bazi.
+
+DevTools → Network tab → filter: Fetch/XHR
+  1. Pronaći POST/PUT zahtev koji se šalje na klik
+  2. Proveriti Status: 200, 201 (uspeh) ili 400, 500 (greška)
+  3. Proveriti Request Payload — da li su poslati ispravni podaci
+  4. Proveriti Response Body — da li server vraca ocekivani odgovor
+  5. Ako nema zahteva uopste — UI bug, dugme ne triggeruje API poziv
+
+Korisno: desni klik na zahtev → Copy as cURL → paste u terminal
+         za brzu reprodukciju bez UI-ja</pre></div>
+<h3 class="sub-sub-title">Console tab — česti signali</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// CORS greška — API poziv blokiran od browsera
+Access to fetch at 'https://api...' has been blocked by CORS policy
+
+// 401 Unauthorized — istekao token, nedostaje auth header
+POST https://api.myapp.com/users 401 (Unauthorized)
+
+// Unhandled rejection — frontend ne hendluje API grešku
+Uncaught (in promise) TypeError: Cannot read property 'name' of null
+
+// Mixed content — HTTPS stranica poziva HTTP resurs
+Mixed Content: The page was loaded over HTTPS but requested
+an insecure resource</pre></div>
+<div class="note">Uvek otvoriti DevTools pre reprodukcije baga — Network tab cuva samo zahteve nastale dok je otvoren. Za bug report: screenshot Network tab-a sa statusom i response-om je jaci dokaz nego samo "ne radi".</div>
 
 <div class="section-nav"><a class="snav-btn" href="s11.html"><span class="snav-label">← Prethodna</span><span class="snav-title">11. Uvod u automatizaciju</span></a><a class="snav-btn next" href="s13.html"><span class="snav-label">Sledeca →</span><span class="snav-title">13. Page Object Model</span></a></div>
 </div>

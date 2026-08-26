@@ -58,6 +58,7 @@
       <a class="nav-item" href="s18.html"><span class="nav-icon">📱</span><span class="nav-item-text">18. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
       <a class="nav-item" href="s19.html"><span class="nav-icon">🧠</span><span class="nav-item-text">19. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
       <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+      <a class="nav-item" href="s21.html"><span class="nav-icon">🎤</span><span class="nav-item-text">21. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
     </div>
   </nav>
 </div>
@@ -95,7 +96,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s14">
 <h1 class="sec-title" id="t-s14">🔌 14. API testiranje<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~2 min citanja</span><button class="mark-read-btn" id="mrb-s14" onclick="markRead('s14')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~4 min citanja</span><button class="mark-read-btn" id="mrb-s14" onclick="markRead('s14')">Oznaci kao procitano</button></div>
 <h2 class="sub-title">14.1 HTTP metode</h2>
 <div class="tbl-wrap"><table><thead><tr><th>Metoda</th><th>Svrha</th><th>Idempotentna</th><th>Safe</th></tr></thead><tbody>
 <tr><td>GET</td><td>Citanje resursa. Bez side-effecta.</td><td>Da</td><td>Da</td></tr>
@@ -143,14 +144,45 @@ pm.test('Token saved', () => {
 pm.test('Response time is acceptable', () => {
     pm.expect(pm.response.responseTime).to.be.below(2000);
 });</pre></div>
-<h2 class="sub-title">14.5 Newman — Postman u CI/CD-u</h2>
+<h2 class="sub-title">14.5 RestSharp — API testiranje u C#</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// GET sa deserializacijom i assertion-ima (xUnit)
+[Fact]
+public void GetUser_WithValidId_ShouldReturnUser()
+{
+ var client = new RestClient("https://api.myapp.com");
+ var request = new RestRequest("/users/1", Method.Get);
+ request.AddHeader("Authorization", $"Bearer {_token}");
+
+ var response = client.Execute&lt;UserDto&gt;(request);
+
+ Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+ Assert.NotNull(response.Data);
+ Assert.Equal("uros@test.com", response.Data.Email);
+}
+
+// POST sa JSON body-jem
+[Fact]
+public void CreateUser_WithValidData_ShouldReturn201()
+{
+ var client = new RestClient("https://api.myapp.com");
+ var request = new RestRequest("/users", Method.Post);
+ request.AddJsonBody(new { Email = "new@test.com", Role = "QA" });
+ request.AddHeader("Authorization", $"Bearer {_token}");
+
+ var response = client.Execute(request);
+
+ Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+ Assert.Contains("new@test.com", response.Content);
+}</pre></div>
+<div class="note">RestSharp je native C# HTTP klijent — prirodan izbor za API testove u istom solution-u sa Selenium testovima (videti Sekciju 16), bez prebacivanja na JavaScript/Newman.</div>
+<h2 class="sub-title">14.6 Newman — Postman u CI/CD-u</h2>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>npm install -g newman newman-reporter-htmlextra
 
 newman run collection.json
   --environment staging.json
   --reporters cli,htmlextra
   --reporter-htmlextra-export reports/api-report.html</pre></div>
-<h2 class="sub-title">14.6 Contract testing — Pact framework</h2>
+<h2 class="sub-title">14.7 Contract testing — Pact framework</h2>
 <p class="body-text">Contract testing resava problem koji se javlja u mikroservisnim arhitekturama: tim A menja API koji tim B koristi, i breaking change prolazi nezapazeno sve do produkcije.</p>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Tok:
   1. Consumer pise pact — definise sta ocekuje od providera
@@ -160,6 +192,42 @@ newman run collection.json
      verifikacija pada pre deploymenta
 
   Rezultat: breaking change je uhvacen u CI/CD, ne na produkciji.</pre></div>
+<h2 class="sub-title">14.8 Auth i security testing za API</h2>
+<p class="body-text">Token-based autentifikacija je standard u modernim API-jima. QA mora testirati ne samo "radi li sa validnim tokenom" nego i sve edge case-ove oko auth lifecycle-a.</p>
+<div class="tbl-wrap tall"><table><thead><tr><th>Scenario</th><th>Ocekivano</th><th>Zasto je vazno</th></tr></thead><tbody>
+<tr><td>Zahtev bez tokena</td><td>401 Unauthorized</td><td>API ne sme dozvoliti anonimni pristup zasticenim resursima.</td></tr>
+<tr><td>Istekao token</td><td>401 + jasna poruka</td><td>Frontend mora znati da treba refresh, ne genericni error.</td></tr>
+<tr><td>Token sa pogresnom rolom</td><td>403 Forbidden</td><td>RBAC mora raditi na API nivou, ne samo na UI-ju.</td></tr>
+<tr><td>Token rotation</td><td>Stari token prestaje da vazi nakon izdavanja novog</td><td>Sprecava replay napade sa ukradenim tokenom.</td></tr>
+<tr><td>Session expiration</td><td>Sesija istice nakon definisanog perioda neaktivnosti</td><td>Compliance zahtev — ne sme ostati ulogovan zauvek.</td></tr>
+<tr><td>Concurrent sessions</td><td>Po policy-ju: dozvoliti ili blokirati drugu sesiju</td><td>Enterprise aplikacije cesto ogranicavaju na jednu sesiju.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// RestSharp — test za istekao token (xUnit)
+[Fact]
+public void ExpiredToken_ShouldReturn401()
+{
+ var client = new RestClient("https://api.myapp.com");
+ var request = new RestRequest("/users", Method.Get);
+ request.AddHeader("Authorization", $"Bearer {_expiredToken}");
+
+ var response = client.Execute(request);
+
+ Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+}
+
+// Test za RBAC — viewer ne sme moci da brise
+[Fact]
+public void ViewerRole_DeleteUser_ShouldReturn403()
+{
+ var client = new RestClient("https://api.myapp.com");
+ var request = new RestRequest("/users/1", Method.Delete);
+ request.AddHeader("Authorization", $"Bearer {_viewerToken}");
+
+ var response = client.Execute(request);
+
+ Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+}</pre></div>
+<div class="note">RBAC testiranje na API nivou je kriticno — cesto se desava da UI pravilno sakriva dugme "Delete", ali API endpoint i dalje dozvoljava brisanje ako se pozove direktno. Uvek testirati API nezavisno od UI-ja (videti Sekciju 12.8 — DevTools Network tab).</div>
 
 <div class="section-nav"><a class="snav-btn" href="s13.html"><span class="snav-label">← Prethodna</span><span class="snav-title">13. Page Object Model</span></a><a class="snav-btn next" href="s15.html"><span class="snav-label">Sledeca →</span><span class="snav-title">15. CI/CD integracija</span></a></div>
 </div>

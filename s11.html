@@ -58,6 +58,7 @@
       <a class="nav-item" href="s18.html"><span class="nav-icon">📱</span><span class="nav-item-text">18. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
       <a class="nav-item" href="s19.html"><span class="nav-icon">🧠</span><span class="nav-item-text">19. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
       <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+      <a class="nav-item" href="s21.html"><span class="nav-icon">🎤</span><span class="nav-item-text">21. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
     </div>
   </nav>
 </div>
@@ -150,6 +151,7 @@ Trofej (Kent C. Dodds):
 <tr><td>Mock</td><td>Verifikuje i kako je pozvana: koliko puta, sa kojim argumentima. Ako ocekivanje nije ispunjeno, test pada.</td></tr>
 <tr><td>Spy</td><td>Omotac oko realne implementacije. Poziva pravu metodu, ali belezi pozive za naknadnu verifikaciju.</td></tr>
 </tbody></table></div>
+<div class="note">Za osnovne definicije Error/Defect/Failure videti Sekciju 1. Piramida i trofej su strategije rasporeda testova po nivoima iz Sekcije 3.</div>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Stub — vraca vrednost, ne proverava poziv
 var stub = new Mock<IPaymentService>();
 stub.Setup(p => p.Charge(It.IsAny<decimal>())).Returns(new Result { Success = true });

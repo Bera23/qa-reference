@@ -58,6 +58,7 @@
       <a class="nav-item" href="s18.html"><span class="nav-icon">📱</span><span class="nav-item-text">18. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
       <a class="nav-item" href="s19.html"><span class="nav-icon">🧠</span><span class="nav-item-text">19. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
       <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+      <a class="nav-item" href="s21.html"><span class="nav-icon">🎤</span><span class="nav-item-text">21. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
     </div>
   </nav>
 </div>
@@ -155,6 +156,13 @@ Dobro:
 <tr><td>Tech Lead / Developer</td><td>Procenjuje effort korekcije i tehnicku kompleksnost.</td></tr>
 </tbody></table></div>
 <div class="note">QA ne odredjuje Priority — to je poslovni poziv PM-a. QA odredjuje Severity — to je tehnicki poziv koji QA mora da odbrani.</div>
+<h3 class="sub-sub-title">Dnevni triage u automatizovanom okruzenju</h3>
+<p class="body-text">U timu sa nightly regression suite-om (videti Sekciju 15), dnevni triage zahteva klasifikaciju svakog failure-a u jednu od tri kategorije:</p>
+<div class="tbl-wrap"><table><thead><tr><th>Kategorija</th><th>Signal</th><th>Akcija</th></tr></thead><tbody>
+<tr><td>App regresija</td><td>Isti test je ranije prolazio, sada pada na validnoj biznis aserciji.</td><td>Bug report ka dev timu sa evidencijom iz pipeline run-a.</td></tr>
+<tr><td>Script issue</td><td>Flaky lokator, sync problem, stale element, test data drift.</td><td>Fix u Page Object-u ili wait logici (videti Sekciju 12), rerun.</td></tr>
+<tr><td>Environment issue</td><td>Servis pao, SSO problem, deployment incident. Vise testova pada istovremeno.</td><td>Eskalacija ka DevOps-u, rerun nakon stabilizacije.</td></tr>
+</tbody></table></div>
 <h2 class="sub-title">6.6 Primer kompletnog bug reporta</h2>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Title:
   Login forma se submituje bez greske pri unosu praznog password polja

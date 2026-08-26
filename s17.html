@@ -58,6 +58,7 @@
       <a class="nav-item" href="s18.html"><span class="nav-icon">📱</span><span class="nav-item-text">18. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
       <a class="nav-item" href="s19.html"><span class="nav-icon">🧠</span><span class="nav-item-text">19. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
       <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+      <a class="nav-item" href="s21.html"><span class="nav-icon">🎤</span><span class="nav-item-text">21. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
     </div>
   </nav>
 </div>
@@ -141,7 +142,41 @@ export default function () {
 <tr><td>Open source</td><td>Da (Grafana Labs)</td><td>Da (Apache)</td></tr>
 </tbody></table></div>
 <div class="note">Preporuka: k6 za timove koji pisu kod i rade u CI/CD; JMeter za timove sa GUI navikama ili legacy projektima.</div>
-<h2 class="sub-title">17.5 QA uloga u performance testiranju</h2>
+<h2 class="sub-title">17.5 NBomber — load testing u C# / .NET</h2>
+<p class="body-text">NBomber je .NET-native load testing framework — testovi se pisu u C#, u istom solution-u sa Selenium/API testovima (videti Sekciju 16).</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// NBomber scenario — load test za API endpoint (xUnit integracija)
+var scenario = Scenario.Create("get_users", async context =>
+{
+    var client = new HttpClient();
+    var response = await client.GetAsync("https://api.myapp.com/users");
+
+    return response.IsSuccessStatusCode
+        ? Response.Ok()
+        : Response.Fail();
+})
+.WithLoadSimulations(
+    Simulation.RampingInject(rate: 50, interval: TimeSpan.FromSeconds(1),
+                             during: TimeSpan.FromMinutes(2)),
+    Simulation.Inject(rate: 50, interval: TimeSpan.FromSeconds(1),
+                      during: TimeSpan.FromMinutes(5)),
+    Simulation.RampingInject(rate: 0, interval: TimeSpan.FromSeconds(1),
+                             during: TimeSpan.FromMinutes(1))
+);
+
+NBomberRunner
+    .RegisterScenarios(scenario)
+    .WithReportFolder("reports")
+    .Run();</pre></div>
+<h2 class="sub-title">17.6 k6 vs NBomber — kada sta koristiti</h2>
+<div class="tbl-wrap"><table><thead><tr><th></th><th>k6</th><th>NBomber</th></tr></thead><tbody>
+<tr><td>Jezik</td><td>JavaScript (ES6+)</td><td>C# / F#</td></tr>
+<tr><td>Ekosistem</td><td>Standalone CLI</td><td>NuGet paket, deo .NET solution-a</td></tr>
+<tr><td>Idealan za</td><td>DevOps/JS timove, brze ad-hoc testove</td><td>QA timove koji vec rade u C# (Selenium, RestSharp)</td></tr>
+<tr><td>CI/CD</td><td>CLI first, odlicna integracija</td><td>dotnet test, ista infra kao funkcionalni testovi</td></tr>
+<tr><td>Izvestaji</td><td>k6 Cloud, Grafana, JSON</td><td>HTML, Markdown, CSV, custom sinks</td></tr>
+</tbody></table></div>
+<div class="note">Za .NET QA timove NBomber ima kljucnu prednost: isti jezik, isti toolchain, isti CI/CD pipeline — bez prebacivanja konteksta na JavaScript.</div>
+<h2 class="sub-title">17.7 QA uloga u performance testiranju</h2>
 <ul><li class="bullet-item">Definisanje realisticnih SLA sa stakeholderima pre testiranja.</li>
 <li class="bullet-item">Kreiranje reprezentativnih load scenarija — ne samo 'svi rade isti zahtev'.</li>
 <li class="bullet-item">Analiza rezultata: identifikovanje bottleneck-a (DB, API, mreza, memorija).</li>

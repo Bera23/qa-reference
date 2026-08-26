@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎤 21. Pitanja i odgovori — QA Referentni Dokument</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button id="read-exit" onclick="toggleReadingMode()">✕ Izlaz</button>
+<div id="share-toast">🔗 Link kopiran!</div>
+
+<div id="bm-panel">
+  <h3>Bookmarks <button id="bm-close" onclick="closeBmPanel()" aria-label="Zatvori">✕</button></h3>
+  <div id="bm-list"><div id="bm-empty">Nema bookmarks-a.<br><small>Klikni ★ pored bilo kog podnaslova.</small></div></div>
+</div>
+
+<div id="sidebar">
+  <div id="sb-header">
+    <h2>QA Referentni Dokument</h2>
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="Pretrazi... (pritisni /)" oninput="searchDoc(this.value)">
+      <div id="search-results"></div>
+    </div>
+    <div id="search-hint"><span id="search-count"></span></div>
+  </div>
+  <nav id="nav">
+    <div class="nav-deo-wrap">
+      <span class="nav-deo">DEO I — Manualno</span>
+      <button class="nav-collapse" onclick="toggleGroup('g1')">▾</button>
+    </div>
+    <div class="nav-group" id="g1">
+      <a class="nav-item" href="s01.html"><span class="nav-icon">📖</span><span class="nav-item-text">1. Osnove i terminologija</span><span class="nav-check" onclick="toggleRead(event,'s01')"></span></a>
+      <a class="nav-item" href="s02.html"><span class="nav-icon">🔄</span><span class="nav-item-text">2. SDLC i STLC</span><span class="nav-check" onclick="toggleRead(event,'s02')"></span></a>
+      <a class="nav-item" href="s03.html"><span class="nav-icon">🧪</span><span class="nav-item-text">3. Tipovi i nivoi testiranja</span><span class="nav-check" onclick="toggleRead(event,'s03')"></span></a>
+      <a class="nav-item" href="s04.html"><span class="nav-icon">🎯</span><span class="nav-item-text">4. Tehnike dizajniranja TC</span><span class="nav-check" onclick="toggleRead(event,'s04')"></span></a>
+      <a class="nav-item" href="s05.html"><span class="nav-icon">📝</span><span class="nav-item-text">5. Pisanje test case-ova</span><span class="nav-check" onclick="toggleRead(event,'s05')"></span></a>
+      <a class="nav-item" href="s06.html"><span class="nav-icon">🐛</span><span class="nav-item-text">6. Bug report i defect lifecycle</span><span class="nav-check" onclick="toggleRead(event,'s06')"></span></a>
+      <a class="nav-item" href="s07.html"><span class="nav-icon">📋</span><span class="nav-item-text">7. Test plan i test strategija</span><span class="nav-check" onclick="toggleRead(event,'s07')"></span></a>
+      <a class="nav-item" href="s08.html"><span class="nav-icon">⚡</span><span class="nav-item-text">8. Agile testiranje</span><span class="nav-check" onclick="toggleRead(event,'s08')"></span></a>
+      <a class="nav-item" href="s09.html"><span class="nav-icon">📊</span><span class="nav-item-text">9. Test dokumentacija</span><span class="nav-check" onclick="toggleRead(event,'s09')"></span></a>
+      <a class="nav-item" href="s10.html"><span class="nav-icon">🗄️</span><span class="nav-item-text">10. Test okruzenje i podaci</span><span class="nav-check" onclick="toggleRead(event,'s10')"></span></a>
+    </div>
+    <div class="nav-deo-wrap">
+      <span class="nav-deo">DEO II — Automatizacija</span>
+      <button class="nav-collapse" onclick="toggleGroup('g2')">▾</button>
+    </div>
+    <div class="nav-group" id="g2">
+      <a class="nav-item" href="s11.html"><span class="nav-icon">🤖</span><span class="nav-item-text">11. Uvod u automatizaciju</span><span class="nav-check" onclick="toggleRead(event,'s11')"></span></a>
+      <a class="nav-item" href="s12.html"><span class="nav-icon">🌐</span><span class="nav-item-text">12. Selenium / WebDriver</span><span class="nav-check" onclick="toggleRead(event,'s12')"></span></a>
+      <a class="nav-item" href="s13.html"><span class="nav-icon">🏗️</span><span class="nav-item-text">13. Page Object Model</span><span class="nav-check" onclick="toggleRead(event,'s13')"></span></a>
+      <a class="nav-item" href="s14.html"><span class="nav-icon">🔌</span><span class="nav-item-text">14. API testiranje</span><span class="nav-check" onclick="toggleRead(event,'s14')"></span></a>
+      <a class="nav-item" href="s15.html"><span class="nav-icon">⚙️</span><span class="nav-item-text">15. CI/CD integracija</span><span class="nav-check" onclick="toggleRead(event,'s15')"></span></a>
+      <a class="nav-item" href="s16.html"><span class="nav-icon">🔧</span><span class="nav-item-text">16. Framework arhitektura</span><span class="nav-check" onclick="toggleRead(event,'s16')"></span></a>
+      <a class="nav-item" href="s17.html"><span class="nav-icon">📈</span><span class="nav-item-text">17. Performance testing</span><span class="nav-check" onclick="toggleRead(event,'s17')"></span></a>
+      <a class="nav-item" href="s18.html"><span class="nav-icon">📱</span><span class="nav-item-text">18. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
+      <a class="nav-item" href="s19.html"><span class="nav-icon">🧠</span><span class="nav-item-text">19. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
+      <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+      <a class="nav-item active" href="s21.html"><span class="nav-icon">🎤</span><span class="nav-item-text">21. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
+    </div>
+  </nav>
+</div>
+
+<div id="main">
+
+<div id="topbar">
+  <div id="topbar-left">
+    <button id="menu-btn" class="tb-btn" onclick="toggleSidebar()" title="Meni" aria-label="Meni">☰</button>
+    <a class="tb-btn" href="index.html" title="Pocetna" aria-label="Pocetna">🏠</a>
+    <span id="topbar-meta">QA Ref · v2.0 · 2026</span>
+    <span id="breadcrumb"><span>🎤 21. Pitanja i odgovori</span></span>
+  </div>
+  <div id="topbar-right">
+    <button class="tb-btn" onclick="toggleQuickRef()" title="Quick Reference" aria-label="Quick Reference">⚡</button>
+    <button class="tb-btn" onclick="openBmPanel()" title="Bookmarks" aria-label="Bookmarks">★ <span id="bm-count" style="display:none">0</span></button>
+    <button class="tb-btn" onclick="toggleReadingMode()" id="read-btn" title="Rezim citanja" aria-label="Rezim citanja">🔖</button>
+    <button class="tb-btn" id="theme-btn" onclick="toggleTheme()" title="Tema" aria-label="Tema">☀</button>
+    <button class="tb-btn" id="overflow-btn" onclick="toggleOverflow()" title="Vise opcija" aria-label="Vise opcija">···</button>
+    <div id="overflow-menu">
+      <div class="ov-label">Velicina fonta</div>
+      <div class="ov-row">
+        <button class="fs-btn" onclick="changeFont(-1)">A−</button>
+        <span class="fs-display" id="fs-display">–</span>
+        <button class="fs-btn" onclick="changeFont(1)">A+</button>
+      </div>
+      <div class="ov-divider"></div>
+      <button class="ov-item" onclick="shareSection()">🔗 Kopiraj link na stranicu</button>
+      <button class="ov-item" onclick="printDoc()">🖨 Stampa / Export PDF</button>
+    </div>
+  </div>
+</div>
+
+  <div id="content">
+<div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
+<div class="section" id="s21">
+<h1 class="sec-title" id="t-s21">🎤 21. Pitanja i odgovori<span class="read-badge">✓ Procitano</span></h1>
+<div class="section-meta"><span class="read-time">⏱ ~26 min citanja</span><button class="mark-read-btn" id="mrb-s21" onclick="markRead('s21')">Oznaci kao procitano</button></div>
+<p class="body-text">Najcesca intervju pitanja za QA pozicije — od manuelnog testiranja do automatizacije. Svaki odgovor pocinje definicijom, a zatim sledi primer iz prakse kako bi se odgovor dao na intervjuu.</p>
+
+<h2 class="sub-title">Deo I — Manuelno testiranje</h2>
+
+<h3 class="sub-sub-title">Koja je razlika izmedju QA i QC?</h3>
+<p class="body-text"><strong>Definicija:</strong> QA (Quality Assurance) je proaktivni proces fokusiran na poboljsanje procesa da bi se sprecilo nastajanje defekata. QC (Quality Control) je reaktivna aktivnost pronalazenja defekata u gotovom proizvodu kroz testiranje.</p>
+<p class="body-text"><strong>U praksi:</strong> "QA je kad na pocetku sprinta kazem 'hajde da definisemo acceptance criteria pre nego sto dev pocne da kodira' — sprecavam problem pre nego sto nastane. QC je kad posle toga sednем i izvrsavam test case-ove na gotovom buildu i prijavljujem bagove. U timu radim oba — i preventivno i detektivno."</p>
+
+<h3 class="sub-sub-title">Objasni razliku izmedju Error, Defect i Failure.</h3>
+<p class="body-text"><strong>Definicija:</strong> Error je ljudska greska — pogresan pretpostavka ili propust developera. Defect je manifestacija te greske u kodu. Failure je vidljivi simptom defekta u runtime-u — sistem se ponasa drugacije od ocekivanog.</p>
+<p class="body-text"><strong>U praksi:</strong> "Developer pogresno protumaci zahtev da cena moze biti negativna — to je error. U kodu stoji <code>if (price > 0)</code> umesto <code>if (price >= 0)</code> — to je defect. Korisnik unese cenu 0 i dobije validacionu gresku iako je nula validna vrednost — to je failure."</p>
+
+<h3 class="sub-sub-title">Koja je razlika izmedju Verification i Validation?</h3>
+<p class="body-text"><strong>Definicija:</strong> Verification proverava da li je sistem izradjen u skladu sa specifikacijom ('are we building the product right?'). Validation proverava da li sistem ispunjava stvarne potrebe korisnika ('are we building the right product?').</p>
+<p class="body-text"><strong>U praksi:</strong> "Verification je kad proveravam da li login forma radi po specifikaciji — da li validira email format, da li prikazuje gresku na pogresan password. Validation je kad korisnik kaze 'ali meni zapravo treba SSO login, ne email/password' — sistem radi ispravno po spec-u, ali ne resava pravi problem."</p>
+
+<h3 class="sub-sub-title">Nabrojte ISTQB 7 principa testiranja.</h3>
+<p class="body-text"><strong>Definicija:</strong> 1) Testiranje pokazuje prisustvo defekata, ne odsustvo. 2) Iscrpno testiranje je nemoguce. 3) Rano testiranje stedi vreme i novac. 4) Defekti se grupisu (Pareto princip). 5) Paradoks pesticida — isti testovi prestaju da nalaze nove bagove. 6) Testiranje zavisi od konteksta. 7) Odsustvo gresaka je zabluda.</p>
+<p class="body-text"><strong>U praksi:</strong> "Paradoks pesticida vidim svaki sprint — isti regression suite prolazi mesecima, a bagovi iskace iz delova koje ne pokrivamo. Zato periodicno dodajem nove test case-ove i radim exploratory sesije za module koji su se menjali. Grupisanje defekata isto vidim — 80% bagova dolazi iz 2-3 modula koji su najkompleksniji."</p>
+
+<h3 class="sub-sub-title">Sta je SDLC, a sta STLC?</h3>
+<p class="body-text"><strong>Definicija:</strong> SDLC (Software Development Life Cycle) je celokupan proces razvoja softvera od zahteva do odrzavanja. STLC (Software Testing Life Cycle) je podskup SDLC-a koji se fokusira iskljucivo na faze testiranja: planiranje, dizajn TC-ova, priprema okruzenja, izvrsavanje, izvestavanje, zatvaranje.</p>
+<p class="body-text"><strong>U praksi:</strong> "Dok dev tim radi na implementaciji u okviru SDLC-a, ja paralelno radim STLC aktivnosti — piseм test plan, dizajniram test case-ove na osnovu zahteva, pripremam test podatke. Kada build stigne na QA okruzenje, vec imam sve spremno za izvrsavanje."</p>
+
+<h3 class="sub-sub-title">Objasni V-Model.</h3>
+<p class="body-text"><strong>Definicija:</strong> V-Model je SDLC model koji eksplicitno mapira svaku razvojnu fazu na odgovarajuci nivo testiranja. Leva strana V-a su faze razvoja (zahtevi → dizajn → kodiranje), desna strana su faze testiranja (unit → integration → system → acceptance).</p>
+<p class="body-text"><strong>U praksi:</strong> "Svaki nivo testiranja ima jasnog 'para' na razvojnoj strani. Kad radim system testing, moj test basis su sistemski zahtevi, ne kod. Kad developer pise unit testove, njegov test basis je detaljan dizajn. V-Model nam pomaze da ne preskocimo nivo — ne mozes raditi UAT ako nisi prosao system testing."</p>
+
+<h3 class="sub-sub-title">Koja je razlika izmedju Smoke i Sanity testiranja?</h3>
+<p class="body-text"><strong>Definicija:</strong> Smoke testing je sirok ali povrsinski — proverava da li kriticne funkcionalnosti rade uopste (Go/No-Go odluka). Sanity testing je uzak ali dublji — fokusirana verifikacija konkretne promene bez punog regression run-a.</p>
+<p class="body-text"><strong>U praksi:</strong> "Kad stigne novi build, prvo pustim smoke suite — login, osnovni CRUD, navigacija. Ako to prodje, znam da build nije fundamentalno pokvaren. Kad developer fixuje konkretan bug u checkout-u, radim sanity samo tog modula — ne treba mi ceo regression, samo da verifikujem da fix radi i da nije nista pokvario u blizini."</p>
+
+<h3 class="sub-sub-title">Koja je razlika izmedju Regression i Retesting?</h3>
+<p class="body-text"><strong>Definicija:</strong> Retesting je ponovo izvrsavanje konkretnog test case-a koji je prethodno failovao, nakon bugfix-a — proverava da li je bug zaista fixovan. Regression testing proverava da bugfix ili nova funkcionalnost nisu narusili postojecu funkcionalnost koja je ranije radila.</p>
+<p class="body-text"><strong>U praksi:</strong> "Developer fixuje bug u kalkulaciji popusta. Retesting: izvrsim isti TC koji je failovao i potvrdim da sad prolazi. Regression: pokrenем ceo checkout suite da proverim da fix nije pokvario naplatu, isporuku ili inventar. Retesting je uzan i brz, regression je sirok i moze biti dug."</p>
+
+<h3 class="sub-sub-title">Objasni Black-box, White-box i Grey-box testiranje.</h3>
+<p class="body-text"><strong>Definicija:</strong> Black-box testiranje se izvrsava bez uvida u kod — samo ulaz i izlaz. White-box testiranje zahteva potpun uvid u internu implementaciju. Grey-box kombinuje oba — parcijalno poznavanje sistema (npr. baza, API) uz fokus na funkcionalne scenarije.</p>
+<p class="body-text"><strong>U praksi:</strong> "Vecinu svog rada bih opisao kao grey-box. Testiram UI kao black-box — ne gledam frontend kod, gledam ponasanje. Ali istovremeno imam pristup bazi i API-ju, pa mogu da proverim da li je akcija zaista zapisana u bazi ili da direktno gadjam API da vidim sta vraca. Cistog black-box-a skoro nema u praksi."</p>
+
+<h3 class="sub-sub-title">Sta su Equivalence Partitioning i Boundary Value Analysis?</h3>
+<p class="body-text"><strong>Definicija:</strong> EP deli ulazni skup na particije u kojima se ocekuje isto ponasanje — testira se jedan predstavnik iz svake. BVA testira vrednosti na granicama particija jer se tu najcesce javljaju greske.</p>
+<p class="body-text"><strong>U praksi:</strong> "Polje 'godine' prima 18-65. EP mi daje tri particije: ispod 18 (nevazece), 18-65 (vazece), iznad 65 (nevazece). BVA me fokusira na granične: 17, 18, 19, 64, 65, 66. Bez BVA bih mozda testirao sa 25 i 50 — i propustio off-by-one gresku na granici."</p>
+
+<h3 class="sub-sub-title">Kako pises test case?</h3>
+<p class="body-text"><strong>Definicija:</strong> Test case je dokumentovan skup koraka, ulaznih podataka i ocekivanih rezultata. Struktura: ID, naslov (sta + uslov + ocekivani ishod), preconditions, koraci (atomski, numerisani), expected result (verifikabilan), test podaci.</p>
+<p class="body-text"><strong>U praksi:</strong> "Naslov nikad ne piseм kao 'Test login'. Uvek u formatu: 'Login sa validnim kredencijalima preusmerava na dashboard'. Koraci su atomski — jedan korak, jedna akcija. Expected result mora biti verifikabilan: ne 'radi kako treba', vec 'URL se menja na /dashboard i header prikazuje korisnicko ime'. Test podatke biram primenom EP i BVA tehnika, ne nasumicno."</p>
+
+<h3 class="sub-sub-title">Koja je razlika izmedju Severity i Priority?</h3>
+<p class="body-text"><strong>Definicija:</strong> Severity je tehnicki uticaj defekta na sistem (Blocker/Critical/Major/Minor/Trivial) — odredjuje ga QA. Priority je hitnost korekcije sa poslovnog aspekta (High/Medium/Low) — odredjuje ga Product Owner ili PM.</p>
+<p class="body-text"><strong>U praksi:</strong> "Klasican primer: logo klijenta je pogresno napisan dan pre prezentacije — low severity (kosmeticki problem), ali high priority (mora se fixovati odmah). Obrnuto: crash na admin stranici koju koristi jedna osoba mesecno — high severity (crash), ali low priority (ne utice na core biznis). QA mora da odbrani severity procenu, ali priority je poslovni poziv."</p>
+
+<h3 class="sub-sub-title">Sta je Bug Triage?</h3>
+<p class="body-text"><strong>Definicija:</strong> Bug triage je proces evaluacije i prioritizacije prijavljenih defekata. Ucestvuju QA (tehnicki kontekst), PM/PO (poslovni uticaj) i Tech Lead (effort korekcije). Odrzava se redovno — obicno jednom po sprintu ili nedeljno.</p>
+<p class="body-text"><strong>U praksi:</strong> "Na triage-u predstavljam svaki novi bug sa evidencijom — screenshot, koraci za reprodukciju, severity procena. PM odlucuje priority, dev procenjuje effort. Ako developer kaze 'nije bug, by design', idem na specifikaciju ili PO-a — ne prihvatam rejected bez dokaza. Svaki bug mora da zavrsi sa jasnim vlasnikoм i sledecim korakom."</p>
+
+<h3 class="sub-sub-title">Sta sadrzi Test Plan?</h3>
+<p class="body-text"><strong>Definicija:</strong> Test plan je dokument koji definise scope, pristup, resurse, raspored i kriterijume za testiranje. Po IEEE 829 standardu sadrzi: test items, features to test, features not to test, approach, pass/fail criteria, entry/exit criteria, deliverables, schedule, risks.</p>
+<p class="body-text"><strong>U praksi:</strong> "Za svaki release imam test plan koji jasno kaze sta testiramo, sta NE testiramo (out of scope), koliko vremena treba, i koji su rizici. Entry criteria: build deployovan i smoke prolazi. Exit criteria: svi critical TC-ovi prosli, nema open blocker/critical bugova. Bez definisanih exit criteria, testiranje nikad ne zavrsava — uvek mozes testirati jos."</p>
+
+<h3 class="sub-sub-title">Sta je Risk-based Testing?</h3>
+<p class="body-text"><strong>Definicija:</strong> Prioritizacija testova na osnovu verovatnoce pojave defekta i uticaja tog defekta na sistem i biznis. Visok rizik = veca verovatnoca × veci uticaj → vise i dublje testiranje.</p>
+<p class="body-text"><strong>U praksi:</strong> "Kad nemam vremena da testiram sve (a nikad nemam), risk-based pristup mi kaze gde da fokusiram. Payment modul je high risk — cesto se menja i uticaj greske je direktan finansijski gubitak. About stranica je low risk — retko se menja i uticaj greske je minimalan. Fokusiram 80% napora na high-risk module."</p>
+
+<h3 class="sub-sub-title">Kakva je uloga QA u Agile/Scrum timu?</h3>
+<p class="body-text"><strong>Definicija:</strong> U Agile-u QA je integrisan u tim od pocetka sprinta — ucestvuje u refinement-u, definise acceptance criteria sa PO-em, testira inkrementalno tokom sprinta (ne na kraju), i doprinosi Definition of Done.</p>
+<p class="body-text"><strong>U praksi:</strong> "Na refinement-u pitam 'sta se desava ako korisnik unese negativnu vrednost?' pre nego sto dev pocne da kodira — to je QA preventiva. Tokom sprinta, cim dev zavrsi feature, ja pocnem testiranje — ne cekam kraj sprinta. Na Three Amigos sesiji (PO + dev + QA) razjasnjavamo zahteve pre implementacije, sto eliminise 'ali ja sam mislio da treba ovako' situacije."</p>
+
+<h3 class="sub-sub-title">Sta je BDD i kako se koristi?</h3>
+<p class="body-text"><strong>Definicija:</strong> Behavior-Driven Development koristi Given/When/Then format za opis ponasanja sistema na jeziku razumljivom svim ulogama. Alati: SpecFlow (C#), Cucumber (Java/JS).</p>
+<p class="body-text"><strong>U praksi:</strong> "Given korisnik je na login stranici / When unese validan email i password / Then je preusmerен na dashboard. Ovaj format je koristan jer ga PO razume — moze da ga citа i potvrdi da li je ponasanje ispravno, bez citanja koda. U praksi koristim SpecFlow u C# projektu gde koraci mapiraju na step definicije koje pozivaju Page Object metode."</p>
+
+<h3 class="sub-sub-title">Koja je razlika izmedju Test Plan-a i Test Strategije?</h3>
+<p class="body-text"><strong>Definicija:</strong> Test strategija je dokument na nivou organizacije ili projekta — definise opsti pristup testiranju, tipove testiranja, alate, okruzenja. Test plan je konkretan, per-release — definise scope, raspored, resurse za odredjeni release ili sprint.</p>
+<p class="body-text"><strong>U praksi:</strong> "Strategija kaze 'koristimo Selenium za UI automatizaciju, xUnit za runner, Azure DevOps za CI/CD, regression se pokrece nightly'. Plan kaze 'u release 3.2, testiramo ove 5 feature-a, sa ovim TC-ovima, QA radi od 15. do 22. marta, exit criteria su ovi'. Strategija se menja jednom godisnje, plan svakog sprinta."</p>
+
+<h3 class="sub-sub-title">Sta su Entry i Exit Criteria?</h3>
+<p class="body-text"><strong>Definicija:</strong> Entry criteria su uslovi koji moraju biti ispunjeni da bi faza testiranja mogla da pocne. Exit criteria su uslovi cijim ispunjenjem se testiranje smatra zavrsenim.</p>
+<p class="body-text"><strong>U praksi:</strong> "Entry: build je deployovan na QA okruzenje, smoke prolazi, test podaci su pripremljeni. Bez toga ne pocinjем — gubim vreme na okruzenje umesto na testiranje. Exit: svi P1/P2 test case-ovi izvrseni, nema open blocker/critical bugova, test izvestaj dostavljen. Bez definisanih exit criteria, neko ce uvek reci 'mozda da testiramo jos malo'."</p>
+
+<h3 class="sub-sub-title">Sta je RTM i zasto je vazna?</h3>
+<p class="body-text"><strong>Definicija:</strong> Requirements Traceability Matrix mapira zahteve na test case-ove i defekte. Omogucava odgovor na pitanje: koji zahtevi su pokriveni testovima, koji imaju otvorene defekte, i koji uopste nisu testirani.</p>
+<p class="body-text"><strong>U praksi:</strong> "Na kraju release-a, PM pita 'da li je sve testirano?' RTM mi daje tacan odgovor: REQ-001 pokriveno sa 4 TC-a, svi prosli. REQ-003 blocked — ne moze se testirati jer zavisna funkcionalnost nije gotova. Bez RTM-a, odgovor bi bio 'mislim da jesmo' — sto nije prihvatljivo."</p>
+
+<h3 class="sub-sub-title">Sta je Exploratory Testing?</h3>
+<p class="body-text"><strong>Definicija:</strong> Simultano ucenje, dizajniranje i izvrsavanje testova bez unapred definisanih koraka. Za razliku od ad-hoc testiranja, exploratory ima charter — definisan scope, cilj i vremenski okvir (time-boxed sesija).</p>
+<p class="body-text"><strong>U praksi:</strong> "Kad dobijem novi modul, prvo radim exploratory sesiju sa charter-om: 'Istrazi checkout flow sa fokusom na edge case-ove oko popusta, 45 minuta'. Ne piseм TC unapred — ucim aplikaciju dok je testiram. Belezim sve sto nadjem i posle formalizujem najvaznije scenarije kao test case-ove za regression."</p>
+
+<h3 class="sub-sub-title">Kako koristis JIRA za defect tracking?</h3>
+<p class="body-text"><strong>Definicija:</strong> JIRA je najrasprostranjeniji alat za pracenje defekata i upravljanje sprintom. Issue Types: Bug, Task, Story, Epic. Defekt ima workflow: Open → In Progress → Fixed → Verified → Closed. Filtri i JQL (JIRA Query Language) omogucavaju brz pregled stanja.</p>
+<p class="body-text"><strong>U praksi:</strong> "Svaki bug fajlujem sa strukturiranim sadrzajem: Summary sa tagom [Regression] ili [New], Steps to reproduce (atomski), Expected vs Actual, screenshot/video, Severity i Component. Koristim JQL za dnevni pregled: <code>project = PLM AND type = Bug AND status != Closed AND assignee = currentUser()</code>. Na sprint review-u filtriram otvorene po severity-ju da pokаzem risk exposure. Dashboard imam sa tri widgeta: bugs by status, bugs by severity, bugs po komponenti — to mi daje instant pregled zdravlja release-a."</p>
+
+<h2 class="sub-title">Deo II — Automatizacija</h2>
+
+<h3 class="sub-sub-title">Kada automatizovati, a kada ne?</h3>
+<p class="body-text"><strong>Definicija:</strong> Automatizovati: regression testove koji se izvrsavaju cesto, smoke/sanity, data-driven scenarije, cross-browser testove. Ne automatizovati: jednokratne testove, exploratory testiranje, feature koji ce se menjati u sledecoj iteraciji, nestabilan UI sa cestim layout promenama.</p>
+<p class="body-text"><strong>U praksi:</strong> "Formulu koristim: Breakeven = Vreme pisanja / Manuelno vreme po run-u. Ako test manualno traje 2h, a pisanje skripta 8h, breakeven je 4 run-a. Ako se pokrece mesecno — isplati se za 4 meseca. Ako se pokrece jednom godisnje — ne isplati se. Ali ROI nije jedini faktor — odrzavanje je skriveni trosak koji senior QA mora ukljuciti od pocetka."</p>
+
+<h3 class="sub-sub-title">Objasni Test Piramidu.</h3>
+<p class="body-text"><strong>Definicija:</strong> Test piramida (Mike Cohn) predlaze raspored: mnogo unit testova (brzi, jeftini), srednji broj integration testova, i mali broj E2E testova (spori, skupi). Anti-pattern je Ice Cream Cone — previse E2E, premalo unit testova.</p>
+<p class="body-text"><strong>U praksi:</strong> "U nasem projektu imamo oko 3000 unit testova koji traju 2 minuta, 500 integration testova za API koji traju 10 minuta, i 200 E2E Selenium testova koji traju sat vremena. Ako bismo imali 2000 E2E testova, suite bi trajao 10 sati i bio bi toliko flaky da bi ga svi ignorisali. Piramida drzi feedback loop brzim."</p>
+
+<h3 class="sub-sub-title">Sta su Flaky testovi i kako ih resavas?</h3>
+<p class="body-text"><strong>Definicija:</strong> Flaky test naizmenicno prolazi i pada bez promene koda. Najcesci uzroci: hardkodovana cekanja (Thread.Sleep), zavisnost od redosleda izvrsavanja, race condition, dinamicki lokatori.</p>
+<p class="body-text"><strong>U praksi:</strong> "Imao sam flaky test u Material Management flow-u — LOV overlay dropdown bi se re-renderovao odmah nakon otvaranja, sto bi invalidiralo IWebElement referencu pre klika (StaleElementReferenceException). Fix je bio na dva nivoa: u wrapper sloju smo uveli re-find-before-act pattern — svaki retry ponovo locira element umesto da koristi staru referencu. U Page Object-u smo dodali explicit wait za overlay visible + option clickable. Test je prestao da oscilira bez da smo dirali biznis asercije."</p>
+
+<h3 class="sub-sub-title">Objasni razliku izmedju Mock, Stub i Spy.</h3>
+<p class="body-text"><strong>Definicija:</strong> Stub vraca predefinisani odgovor bez logike — zamenjuje zavisnost. Mock verifikuje i kako je pozvan: koliko puta, sa kojim argumentima. Spy je omotac oko realne implementacije — poziva pravu metodu ali belezi pozive.</p>
+<p class="body-text"><strong>U praksi:</strong> "Kad testiram checkout, payment servis stub-ujem da uvek vraca Success — ne zelim da gadjam Stripe u testu. Kad testiram da li notifikacioni servis SALJE email, koristim mock — proveravam da je metoda pozvana tacno jednom sa ispravnim argumentima. Spy koristim retko — kad zelim da realna metoda prodje ali da proverim da je pozvana."</p>
+
+<h3 class="sub-sub-title">Sta je Selenium WebDriver i kako radi?</h3>
+<p class="body-text"><strong>Definicija:</strong> Selenium WebDriver je W3C standard protokol za automatizaciju web browser-a. Test kod salje HTTP komande WebDriver-u, koji ih prevodi u native komande za browser (ChromeDriver, GeckoDriver).</p>
+<p class="body-text"><strong>U praksi:</strong> "Piseм testove u C# koji koriste IWebDriver interfejs. Kad pozovem FindElement().Click(), to postaje HTTP POST na ChromeDriver koji ga prevodi u Chrome DevTools Protocol komandu. Nikad ne radim direktno sa browser DOM-om — sve ide kroz WebDriver sloj. To znaci da isti test moze da radi na Chrome, Firefox, Edge bez promene koda — samo promeniш driver."</p>
+
+<h3 class="sub-sub-title">Objasni Explicit vs Implicit Wait u Seleniumu.</h3>
+<p class="body-text"><strong>Definicija:</strong> Implicit Wait postavlja globalan timeout za sve FindElement pozive — ceka do X sekundi pre nego sto baci exception. Explicit Wait (WebDriverWait) ceka konkretan uslov na konkretnom elementu — npr. element vidljiv, klikabilan, tekst prisutan.</p>
+<p class="body-text"><strong>U praksi:</strong> "Implicit Wait je zamka — maskira probleme i usporava testove kad element zaista ne postoji. Koristim iskljucivo Explicit Wait: <code>new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(ExpectedConditions.ElementIsVisible(locator))</code>. Nikad Thread.Sleep() — to je hardkodovano cekanje koje ili ceka previse ili premalo."</p>
+
+<h3 class="sub-sub-title">Koja je tvoja lokator strategija?</h3>
+<p class="body-text"><strong>Definicija:</strong> Prioritet lokatorima: 1) ID ili stabilan data atribut. 2) CSS sa semantickim atributima. 3) XPath samo kada je neophodno — kompleksna hijerarhija, label-to-control veze, dinamicke tabele.</p>
+<p class="body-text"><strong>U praksi:</strong> "Izbegavam pozicione selektore (nth-child), duge fragile XPath lance, i text-match selektore koji pucaju sa lokalizacijom. Kad aplikacija nema stabilne identifikatore — a to se desava — short-term gradim najrobusniji fallback koji mogu (parent kontekst + atribut + tip kontrole + wait). Medium-term trazim od dev tima da dodaju data-testid atribute — developer je obicno receptivan kad mu pokаzeм konkretan flaky test koji bi njegov atribut resio."</p>
+
+<h3 class="sub-sub-title">Sta je Page Object Model i zasto ga koristis?</h3>
+<p class="body-text"><strong>Definicija:</strong> POM je design pattern koji enkapsulira UI lokatore i interakcije za stranicu u posebnu klasu. Test kod komunicira sa stranicom kroz metode te klase, nikad direktno sa lokatorima. Prednosti: separacija briga, odrzivost, citljivost, ponovna upotreba.</p>
+<p class="body-text"><strong>U praksi:</strong> "U nasem framework-u imamo slojevit model. Na dnu je wrapper sloj koji apstrahuje WebDriver pozive — kontrole, wait logiku, retry mehanizme. Iznad toga je sloj Page Object-a sa biznis-level akcijama: test ne kaze 'nadji element i klikni', vec 'kreiraj novu specifikaciju' ili 'dodeli atribut'. Postoji i customization sloj za tenant-specificne override-ove jer je ovo multi-tenant PLM platforma. Test scenariji na vrhu pozivaju intent-level metode bez da znaju za implementacione detalje."</p>
+
+<h3 class="sub-sub-title">Sta radis kad POM postane problem?</h3>
+<p class="body-text"><strong>Definicija:</strong> POM postaje problem kad Page klase postanu prevelike (50+ metoda), kad se over-engineeruje na jednostavnim projektima, ili kad ugnjezdeni Page objekti cine navigaciju komplikovanom. Alternativa za kompleksne scenarije: Screenplay pattern.</p>
+<p class="body-text"><strong>U praksi:</strong> "Kad Page klasa naraste previše, delim je po odgovornosti — LoginPage, LoginValidationPage, LoginSocialPage. Kad isti 'custom' kod pocne da se ponavlja u vise tenant override-ova, refaktorisem ga nazad u bazni sloj. Pravilo je jednostavno: ako je stabilno i deljeno — ide u bazu. Ako devira po tenantu — ide u customization sloj."</p>
+
+<h3 class="sub-sub-title">Sta testiras na API-ju?</h3>
+<p class="body-text"><strong>Definicija:</strong> Status kod, response body (kontrakt), auth/authz, response time, idempotencija, i schema validacija prema OpenAPI/Swagger kontraktu.</p>
+<p class="body-text"><strong>U praksi:</strong> "Za svaki API endpoint proveravam pet stvari. Prvo, HTTP kontrakt — da li je 401 bez tokena, 403 sa pogresnоm rolom? Drugo, schema — da li su polja ispravnog tipa i da li su obavezna polja prisutna? Trece, biznis pravila — validni i nevalidni inputi, boundary vrednosti. Cetvrto, perzistencija — posle POST-a idem u bazu i proveravam SQL-om da li je zapis zaista napisan ispravno. Peto, backward kompatibilnost — da li postojeci consumer i dalje radi nakon promene."</p>
+
+<h3 class="sub-sub-title">Sta je RestSharp i zasto ga koristis umesto Postmana?</h3>
+<p class="body-text"><strong>Definicija:</strong> RestSharp je C# HTTP klijent za API testiranje. Native .NET alternativa Postmanu — testovi se pisu u istom jeziku i solution-u kao Selenium testovi, sa deljenim assertion-ima i test data setup-om.</p>
+<p class="body-text"><strong>U praksi:</strong> "Postman koristim za rucno istrazivanje i brze ad-hoc provere. Ali za automatizovane API testove koristim RestSharp u C# — jer je u istom solution-u sa UI testovima. Deljimo isti config layer, iste test podatke, isti CI/CD pipeline. Nema prebacivanja konteksta na JavaScript i Newman — sve je jedan ecosystem."</p>
+
+<h3 class="sub-sub-title">Sta je Contract Testing?</h3>
+<p class="body-text"><strong>Definicija:</strong> Contract testing resava problem u mikroservisnim arhitekturama: tim A menja API koji tim B koristi, i breaking change prolazi nezapazeno do produkcije. Consumer pise pact (ocekivanja), provider ga verifikuje u svom CI/CD-u. Alat: Pact framework.</p>
+<p class="body-text"><strong>U praksi:</strong> "Bez contract testova, backend tim promeni response shape i frontend se pokvari tek kad neko rucno testira integraciju. Sa Pact-om, provider automatski verifikuje kontrakt u svom pipeline-u — ako promeni polje koje consumer koristi, build pada pre deploy-a. Breaking change je uhvacen u CI/CD, ne na produkciji."</p>
+
+<h3 class="sub-sub-title">Kako izgleda tvoj CI/CD pipeline za testove?</h3>
+<p class="body-text"><strong>Definicija:</strong> Tipicna struktura: Code commit → Build → Unit tests → Static analysis → Deploy na test → Integration tests → E2E/UI tests → Deploy na staging → Smoke tests → Deploy na produkciju.</p>
+<p class="body-text"><strong>U praksi:</strong> "Koristimo Azure DevOps sa scheduled nightly pipeline-om. YAML definicija: dotnet restore → build → dotnet test sa TRX loggerom → PublishTestResults task. Environment-specific konfiguracija je u variable groups-ama — secreti su enkriptovani i ne prikazuju se u logovima. Testovi se pokrecu u headless modu. Kad test padne, i ja i developer vidimo isti rezultat u pipeline test tab-u — screenshot, stack trace, trajanje."</p>
+
+<h3 class="sub-sub-title">Kako tvoj framework izgleda arhitekturalno?</h3>
+<p class="body-text"><strong>Definicija:</strong> Robustan test framework ima: Driver Management (DriverFactory), Page Objects (POM), Base Test Class, Configuration Layer, Test Data Management, Utility/Helper Layer, Reporting (Allure/ExtentReports), Logging (NLog/log4net).</p>
+<p class="body-text"><strong>U praksi:</strong> "Nas framework je slojevit C#/Selenium/xUnit stack. Na dnu je wrapper sloj koji apstrahuje WebDriver — kontrole, wait logika, retry mehanizmi. Test kod nikad ne dodiruje WebDriver direktno. Iznad je Page Object sloj sa biznis-level akcijama. Na vrhu su test scenariji u xUnit projektu sa asercijama. Konfiguracija je u runsettings/testsettings fajlovima — isti test kod radi na vise okruzenja bez promene. Pravilo: nijedan test ne hardkoduje URL, credential ili environment detalj."</p>
+
+<h3 class="sub-sub-title">Sta je Data-driven Testing?</h3>
+<p class="body-text"><strong>Definicija:</strong> Isti test scenario se izvrsava sa razlicitim skupovima ulaznih podataka. U xUnit-u se implementira sa [Theory] i [InlineData] atributima. Izvori podataka: inline, JSON, CSV, baza.</p>
+<p class="body-text"><strong>U praksi:</strong> "Login test sa tri kombinacije: validan email/password → uspeh, nevalidan email → greska, prazan password → greska. Umesto da pisem tri odvojena testa sa 90% istog koda, napisem jedan [Theory] sa tri [InlineData] reda. Kad treba dodati novi scenario, dodam samo jos jedan [InlineData] — nula dupliranja."</p>
+
+<h3 class="sub-sub-title">Koje tipove Performance testiranja poznajes?</h3>
+<p class="body-text"><strong>Definicija:</strong> Load testing (normalno opterecenje), Stress testing (iznad kapaciteta — tacka loma), Spike testing (nagli kratki skok), Soak/Endurance testing (dugorocno normalno opterecenje — memory leak-ovi).</p>
+<p class="body-text"><strong>U praksi:</strong> "Load test simulira tipican radni dan — 100 korisnika, standardni workflow-i. Stress test gura do pucanja — 500, 1000, 5000 korisnika — da vidimo gde sistem prvi popusti (obicno baza ili connection pool). Soak test pustim preko vikenda na normalnom opterecenju — ako u ponedeljak response time poraste sa 200ms na 2s, imam memory leak. Spike test simuliram sa ramp-up od 0 do 500 korisnika za 30 sekundi."</p>
+
+<h3 class="sub-sub-title">Koje su kljucne Performance metrike?</h3>
+<p class="body-text"><strong>Definicija:</strong> Response Time (TTFB), Throughput (req/s), Error Rate (cilj < 1%), Percentili (p95, p99 — bolji od proseka), Concurrent Users.</p>
+<p class="body-text"><strong>U praksi:</strong> "Prosek je laz u performance testiranju. Ako je prosecni response time 200ms, ali p99 je 5s, znaci da svaki stoti korisnik ceka 5 sekundi — to je lose iskustvo. Uvek gledam p95 i p99. SLA definisem sa stakeholderima pre testiranja: 'p95 pod 2s, error rate pod 1%'. Threshold-e stavim u k6/NBomber konfiguraciju — ako prekoraci, pipeline pada."</p>
+
+<h3 class="sub-sub-title">Sta je Appium i kako ga koristis?</h3>
+<p class="body-text"><strong>Definicija:</strong> Appium je open-source alat za automatizaciju mobilnih aplikacija. Koristi WebDriver protokol — ista arhitektura kao Selenium, ali sa mobilnim driverima (UIAutomator2 za Android, XCUITest za iOS).</p>
+<p class="body-text"><strong>U praksi:</strong> "Appium mi dozvoljava da koristim isti mentalni model kao za Selenium — lokatori, wait-ovi, Page Object pattern. Razlika je u lokator strategiji: umesto CSS selektora, preferiram Accessibility ID (content-desc na Androidu). Za gesture akcije (swipe, tap, long press) koristim W3C Actions API. POM za mobilne aplikacije pravim po istom principu kao za web — LoginScreen klasa sa metodama, ne goli lokatori u testu."</p>
+
+<h3 class="sub-sub-title">Kako testiras AI-powered feature-e?</h3>
+<p class="body-text"><strong>Definicija:</strong> Kad je output nedeterministicki, ne moze se asertovati na tacan tekst. Testiraju se invarijante po pet dimenzija: relevantnost, grounding, permission boundaries, format contract, latency/error budget.</p>
+<p class="body-text"><strong>U praksi:</strong> "Kontekst je fiksiran — isti korisnik, ista rola, isti dataset. Saljem definisan prompt i onda proveravam: da li odgovor adresira temu (relevantnost)? Da li referise podatke koji postoje u sistemu, ili izmislja (grounding)? Ako korisnik nema pristup kategoriji X, da li Copilot ipak surfacuje podatke iz nje (permission boundary)? Da li response prati ocekivanu strukturu (format)? Da li stize u okviru SLA (latency)?</p>
+<p class="body-text">Najvredniji deo je bio permission-bound testiranje — otkrili smo slucajeve gde je AI leak-ovao podatke iz kategorija kojima korisnikova rola nema pristup. To nije hallucination — to je autorizacioni propust surfaced kroz AI, i klasicno testiranje ga ne bi uhvatilo."</p>
+
+<h3 class="sub-sub-title">Kako komuniciras regresiju developerima? Kako postupas kada pushback-uju?</h3>
+<p class="body-text"><strong>Definicija:</strong> Bug report mora biti evidence-first: naslov sa tagom Regression i modulom, scope (okruzenje, build, test case ID), repro koraci, expected vs actual, screenshot/video, severity/priority, i istorija ('ovo je prolazilo do build-a X').</p>
+<p class="body-text"><strong>U praksi:</strong> "Za 'works on my machine' pushback — uporedjujem uslove: okruzenje, rola, test podaci, feature flags. Obicno je razlika u podacima ili roli, ne u kodu. Za 'to je expected behavior' — idem na specifikaciju ili PO-a. Ako zaista jeste nova intended promena, azuriram test i linkujem odluku za traceability. Ako nije — ostaje bug sa jasnim acceptance kriterijumom za fix. Nikad ne ostavljam bug u limbu."</p>
+
+<h3 class="sub-sub-title">Kako izgleda tvoj dnevni triage?</h3>
+<p class="body-text"><strong>Definicija:</strong> Dnevna analiza rezultata nightly regression suite-a. Svaki failure se klasifikuje u jednu od tri kategorije: app regresija, script issue, ili environment issue.</p>
+<p class="body-text"><strong>U praksi:</strong> "Svako jutro krecem od pipeline rezultata — failovi, stack trace-ovi, screenshot-i, log koraci. Obicno 1-3 failure-a. Brzi filter: da li isti korak pada konzistentno na vise okruzenja i na biznis aserciji? Ako da — prava regresija, fajlujem bug. Ako je nekonzistentno i vezano za element interakciju — script issue, fixujem lokator ili wait. Ako nista ne radi ili auth pada na svim testovima — environment issue, eskaliram DevOps-u. Cilj: do kraja triage-a svaki failure ima jasnog vlasnika i sledeci korak."</p>
+
+<h3 class="sub-sub-title">Kako rukovodis paralelizacijom testova?</h3>
+<p class="body-text"><strong>Definicija:</strong> Paralelno izvrsavanje testova za brzi feedback. Zahteva izolaciju na tri nivoa: browser/sesija, test podaci, i execution scope.</p>
+<p class="body-text"><strong>U praksi:</strong> "Hibridni pristup — nezavisni testovi idu paralelno, stateful testovi ostaju sekvencijalni. Izolacija: svaki worker ima svoj driver i sesiju (nema deljenja browser konteksta), test podaci koriste unique sufikse i timestamp-e, i testovi koji dele resurs (isti zapis, workflow lock) su grupisani da ne trce paralelno. Princip: paralelizuj bezbedne, nezavisne tokove za throughput, a drzi stateful tokove kontrolisanim da izbegnes lazne failure-e od data contention-a."</p>
+
+<h3 class="sub-sub-title">Sta gledas kad review-ujes tud test kod?</h3>
+<p class="body-text"><strong>Definicija:</strong> Code review za testove proverava: naming konvenciju (Method_State_Expected), jednu stvar po testu, nezavisnost od redosleda, parametrizovane podatke, stabilne lokatore, i odsutnost hardkodovanih vrednosti.</p>
+<p class="body-text"><strong>U praksi:</strong> "Pet stvari trazim odmah: Thread.Sleep() — to je uvek bug, zameni sa explicit wait. Vise od jedne asercije koja testira razlicite stvari — podeli u dva testa. Hardkodovani URL-ovi ili credentials — mora ici u config. Fragilan XPath sa indeksima — zameni sa stabilnijim lokatorom. I test koji zavisi od drugog testa ili od podataka koje ostavlja prethodni test — svaki test mora moci da radi izolovano."</p>
+
+<h3 class="sub-sub-title">Kako koristis Browser DevTools u testiranju?</h3>
+<p class="body-text"><strong>Definicija:</strong> Browser DevTools (F12) su svakodnevni QA alat. Tri najkorisnija tab-a: Network (HTTP zahtevi, status kodovi, payload), Console (JS greske, unhandled rejections), Elements (DOM inspekcija, atributi, CSS).</p>
+<p class="body-text"><strong>U praksi:</strong> "Kad korisnik kaze 'kliknuo sam Save ali nista se nije desilo', otvorim Network tab, reprodukujem akciju i gledam: da li je API poziv uopste poslan? Ako jeste — koji je status? 200 ali podaci nisu sacuvani → backend bug. 400 → frontend salje pogresan payload. Nema zahteva uopste → UI bug, dugme ne triggeruje API poziv. Console tab mi otkriva greske koje UI ne prikazuje — CORS blokadu, 401 istekao token, unhandled promise rejection. Copy as cURL iz Network tab-a mi daje brzu reprodukciju bez UI-ja."</p>
+
+<h3 class="sub-sub-title">Sta testiras kod token-based autentifikacije?</h3>
+<p class="body-text"><strong>Definicija:</strong> Token-based auth ima vise edge case-ova od prostog login/logout: zahtev bez tokena (401), istekao token (401 sa jasnom porukom), pogresan role (403), token rotation, session expiration, concurrent sessions.</p>
+<p class="body-text"><strong>U praksi:</strong> "Sest scenarija testiram za svaki zasticeni endpoint. Bez tokena → 401. Istekao token → 401 sa porukom za refresh, ne genericki error. Token sa viewer rolom na DELETE endpoint → 403. Token rotation — stari token prestaje da vazi nakon izdavanja novog, sprecava replay napade. Session expiration — sesija istice nakon perioda neaktivnosti, compliance zahtev. RBAC na API nivou je kriticno — cesto se desi da UI sakriva dugme, ali API endpoint i dalje dozvoljava akciju ako se pozove direktno."</p>
+
+<h3 class="sub-sub-title">Kako izgleda tvoj Git workflow kao QA?</h3>
+<p class="body-text"><strong>Definicija:</strong> QA automation inzenjer radi sa Git-om svakodnevno: feature branch za novi test suite, atomski commit-i, PR code review za test kod, merge conflict rezolucija u Page Object fajlovima.</p>
+<p class="body-text"><strong>U praksi:</strong> "Svako jutro: git pull origin develop za sync. Nova grana za svaki fix ili feature: <code>fix/material-lov-stale-ref</code>. Atomski commit — jedan fix, jedna poruka: 'Fix: re-find LOV overlay before click to prevent stale ref'. Push, PR, code review od kolege QA-a koji proverava naming, lokatore, wait strategiju. Tipican changeset je 2-4 fajla: lokator update + Page Object fix + test scenario azuriranje. Merge conflict nastaje kad dva QA menjaju isti Page Object — resavam rucno u Visual Studio."</p>
+
+<h3 class="sub-sub-title">Sta je Gated Build i zasto je vazan?</h3>
+<p class="body-text"><strong>Definicija:</strong> Gated Build (PR validation pipeline) je CI pipeline koji se triggeruje na Pull Request i blokira merge ako testovi padnu. Za razliku od nightly scheduled pipeline-a koji pokrece full regression, gated build pokrece brzi smoke/sanity subset.</p>
+<p class="body-text"><strong>U praksi:</strong> "Imamo tri tipa pipeline-a. Standard CI — triggeruje se na svaki push, build + unit testovi, brzi feedback. Gated Build — triggeruje se na PR, pokrece smoke testove (<code>dotnet test --filter Category=Smoke</code>), blokira merge ako padne. Nightly Scheduled — pokrece se u 2h ujutru, full regression na svim okruzenjima. Kombinacija Gated + Nightly je standard: Gated drzi kvalitet pre merge-a, Nightly pokriva sve ostalo."</p>
+
+<h3 class="sub-sub-title">Kako upravljas testovima na vise okruzenja sa razlicitim verzijama?</h3>
+<p class="body-text"><strong>Definicija:</strong> Strategije: config per environment (appsettings.QA.json, appsettings.Staging.json), Page Object override za UI razlike izmedju verzija, conditional skip za feature-e koji ne postoje na svim verzijama, feature flags u config-u.</p>
+<p class="body-text"><strong>U praksi:</strong> "Isti test kod trci na tri okruzenja sa razlicitim verzijama proizvoda. Varijabilnost se apsorbuje u config sloju — URL, credentials, feature flags. Ako Copilot postoji samo na Staging 3.2 a ne na QA 3.1, test ima <code>Skip.If(!Config.HasCopilot)</code>. Ako se UI razlikuje izmedju tenanta, override-ujem Page Object sa tenant-specificnim lokatorima. Pravilo: test scenario ostaje isti, nikad ne dupliraš test za razlicitu verziju."</p>
+
+<h3 class="sub-sub-title">Kako testiras data import/export workflow?</h3>
+<p class="body-text"><strong>Definicija:</strong> ETL (Extract-Transform-Load) testiranje pokriva: validan fajl, pogresan format, prazan fajl, malformed data, field mapping, duplikati, veliki fajl (performance), submit-to-form validaciju.</p>
+<p class="body-text"><strong>U praksi:</strong> "Za Excel upload workflow imam 8 scenarija. Validan fajl — 3 specifikacije kreirane, verifikujem i u UI-ju i SQL-om u bazi. Pogresan format — .txt umesto .xlsx, ocekujem jasnu poruku. Prazan fajl — header bez redova, ne sme crash-ovati. Malformed data — numericki atribut sa tekstom, datum u pogresnom formatu. Field mapping — da li je Excel kolona 'Material Name' ispravno mapirana na polje 'Title'. Veliki fajl sa 10.000+ redova — performance i parcijalni import. Svaki scenario ima DB verifikaciju jer UI moze prikazati success a da podatak nije sacuvan."</p>
+
+<h3 class="sub-sub-title">Sta su custom Copilot agenti i kako ih QA koristi?</h3>
+<p class="body-text"><strong>Definicija:</strong> Custom AI agenti se kreiraju u Microsoft Copilot Studio / Agent Builder — bez koda, sa system instructions i definisanim izvorima podataka. QA ih koristi kao alat za ubrzavanje sopstvenog rada.</p>
+<p class="body-text"><strong>U praksi:</strong> "Napravio sam dva agenta. Test Oracle Agent — system instruction: 'Ti si QA ekspert za PLM sistem, odgovaraj samo na osnovu specifikacije'. Data source: produktna dokumentacija. Kad treba da proverim expected behavior, pitam agenta umesto da pretrazujem 200 strana dokumentacije. Bug Triage Assistant — klasifikuje failure u app regresija, script issue, environment issue na osnovu istorije nightly rezultata. Testiranje ovih agenata prati isti 5-dimenzionalni pristup kao za bilo koji AI feature — grounding, permission, relevantnost."</p>
+
+<h3 class="sub-sub-title">Kako koristis AI alate u svakodnevnom QA radu?</h3>
+<p class="body-text"><strong>Definicija:</strong> AI alati kao GitHub Copilot, M365 Copilot i ChatGPT/Claude su produktivni alati za QA — autocomplete za kod, analiza failure logova, generisanje test podataka, brainstorming edge case-ova.</p>
+<p class="body-text"><strong>U praksi:</strong> "GitHub Copilot mi stedi 60-70% vremena na boilerplate kodu — Page Object metode, assertion patterns, setup/teardown. M365 Copilot koristim za analizu nightly failure-a: paste-ujem stack trace sa kontekstom ('prosao je do juce, poslednji changeset je refaktor LOV komponente') i dobijem hipotezu za root cause koju onda verifikujem. ChatGPT/Claude koristim za generisanje test podataka, review test case design-a i brainstorming edge case-ova koje sam propustio. Kljucno: AI generisani kod je QA odgovornost — uvek review-ujem, nikad slepo prihvatam."</p>
+
+<div class="section-nav"><a class="snav-btn" href="s20.html"><span class="snav-label">← Prethodna</span><span class="snav-title">20. Glosar</span></a></div>
+</div>
+  </div>
+
+<div id="quickref">
+  <h3>⚡ Quick Reference <button id="qr-close" onclick="toggleQuickRef()" aria-label="Zatvori">✕</button></h3>
+  <div class="qr-grid">
+    <div class="qr-card"><h4>Severity nivoi</h4>
+      <div class="qr-item"><span class="qr-key">Blocker</span><span class="qr-tooltip">Sistem se ne moze koristiti. Testiranje je blokirano. Nema workaround-a.</span><span class="qr-val">Sistem ne radi, nema workaround-a</span></div>
+      <div class="qr-item"><span class="qr-key">Critical</span><span class="qr-tooltip">Kriticna funkcionalnost je slomljena. Korisnik ne moze da dovrsi kljucni task.</span><span class="qr-val">Kriticna funkcionalnost slomljena</span></div>
+      <div class="qr-item"><span class="qr-key">Major</span><span class="qr-tooltip">Znacajna funkcionalnost ostecena. Workaround postoji ali je neudoban.</span><span class="qr-val">Znacajna funkcionalnost ostecena</span></div>
+      <div class="qr-item"><span class="qr-key">Minor</span><span class="qr-tooltip">Manja funkcionalnost ostecena. Prihvatljiv workaround postoji.</span><span class="qr-val">Manja funkcionalnost, postoji workaround</span></div>
+      <div class="qr-item"><span class="qr-key">Trivial</span><span class="qr-tooltip">Estetski problem — UI, tekst, formatiranje. Nema funkcionalnog uticaja.</span><span class="qr-val">Estetski problem, bez funkcionalnog uticaja</span></div>
+    </div>
+    <div class="qr-card"><h4>HTTP status kodovi</h4>
+      <div class="qr-item"><span class="qr-key">200 OK</span><span class="qr-tooltip">Uspesno obradjen zahtev. Vraca se za GET i za akcije koje ne kreiraju resurs.</span><span class="qr-val">Uspesno</span></div>
+      <div class="qr-item"><span class="qr-key">201 Created</span><span class="qr-tooltip">Resurs je kreiran. Vraca se za uspesni POST. Obicno ukljucuje Location header.</span><span class="qr-val">Resurs kreiran (POST)</span></div>
+      <div class="qr-item"><span class="qr-key">401</span><span class="qr-tooltip">Token nedostaje ili je neispravan. Klijent treba da se autentifikuje.</span><span class="qr-val">Nedostaje token</span></div>
+      <div class="qr-item"><span class="qr-key">403</span><span class="qr-tooltip">Autentifikacija je ok, ali korisnik nema prava na ovaj resurs.</span><span class="qr-val">Token validan, nema dozvolu</span></div>
+      <div class="qr-item"><span class="qr-key">404</span><span class="qr-tooltip">Resurs ne postoji na ovoj URL-i.</span><span class="qr-val">Resurs ne postoji</span></div>
+      <div class="qr-item"><span class="qr-key">422</span><span class="qr-tooltip">Format zahteva je ok, ali semanticki nije validan (narusena biznis pravila).</span><span class="qr-val">Semanticki nevalidan zahtev</span></div>
+      <div class="qr-item"><span class="qr-key">500</span><span class="qr-tooltip">Greska na serveru. Uvek je defekt — developer mora da je ispravi.</span><span class="qr-val">Greska na serveru — uvek defekt</span></div>
+    </div>
+    <div class="qr-card"><h4>Selenium exception-i</h4>
+      <div class="qr-item"><span class="qr-key">NoSuchElement</span><span class="qr-tooltip">Element nije pronadjen u DOM-u. Proveriti lokator i dodati Explicit Wait.</span><span class="qr-val">Proveriti lokator + dodati Wait</span></div>
+      <div class="qr-item"><span class="qr-key">StaleElement</span><span class="qr-tooltip">Element pronadjen ali DOM se promenio pre interakcije. Re-locate element.</span><span class="qr-val">Re-locate element</span></div>
+      <div class="qr-item"><span class="qr-key">NotInteractable</span><span class="qr-tooltip">Element postoji ali je skriven, disabled ili prekriven drugim elementom.</span><span class="qr-val">Cekati na clickability</span></div>
+      <div class="qr-item"><span class="qr-key">ClickIntercepted</span><span class="qr-tooltip">Drugi element (modal, overlay) prekriva ciljni element pri kliku.</span><span class="qr-val">Sacekati da overlay nestane</span></div>
+      <div class="qr-item"><span class="qr-key">Timeout</span><span class="qr-tooltip">Explicit Wait nije pronasao ocekivani uslov u zadatom vremenskom okviru.</span><span class="qr-val">Povecati timeout / proveriti lokator</span></div>
+    </div>
+    <div class="qr-card"><h4>Smoke / Sanity / Regression</h4>
+      <div class="qr-item"><span class="qr-key">Smoke</span><span class="qr-tooltip">Broad + Shallow. Pokrece se na svakom novom build-u. Go/No-Go odluka za dalji QA.</span><span class="qr-val">Broad + Shallow · svaki build</span></div>
+      <div class="qr-item"><span class="qr-key">Sanity</span><span class="qr-tooltip">Narrow + Deep. Pokrece se nakon specificnog bugfix-a ili nove funkcionalnosti.</span><span class="qr-val">Narrow + Deep · nakon fix-a</span></div>
+      <div class="qr-item"><span class="qr-key">Regression</span><span class="qr-tooltip">Broad + Deep. Pokrece se pre svakog release-a. Pokriva ceo scope.</span><span class="qr-val">Broad + Deep · pre release-a</span></div>
+      <div class="qr-item"><span class="qr-key">Retesting</span><span class="qr-tooltip">Ponovo se izvrsava konkretan TC koji je prethodno failovao, nakon bugfix-a.</span><span class="qr-val">Konkretan TC koji je failovao</span></div>
+    </div>
+    <div class="qr-card"><h4>Test case checklist</h4>
+      <div class="qr-item"><span class="qr-key">✓ Naziv</span><span class="qr-val">Method_State_Expected format</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Atomican</span><span class="qr-val">Testira tacno jednu stvar</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Nezavistan</span><span class="qr-val">Ne zavisi od redosleda</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Preconditions</span><span class="qr-val">Potpuni i precizni</span></div>
+      <div class="qr-item"><span class="qr-key">✓ Expected Result</span><span class="qr-val">Verifikabilan i nedvosmislen</span></div>
+    </div>
+    <div class="qr-card"><h4>DoD — QA stavke</h4>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Acceptance criteria ispunjena i verifikovana</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Test case-ovi napisani i odobreni</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">High/Critical defekti zatvoreni</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Regression suite prolazi</span></div>
+      <div class="qr-item"><span class="qr-key">✓</span><span class="qr-val">Testirano na staging okruzenju</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>window.QA_PAGE = {"id":"s21","title":"21. Pitanja i odgovori","prevUrl":"s20.html","nextUrl":null};</script>
+<script src="script.js"></script>
+</body>
+</html>
