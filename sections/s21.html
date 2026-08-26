@@ -216,3 +216,42 @@
 <h3 class="sub-sub-title">Kako koristis AI alate u svakodnevnom QA radu?</h3>
 <p class="body-text"><strong>Definicija:</strong> AI alati kao GitHub Copilot, M365 Copilot i ChatGPT/Claude su produktivni alati za QA — autocomplete za kod, analiza failure logova, generisanje test podataka, brainstorming edge case-ova.</p>
 <p class="body-text"><strong>U praksi:</strong> "GitHub Copilot mi stedi 60-70% vremena na boilerplate kodu — Page Object metode, assertion patterns, setup/teardown. M365 Copilot koristim za analizu nightly failure-a: paste-ujem stack trace sa kontekstom ('prosao je do juce, poslednji changeset je refaktor LOV komponente') i dobijem hipotezu za root cause koju onda verifikujem. ChatGPT/Claude koristim za generisanje test podataka, review test case design-a i brainstorming edge case-ova koje sam propustio. Kljucno: AI generisani kod je QA odgovornost — uvek review-ujem, nikad slepo prihvatam."</p>
+
+<h2 class="sub-title">Deo III — Behavioral / Situaciona pitanja</h2>
+<p class="body-text">Intervjui za senior pozicije ukljucuju i pitanja o ponasanju u realnim situacijama. Odgovori prate STAR format: Situation → Task → Action → Result.</p>
+
+<h3 class="sub-sub-title">Opisi situaciju kad si se sukobio sa developerom oko baga.</h3>
+<p class="body-text"><strong>Situation:</strong> Prijavio sam bug gde approve workflow na specifikaciji nije upisivao audit trail zapis u bazu. Developer je rekao da je to by design jer je audit refaktorisan u novi servis.</p>
+<p class="body-text"><strong>Task:</strong> Morao sam ili da dokazem da je bug ili da prihvatim da je intended promena.</p>
+<p class="body-text"><strong>Action:</strong> Otisao sam na specifikaciju i nasao zahtev koji eksplicitno kaze 'svaka statusna promena mora imati audit trail entry'. Pokazao sam developeru requirement i uporedio sa SQL rezultatom koji je bio prazan. Predlozio sam: 'Ako je audit presao u novi servis, hajde da verifikujemo tamo — ali negde MORA postojati zapis.'</p>
+<p class="body-text"><strong>Result:</strong> Ispostavilo se da je migracija na novi audit servis bila nepotpuna — approve akcija nije bila mapirana. Developer je fixovao za isti sprint. Kljuc je bio da sam dosao sa dokazom (requirement + SQL), ne sa misljenjем.</p>
+
+<h3 class="sub-sub-title">Kako si prioritizovao kad si imao previse posla a kratak rok?</h3>
+<p class="body-text"><strong>Situation:</strong> Pred release, imao sam 3 dana za full regression (200+ testova), 5 novih feature-a za validaciju, i 3 otvorena buga za retest — fizicki nemoguce sve zavrsiti.</p>
+<p class="body-text"><strong>Task:</strong> Morao sam da odlucim sta testirati, a sta preskociti, i da to komuniciram transparentno.</p>
+<p class="body-text"><strong>Action:</strong> Primenio sam risk-based pristup. Sortirao sam feature-e po uticaju na krajnje korisnike i ucestalosti koriscenja. Dva high-risk feature-a (payment i core workflow) sam testirao detaljno. Tri low-risk (admin UI promene) sam pokrio samo smoke testovima. Regression sam pustio automatski nightly — sto prodje, prodje. Napisao sam email PM-u sa eksplicitnim listom sta JE testirano, sta NIJE, i koji je rizik za svaku stavku.</p>
+<p class="body-text"><strong>Result:</strong> Release je prosao bez critical bagova. PM je cenio transparentnost — znao je tacno gde je rizik. Posle toga smo uveli pravilo da svaki release ima risk matrix pre nego sto pocne testiranje.</p>
+
+<h3 class="sub-sub-title">Opisi situaciju kad si napravio gresku u testiranju — sta si naucio?</h3>
+<p class="body-text"><strong>Situation:</strong> Odobrio sam build za produkciju nakon sto je regression prosao, ali je na produkciji pukao specifican scenario sa Oracle bazom koji na QA-u (MSSQL) nije mogao da se reprodukuje.</p>
+<p class="body-text"><strong>Task:</strong> Morao sam da razumem zasto je promaklo i da sprecim da se ponovi.</p>
+<p class="body-text"><strong>Action:</strong> Analizirao sam razliku: Oracle je case-sensitive za identifikatore, MSSQL nije. Test je prolazio na MSSQL jer je query radio bez obzira na casing, ali je na Oracle-u vracao prazan rezultat. Uveo sam u environment checklist proveru da se kriticni scenariji moraju verifikovati na okruzenju koje koristi istu bazu kao produkcija.</p>
+<p class="body-text"><strong>Result:</strong> Dodali smo staging okruzenje sa Oracle bazom za pre-release validaciju. Naucio sam da razlika u test vs prod bazi nije trivijalna — 'testovi prolaze' ne znaci 'radi na produkciji' ako su infrastrukture razlicite.</p>
+
+<h3 class="sub-sub-title">Kako si se nosio sa flaky testovima koji su blokirali pipeline?</h3>
+<p class="body-text"><strong>Situation:</strong> Tri testa u nightly regression suite-u su padali intermitentno — jednom u tri run-a. Tim je poceo da ignorise nightly rezultate jer 'uvek nesto pada'.</p>
+<p class="body-text"><strong>Task:</strong> Morao sam da vratim poverenje u nightly suite — ignorisanje rezultata je gore nego da suite ne postoji.</p>
+<p class="body-text"><strong>Action:</strong> Tagirao sam flaky testove sa [Trait("Stability", "Flaky")] i privremeno ih izbacio iz nightly gate-a (i dalje su se pokretali, ali nisu blokirali). Za svaki sam analizirao root cause: dva su imala race condition na LOV overlay-u (fix: re-find pattern + explicit wait za overlay visible), treci je zavisio od podataka koje prethodni test ostavlja (fix: izolacija test podataka sa unique sufiksom). Nakon fix-a, vratio sam ih u stable suite.</p>
+<p class="body-text"><strong>Result:</strong> Za dve nedelje smo imali zero flaky failures. Tim je ponovo poceo da gleda nightly rezultate jer je svaki failure znacio pravi problem. Pravilo: flaky test se nikad ne ignorise — ili se fixuje ili se tagira, ali nikad ne ostaje u stable suite-u bez akcije.</p>
+
+<h3 class="sub-sub-title">Opisi situaciju kad si predlozio poboljsanje procesa u timu.</h3>
+<p class="body-text"><strong>Situation:</strong> Svaki put kad bi developer deployovao nov build na QA, niko ne bi obavestio QA tim. Desavalo se da testiramo na starom buildu satima bez da znamo da je nov build vec dostupan.</p>
+<p class="body-text"><strong>Task:</strong> Trebalo je uvesti automatsku notifikaciju o deploymentu bez dodatnog manuelnog posla za developere.</p>
+<p class="body-text"><strong>Action:</strong> Predlozio sam da u Azure DevOps pipeline dodamo post-deployment step koji salje Teams poruku sa build brojem, verzijom i linkova na changelog. Napisao sam YAML task za to — bukvalno 5 linija koda u pipeline-u.</p>
+<p class="body-text"><strong>Result:</strong> QA vise nikad nije testirao na pogresnom buildu. Bonus: developeri su poceli da koriste isti kanal za komunikaciju o breakingchanges pre nego sto QA pocne testiranje. Mala promena, veliki uticaj na efikasnost.</p>
+
+<h3 class="sub-sub-title">Kako pomognes novom clanu tima da se uklopi?</h3>
+<p class="body-text"><strong>Situation:</strong> Nov QA inzenjer se pridruzio timu i trebalo mu je 3 nedelje da napravi prvi automatizovani test jer nije razumeo framework arhitekturu — wrapper sloj, Page Object konvencije, config sistem.</p>
+<p class="body-text"><strong>Task:</strong> Skratiti ramp-up period za buducu novu osobu sa 3 nedelje na manje od jedne.</p>
+<p class="body-text"><strong>Action:</strong> Napravio sam 'starter' test koji pokriva ceo flow: login → navigacija → akcija → asercija → screenshot na fail. Komentarisao sam svaki sloj koji test koristi — wrapper metode, Page Object pattern, config pristup. Uz test sam napisao kratki dokument: 'Tvoj prvi test za 2 sata' sa koracima: kloniraj repo → podesi config → pokreni starter test → modifikuj ga za novi scenario.</p>
+<p class="body-text"><strong>Result:</strong> Sledeca nova osoba je pokrenula prvi test za pola dana umesto tri nedelje. Starter test je postao deo onboarding procesa. Dokumentacija nije bila savrsena, ali je bila dovoljna da osoba ne bude blokirana dok ceka moj slobodan termin za pair session."</p>
