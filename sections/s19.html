@@ -10,7 +10,7 @@
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer prompta:
 
   'Ti si senior QA automation inzenjer koji pise Selenium C# testove.
-   Koristi NUnit, Page Object Model i FluentAssertions.
+   Koristi xUnit, Page Object Model i FluentAssertions.
    Generiši test klasu za sledeci scenario:
 
    Feature:  Forgot Password funkcionalnost
@@ -28,7 +28,7 @@
 Workflow:
   LLM generise skelet -> QA proverava lokatore -> QA dodaje specificne
   test podatke -> QA verifikuje Expected Result-e -> QA pokrecepokalno.</pre></div>
-<div class="note">LLM stedi 60-70% vremena na boilerplate kodu. Ostatak — domain znanje, specificnosti aplikacije, edge case-ovi — ostaje iskljucivo odgovornost QA inzenjera.</div>
+<div class="note">LLM stedi 60-70% vremena na boilerplate kodu. Generisani kod treba da prati POM strukturu (Sekcija 13) i naming konvenciju (Sekcija 16). Ostatak — domain znanje, specificnosti aplikacije, edge case-ovi — ostaje iskljucivo odgovornost QA inzenjera.</div>
 <h2 class="sub-title">19.3 Vizuelna regresija</h2>
 <div class="tbl-wrap"><table><tbody>
 <tr><td>Applitools Eyes</td><td>AI-powered vizuelni testing. Koristi ML da razlikuje significantne vizuelne promene od nebitnih (anti-aliasing, font rendering razlike). Integracija sa Selenium, Cypress, Playwright.</td></tr>
@@ -49,13 +49,74 @@ public class ForgotPasswordPage : BasePage
  private By SubmitButton => By.CssSelector(button[type=submit]);
  private By SuccessMsg  => By.CssSelector(.success-message);
 
-    [Test]
+    [Fact]
     public void ValidEmail_ShouldShowSuccessMessage()
     {
  var page = new ForgotPasswordPage(Driver);
  page.Navigate();
- page.EnterEmail(user@test.com);  // QA dodaje: konkretni test email
+ page.EnterEmail("user@test.com");
  page.Submit();
- Assert.That(page.GetSuccessMessage(), Does.Contain(Check your email));
+ Assert.Contains("Check your email", page.GetSuccessMessage());
     }
 }</pre></div>
+<h2 class="sub-title">19.6 Testiranje AI-powered feature-a</h2>
+<p class="body-text">Kada aplikacija sama koristi AI (npr. Copilot, chatbot, AI preporuke), output je nedeterministicki — ne moze se asertovati na tacan tekst. Umesto toga, testiraju se invarijante po pet dimenzija:</p>
+<div class="tbl-wrap tall"><table><thead><tr><th>Dimenzija</th><th>Sta se proverava</th><th>Primer asercije</th></tr></thead><tbody>
+<tr><td>Relevantnost</td><td>Da li odgovor adresira temu iz prompta?</td><td>Prompt o specifikaciji materijala → odgovor sadrzi atribute tog materijala, ne genericke informacije.</td></tr>
+<tr><td>Grounding</td><td>Da li se odgovor oslanja na dozvoljene izvore podataka, bez fabriciranja cinjenica?</td><td>Copilot navodi specifikaciju koja postoji u sistemu, ne izmisljenu.</td></tr>
+<tr><td>Permission boundaries</td><td>Da li AI postuje RBAC? Korisnik bez pristupa kategoriji X ne sme dobiti podatke iz nje.</td><td>User sa rolom "Viewer" pita za confidential BOM → odgovor je prazan ili access denied.</td></tr>
+<tr><td>Format contract</td><td>Da li odgovor prati ocekivanu strukturu — obavezna polja, output shape?</td><td>JSON odgovor sadrzi "source", "confidence", "text" polja.</td></tr>
+<tr><td>Latency / error budget</td><td>Da li odgovor stize u okviru SLA bez fallback greske?</td><td>Response time &lt; 5s, nema generic error poruke.</td></tr>
+</tbody></table></div>
+<h3 class="sub-sub-title">Strategije za stabilno AI testiranje</h3>
+<ul><li class="bullet-item"><strong>Golden intent prompts</strong> — skup poznatih upita sa ocekivanim ponasanjem. Threshold-based pass/fail umesto egzaktnog poklapanja.</li>
+<li class="bullet-item"><strong>Negativni testovi</strong> — out-of-scope prompti koji treba da budu odbijeni, adversarial inputs, permission boundary probes gde odgovor mora biti prazan iako podaci postoje u sistemu.</li>
+<li class="bullet-item"><strong>Fiksirani kontekst</strong> — isti korisnik, ista rola, isti dataset za svaki test run. Varijabla je samo prompt.</li>
+</ul>
+<div class="warning">Permission-bound testiranje je cesto najvrednije — otkriva slucajeve gde AI leak-uje podatke iz kategorija kojima korisnikova rola nema pristup. To nije hallucination problem, to je autorizacioni propust surfaced kroz AI — i klasicno testiranje ga nece uhvatiti.</div>
+<h2 class="sub-title">19.7 AI alati u svakodnevnom QA radu</h2>
+<p class="body-text">AI alati nisu samo objekat testiranja — oni su i alat koji QA koristi svaki dan za produktivnost.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Alat</th><th>QA upotreba</th></tr></thead><tbody>
+<tr><td>GitHub Copilot</td><td>Autocomplete za automation kod — Page Object metode, assertion patterns, boilerplate. Stedi 60-70% vremena na repetitivnom kodu (videti 19.2).</td></tr>
+<tr><td>M365 Copilot</td><td>Analiza nightly failure logova — paste stack trace, pitaj za root cause. Sumarizacija dugackih bug threadova. Drafting bug reporta iz beleški.</td></tr>
+<tr><td>ChatGPT / Claude</td><td>Generisanje test podataka, review test case design-a, objasnjavanje nepoznatog koda, brainstorming edge case-ova.</td></tr>
+</tbody></table></div>
+<h3 class="sub-sub-title">Primer: AI-assisted failure analysis</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Prompt za M365 Copilot / ChatGPT:
+
+  "Ovo je stack trace iz nightly regression testa koji je prosao
+   do jucerasnjeg build-a, a sada pada:
+
+   [StaleElementReferenceException at MaterialPage.SelectLOV()]
+
+   Test scenario: kreiranje nove specifikacije sa Material atributom.
+   Poslednji changeset na aplikaciji: refaktor LOV dropdown komponente.
+
+   Sta je najerovatniji uzrok i koji je najbrzi fix?"
+
+Odgovor: AI sugerise re-find pattern jer LOV re-renderuje DOM.
+QA verifikuje hipotezu, implementira fix, check-in.</pre></div>
+<h2 class="sub-title">19.8 Custom Copilot agenti (Microsoft Agent Builder)</h2>
+<p class="body-text">QA moze kreirati custom AI agente za specificne zadatke koristeci Microsoft Copilot Studio / Agent Builder — bez pisanja koda, samo sa system instructions i definisanim izvorima podataka.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Agent</th><th>System instruction</th><th>Data source</th><th>QA vrednost</th></tr></thead><tbody>
+<tr><td>Test Oracle Agent</td><td>"Ti si QA ekspert za PLM sistem. Odgovaraj samo na osnovu specifikacije."</td><td>Produktna dokumentacija, specifikacija</td><td>Brza verifikacija expected behavior-a bez pretrazivanja dokumenata.</td></tr>
+<tr><td>Bug Triage Assistant</td><td>"Klasifikuj failure u: app regresija, script issue, environment issue."</td><td>Istorija nightly rezultata, poznati flaky testovi</td><td>Ubrzava dnevni triage — AI predlaze kategoriju, QA potvrdjuje.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Custom Agent — ključni elementi:
+
+  System Instructions:
+    - Definisi ulogu, ton, ogranicenja
+    - "Odgovaraj samo na osnovu prilozenог dokumenta"
+    - "Ako nemas odgovor, reci 'nije u specifikaciji'"
+
+  Data Sources:
+    - Upload dokumenata (PDF, Word, Excel)
+    - SharePoint stranice
+    - Web URL-ovi
+
+  Testiranje agenta:
+    - Isti 5-dimenzionalni pristup kao za AI feature (19.6)
+    - Da li odgovara samo iz dozvoljenih izvora (grounding)?
+    - Da li odbija pitanja van scope-a?
+    - Da li multimodalni input (slika + tekst) radi ispravno?</pre></div>
+<div class="note">Izgradnja custom AI agenata je differentiator na intervjuu — pokazuje da QA ne samo testira AI, vec i koristi AI za unapredjenje sopstvenog rada.</div>

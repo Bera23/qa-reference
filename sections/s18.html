@@ -13,14 +13,79 @@
 <tr><td>Hybrid</td><td>Web view unutar native shell-a. React Native, Ionic.</td><td>Puna podrska. Context switching izmedju native i web.</td></tr>
 <tr><td>Mobile Web</td><td>Browser aplikacija — Safari, Chrome na mobilnom.</td><td>Podrska kroz mobile browser driver.</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">18.3 Lokatori u Appium-u</h2>
+<h2 class="sub-title">18.3 Appium C# — setup i osnovni test</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Capabilities i driver inicijalizacija (Android)
+var options = new AppiumOptions();
+options.PlatformName = "Android";
+options.AutomationName = "UIAutomator2";
+options.DeviceName = "emulator-5554";
+options.App = "/path/to/app.apk";
+
+var driver = new AndroidDriver(
+    new Uri("http://localhost:4723"), options);
+
+// Lociranje elementa i interakcija
+var loginBtn = driver.FindElement(
+    MobileBy.AccessibilityId("loginButton"));
+loginBtn.Click();
+
+// Assertion (xUnit)
+var welcomeMsg = driver.FindElement(
+    MobileBy.AccessibilityId("welcomeLabel"));
+Assert.Equal("Dobrodosli", welcomeMsg.Text);</pre></div>
+<div class="note">Ista WebDriver arhitektura kao Selenium (videti Sekciju 12) — poznavanje lokator strategija i wait mehanizama se direktno prenosi.</div>
+<h2 class="sub-title">18.4 Lokatori u Appium-u</h2>
 <div class="tbl-wrap"><table><thead><tr><th>Lokator</th><th>iOS</th><th>Android</th></tr></thead><tbody>
 <tr><td>Accessibility ID</td><td>accessibilityIdentifier atribut</td><td>content-desc atribut — preporuceni</td></tr>
 <tr><td>XPath</td><td>Dostupan, ali sporiji</td><td>Dostupan, ali sporiji</td></tr>
 <tr><td>Class Name</td><td>XCUIElementTypeButton</td><td>android.widget.Button</td></tr>
 <tr><td>ID</td><td>Bez direktnog ekvivalenta</td><td>Resource ID (com.app:id/btn)</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">18.4 Realni uredaji vs. Emulatori</h2>
+<h2 class="sub-title">18.5 Gesture akcije u C#</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Swipe gore (scroll down)
+var size = driver.Manage().Window.Size;
+var finger = new PointerInputDevice(PointerKind.Touch, "finger");
+var swipe = new ActionSequence(finger);
+swipe.AddAction(finger.CreatePointerMove(
+    CoordinateOrigin.Viewport, size.Width / 2, size.Height * 3 / 4));
+swipe.AddAction(finger.CreatePointerDown(MouseButton.Left));
+swipe.AddAction(finger.CreatePointerMove(
+    CoordinateOrigin.Viewport, size.Width / 2, size.Height / 4,
+    TimeSpan.FromMilliseconds(500)));
+swipe.AddAction(finger.CreatePointerUp(MouseButton.Left));
+driver.PerformActions(new List&lt;ActionSequence&gt; { swipe });
+
+// Tap na koordinate
+var tap = new ActionSequence(finger);
+tap.AddAction(finger.CreatePointerMove(
+    CoordinateOrigin.Viewport, 200, 400));
+tap.AddAction(finger.CreatePointerDown(MouseButton.Left));
+tap.AddAction(finger.CreatePointerUp(MouseButton.Left));
+driver.PerformActions(new List&lt;ActionSequence&gt; { tap });</pre></div>
+<h2 class="sub-title">18.6 Page Object Model za mobilne aplikacije</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// POM za Appium — isti princip kao web (videti Sekciju 13)
+public class LoginScreen
+{
+ private readonly AndroidDriver _driver;
+
+ private AppiumElement UsernameField =>
+  _driver.FindElement(MobileBy.AccessibilityId("username"));
+ private AppiumElement PasswordField =>
+  _driver.FindElement(MobileBy.AccessibilityId("password"));
+ private AppiumElement LoginButton =>
+  _driver.FindElement(MobileBy.AccessibilityId("loginBtn"));
+
+ public LoginScreen(AndroidDriver driver) => _driver = driver;
+
+ public HomeScreen LoginAs(string user, string pass)
+ {
+  UsernameField.SendKeys(user);
+  PasswordField.SendKeys(pass);
+  LoginButton.Click();
+  return new HomeScreen(_driver);
+ }
+}</pre></div>
+<h2 class="sub-title">18.7 Realni uredaji vs. Emulatori</h2>
 <div class="tbl-wrap"><table><thead><tr><th></th><th>Emulatori / Simulatori</th><th>Realni uredaji</th></tr></thead><tbody>
 <tr><td>Brzina setup-a</td><td>Brzo, bez hardvera</td><td>Zahteva fizicki pristup</td></tr>
 <tr><td>Tacnost</td><td>Dobra za funkcionalne testove</td><td>Neophodna za hardware, senzore, performanse</td></tr>
@@ -29,7 +94,7 @@
 <tr><td>Preporuka</td><td>Regression, funkcionalni testovi</td><td>Release testing, performance, UAT</td></tr>
 </tbody></table></div>
 <div class="note">Cloud device farme (BrowserStack, Sauce Labs, AWS Device Farm) nude stotine realnih uredaja bez kupovine — idealno za cross-device testing.</div>
-<h2 class="sub-title">18.5 Specificnosti mobilnog testiranja</h2>
+<h2 class="sub-title">18.8 Specificnosti mobilnog testiranja</h2>
 <ul><li class="bullet-item">Razlicite rezolucije i gustine piksela — testirati na vise uredjaja.</li>
 <li class="bullet-item">Interruptions: pozivi, notifikacije, low battery — sistem mora da se ponasa predvidivo.</li>
 <li class="bullet-item">Network conditions — testirati na 3G, 4G, offline modu.</li>

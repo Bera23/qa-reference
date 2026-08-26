@@ -18,15 +18,16 @@
 <tr><td>Fluent Interface</td><td>Method chaining za citljiviji test kod.</td><td>page.EnterEmail().EnterPass().Submit()</td></tr>
 <tr><td>Strategy Pattern</td><td>Zamenjive strategije (razliciti browser-i, okruzenja).</td><td>IBrowserStrategy -> ChromeStrategy</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">16.3 Data-driven testing — NUnit primeri</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[TestCase(user@test.com, Test1234!, true)]
-[TestCase(invalid@test.com, Wrong, false)]
-[TestCase(, Test1234!, false)]
+<h2 class="sub-title">16.3 Data-driven testing — xUnit primeri</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[Theory]
+[InlineData("user@test.com", "Test1234!", true)]
+[InlineData("invalid@test.com", "Wrong", false)]
+[InlineData("", "Test1234!", false)]
 public void Login_WithCredentials_ReturnsExpectedResult(
     string email, string password, bool expectedSuccess)
 {
  var result = new LoginPage(Driver).LoginAs(email, password);
- Assert.That(result.IsSuccessful, Is.EqualTo(expectedSuccess));
+ Assert.Equal(expectedSuccess, result.IsSuccessful);
 }</pre></div>
 <h2 class="sub-title">16.4 Test naming konvencija</h2>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Format: MethodName_StateUnderTest_ExpectedBehavior
@@ -40,27 +41,29 @@ Test1()      // bez konteksta
 LoginTest()  // nema state i expected result</pre></div>
 <h2 class="sub-title">16.5 Reporting — Allure i ExtentReports</h2>
 <h3 class="sub-sub-title">Allure</h3>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[Test]
-[AllureFeature(Login)]
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[Fact]
+[AllureFeature("Login")]
 [AllureSeverity(SeverityLevel.Critical)]
 public void ValidCredentials_ShouldRedirectToDashboard()
 {
- AllureApi.Step(Open login page, () => Driver.Navigate().GoToUrl(url));
- AllureApi.Step(Verify dashboard, () =>
- Assert.That(Driver.Url, Does.Contain(/dashboard)));
+ AllureApi.Step("Open login page", () => Driver.Navigate().GoToUrl(url));
+ AllureApi.Step("Verify dashboard", () =>
+ Assert.Contains("/dashboard", Driver.Url));
 }</pre></div>
 <h3 class="sub-sub-title">ExtentReports</h3>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[TearDown]
-public void EndTest()
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// xUnit: teardown kroz IDisposable umesto [TearDown] atributa
+public class LoginTests : IDisposable
 {
- var status = TestContext.CurrentContext.Result.Outcome.Status;
- if (status == TestStatus.Failed)
+ private readonly ExtentTest _test;
+
+ public LoginTests() { /* setup */ }
+
+ public void Dispose()
  {
- var screenshot = ((ITakesScreenshot)Driver).GetScreenshot();
- _test.Fail(msg).AddScreenCaptureFromPath(path);
+  var screenshot = ((ITakesScreenshot)Driver).GetScreenshot();
+  _test.Info("Screenshot").AddScreenCaptureFromPath(path);
+  _extent.Flush();
  }
- else _test.Pass(Test passed);
- _extent.Flush();
 }</pre></div>
 <h2 class="sub-title">16.6 Pre-commit checklist za automatizovani test</h2>
 <ul><li class="bullet-item">Test ima jasan naziv po konvenciji (Method_State_Expected).</li>

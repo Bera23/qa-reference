@@ -56,3 +56,44 @@ Princip: QA daje cinjenice + preporuku + opcije. Stakeholder donosi odluku.</pre
 <tr><td>Charts</td><td>Vizuelizacija rezultata — pie chart pass/fail, trend kroz vreme.</td></tr>
 <tr><td>Traceability</td><td>Direktna veza izmedju Test Case work item-a i User Story / Bug work item-a.</td></tr>
 </tbody></table></div>
+<h2 class="sub-title">9.6 JIRA — defect tracking i sprint workflow</h2>
+<p class="body-text">JIRA je najrasprostranjeni alat za bug tracking i Agile project management. Za razliku od Azure DevOps Test Plans (9.5), JIRA se koristi primarno za defect tracking i sprint upravljanje, ne za izvrsavanje testova.</p>
+<div class="tbl-wrap"><table><thead><tr><th>JIRA koncept</th><th>Opis</th></tr></thead><tbody>
+<tr><td>Issue Types</td><td>Bug, Story, Task, Epic, Sub-task. QA najcesce kreira Bug i Sub-task za test aktivnosti.</td></tr>
+<tr><td>Workflow</td><td>Open → In Progress → In Review → Done. Custom workflow za bugove: Open → Assigned → Fixed → Ready for Retest → Closed/Reopened.</td></tr>
+<tr><td>Sprint Board</td><td>Kanban ili Scrum board — vizuelni pregled statusa svih issue-a u sprintu.</td></tr>
+<tr><td>Filters / JQL</td><td>JIRA Query Language za precizno filtriranje: <code>project = PLM AND type = Bug AND status = Open AND priority = High</code></td></tr>
+<tr><td>Labels / Components</td><td>Organizacija po modulu, tipu testiranja ili release-u za lakse filtriranje i izvestavanje.</td></tr>
+<tr><td>Dashboards</td><td>Custom dashboardi sa gadgetima: bug trend, open vs closed, distribution po severity-ju.</td></tr>
+</tbody></table></div>
+<h3 class="sub-sub-title">QA workflow u JIRA sprintu</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Sprint pocetak:
+  1. QA review-uje stories u backlogu → dodaje AC i test notes
+  2. Story prelazi u In Progress → QA priprema TC-ove
+
+Tokom sprinta:
+  3. Dev zavrsi story → QA dobija za testiranje
+  4. QA testira → Pass: story → Done
+                → Fail: kreira Bug, linkuje sa Story
+  5. Dev fixuje bug → QA retestira → Close ili Reopen
+
+Sprint kraj:
+  6. QA proverava da svi linkovi Bug↔Story postoje
+  7. Dashboard review sa PM-om: open bugs, escaped defects</pre></div>
+<h3 class="sub-sub-title">Korisni JQL upiti za QA</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>-- Svi otvoreni bagovi u trenutnom sprintu
+project = PLM AND type = Bug AND sprint in openSprints()
+  AND status != Closed
+
+-- Bagovi koje sam ja prijavio, a nisu fixovani
+reporter = currentUser() AND type = Bug
+  AND status NOT IN (Closed, Done)
+
+-- Critical/Blocker bagovi koji cekaju retest
+type = Bug AND priority IN (Critical, Blocker)
+  AND status = "Ready for Retest"
+
+-- Defect leakage — bagovi nadjeni na produkciji
+type = Bug AND labels = production-found
+  AND createdDate >= startOfMonth()</pre></div>
+<div class="note">JIRA i Azure DevOps nisu medjusobno iskljucivi — na nekim projektima JIRA sluzi za defect tracking dok Azure DevOps drzi pipeline i test plans.</div>

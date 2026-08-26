@@ -52,6 +52,7 @@ Trofej (Kent C. Dodds):
 <tr><td>Mock</td><td>Verifikuje i kako je pozvana: koliko puta, sa kojim argumentima. Ako ocekivanje nije ispunjeno, test pada.</td></tr>
 <tr><td>Spy</td><td>Omotac oko realne implementacije. Poziva pravu metodu, ali belezi pozive za naknadnu verifikaciju.</td></tr>
 </tbody></table></div>
+<div class="note">Za osnovne definicije Error/Defect/Failure videti Sekciju 1. Piramida i trofej su strategije rasporeda testova po nivoima iz Sekcije 3.</div>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Stub — vraca vrednost, ne proverava poziv
 var stub = new Mock<IPaymentService>();
 stub.Setup(p => p.Charge(It.IsAny<decimal>())).Returns(new Result { Success = true });

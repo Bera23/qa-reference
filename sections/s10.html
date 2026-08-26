@@ -30,7 +30,114 @@
 <li class="bullet-item">Kartice — koristiti test brojeve koje payment provajder daje za sandbox.</li>
 <li class="bullet-item">Koristiti Faker biblioteke za generisanje realisticnih ali laznih podataka.</li>
 </ul>
-<h2 class="sub-title">10.5 Environment checklist — pre pocetka testiranja</h2>
+<h2 class="sub-title">10.5 SQL verifikacija podataka u testiranju</h2>
+<p class="body-text">SQL upiti su kriticni za verifikaciju da li je UI ili API akcija zaista izmenila podatke u bazi — ne samo da je prikazala success poruku. Ovo vazi za MSSQL, Oracle i druge relacione baze (videti Sekciju 14 za API + DB validaciju).</p>
+<h3 class="sub-sub-title">Seed / Setup — priprema test podataka</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>-- Kreiranje test korisnika pre testa
+INSERT INTO Users (Email, Role, IsActive, CreatedAt)
+VALUES ('qa-test@test.internal', 'QA', 1, GETDATE());
+
+-- PLM primer: kreiranje test specifikacije sa atributima
+INSERT INTO Specifications (SpecId, Title, Status, OwnerId)
+VALUES ('SPEC-TEST-001', 'QA Test Material', 'Draft', @TestUserId);
+
+INSERT INTO SpecAttributes (SpecId, AttrName, AttrValue)
+VALUES ('SPEC-TEST-001', 'Material', 'Steel'),
+       ('SPEC-TEST-001', 'Grade', 'A36');</pre></div>
+<h3 class="sub-sub-title">Assertion — verifikacija nakon akcije</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>-- Posle UI/API akcije "Approve Specification", verifikovati u bazi:
+SELECT Status, ApprovedBy, ApprovedDate
+FROM Specifications
+WHERE SpecId = 'SPEC-TEST-001';
+-- Ocekivano: Status = 'Approved', ApprovedBy IS NOT NULL
+
+-- Verifikacija kaskadnih efekata:
+SELECT COUNT(*) FROM AuditLog
+WHERE EntityId = 'SPEC-TEST-001' AND Action = 'StatusChange';
+-- Ocekivano: >= 1 (akcija je upisana u audit trail)</pre></div>
+<h3 class="sub-sub-title">Cleanup — ciscenje test podataka</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>-- Brisanje test podataka nakon testa (obrnut redosled od insert-a)
+DELETE FROM SpecAttributes WHERE SpecId = 'SPEC-TEST-001';
+DELETE FROM Specifications WHERE SpecId = 'SPEC-TEST-001';
+DELETE FROM Users WHERE Email = 'qa-test@test.internal';
+
+-- Alternativa: TRANSACTION rollback pattern
+BEGIN TRANSACTION;
+  -- ... seed + test akcija + assertion ...
+ROLLBACK;  -- automatski cisti sve promene</pre></div>
+<h3 class="sub-sub-title">C# integracija — DB assertion u automatizovanom testu</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// xUnit test sa SQL verifikacijom nakon UI akcije
+[Fact]
+public void ApproveSpec_ShouldUpdateStatusInDatabase()
+{
+ var specPage = new SpecificationPage(Driver);
+ specPage.NavigateTo("SPEC-TEST-001");
+ specPage.ClickApprove();
+
+ using var conn = new SqlConnection(_connectionString);
+ conn.Open();
+ var cmd = new SqlCommand(
+  "SELECT Status FROM Specifications WHERE SpecId = @id", conn);
+ cmd.Parameters.AddWithValue("@id", "SPEC-TEST-001");
+
+ var status = (string)cmd.ExecuteScalar();
+ Assert.Equal("Approved", status);
+}</pre></div>
+<div class="note">DB assertions otkrivaju situacije gde UI prikazuje success ali podatak nije sacuvan (ili je sacuvan pogresno). Posebno vazno za enterprise sisteme sa kompleksnim workflow-ima i audit trail-ovima.</div>
+<h2 class="sub-title">10.6 Multi-version environment management</h2>
+<p class="body-text">U enterprise sistemima isti test kod cesto trce na vise okruzenja sa razlicitim verzijama proizvoda. Upravljanje razlikama bez dupliranja testova je kljucan skill.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Strategija</th><th>Opis</th><th>Kada koristiti</th></tr></thead><tbody>
+<tr><td>Config per environment</td><td>URL-ovi, credentials, feature flags u odvojenim config fajlovima (appsettings.QA.json, appsettings.Staging.json).</td><td>Uvek — nulti nivo izolacije.</td></tr>
+<tr><td>Page Object override</td><td>Bazni Page Object + tenant/version-specific override klasa koja menja lokatore ili flow korake.</td><td>Kad se UI razlikuje izmedju verzija ili tenanta.</td></tr>
+<tr><td>Conditional skip</td><td>Test se preskace na verziji gde feature ne postoji. Oznacava se razlogom, ne ignorise se bez objasnjenja.</td><td>Retko — samo kad capability ne postoji.</td></tr>
+<tr><td>Feature flags u config-u</td><td>Boolean flag koji ukljucuje/iskljucuje deo test logike per environment.</td><td>Kad je ista funkcionalnost razlicito implementirana.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Primer: isti test, razliciti config-ovi
+// appsettings.QA.json
+{ "BaseUrl": "https://qa.plm.com", "Version": "3.1", "HasCopilot": false }
+
+// appsettings.Staging.json
+{ "BaseUrl": "https://staging.plm.com", "Version": "3.2", "HasCopilot": true }
+
+// Test koji koristi config:
+[Fact]
+public void CopilotSearch_ShouldReturnResults()
+{
+ Skip.If(!Config.HasCopilot, "Copilot not available in this version");
+ // ... test logika ...
+}</pre></div>
+<div class="note">Pravilo: test scenario ostaje isti, varijabilnost se apsorbuje u config-u i Page Object sloju. Ako moras duplirati test za razlicitu verziju — nesto nije dobro u arhitekturi (videti Sekciju 16).</div>
+<h2 class="sub-title">10.7 Testiranje data extraction workflow-a</h2>
+<p class="body-text">Mnoge enterprise aplikacije imaju import/export funkcionalnost — Excel upload, CSV import, field mapping. Testiranje ovih workflow-a zahteva specifican pristup:</p>
+<div class="tbl-wrap"><table><thead><tr><th>Scenario</th><th>Sta testirati</th></tr></thead><tbody>
+<tr><td>Validan fajl</td><td>Upload uspeva, sva polja pravilno mapirana, podaci vidljivi u aplikaciji i bazi.</td></tr>
+<tr><td>Pogresan format</td><td>.txt umesto .xlsx, .csv sa pogresnim delimiterom — jasna poruka o gresci.</td></tr>
+<tr><td>Prazan fajl</td><td>Excel sa header-om ali bez redova — graceful handling, ne crash.</td></tr>
+<tr><td>Malformed data</td><td>Numericki atribut sa tekstom, datum u pogresnom formatu, specijalni karakteri.</td></tr>
+<tr><td>Field mapping</td><td>Excel kolona "Material Name" mapirana na polje "Title" u aplikaciji — tacnost mapiranja.</td></tr>
+<tr><td>Duplikati</td><td>Upload fajla koji sadrzi vec postojece zapise — update, skip, ili greska po biznis pravilu.</td></tr>
+<tr><td>Veliki fajl</td><td>10.000+ redova — performance, timeout, parcijalni import.</td></tr>
+<tr><td>Submit-to-form flow</td><td>Importovani podaci moraju proci validaciju pre kreiranja zapisa u sistemu.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// PLM primer: test Excel upload workflow-a
+[Fact]
+public void ExcelUpload_ValidFile_ShouldCreateSpecifications()
+{
+ var importPage = new DataImportPage(Driver);
+ importPage.UploadFile("TestData/valid_specs.xlsx");
+ importPage.MapColumn("Material Name", "Title");
+ importPage.MapColumn("Grade", "Grade Attribute");
+ importPage.ClickSubmit();
+
+ Assert.Equal("3 specifications created", importPage.GetResultMessage());
+
+ // DB verifikacija (videti Sekciju 10.5)
+ using var conn = new SqlConnection(_connectionString);
+ var count = conn.ExecuteScalar&lt;int&gt;(
+  "SELECT COUNT(*) FROM Specifications WHERE Source = 'Excel Import'");
+ Assert.Equal(3, count);
+}</pre></div>
+<h2 class="sub-title">10.8 Environment checklist — pre pocetka testiranja</h2>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [ ] Build je deployovan i verzija je verifikovana
   [ ] Seed data je prisutna i ispravna
   [ ] External mock servisi / sandbox su dostupni
