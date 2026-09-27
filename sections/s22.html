@@ -1,125 +1,161 @@
-<p class="body-text">Kompaktni pregled najvaznijih komandi, pattern-a i formula — za brzi podsetnik pre intervjua ili tokom rada. Svaki red linkuje na detaljnu sekciju.</p>
-
-<h2 class="sub-title">22.1 Selenium / WebDriver</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Pattern</th><th>C# primer</th><th>Ref</th></tr></thead><tbody>
-<tr><td>Explicit Wait</td><td><code>new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(ExpectedConditions.ElementIsVisible(By.Id("btn")))</code></td><td>s12.3</td></tr>
-<tr><td>Lokator prioritet</td><td>ID &gt; data-testid &gt; CSS &gt; XPath (izbegavati pozicione)</td><td>s12.2</td></tr>
-<tr><td>Screenshot</td><td><code>((ITakesScreenshot)driver).GetScreenshot().SaveAsFile(path)</code></td><td>s12.7</td></tr>
-<tr><td>Hover</td><td><code>new Actions(driver).MoveToElement(el).Perform()</code></td><td>s12.5</td></tr>
-<tr><td>Headless</td><td><code>options.AddArgument("--headless=new")</code></td><td>s12.7</td></tr>
-<tr><td>File Upload</td><td><code>FindElement(By.CssSelector("input[type=file]")).SendKeys(path)</code></td><td>s12.6</td></tr>
-<tr><td>StaleElement fix</td><td>Re-locate element pre interakcije (re-find pattern)</td><td>s12.4</td></tr>
-</tbody></table></div>
-
-<h2 class="sub-title">22.2 xUnit</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Koncept</th><th>Kod</th><th>Ref</th></tr></thead><tbody>
-<tr><td>Jedan test</td><td><code>[Fact] public void Method_State_Expected() { ... }</code></td><td>s16.3</td></tr>
-<tr><td>Data-driven</td><td><code>[Theory] [InlineData("a", 1)] public void Test(string x, int y)</code></td><td>s16.3</td></tr>
-<tr><td>Jednakost</td><td><code>Assert.Equal(expected, actual)</code></td><td>s16</td></tr>
-<tr><td>Sadrzi</td><td><code>Assert.Contains(substring, fullString)</code></td><td>s16</td></tr>
-<tr><td>Teardown</td><td><code>IDisposable</code> — <code>Dispose()</code> umesto <code>[TearDown]</code></td><td>s16.5</td></tr>
-<tr><td>Conditional skip</td><td><code>Skip.If(!Config.HasFeature, "reason")</code></td><td>s10.6</td></tr>
-</tbody></table></div>
-
-<h2 class="sub-title">22.3 Page Object Model</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Sloj</th><th>Odgovornost</th><th>Ref</th></tr></thead><tbody>
-<tr><td>Wrapper</td><td>Apstrakcija WebDriver poziva — kontrole, wait, retry</td><td>s13, s16</td></tr>
-<tr><td>GuiLayer (Page Object)</td><td>Biznis-level akcije: <code>page.CreateSpecification("title")</code></td><td>s13</td></tr>
-<tr><td>GuiCustomizationLayer</td><td>Tenant/version override lokatorima i flow koraka</td><td>s10.6, s13</td></tr>
-<tr><td>RegressionPlan (Test)</td><td>Intent-level scenariji sa xUnit asercijama</td><td>s16</td></tr>
-</tbody></table></div>
-
-<h2 class="sub-title">22.4 API testiranje</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Akcija</th><th>Kod / Pattern</th><th>Ref</th></tr></thead><tbody>
-<tr><td>RestSharp GET</td><td><code>var response = client.Execute&lt;UserDto&gt;(new RestRequest("/users/1", Method.Get))</code></td><td>s14.5</td></tr>
-<tr><td>RestSharp POST</td><td><code>request.AddJsonBody(new { Email = "x@test.com" })</code></td><td>s14.5</td></tr>
-<tr><td>Postman assert</td><td><code>pm.response.to.have.status(200)</code></td><td>s14.4</td></tr>
-<tr><td>Auth matrix</td><td>no token→401, expired→401, wrong role→403, valid→200</td><td>s14.8</td></tr>
-<tr><td>Contract</td><td>Consumer Pact → Pact Broker → Provider verifikacija</td><td>s14.7</td></tr>
-<tr><td>Newman CI</td><td><code>newman run collection.json --environment staging.json</code></td><td>s14.6</td></tr>
-</tbody></table></div>
-
-<h2 class="sub-title">22.5 CI/CD (Azure DevOps)</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Tip pipeline-a</th><th>YAML kljuc</th><th>Ref</th></tr></thead><tbody>
-<tr><td>Standard CI</td><td><code>trigger: branches: include: [main, develop]</code></td><td>s15.3</td></tr>
-<tr><td>Gated Build (PR)</td><td><code>trigger: none</code> + <code>pr: branches: include: [main]</code></td><td>s15.6</td></tr>
-<tr><td>Nightly Scheduled</td><td><code>schedules: - cron: "0 2 * * *"</code></td><td>s15.6</td></tr>
-<tr><td>Test results</td><td><code>PublishTestResults@2</code> sa TRX formatom</td><td>s15.3</td></tr>
-<tr><td>Secrets</td><td><code>$(db-password)</code> iz Variable Groups</td><td>s15.4</td></tr>
-</tbody></table></div>
-
-<h2 class="sub-title">22.6 SQL verifikacija</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Faza</th><th>SQL</th><th>Ref</th></tr></thead><tbody>
-<tr><td>Seed</td><td><code>INSERT INTO Users (Email, Role) VALUES ('qa@test.internal', 'QA')</code></td><td>s10.5</td></tr>
-<tr><td>Assert</td><td><code>SELECT Status FROM Specifications WHERE SpecId = @id</code></td><td>s10.5</td></tr>
-<tr><td>Cleanup</td><td><code>DELETE FROM ...</code> (obrnut redosled) ili <code>ROLLBACK</code></td><td>s10.5</td></tr>
-<tr><td>C# integracija</td><td><code>new SqlConnection(connStr)</code> → <code>SqlCommand</code> → <code>ExecuteScalar()</code></td><td>s10.5</td></tr>
-</tbody></table></div>
-
-<h2 class="sub-title">22.7 Appium / Mobile</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Akcija</th><th>C# primer</th><th>Ref</th></tr></thead><tbody>
-<tr><td>Setup</td><td><code>new AppiumOptions(); options["platformName"] = "Android"</code></td><td>s18.3</td></tr>
-<tr><td>Lokator</td><td><code>MobileBy.AccessibilityId("login_button")</code></td><td>s18.3</td></tr>
-<tr><td>Swipe</td><td><code>PointerInputDevice</code> + <code>ActionSequence</code></td><td>s18.5</td></tr>
-<tr><td>Mobile POM</td><td>Isti princip kao web — <code>LoginScreen</code> klasa sa <code>AppiumElement</code></td><td>s18.6</td></tr>
-</tbody></table></div>
-
-<h2 class="sub-title">22.8 Performance</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Alat / Metrika</th><th>Detalj</th><th>Ref</th></tr></thead><tbody>
-<tr><td>NBomber</td><td><code>Scenario.Create("name", async ctx => { ... })</code> — .NET native</td><td>s17.5</td></tr>
-<tr><td>k6</td><td>JavaScript skripte, open-source, laksi za API load</td><td>s17.6</td></tr>
-<tr><td>p95 / p99</td><td>95% (99%) zahteva &lt; X ms — bolji od proseka</td><td>s17</td></tr>
-<tr><td>Throughput</td><td>req/s — koliko zahteva sistem obradjuje</td><td>s17</td></tr>
-<tr><td>TTFB</td><td>Time To First Byte — server-side latency</td><td>s17</td></tr>
-</tbody></table></div>
-
-<h2 class="sub-title">22.9 Git za QA</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Komanda</th><th>QA kontekst</th><th>Ref</th></tr></thead><tbody>
-<tr><td><code>git pull origin develop</code></td><td>Sync sa poslednjim promenama — svako jutro</td><td>s15.7</td></tr>
-<tr><td><code>git checkout -b fix/lov-stale</code></td><td>Nova grana za fix ili feature</td><td>s15.7</td></tr>
-<tr><td><code>git add Pages/X.cs Tests/X.cs</code></td><td>Stage samo relevantne fajlove</td><td>s15.7</td></tr>
-<tr><td><code>git commit -m "Fix: ..."</code></td><td>Atomski commit — jedan fix, jedna poruka</td><td>s15.7</td></tr>
-<tr><td><code>git push origin fix/lov-stale</code></td><td>Push → PR → code review → merge</td><td>s15.7</td></tr>
-</tbody></table></div>
-
-<h2 class="sub-title">22.10 AI testiranje</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Dimenzija</th><th>Sta proveriti</th><th>Ref</th></tr></thead><tbody>
-<tr><td>Relevantnost</td><td>Odgovor adresira temu iz prompta</td><td>s19.6</td></tr>
-<tr><td>Grounding</td><td>Podaci iz dozvoljenih izvora, bez fabriciranja</td><td>s19.6</td></tr>
-<tr><td>Permissions</td><td>RBAC postovan — nema data leak-a kroz AI</td><td>s19.6</td></tr>
-<tr><td>Format</td><td>Output prati ocekivanu strukturu / schema</td><td>s19.6</td></tr>
-<tr><td>Latency</td><td>Response &lt; SLA, nema fallback greske</td><td>s19.6</td></tr>
-</tbody></table></div>
-
-<h2 class="sub-title">22.11 JIRA / Bug tracking</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Akcija</th><th>Detalj</th><th>Ref</th></tr></thead><tbody>
-<tr><td>JQL filter</td><td><code>project = PLM AND type = Bug AND status != Closed</code></td><td>s09.6</td></tr>
-<tr><td>Workflow</td><td>Open → In Progress → Fixed → Verified → Closed</td><td>s09.6</td></tr>
-<tr><td>Triage kategorije</td><td>App regresija / Script issue / Environment issue</td><td>s06</td></tr>
-<tr><td>Bug report</td><td>Summary + Steps + Expected/Actual + Screenshot + Severity</td><td>s06</td></tr>
-</tbody></table></div>
-
-<h2 class="sub-title">22.12 Kljucne formule i pravila</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Formula / Pravilo</th><th>Objasnjenje</th><th>Ref</th></tr></thead><tbody>
-<tr><td>Automation ROI</td><td>Breakeven = Vreme pisanja skripta / Manuelno vreme po run-u</td><td>s11</td></tr>
-<tr><td>Risk</td><td>Rizik = Verovatnoca × Uticaj → prioritizacija testova</td><td>s07</td></tr>
-<tr><td>Test Piramida</td><td>Mnogo Unit &gt; srednje Integration &gt; malo E2E</td><td>s16</td></tr>
-<tr><td>Pareto (80/20)</td><td>80% bagova dolazi iz 20% modula</td><td>s01</td></tr>
-<tr><td>LLM boilerplate</td><td>AI stedi 60-70% na boilerplate, QA review obavezan</td><td>s19.2</td></tr>
-</tbody></table></div>
-
-<h2 class="sub-title">22.13 DevTools brzi pregled</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Tab</th><th>Sta traziti</th><th>Ref</th></tr></thead><tbody>
-<tr><td>Network</td><td>Status kod, payload, response body, "nema zahteva = UI bug"</td><td>s12.8</td></tr>
-<tr><td>Console</td><td>CORS, 401, unhandled rejection, mixed content</td><td>s12.8</td></tr>
-<tr><td>Elements</td><td>data-testid atributi, aria-*, live CSS edit</td><td>s12.8</td></tr>
-<tr><td>Copy as cURL</td><td>Brza reprodukcija API poziva bez UI-ja</td><td>s12.8</td></tr>
-</tbody></table></div>
-
-<h2 class="sub-title">22.14 Alat i protokol poredjenja</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Poredjenje</th><th>Kljucna razlika</th></tr></thead><tbody>
-<tr><td>Selenium vs. Playwright</td><td>Selenium — zreo, svi jezici, rucno podesavanje wait-ova. Playwright — noviji, auto-wait, ugradjeno upravljanje browser-ima, network interception. Oba podrzavaju POM.</td></tr>
-<tr><td>Cypress vs. Playwright</td><td>Cypress — samo JS, izvrsava se unutar browsera, jedan tab. Playwright — vise jezika, vise browsera, vise tabova, bolji za kompleksne aplikacije.</td></tr>
-<tr><td>REST vs. SOAP</td><td>REST — HTTP, JSON, lagan. SOAP — XML, strogi kontrakti, ugradjena bezbednost. REST dominira modernim API-jima, SOAP jos zivi u enterprise/banking sistemima.</td></tr>
-<tr><td>REST vs. GraphQL</td><td>REST — jedan endpoint po resursu, server odredjuje oblik odgovora. GraphQL — jedan endpoint, klijent sam bira koja polja zeli.</td></tr>
-</tbody></table></div>
+<p class="body-text">Alfabetski pregled kljucnih termina. Koristite pretragu ispod za brzo pronalazenje.</p>
+<div class="glosar-search-wrap"><input type="text" id="glosar-search" placeholder="Filtriraj termine..." oninput="filterGlosar(this.value)"><span id="glosar-count"></span></div>
+<div id="glosar-content">
+<div class="glosar-letter-group" data-letter="A"><div class="glosar-letter">A</div>
+<div class="glosar-item"><span class="glosar-term">Acceptance Criteria</span><span class="glosar-def">Uslovi koje user story mora ispuniti da bi bio prihvacen od Product Owner-a.</span></div>
+<div class="glosar-item"><span class="glosar-term">Acceptance Testing (UAT)</span><span class="glosar-def">Testiranje od strane krajnjih korisnika ili PO-a sa ciljem validacije poslovnih zahteva.</span></div>
+<div class="glosar-item"><span class="glosar-term">Accessibility Testing</span><span class="glosar-def">Testiranje pristupacnosti aplikacije za korisnike sa invaliditetom — keyboard navigacija, screen reader, kontrast, WCAG standardi.</span></div>
+<div class="glosar-item"><span class="glosar-term">Ad-hoc Testing</span><span class="glosar-def">Neformalno, bez dokumentacije i plana. Za razliku od exploratory testiranja, nema ni charter.</span></div>
+<div class="glosar-item"><span class="glosar-term">Agile</span><span class="glosar-def">Iterativni pristup razvoju softvera sa kratkim sprintovima i kontinualnim isporukama.</span></div>
+<div class="glosar-item"><span class="glosar-term">Allure</span><span class="glosar-def">Open-source alat za generisanje HTML test izvestaja sa timeline-om i screenshot integracijom.</span></div>
+<div class="glosar-item"><span class="glosar-term">Appium</span><span class="glosar-def">Open-source alat za automatizaciju mobilnih aplikacija koji koristi WebDriver protokol.</span></div>
+<div class="glosar-item"><span class="glosar-term">Applitools Eyes</span><span class="glosar-def">AI-powered alat za vizuelnu regresiju. Koristi ML da razlikuje bitne vizuelne promene od nebitnih (anti-aliasing, font rendering).</span></div>
+<div class="glosar-item"><span class="glosar-term">Assertion</span><span class="glosar-def">Provera da li je stvarni rezultat jednak ocekivanom. Osnova svakog automatizovanog testa.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="B"><div class="glosar-letter">B</div>
+<div class="glosar-item"><span class="glosar-term">BDD</span><span class="glosar-def">Behavior-Driven Development — pristup koji koristi Given/When/Then format za opis ponasanja.</span></div>
+<div class="glosar-item"><span class="glosar-term">Black-box Testing</span><span class="glosar-def">Testiranje bez uvida u internu implementaciju — samo ulaz i izlaz.</span></div>
+<div class="glosar-item"><span class="glosar-term">Blocker</span><span class="glosar-def">Defekt koji sprecava dalje testiranje ili koristenje sistema. Nema workaround-a.</span></div>
+<div class="glosar-item"><span class="glosar-term">BVA</span><span class="glosar-def">Boundary Value Analysis — tehnika koja testira vrednosti na granicama particija.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="C"><div class="glosar-letter">C</div>
+<div class="glosar-item"><span class="glosar-term">Changeset</span><span class="glosar-def">Jedinica rada u Git-u — obicno 2-4 fajla: lokator update + Page Object fix + test scenario azuriranje.</span></div>
+<div class="glosar-item"><span class="glosar-term">CI/CD</span><span class="glosar-def">Continuous Integration / Continuous Delivery — automatizovano build, test i deploy.</span></div>
+<div class="glosar-item"><span class="glosar-term">Contract Testing</span><span class="glosar-def">Testiranje da li consumer i provider API imaju usaglaseni kontrakt (Pact framework).</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="D"><div class="glosar-letter">D</div>
+<div class="glosar-item"><span class="glosar-term">Data-driven Testing</span><span class="glosar-def">Isti test scenario se izvrsava sa razlicitim skupovima ulaznih podataka.</span></div>
+<div class="glosar-item"><span class="glosar-term">Defect</span><span class="glosar-def">Diskrepancija izmedju stvarnog i ocekivanog ponasanja sistema.</span></div>
+<div class="glosar-item"><span class="glosar-term">Defect Density</span><span class="glosar-def">Broj defekata po jedinici velicine funkcionalnosti. Metrika kvaliteta koda.</span></div>
+<div class="glosar-item"><span class="glosar-term">Defect Leakage</span><span class="glosar-def">Procenat defekata koji su prosli QA a nadjeni su na produkciji.</span></div>
+<div class="glosar-item"><span class="glosar-term">Definition of Done</span><span class="glosar-def">Lista kriterijuma koje user story mora ispuniti da bi bio proglaseni Done.</span></div>
+<div class="glosar-item"><span class="glosar-term">DevTools</span><span class="glosar-def">Browser Developer Tools (F12) — Network, Console, Elements tab-ovi za QA debugging i inspekciju HTTP zahteva.</span></div>
+<div class="glosar-item"><span class="glosar-term">Definition of Ready</span><span class="glosar-def">Lista kriterijuma koje user story mora ispuniti pre ulaska u sprint.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="E"><div class="glosar-letter">E</div>
+<div class="glosar-item"><span class="glosar-term">E2E Testing</span><span class="glosar-def">End-to-end testiranje — simulacija kompletnog korisnickog toka kroz sistem.</span></div>
+<div class="glosar-item"><span class="glosar-term">Entry Criteria</span><span class="glosar-def">Uslovi koji moraju biti ispunjeni da bi faza testiranja mogla da pocne.</span></div>
+<div class="glosar-item"><span class="glosar-term">EP</span><span class="glosar-def">Equivalence Partitioning — tehnika koja deli ulazni skup na particije.</span></div>
+<div class="glosar-item"><span class="glosar-term">Error</span><span class="glosar-def">Ljudska greska — pogresan pretpostavka ili propust developera u kodu.</span></div>
+<div class="glosar-item"><span class="glosar-term">Escaped Defects</span><span class="glosar-def">Defekti koje su pronasli korisnici na produkciji. Kljucna KPI za QA tim.</span></div>
+<div class="glosar-item"><span class="glosar-term">ETL</span><span class="glosar-def">Extract-Transform-Load — proces ekstrakcije, transformacije i ucitavanja podataka. U QA kontekstu: testiranje import/export workflow-a (Excel upload, CSV, field mapping).</span></div>
+<div class="glosar-item"><span class="glosar-term">Exit Criteria</span><span class="glosar-def">Uslovi cijim ispunjenjem se testiranje smatra zavrsenim.</span></div>
+<div class="glosar-item"><span class="glosar-term">Exploratory Testing</span><span class="glosar-def">Simultano ucenje, dizajniranje i izvrsavanje testova bez unapred definisanih koraka.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="F"><div class="glosar-letter">F</div>
+<div class="glosar-item"><span class="glosar-term">Failure</span><span class="glosar-def">Vidljivi simptom defekta u runtime-u — sistem se ponasa drugacije od ocekivanog.</span></div>
+<div class="glosar-item"><span class="glosar-term">Feature Flag</span><span class="glosar-def">Boolean konfiguracija koja ukljucuje/iskljucuje funkcionalnost per environment. Koristi se za multi-version env management.</span></div>
+<div class="glosar-item"><span class="glosar-term">Flaky Test</span><span class="glosar-def">Test koji naizmenicno prolazi i pada bez promene koda.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="G"><div class="glosar-letter">G</div>
+<div class="glosar-item"><span class="glosar-term">GDPR</span><span class="glosar-def">General Data Protection Regulation — EU regulativa za zastitu licnih podataka. Test podaci moraju biti anonimizovani.</span></div>
+<div class="glosar-item"><span class="glosar-term">Grey-box Testing</span><span class="glosar-def">Delimicno poznavanje internih detalja sistema. Najcesci scenario u praksi.</span></div>
+<div class="glosar-item"><span class="glosar-term">Gated Build</span><span class="glosar-def">CI pipeline koji se triggeruje na Pull Request i blokira merge ako smoke/sanity testovi padnu. PR validation gate.</span></div>
+<div class="glosar-item"><span class="glosar-term">Git</span><span class="glosar-def">Distribuirani version control sistem. QA koristi za branching, commit, PR review automation koda.</span></div>
+<div class="glosar-item"><span class="glosar-term">Grounding</span><span class="glosar-def">U AI kontekstu: svojstvo da se odgovor oslanja na stvarne, verifikovane izvore podataka umesto na fabricirane cinjenice.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="H"><div class="glosar-letter">H</div>
+<div class="glosar-item"><span class="glosar-term">Hallucination</span><span class="glosar-def">AI generise plausibilan ali netacan sadrzaj — nepostojece cinjenice, API endpoint-e ili podatke. Kriticno za QA AI feature-a.</span></div>
+<div class="glosar-item"><span class="glosar-term">Happy Path</span><span class="glosar-def">Idealni scenario — svi ulazi su validni, korisnik radi ono sto se ocekuje.</span></div>
+<div class="glosar-item"><span class="glosar-term">Healenium</span><span class="glosar-def">AI alat koji automatski azurira Selenium lokatore kada se UI promeni, smanjujuci odrzavanje testova.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="I"><div class="glosar-letter">I</div>
+<div class="glosar-item"><span class="glosar-term">Ice Cream Cone</span><span class="glosar-def">Anti-pattern test piramide: previse E2E testova, premalo unit testova. Testovi su spori, krhki i skupi.</span></div>
+<div class="glosar-item"><span class="glosar-term">Idempotent</span><span class="glosar-def">Operacija koja daje isti rezultat bez obzira na broj ponavljanja. GET, PUT i DELETE su idempotentne HTTP metode.</span></div>
+<div class="glosar-item"><span class="glosar-term">IEEE 829</span><span class="glosar-def">Standard za dokumentaciju sofverskog testiranja — struktura test plana.</span></div>
+<div class="glosar-item"><span class="glosar-term">Integration Testing</span><span class="glosar-def">Testiranje interakcije izmedju dve ili vise komponenti sistema.</span></div>
+<div class="glosar-item"><span class="glosar-term">ISTQB</span><span class="glosar-def">International Software Testing Qualifications Board — globalna QA sertifikaciona organizacija.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="J"><div class="glosar-letter">J</div>
+<div class="glosar-item"><span class="glosar-term">JIRA</span><span class="glosar-def">Atlassian alat za defect tracking, sprint management i project tracking. Issue Types: Bug, Task, Story, Epic.</span></div>
+<div class="glosar-item"><span class="glosar-term">JQL</span><span class="glosar-def">JIRA Query Language — structured query za filtriranje issue-a (npr. <code>type = Bug AND status != Closed AND priority = High</code>).</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="K"><div class="glosar-letter">K</div>
+<div class="glosar-item"><span class="glosar-term">k6</span><span class="glosar-def">Open-source alat za performance (load) testiranje. Skripte se pisu u JavaScript-u.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="L"><div class="glosar-letter">L</div>
+<div class="glosar-item"><span class="glosar-term">Load Testing</span><span class="glosar-def">Performance testiranje na ocekivanom normalnom opterecenju sistema.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="M"><div class="glosar-letter">M</div>
+<div class="glosar-item"><span class="glosar-term">MC/DC</span><span class="glosar-def">Modified Condition/Decision Coverage — svaki uslov u odluci nezavisno utice na ishod. Najstrozija white-box tehnika pokrivanja.</span></div>
+<div class="glosar-item"><span class="glosar-term">Mock</span><span class="glosar-def">Zamena realne zavisnosti koja verifikuje i kako je pozvana, ne samo sta vraca.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="N"><div class="glosar-letter">N</div>
+<div class="glosar-item"><span class="glosar-term">NBomber</span><span class="glosar-def">.NET-native load testing framework. Testovi se pisu u C#, u istom solution-u sa Selenium/API testovima.</span></div>
+<div class="glosar-item"><span class="glosar-term">Newman</span><span class="glosar-def">CLI alat za pokretanje Postman kolekcija u CI/CD pipeline-u.</span></div>
+<div class="glosar-item"><span class="glosar-term">NUnit</span><span class="glosar-def">.NET test framework sa [Test], [TestCase] atributima. Alternativa: xUnit sa [Fact], [Theory].</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="O"><div class="glosar-letter">O</div>
+<div class="glosar-item"><span class="glosar-term">OpenAPI / Swagger</span><span class="glosar-def">Specifikacija za opisivanje REST API-ja. Swagger UI omogucava interaktivno testiranje endpoint-a, a OpenAPI spec sluzi za schema validaciju.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="P"><div class="glosar-letter">P</div>
+<div class="glosar-item"><span class="glosar-term">Page Factory</span><span class="glosar-def">Alternativni nacin definisanja lokatorima u POM-u sa [FindsBy] atributima. Ne preporucuje se u novim projektima.</span></div>
+<div class="glosar-item"><span class="glosar-term">Page Object Model</span><span class="glosar-def">Design pattern koji enkapsulira UI lokatore i interakcije za stranicu u posebnu klasu.</span></div>
+<div class="glosar-item"><span class="glosar-term">Pairwise Testing</span><span class="glosar-def">Tehnika koja smanjuje broj test kombinacija pokrivanjem svih parova parametara.</span></div>
+<div class="glosar-item"><span class="glosar-term">Percy</span><span class="glosar-def">BrowserStack vizuelna regresija integrisana sa CI/CD pipeline-om. Svaki PR dobija vizuelni diff review.</span></div>
+<div class="glosar-item"><span class="glosar-term">PII</span><span class="glosar-def">Personally Identifiable Information — licni podaci koji se moraju anonimizovati u testovima.</span></div>
+<div class="glosar-item"><span class="glosar-term">Priority</span><span class="glosar-def">Hitnost korekcije defekta sa poslovnog aspekta (High/Medium/Low).</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="Q"><div class="glosar-letter">Q</div>
+<div class="glosar-item"><span class="glosar-term">QA</span><span class="glosar-def">Quality Assurance — proaktivni proces poboljsavanja procesa da bi se sprecilo nastajanje defekata.</span></div>
+<div class="glosar-item"><span class="glosar-term">QC</span><span class="glosar-def">Quality Control — reaktivna aktivnost pronalazenja defekata u gotovom proizvodu.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="R"><div class="glosar-letter">R</div>
+<div class="glosar-item"><span class="glosar-term">p95 / p99</span><span class="glosar-def">Percentili response time-a: 95% (99%) zahteva se obradjuje za manje od X ms. Bolji od proseka za merenje performansi.</span></div>
+<div class="glosar-item"><span class="glosar-term">RBAC</span><span class="glosar-def">Role-Based Access Control — autorizacija zasnovana na ulogama. Kriticno testirati i na UI i na API nivou.</span></div>
+<div class="glosar-item"><span class="glosar-term">RACI</span><span class="glosar-def">Matrica odgovornosti: Responsible, Accountable, Consulted, Informed.</span></div>
+<div class="glosar-item"><span class="glosar-term">Regression Testing</span><span class="glosar-def">Provera da nove izmene nisu narusile postojecu funkcionalnost.</span></div>
+<div class="glosar-item"><span class="glosar-term">REST</span><span class="glosar-def">Representational State Transfer — arhitekturalni stil za dizajn web API-ja.</span></div>
+<div class="glosar-item"><span class="glosar-term">RestSharp</span><span class="glosar-def">C# HTTP klijent za API testiranje. Native .NET alternativa za Postman/Newman u automatizovanim testovima.</span></div>
+<div class="glosar-item"><span class="glosar-term">Retesting</span><span class="glosar-def">Ponovo izvrsavanje konkretnog TC koji je prethodno failovao, nakon bugfix-a.</span></div>
+<div class="glosar-item"><span class="glosar-term">Risk-based Testing</span><span class="glosar-def">Prioritizacija testova na osnovu verovatnoce i uticaja potencijalnog defekta.</span></div>
+<div class="glosar-item"><span class="glosar-term">RTM</span><span class="glosar-def">Requirements Traceability Matrix — tabela koja mapira zahteve na test case-ove i defekte.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="S"><div class="glosar-letter">S</div>
+<div class="glosar-item"><span class="glosar-term">Sanity Testing</span><span class="glosar-def">Fokusirana verifikacija konkretne promene bez punog regression run-a.</span></div>
+<div class="glosar-item"><span class="glosar-term">SDET</span><span class="glosar-def">Software Development Engineer in Test — QA koji pise produkcioni kod i framework.</span></div>
+<div class="glosar-item"><span class="glosar-term">Screenplay Pattern</span><span class="glosar-def">Alternativa POM-u za kompleksne scenarije. Modelira interakcije kao User + Abilities + Tasks + Questions.</span></div>
+<div class="glosar-item"><span class="glosar-term">Security Testing</span><span class="glosar-def">Testiranje sistema na ranjivosti — SQL injection, XSS, autentifikacija, autorizacija. OWASP Top 10 kao referenca.</span></div>
+<div class="glosar-item"><span class="glosar-term">Selenium</span><span class="glosar-def">Open-source framework za automatizaciju web browser-a.</span></div>
+<div class="glosar-item"><span class="glosar-term">Severity</span><span class="glosar-def">Tehnicki uticaj defekta na sistem (Blocker/Critical/Major/Minor/Trivial).</span></div>
+<div class="glosar-item"><span class="glosar-term">Smoke Testing</span><span class="glosar-def">Povrsinska provera kriticnih funkcionalnosti — Go/No-Go odluka za dalji QA.</span></div>
+<div class="glosar-item"><span class="glosar-term">Soak Testing</span><span class="glosar-def">Endurance test — sistem pod normalnim opterecenjem duzi period. Trazi memory leak-ove i degradaciju performansi.</span></div>
+<div class="glosar-item"><span class="glosar-term">Spike Testing</span><span class="glosar-def">Testiranje reakcije sistema na nagli kratki skok opterecenja (flash sale, viralni content).</span></div>
+<div class="glosar-item"><span class="glosar-term">Spy</span><span class="glosar-def">Omotac oko realne implementacije koji belezi pozive za naknadnu verifikaciju.</span></div>
+<div class="glosar-item"><span class="glosar-term">State Transition Testing</span><span class="glosar-def">Tehnika koja modelira ponasanje sistema kao skup stanja i prelaza izmedju njih.</span></div>
+<div class="glosar-item"><span class="glosar-term">Static Testing</span><span class="glosar-def">Testiranje bez izvrsavanja softvera — code review, inspekcija dokumentacije.</span></div>
+<div class="glosar-item"><span class="glosar-term">Stress Testing</span><span class="glosar-def">Performance testiranje sistema iznad normalnog kapaciteta.</span></div>
+<div class="glosar-item"><span class="glosar-term">Stub</span><span class="glosar-def">Lazna implementacija koja vraca predefinisani odgovor bez logike.</span></div>
+<div class="glosar-item"><span class="glosar-term">System Testing</span><span class="glosar-def">Testiranje celokupnog sistema kao jedinstvene celine prema zahtevima.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="T"><div class="glosar-letter">T</div>
+<div class="glosar-item"><span class="glosar-term">Test Basis</span><span class="glosar-def">Sve sto se koristi kao osnova za dizajn test case-ova: zahtevi, kod, standardi.</span></div>
+<div class="glosar-item"><span class="glosar-term">Test Pyramid</span><span class="glosar-def">Strategija rasporeda testova: mnogo unit (brzi), srednje integration, malo E2E (spori). Suprotnost: Ice Cream Cone.</span></div>
+<div class="glosar-item"><span class="glosar-term">Test Case</span><span class="glosar-def">Dokumentovan skup koraka, ulaznih podataka i ocekivanih rezultata.</span></div>
+<div class="glosar-item"><span class="glosar-term">Test Coverage</span><span class="glosar-def">Procenat test basis-a (zahteva, koda, funkcionalnosti) pokriven testovima.</span></div>
+<div class="glosar-item"><span class="glosar-term">Test Harness</span><span class="glosar-def">Infrastruktura koja podrzava izvrsavanje testova: runner, stubs, drivers, konfiguracija.</span></div>
+<div class="glosar-item"><span class="glosar-term">Test Oracle</span><span class="glosar-def">Mehanizam kojim se odredjuje da li je rezultat testa ispravan.</span></div>
+<div class="glosar-item"><span class="glosar-term">Test Plan</span><span class="glosar-def">Dokument koji definise scope, pristup, resurse i raspored testiranja.</span></div>
+<div class="glosar-item"><span class="glosar-term">Three Amigos</span><span class="glosar-def">Sesija izmedju PO, developera i QA-a pre razvoja feature-a za razjasnjavanje zahteva.</span></div>
+<div class="glosar-item"><span class="glosar-term">Throughput</span><span class="glosar-def">Broj zahteva koje sistem obradjuje u jedinici vremena (req/s). Kljucna performance metrika.</span></div>
+<div class="glosar-item"><span class="glosar-term">TTFB</span><span class="glosar-def">Time To First Byte — vreme od zahteva do prvog byte-a odgovora. Meri server-side latency.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="U"><div class="glosar-letter">U</div>
+<div class="glosar-item"><span class="glosar-term">UAT</span><span class="glosar-def">User Acceptance Testing — testiranje od strane krajnjih korisnika ili Product Owner-a.</span></div>
+<div class="glosar-item"><span class="glosar-term">Unit Testing</span><span class="glosar-def">Testiranje individualne funkcije ili metode u izolaciji.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="V"><div class="glosar-letter">V</div>
+<div class="glosar-item"><span class="glosar-term">V-Model</span><span class="glosar-def">SDLC model koji eksplicitno mapira svaku razvojnu fazu na odgovarajuci nivo testiranja.</span></div>
+<div class="glosar-item"><span class="glosar-term">Validation</span><span class="glosar-def">Provera da li sistem ispunjava stvarne potrebe korisnika.</span></div>
+<div class="glosar-item"><span class="glosar-term">Verification</span><span class="glosar-def">Provera da li je sistem izradjen u skladu sa specifikacijom.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="W"><div class="glosar-letter">W</div>
+<div class="glosar-item"><span class="glosar-term">WCAG</span><span class="glosar-def">Web Content Accessibility Guidelines — standard za pristupacnost web sadrzaja.</span></div>
+<div class="glosar-item"><span class="glosar-term">WebDriver</span><span class="glosar-def">W3C standard protokol koji Selenium koristi za komunikaciju sa browser-om.</span></div>
+<div class="glosar-item"><span class="glosar-term">White-box Testing</span><span class="glosar-def">Testiranje sa punim uvidom u internu implementaciju — kod, arhitekturu, logiku.</span></div>
+</div>
+<div class="glosar-letter-group" data-letter="X"><div class="glosar-letter">X</div>
+<div class="glosar-item"><span class="glosar-term">xUnit</span><span class="glosar-def">.NET test framework sa [Fact] i [Theory]/[InlineData] atributima. Modernija alternativa NUnit-u, konstruktor za setup, IDisposable za teardown.</span></div>
+<div class="glosar-item"><span class="glosar-term">XPath</span><span class="glosar-def">Jezik za navigaciju kroz XML/HTML dokument — jedan od Selenium lokator tipova.</span></div>
+</div>
+</div>

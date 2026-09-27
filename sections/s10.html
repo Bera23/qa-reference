@@ -31,7 +31,7 @@
 <li class="bullet-item">Koristiti Faker biblioteke za generisanje realisticnih ali laznih podataka.</li>
 </ul>
 <h2 class="sub-title">10.5 SQL verifikacija podataka u testiranju</h2>
-<p class="body-text">SQL upiti su kriticni za verifikaciju da li je UI ili API akcija zaista izmenila podatke u bazi — ne samo da je prikazala success poruku. Ovo vazi za MSSQL, Oracle i druge relacione baze (videti Sekciju 14 za API + DB validaciju).</p>
+<p class="body-text">SQL upiti su kriticni za verifikaciju da li je UI ili API akcija zaista izmenila podatke u bazi — ne samo da je prikazala success poruku. Ovo vazi za MSSQL, Oracle i druge relacione baze (videti Sekciju 15 za API + DB validaciju).</p>
 <h3 class="sub-sub-title">Seed / Setup — priprema test podataka</h3>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>-- Kreiranje test korisnika pre testa
 INSERT INTO Users (Email, Role, IsActive, CreatedAt)
@@ -106,7 +106,7 @@ public void CopilotSearch_ShouldReturnResults()
  Skip.If(!Config.HasCopilot, "Copilot not available in this version");
  // ... test logika ...
 }</pre></div>
-<div class="note">Pravilo: test scenario ostaje isti, varijabilnost se apsorbuje u config-u i Page Object sloju. Ako moras duplirati test za razlicitu verziju — nesto nije dobro u arhitekturi (videti Sekciju 16).</div>
+<div class="note">Pravilo: test scenario ostaje isti, varijabilnost se apsorbuje u config-u i Page Object sloju. Ako moras duplirati test za razlicitu verziju — nesto nije dobro u arhitekturi (videti Sekciju 18).</div>
 <h2 class="sub-title">10.7 Testiranje data extraction workflow-a</h2>
 <p class="body-text">Mnoge enterprise aplikacije imaju import/export funkcionalnost — Excel upload, CSV import, field mapping. Testiranje ovih workflow-a zahteva specifican pristup:</p>
 <div class="tbl-wrap"><table><thead><tr><th>Scenario</th><th>Sta testirati</th></tr></thead><tbody>

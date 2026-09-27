@@ -1,131 +1,53 @@
-<h2 class="sub-title">14.1 HTTP metode</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Metoda</th><th>Svrha</th><th>Idempotentna</th><th>Safe</th></tr></thead><tbody>
-<tr><td>GET</td><td>Citanje resursa. Bez side-effecta.</td><td>Da</td><td>Da</td></tr>
-<tr><td>POST</td><td>Kreiranje novog resursa.</td><td>Ne</td><td>Ne</td></tr>
-<tr><td>PUT</td><td>Potpuna zamena postojeceg resursa.</td><td>Da</td><td>Ne</td></tr>
-<tr><td>PATCH</td><td>Parcijalna izmena resursa.</td><td>Ne</td><td>Ne</td></tr>
-<tr><td>DELETE</td><td>Brisanje resursa.</td><td>Da</td><td>Ne</td></tr>
-</tbody></table></div>
-<h2 class="sub-title">14.2 HTTP status kodovi</h2>
-<div class="tbl-wrap tall"><table><thead><tr><th>Status</th><th>Znacenje</th></tr></thead><tbody>
-<tr><td>200 OK</td><td>Zahtev uspesno obradjen. Standardni odgovor za GET.</td></tr>
-<tr><td>201 Created</td><td>Resurs je kreiran. Za uspesni POST, obicno sa Location headerom.</td></tr>
-<tr><td>204 No Content</td><td>Uspesno, bez tela odgovora. Tipicno za DELETE.</td></tr>
-<tr><td>400 Bad Request</td><td>Nevalidan zahtev — los JSON, nedostaju obavezna polja.</td></tr>
-<tr><td>401 Unauthorized</td><td>Nedostaje ili je nevazeci autentifikacioni token.</td></tr>
-<tr><td>403 Forbidden</td><td>Token validan, ali nema dozvolu za resurs.</td></tr>
-<tr><td>404 Not Found</td><td>Resurs ne postoji.</td></tr>
-<tr><td>409 Conflict</td><td>Konflikt — kreiranje korisnika sa emailom koji vec postoji.</td></tr>
-<tr><td>422 Unprocessable</td><td>Semanticki nevalidan — format ok, ali biznis pravila narusena.</td></tr>
-<tr><td>429 Too Many Requests</td><td>Rate limiting.</td></tr>
-<tr><td>500 Internal Server Error</td><td>Greska na serveru. Uvek defekt.</td></tr>
-<tr><td>502 Bad Gateway</td><td>Upstream servis ne odgovara.</td></tr>
-<tr><td>503 Service Unavailable</td><td>Servis trenutno nedostupan.</td></tr>
-</tbody></table></div>
-<h2 class="sub-title">14.3 Sta testirati na API-ju</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Sta testirati</th><th>Detalj</th></tr></thead><tbody>
-<tr><td>Status kod</td><td>Da li je odgovor ispravan? 200 vs. 201 vs. 400 — svaki ima specificno znacenje.</td></tr>
-<tr><td>Response body</td><td>Da li JSON odgovara ocekivanom kontraktu? Da li su sva polja prisutna?</td></tr>
-<tr><td>Auth/Authz</td><td>Bez tokena -> 401. Sa pogresnim pravima -> 403. Validan token -> 200.</td></tr>
-<tr><td>Response time</td><td>Da li API odgovara u prihvatljivom roku? (< 2000ms)</td></tr>
-<tr><td>Idempotencija</td><td>Visestruki GET/PUT/DELETE ne smeju da menjaju stanje sistema.</td></tr>
-<tr><td>Schema validacija</td><td>Struktura odgovora vs. OpenAPI/Swagger kontrakt.</td></tr>
-</tbody></table></div>
-<h2 class="sub-title">14.4 Postman test skripta — primeri</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>pm.test('Status code is 200', () => {
-    pm.response.to.have.status(200);
-});
-
-pm.test('Token saved', () => {
-    const token = pm.response.json().access_token;
-    pm.expect(token).to.be.a('string').and.not.empty;
-    pm.environment.set('auth_token', token);
-});
-
-pm.test('Response time is acceptable', () => {
-    pm.expect(pm.response.responseTime).to.be.below(2000);
-});</pre></div>
-<h2 class="sub-title">14.5 RestSharp — API testiranje u C#</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// GET sa deserializacijom i assertion-ima (xUnit)
-[Fact]
-public void GetUser_WithValidId_ShouldReturnUser()
+<h2 class="sub-title">14.1 Sta je POM i zasto postoji</h2>
+<p class="body-text">Page Object Model je design pattern koji enkapsulira UI lokatore i interakcije za odredjenu stranicu u posebnu klasu. Test kod komunicira sa stranicom iskljucivo kroz metode te klase — nikad direktno sa lokatorima.</p>
+<ul><li class="bullet-item">Separacija brige — lokatori i UI logika odvojeni od test logike.</li>
+<li class="bullet-item">Odrzivost — promena lokacije elementa zahteva izmenu samo u Page klasi.</li>
+<li class="bullet-item">Citljivost — testovi opisuju ponasanje, ne implementacione detalje.</li>
+<li class="bullet-item">Ponovna upotreba — iste metode se koriste u vise testova.</li>
+</ul>
+<div class="note">POM koristi Selenium WebDriver lokatore i wait mehanizme (videti Sekciju 13). Za pozicioniranje POM-a u okviru kompletnog framework-a videti Sekciju 18.</div>
+<h2 class="sub-title">14.2 Struktura POM projekta (C#)</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>TestProject/
+  Pages/
+    BasePage.cs           // Zajednička logika svih stranica
+    LoginPage.cs          // Lokatori + metode za Login stranicu
+    DashboardPage.cs
+  Tests/
+    BaseTest.cs           // Setup/TearDown, driver inicijalizacija
+    LoginTests.cs
+  Helpers/
+    DriverFactory.cs      // Kreiranje WebDriver instance
+    TestDataBuilder.cs
+  Config/
+    appsettings.Test.json
+    appsettings.CI.json</pre></div>
+<h2 class="sub-title">14.3 Implementacija Page klase</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public class LoginPage : BasePage
 {
- var client = new RestClient("https://api.myapp.com");
- var request = new RestRequest("/users/1", Method.Get);
- request.AddHeader("Authorization", $"Bearer {_token}");
+ private By EmailField    => By.CssSelector(input[name=email]);
+ private By PasswordField => By.CssSelector(input[name=password]);
+ private By LoginButton   => By.CssSelector(button[type=submit]);
+ private By ErrorMessage  => By.CssSelector(.alert-error);
 
- var response = client.Execute&lt;UserDto&gt;(request);
+    public LoginPage(IWebDriver driver) : base(driver) { }
 
- Assert.Equal(HttpStatusCode.OK, response.StatusCode);
- Assert.NotNull(response.Data);
- Assert.Equal("uros@test.com", response.Data.Email);
-}
+    public void EnterEmail(string email)
+        => WaitForVisible(EmailField).SendKeys(email);
 
-// POST sa JSON body-jem
-[Fact]
-public void CreateUser_WithValidData_ShouldReturn201()
-{
- var client = new RestClient("https://api.myapp.com");
- var request = new RestRequest("/users", Method.Post);
- request.AddJsonBody(new { Email = "new@test.com", Role = "QA" });
- request.AddHeader("Authorization", $"Bearer {_token}");
-
- var response = client.Execute(request);
-
- Assert.Equal(HttpStatusCode.Created, response.StatusCode);
- Assert.Contains("new@test.com", response.Content);
+    // High-level composite akcija
+    public DashboardPage LoginAs(string email, string password)
+    {
+        EnterEmail(email); EnterPassword(password);
+        return ClickLogin();  // vraca sledecu stranicu
+    }
 }</pre></div>
-<div class="note">RestSharp je native C# HTTP klijent — prirodan izbor za API testove u istom solution-u sa Selenium testovima (videti Sekciju 16), bez prebacivanja na JavaScript/Newman.</div>
-<h2 class="sub-title">14.6 Newman — Postman u CI/CD-u</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>npm install -g newman newman-reporter-htmlextra
-
-newman run collection.json
-  --environment staging.json
-  --reporters cli,htmlextra
-  --reporter-htmlextra-export reports/api-report.html</pre></div>
-<h2 class="sub-title">14.7 Contract testing — Pact framework</h2>
-<p class="body-text">Contract testing resava problem koji se javlja u mikroservisnim arhitekturama: tim A menja API koji tim B koristi, i breaking change prolazi nezapazeno sve do produkcije.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Tok:
-  1. Consumer pise pact — definise sta ocekuje od providera
-  2. Pact se cuva u Pact Broker
-  3. Provider verifikuje kontrakt u svom CI/CD pipeline-u
-  4. Ako provider promeni API na nacin koji krsi kontrakt,
-     verifikacija pada pre deploymenta
-
-  Rezultat: breaking change je uhvacen u CI/CD, ne na produkciji.</pre></div>
-<h2 class="sub-title">14.8 Auth i security testing za API</h2>
-<p class="body-text">Token-based autentifikacija je standard u modernim API-jima. QA mora testirati ne samo "radi li sa validnim tokenom" nego i sve edge case-ove oko auth lifecycle-a.</p>
-<div class="tbl-wrap tall"><table><thead><tr><th>Scenario</th><th>Ocekivano</th><th>Zasto je vazno</th></tr></thead><tbody>
-<tr><td>Zahtev bez tokena</td><td>401 Unauthorized</td><td>API ne sme dozvoliti anonimni pristup zasticenim resursima.</td></tr>
-<tr><td>Istekao token</td><td>401 + jasna poruka</td><td>Frontend mora znati da treba refresh, ne genericni error.</td></tr>
-<tr><td>Token sa pogresnom rolom</td><td>403 Forbidden</td><td>RBAC mora raditi na API nivou, ne samo na UI-ju.</td></tr>
-<tr><td>Token rotation</td><td>Stari token prestaje da vazi nakon izdavanja novog</td><td>Sprecava replay napade sa ukradenim tokenom.</td></tr>
-<tr><td>Session expiration</td><td>Sesija istice nakon definisanog perioda neaktivnosti</td><td>Compliance zahtev — ne sme ostati ulogovan zauvek.</td></tr>
-<tr><td>Concurrent sessions</td><td>Po policy-ju: dozvoliti ili blokirati drugu sesiju</td><td>Enterprise aplikacije cesto ogranicavaju na jednu sesiju.</td></tr>
-</tbody></table></div>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// RestSharp — test za istekao token (xUnit)
-[Fact]
-public void ExpiredToken_ShouldReturn401()
-{
- var client = new RestClient("https://api.myapp.com");
- var request = new RestRequest("/users", Method.Get);
- request.AddHeader("Authorization", $"Bearer {_expiredToken}");
-
- var response = client.Execute(request);
-
- Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-}
-
-// Test za RBAC — viewer ne sme moci da brise
-[Fact]
-public void ViewerRole_DeleteUser_ShouldReturn403()
-{
- var client = new RestClient("https://api.myapp.com");
- var request = new RestRequest("/users/1", Method.Delete);
- request.AddHeader("Authorization", $"Bearer {_viewerToken}");
-
- var response = client.Execute(request);
-
- Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
-}</pre></div>
-<div class="note">RBAC testiranje na API nivou je kriticno — cesto se desava da UI pravilno sakriva dugme "Delete", ali API endpoint i dalje dozvoljava brisanje ako se pozove direktno. Uvek testirati API nezavisno od UI-ja (videti Sekciju 12.8 — DevTools Network tab).</div>
+<h2 class="sub-title">14.4 Page Factory</h2>
+<p class="body-text">Alternativni nacin definisanja lokatorima — koristi [FindsBy] atribute i PageFactory.InitElements(). Cest u starijim C# i Java projektima.</p>
+<div class="warning">Page Factory se NE preporucuje u novim projektima. Interno koristi lazy initialization sa implicit wait logikom — moze maskirati probleme i ponasati se neocekivano sa StaleElementReferenceException.</div>
+<h2 class="sub-title">14.5 Kada POM postaje problem</h2>
+<ul><li class="bullet-item">Over-engineering na jednostavnim projektima — 10 TC-ova ne zahtevaju punu POM arhitekturu.</li>
+<li class="bullet-item">Page klase postaju prevelike — ako LoginPage ima 50 metoda, pokriva previse odgovornosti.</li>
+<li class="bullet-item">Teske za odrzavanje pri cestim UI promenama.</li>
+<li class="bullet-item">Ugnjezdeni Page objekti — navigacija postaje komplikovana.</li>
+</ul>
+<div class="note">Alternativa za kompleksne scenarije: Screenplay pattern — modelira interakcije kao User + Abilities + Tasks + Questions.</div>

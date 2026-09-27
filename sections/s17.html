@@ -1,86 +1,57 @@
-<h2 class="sub-title">17.1 Tipovi performance testiranja</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Tip</th><th>Definicija</th><th>Kada koristiti</th></tr></thead><tbody>
-<tr><td>Load testing</td><td>Sistem se testira na ocekivanom normalnom opterecenju.</td><td>Redovno, pre svakog release-a.</td></tr>
-<tr><td>Stress testing</td><td>Sistem se gura iznad kapaciteta da bi se videlo kako puca i kako se oporavlja.</td><td>Kada treba utvrditi tacku loma sistema.</td></tr>
-<tr><td>Spike testing</td><td>Nagli kratki skok opterecenja (flash sale, viralni content).</td><td>Ocekivani nagli rast korisnika.</td></tr>
-<tr><td>Endurance/Soak</td><td>Sistem se drzi pod normalnim opterecenjem duzi period — trazi memory leak-ove i degradaciju performansi.</td><td>Detektovanje degradacije tokom vremena.</td></tr>
+<p class="body-text">Enterprise CI/CD agenti i deployment okruzenja su cesto Linux masine — poznavanje osnovnih komandi je korisno za debugovanje pipeline-a i provere okruzenja bez oslanjanja na DevOps tim za svaku sitnicu.</p>
+<h2 class="sub-title">17.1 Logovi i pretraga</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>grep -i "error" /var/log/app.log     # trazi "error" bez obzira na velika/mala slova
+tail -f /var/log/app.log             # prati log u realnom vremenu (novi redovi odmah vidljivi)
+tail -f log.txt | grep -i "error"    # filtrira live log samo na greske
+cat / head / tail / wc -l            # citanje fajla / pocetak / kraj / broj redova
+find / -name "*.log"                 # pronadji sve .log fajlove na sistemu</pre></div>
+<h2 class="sub-title">17.2 Procesi i servisi</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>ps aux | grep service_name    # da li servis/proces radi
+systemctl status service_name # status servisa (running/failed/stopped)
+top / htop                    # procesi uzivo, CPU/RAM po procesu</pre></div>
+<h2 class="sub-title">17.3 Resursi i dozvole</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>df -h            # slobodan prostor na disku (cest uzrok "environment down" incidenata)
+free -h          # iskoriscenost memorije
+chmod 755 script.sh   # owner: read+write+execute, ostali: read+execute</pre></div>
+<div class="note">Cest scenario: CI pipeline pocne da failuje bez promene u kodu — pre nego sto se sumnja na test, proveriti <code>df -h</code> (disk pun na agentu) i <code>systemctl status</code> za servise od kojih pipeline zavisi (baza, mock servisi).</div>
+<h2 class="sub-title">17.4 SSH i rad na udaljenom agentu</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>ssh user@ci-agent-01                     # konekcija na udaljenu masinu (npr. Linux CI agent)
+ssh -i ~/.ssh/id_rsa user@host           # sa konkretnim privatnim kljucem
+scp report.trx user@host:/tmp/           # kopiranje fajla NA udaljenu masinu
+scp user@host:/var/log/app.log ./       # kopiranje fajla SA udaljene masine (npr. logovi za analizu)</pre></div>
+<div class="note">Tipican scenario: test padne samo na CI agentu, ne lokalno (videti Sekciju 23). SSH na agenta i provera logova/resursa direktno na masini je prvi korak pre nego sto se sumnja na sam test kod.</div>
+<h2 class="sub-title">17.5 Environment varijable</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>export BASE_URL="https://qa.plm.com"     # postavljanje env varijable za trenutnu sesiju
+echo $BASE_URL                           # ispis vrednosti
+printenv | grep -i base                  # pretraga svih env varijabli koje sadrze "base"
+env BASE_URL=https://staging.plm.com dotnet test   # override samo za jednu komandu</pre></div>
+<div class="note">Direktna veza sa Sekcijom 15.4 (Secrets i environment variables u Azure DevOps) — Variable Groups u ADO se na agentu na kraju materijalizuju kao env varijable koje pipeline korak cita ovako.</div>
+<h2 class="sub-title">17.6 Docker osnove za QA</h2>
+<p class="body-text">Selenium Grid, izolovani test environment-i i CI agenti se sve cesce pokrecu kao Docker kontejneri — korisno je razumeti osnovne komande i bez da si DevOps.</p>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>docker ps</td><td>Lista pokrenutih kontejnera — provera da li Selenium Grid/mock servis uopste radi.</td></tr>
+<tr><td>docker logs -f container_name</td><td>Prati logove kontejnera uzivo — prvi korak kad test ne moze da se poveze na servis.</td></tr>
+<tr><td>docker exec -it container_name bash</td><td>Otvara shell UNUTAR kontejnera — za direktnu inspekciju (fajlovi, procesi) bez da se kontejner rusi.</td></tr>
+<tr><td>docker restart container_name</td><td>Restart kontejnera — cest brzi fix kad je servis "zaglavljen".</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">17.2 Kljucne metrike</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Metrika</th><th>Opis</th></tr></thead><tbody>
-<tr><td>Response Time</td><td>Vreme od zahteva do prvog byte-a odgovora (TTFB).</td></tr>
-<tr><td>Throughput</td><td>Broj zahteva koje sistem obradjuje u jedinici vremena (req/s).</td></tr>
-<tr><td>Error Rate</td><td>Procenat failovanih zahteva. Cilj: < 1%.</td></tr>
-<tr><td>Percentili (p95, p99)</td><td>95% i 99% zahteva se obradjuje za manje od X ms. Bolji od proseka.</td></tr>
-<tr><td>Concurrent Users</td><td>Broj simultanih korisnika koje sistem moze da podnese.</td></tr>
-</tbody></table></div>
-<h2 class="sub-title">17.3 k6 — moderni load testing alat</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>import http from 'k6/http';
-import { check, sleep } from 'k6';
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Selenium Grid u Docker-u — tipicna postavka za paralelno izvrsavanje
+docker run -d -p 4444:4444 --shm-size=2g selenium/standalone-chrome
 
-export const options = {
-  stages: [
-    { duration: '2m', target: 100 },  // ramp up
-    { duration: '5m', target: 100 },  // stay at 100 users
-    { duration: '2m', target: 0 },    // ramp down
-  ],
-  thresholds: {
-    http_req_duration: ['p(95)<2000'],  // 95% pod 2s
-    http_req_failed:   ['rate<0.01'],   // error rate < 1%
-  },
-};
+// Test se povezuje na Grid umesto lokalnog drajvera
+var driver = new RemoteWebDriver(new Uri("http://localhost:4444/wd/hub"), options);</pre></div>
+<h2 class="sub-title">17.7 Cron — planiranje automatskih run-ova</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre># Format: minut sat dan-u-mesecu mesec dan-u-nedelji komanda
+0 2 * * *      /scripts/run-nightly-regression.sh   # svaki dan u 02:00
+*/15 * * * *   /scripts/health-check.sh             # svakih 15 minuta
+0 6 * * 1-5    /scripts/smoke-test.sh               # radnim danima u 06:00
 
-export default function () {
-  const res = http.get('https://api.myapp.com/users');
-  check(res, { 'status is 200': (r) => r.status === 200 });
-  sleep(1);
-}</pre></div>
-<h2 class="sub-title">17.4 k6 vs JMeter — poredjenje</h2>
-<div class="tbl-wrap"><table><thead><tr><th></th><th>k6</th><th>JMeter</th></tr></thead><tbody>
-<tr><td>Skriptovanje</td><td>JavaScript (ES6+)</td><td>XML + GUI</td></tr>
-<tr><td>Kriva ucenja</td><td>Niska za developere</td><td>Visa, GUI-driven</td></tr>
-<tr><td>CI/CD integracija</td><td>Odlicna (CLI first)</td><td>Dobra (plugins)</td></tr>
-<tr><td>Izvestaji</td><td>k6 Cloud, Grafana</td><td>HTML izvestaji, plugins</td></tr>
-<tr><td>Open source</td><td>Da (Grafana Labs)</td><td>Da (Apache)</td></tr>
-</tbody></table></div>
-<div class="note">Preporuka: k6 za timove koji pisu kod i rade u CI/CD; JMeter za timove sa GUI navikama ili legacy projektima.</div>
-<h2 class="sub-title">17.5 NBomber — load testing u C# / .NET</h2>
-<p class="body-text">NBomber je .NET-native load testing framework — testovi se pisu u C#, u istom solution-u sa Selenium/API testovima (videti Sekciju 16).</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// NBomber scenario — load test za API endpoint (xUnit integracija)
-var scenario = Scenario.Create("get_users", async context =>
-{
-    var client = new HttpClient();
-    var response = await client.GetAsync("https://api.myapp.com/users");
+crontab -l     # prikaz trenutno zakazanih job-ova
+crontab -e     # izmena zakazanih job-ova</pre></div>
+<div class="note">U praksi nightly regression u enterprise timovima cesce ide preko Azure DevOps scheduled trigger-a (Sekcija 16) nego preko cron-a direktno — ali ako pipeline agent sam nesto zakazuje lokalno (npr. cleanup skriptu), ovo je mehanizam.</div>
+<h2 class="sub-title">17.8 Mrezne komande — brza dijagnostika</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>curl -I https://qa.plm.com/api/health     # brza provera da li API endpoint uopste odgovara (samo headeri)
+curl -X POST https://api/.../login -d '{"user":"qa"}' -H "Content-Type: application/json"
+ping qa.plm.com                           # da li je host dostupan na mrezi
+ss -tulpn | grep 4444                     # koji proces slusa na portu 4444 (npr. Selenium Grid)</pre></div>
+<div class="note">Cest prvi korak kad automatizovani test ne moze da se poveze ni na sta: <code>curl</code> istog endpoint-a rucno iskljucuje da li je problem u mrezi/servisu ili u samom test kodu.</div>
 
-    return response.IsSuccessStatusCode
-        ? Response.Ok()
-        : Response.Fail();
-})
-.WithLoadSimulations(
-    Simulation.RampingInject(rate: 50, interval: TimeSpan.FromSeconds(1),
-                             during: TimeSpan.FromMinutes(2)),
-    Simulation.Inject(rate: 50, interval: TimeSpan.FromSeconds(1),
-                      during: TimeSpan.FromMinutes(5)),
-    Simulation.RampingInject(rate: 0, interval: TimeSpan.FromSeconds(1),
-                             during: TimeSpan.FromMinutes(1))
-);
-
-NBomberRunner
-    .RegisterScenarios(scenario)
-    .WithReportFolder("reports")
-    .Run();</pre></div>
-<h2 class="sub-title">17.6 k6 vs NBomber — kada sta koristiti</h2>
-<div class="tbl-wrap"><table><thead><tr><th></th><th>k6</th><th>NBomber</th></tr></thead><tbody>
-<tr><td>Jezik</td><td>JavaScript (ES6+)</td><td>C# / F#</td></tr>
-<tr><td>Ekosistem</td><td>Standalone CLI</td><td>NuGet paket, deo .NET solution-a</td></tr>
-<tr><td>Idealan za</td><td>DevOps/JS timove, brze ad-hoc testove</td><td>QA timove koji vec rade u C# (Selenium, RestSharp)</td></tr>
-<tr><td>CI/CD</td><td>CLI first, odlicna integracija</td><td>dotnet test, ista infra kao funkcionalni testovi</td></tr>
-<tr><td>Izvestaji</td><td>k6 Cloud, Grafana, JSON</td><td>HTML, Markdown, CSV, custom sinks</td></tr>
-</tbody></table></div>
-<div class="note">Za .NET QA timove NBomber ima kljucnu prednost: isti jezik, isti toolchain, isti CI/CD pipeline — bez prebacivanja konteksta na JavaScript.</div>
-<h2 class="sub-title">17.7 QA uloga u performance testiranju</h2>
-<ul><li class="bullet-item">Definisanje realisticnih SLA sa stakeholderima pre testiranja.</li>
-<li class="bullet-item">Kreiranje reprezentativnih load scenarija — ne samo 'svi rade isti zahtev'.</li>
-<li class="bullet-item">Analiza rezultata: identifikovanje bottleneck-a (DB, API, mreza, memorija).</li>
-<li class="bullet-item">Baseline testing: merenje pre i posle svake relevantne izmene.</li>
-<li class="bullet-item">Performance regression u CI/CD-u sa failure thresholds.</li>
-</ul>

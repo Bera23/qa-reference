@@ -1,103 +1,76 @@
-<h2 class="sub-title">18.1 Sta je Appium i kako funkcionise</h2>
-<p class="body-text">Appium je open-source alat za automatizaciju mobilnih aplikacija. Koristi WebDriver protokol — ista arhitektura kao Selenium, ali sa mobilnim driver-ima.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [Test kod (C#/Java/Python)]
-          |  WebDriver API pozivi
-          v
-  [Appium Server]
-          |  XCUITest (iOS) / UIAutomator2 (Android)
-          v
-  [Realni uredjaj / Emulator]</pre></div>
-<h2 class="sub-title">18.2 Tipovi mobilnih aplikacija</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Tip</th><th>Opis</th><th>Appium podrska</th></tr></thead><tbody>
-<tr><td>Native</td><td>Pisana u Swift/Kotlin, koristi native UI komponente.</td><td>Puna podrska. Pristup svim native elementima.</td></tr>
-<tr><td>Hybrid</td><td>Web view unutar native shell-a. React Native, Ionic.</td><td>Puna podrska. Context switching izmedju native i web.</td></tr>
-<tr><td>Mobile Web</td><td>Browser aplikacija — Safari, Chrome na mobilnom.</td><td>Podrska kroz mobile browser driver.</td></tr>
+<h2 class="sub-title">18.1 Komponente robustnog test framework-a</h2>
+<div class="tbl-wrap tall"><table><thead><tr><th>Komponenta</th><th>Opis</th></tr></thead><tbody>
+<tr><td>Driver Management</td><td>Centralizovana inicijalizacija i teardown WebDriver-a. DriverFactory.</td></tr>
+<tr><td>Page Objects (POM)</td><td>Enkapsulacija UI lokatorima i interakcija po stranicama.</td></tr>
+<tr><td>Base Test Class</td><td>Zajednicki setUp/tearDown, driver inicijalizacija, logging.</td></tr>
+<tr><td>Configuration Layer</td><td>Upravljanje okruzenjima (URL, credentials) via config fajlovi ili environment variables.</td></tr>
+<tr><td>Test Data Management</td><td>Separacija test podataka od test logike. JSON, CSV, Database ili builder pattern.</td></tr>
+<tr><td>Utility / Helper Layer</td><td>Reusable metode: screenshot, JS executor, file reader, waits.</td></tr>
+<tr><td>Reporting</td><td>Allure ili ExtentReports — screenshots za failove, step-by-step log.</td></tr>
+<tr><td>Logging</td><td>NLog, log4net — tracing toka testa za debugging.</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">18.3 Appium C# — setup i osnovni test</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Capabilities i driver inicijalizacija (Android)
-var options = new AppiumOptions();
-options.PlatformName = "Android";
-options.AutomationName = "UIAutomator2";
-options.DeviceName = "emulator-5554";
-options.App = "/path/to/app.apk";
-
-var driver = new AndroidDriver(
-    new Uri("http://localhost:4723"), options);
-
-// Lociranje elementa i interakcija
-var loginBtn = driver.FindElement(
-    MobileBy.AccessibilityId("loginButton"));
-loginBtn.Click();
-
-// Assertion (xUnit)
-var welcomeMsg = driver.FindElement(
-    MobileBy.AccessibilityId("welcomeLabel"));
-Assert.Equal("Dobrodosli", welcomeMsg.Text);</pre></div>
-<div class="note">Ista WebDriver arhitektura kao Selenium (videti Sekciju 12) — poznavanje lokator strategija i wait mehanizama se direktno prenosi.</div>
-<h2 class="sub-title">18.4 Lokatori u Appium-u</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Lokator</th><th>iOS</th><th>Android</th></tr></thead><tbody>
-<tr><td>Accessibility ID</td><td>accessibilityIdentifier atribut</td><td>content-desc atribut — preporuceni</td></tr>
-<tr><td>XPath</td><td>Dostupan, ali sporiji</td><td>Dostupan, ali sporiji</td></tr>
-<tr><td>Class Name</td><td>XCUIElementTypeButton</td><td>android.widget.Button</td></tr>
-<tr><td>ID</td><td>Bez direktnog ekvivalenta</td><td>Resource ID (com.app:id/btn)</td></tr>
+<h2 class="sub-title">18.2 Design patterns u test automatizaciji</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Pattern</th><th>Svrha</th><th>Primer</th></tr></thead><tbody>
+<tr><td>Page Object Model</td><td>Enkapsulacija UI po stranicama. Standardni pattern za Selenium.</td><td>Videti Sekciju 14.</td></tr>
+<tr><td>Factory Pattern</td><td>Kreiranje WebDriver instanci bez eksplicitnog navodjenja tipa.</td><td>DriverFactory.Create(chrome)</td></tr>
+<tr><td>Builder Pattern</td><td>Fleksibilno kreiranje test objekata korak po korak.</td><td>new UserBuilder().WithEmail().WithRole(admin).Build()</td></tr>
+<tr><td>Singleton / ThreadLocal</td><td>Osigurava jednu instancu driver-a po thread-u.</td><td>ThreadLocal<IWebDriver></td></tr>
+<tr><td>Fluent Interface</td><td>Method chaining za citljiviji test kod.</td><td>page.EnterEmail().EnterPass().Submit()</td></tr>
+<tr><td>Strategy Pattern</td><td>Zamenjive strategije (razliciti browser-i, okruzenja).</td><td>IBrowserStrategy -> ChromeStrategy</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">18.5 Gesture akcije u C#</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Swipe gore (scroll down)
-var size = driver.Manage().Window.Size;
-var finger = new PointerInputDevice(PointerKind.Touch, "finger");
-var swipe = new ActionSequence(finger);
-swipe.AddAction(finger.CreatePointerMove(
-    CoordinateOrigin.Viewport, size.Width / 2, size.Height * 3 / 4));
-swipe.AddAction(finger.CreatePointerDown(MouseButton.Left));
-swipe.AddAction(finger.CreatePointerMove(
-    CoordinateOrigin.Viewport, size.Width / 2, size.Height / 4,
-    TimeSpan.FromMilliseconds(500)));
-swipe.AddAction(finger.CreatePointerUp(MouseButton.Left));
-driver.PerformActions(new List&lt;ActionSequence&gt; { swipe });
-
-// Tap na koordinate
-var tap = new ActionSequence(finger);
-tap.AddAction(finger.CreatePointerMove(
-    CoordinateOrigin.Viewport, 200, 400));
-tap.AddAction(finger.CreatePointerDown(MouseButton.Left));
-tap.AddAction(finger.CreatePointerUp(MouseButton.Left));
-driver.PerformActions(new List&lt;ActionSequence&gt; { tap });</pre></div>
-<h2 class="sub-title">18.6 Page Object Model za mobilne aplikacije</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// POM za Appium — isti princip kao web (videti Sekciju 13)
-public class LoginScreen
+<h2 class="sub-title">18.3 Data-driven testing — xUnit primeri</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[Theory]
+[InlineData("user@test.com", "Test1234!", true)]
+[InlineData("invalid@test.com", "Wrong", false)]
+[InlineData("", "Test1234!", false)]
+public void Login_WithCredentials_ReturnsExpectedResult(
+    string email, string password, bool expectedSuccess)
 {
- private readonly AndroidDriver _driver;
+ var result = new LoginPage(Driver).LoginAs(email, password);
+ Assert.Equal(expectedSuccess, result.IsSuccessful);
+}</pre></div>
+<h2 class="sub-title">18.4 Test naming konvencija</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Format: MethodName_StateUnderTest_ExpectedBehavior
 
- private AppiumElement UsernameField =>
-  _driver.FindElement(MobileBy.AccessibilityId("username"));
- private AppiumElement PasswordField =>
-  _driver.FindElement(MobileBy.AccessibilityId("password"));
- private AppiumElement LoginButton =>
-  _driver.FindElement(MobileBy.AccessibilityId("loginBtn"));
+Login_WithValidCredentials_ShouldRedirectToDashboard()
+Login_WithEmptyPassword_ShouldShowRequiredError()
+GetUser_WithNonExistentId_ShouldReturn404()
 
- public LoginScreen(AndroidDriver driver) => _driver = driver;
+// Izbegavati:
+Test1()      // bez konteksta
+LoginTest()  // nema state i expected result</pre></div>
+<h2 class="sub-title">18.5 Reporting — Allure i ExtentReports</h2>
+<h3 class="sub-sub-title">Allure</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[Fact]
+[AllureFeature("Login")]
+[AllureSeverity(SeverityLevel.Critical)]
+public void ValidCredentials_ShouldRedirectToDashboard()
+{
+ AllureApi.Step("Open login page", () => Driver.Navigate().GoToUrl(url));
+ AllureApi.Step("Verify dashboard", () =>
+ Assert.Contains("/dashboard", Driver.Url));
+}</pre></div>
+<h3 class="sub-sub-title">ExtentReports</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// xUnit: teardown kroz IDisposable umesto [TearDown] atributa
+public class LoginTests : IDisposable
+{
+ private readonly ExtentTest _test;
 
- public HomeScreen LoginAs(string user, string pass)
+ public LoginTests() { /* setup */ }
+
+ public void Dispose()
  {
-  UsernameField.SendKeys(user);
-  PasswordField.SendKeys(pass);
-  LoginButton.Click();
-  return new HomeScreen(_driver);
+  var screenshot = ((ITakesScreenshot)Driver).GetScreenshot();
+  _test.Info("Screenshot").AddScreenCaptureFromPath(path);
+  _extent.Flush();
  }
 }</pre></div>
-<h2 class="sub-title">18.7 Realni uredaji vs. Emulatori</h2>
-<div class="tbl-wrap"><table><thead><tr><th></th><th>Emulatori / Simulatori</th><th>Realni uredaji</th></tr></thead><tbody>
-<tr><td>Brzina setup-a</td><td>Brzo, bez hardvera</td><td>Zahteva fizicki pristup</td></tr>
-<tr><td>Tacnost</td><td>Dobra za funkcionalne testove</td><td>Neophodna za hardware, senzore, performanse</td></tr>
-<tr><td>Cena</td><td>Besplatno</td><td>Kupovina ili cloud (BrowserStack, Sauce Labs)</td></tr>
-<tr><td>Interruptions</td><td>Ne simulira pozive, SMS</td><td>Realni interruptions</td></tr>
-<tr><td>Preporuka</td><td>Regression, funkcionalni testovi</td><td>Release testing, performance, UAT</td></tr>
-</tbody></table></div>
-<div class="note">Cloud device farme (BrowserStack, Sauce Labs, AWS Device Farm) nude stotine realnih uredaja bez kupovine — idealno za cross-device testing.</div>
-<h2 class="sub-title">18.8 Specificnosti mobilnog testiranja</h2>
-<ul><li class="bullet-item">Razlicite rezolucije i gustine piksela — testirati na vise uredjaja.</li>
-<li class="bullet-item">Interruptions: pozivi, notifikacije, low battery — sistem mora da se ponasa predvidivo.</li>
-<li class="bullet-item">Network conditions — testirati na 3G, 4G, offline modu.</li>
-<li class="bullet-item">Permissions — kamera, lokacija, kontakti — testirati scenarije odbijanja dozvola.</li>
-<li class="bullet-item">Orientation — portrait i landscape mod.</li>
+<h2 class="sub-title">18.6 Pre-commit checklist za automatizovani test</h2>
+<ul><li class="bullet-item">Test ima jasan naziv po konvenciji (Method_State_Expected).</li>
+<li class="bullet-item">Testuje tacno jednu stvar.</li>
+<li class="bullet-item">Nezavistan od redosleda izvrsavanja i od stanja koje ostavljaju drugi testovi.</li>
+<li class="bullet-item">Koristi Explicit Wait, ne Thread.Sleep().</li>
+<li class="bullet-item">Lokatori su stabilni (data-testid, ID, CSS — ne pun XPath sa indeksima).</li>
+<li class="bullet-item">Test podaci su parametrizovani, ne hard-coded u kodu.</li>
+<li class="bullet-item">Test prolazi lokalno i u CI okruzenju.</li>
 </ul>

@@ -1,57 +1,125 @@
-<p class="body-text">Enterprise CI/CD agenti i deployment okruzenja su cesto Linux masine — poznavanje osnovnih komandi je korisno za debugovanje pipeline-a i provere okruzenja bez oslanjanja na DevOps tim za svaku sitnicu.</p>
-<h2 class="sub-title">24.1 Logovi i pretraga</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>grep -i "error" /var/log/app.log     # trazi "error" bez obzira na velika/mala slova
-tail -f /var/log/app.log             # prati log u realnom vremenu (novi redovi odmah vidljivi)
-tail -f log.txt | grep -i "error"    # filtrira live log samo na greske
-cat / head / tail / wc -l            # citanje fajla / pocetak / kraj / broj redova
-find / -name "*.log"                 # pronadji sve .log fajlove na sistemu</pre></div>
-<h2 class="sub-title">24.2 Procesi i servisi</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>ps aux | grep service_name    # da li servis/proces radi
-systemctl status service_name # status servisa (running/failed/stopped)
-top / htop                    # procesi uzivo, CPU/RAM po procesu</pre></div>
-<h2 class="sub-title">24.3 Resursi i dozvole</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>df -h            # slobodan prostor na disku (cest uzrok "environment down" incidenata)
-free -h          # iskoriscenost memorije
-chmod 755 script.sh   # owner: read+write+execute, ostali: read+execute</pre></div>
-<div class="note">Cest scenario: CI pipeline pocne da failuje bez promene u kodu — pre nego sto se sumnja na test, proveriti <code>df -h</code> (disk pun na agentu) i <code>systemctl status</code> za servise od kojih pipeline zavisi (baza, mock servisi).</div>
-<h2 class="sub-title">24.4 SSH i rad na udaljenom agentu</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>ssh user@ci-agent-01                     # konekcija na udaljenu masinu (npr. Linux CI agent)
-ssh -i ~/.ssh/id_rsa user@host           # sa konkretnim privatnim kljucem
-scp report.trx user@host:/tmp/           # kopiranje fajla NA udaljenu masinu
-scp user@host:/var/log/app.log ./       # kopiranje fajla SA udaljene masine (npr. logovi za analizu)</pre></div>
-<div class="note">Tipican scenario: test padne samo na CI agentu, ne lokalno (videti Sekciju 21). SSH na agenta i provera logova/resursa direktno na masini je prvi korak pre nego sto se sumnja na sam test kod.</div>
-<h2 class="sub-title">24.5 Environment varijable</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>export BASE_URL="https://qa.plm.com"     # postavljanje env varijable za trenutnu sesiju
-echo $BASE_URL                           # ispis vrednosti
-printenv | grep -i base                  # pretraga svih env varijabli koje sadrze "base"
-env BASE_URL=https://staging.plm.com dotnet test   # override samo za jednu komandu</pre></div>
-<div class="note">Direktna veza sa Sekcijom 15.4 (Secrets i environment variables u Azure DevOps) — Variable Groups u ADO se na agentu na kraju materijalizuju kao env varijable koje pipeline korak cita ovako.</div>
-<h2 class="sub-title">24.6 Docker osnove za QA</h2>
-<p class="body-text">Selenium Grid, izolovani test environment-i i CI agenti se sve cesce pokrecu kao Docker kontejneri — korisno je razumeti osnovne komande i bez da si DevOps.</p>
-<div class="tbl-wrap"><table><tbody>
-<tr><td>docker ps</td><td>Lista pokrenutih kontejnera — provera da li Selenium Grid/mock servis uopste radi.</td></tr>
-<tr><td>docker logs -f container_name</td><td>Prati logove kontejnera uzivo — prvi korak kad test ne moze da se poveze na servis.</td></tr>
-<tr><td>docker exec -it container_name bash</td><td>Otvara shell UNUTAR kontejnera — za direktnu inspekciju (fajlovi, procesi) bez da se kontejner rusi.</td></tr>
-<tr><td>docker restart container_name</td><td>Restart kontejnera — cest brzi fix kad je servis "zaglavljen".</td></tr>
+<p class="body-text">Kompaktni pregled najvaznijih komandi, pattern-a i formula — za brzi podsetnik pre intervjua ili tokom rada. Svaki red linkuje na detaljnu sekciju.</p>
+
+<h2 class="sub-title">24.1 Selenium / WebDriver</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Pattern</th><th>C# primer</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Explicit Wait</td><td><code>new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(ExpectedConditions.ElementIsVisible(By.Id("btn")))</code></td><td>s13.3</td></tr>
+<tr><td>Lokator prioritet</td><td>ID &gt; data-testid &gt; CSS &gt; XPath (izbegavati pozicione)</td><td>s13.2</td></tr>
+<tr><td>Screenshot</td><td><code>((ITakesScreenshot)driver).GetScreenshot().SaveAsFile(path)</code></td><td>s13.7</td></tr>
+<tr><td>Hover</td><td><code>new Actions(driver).MoveToElement(el).Perform()</code></td><td>s13.5</td></tr>
+<tr><td>Headless</td><td><code>options.AddArgument("--headless=new")</code></td><td>s13.7</td></tr>
+<tr><td>File Upload</td><td><code>FindElement(By.CssSelector("input[type=file]")).SendKeys(path)</code></td><td>s13.6</td></tr>
+<tr><td>StaleElement fix</td><td>Re-locate element pre interakcije (re-find pattern)</td><td>s13.4</td></tr>
 </tbody></table></div>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Selenium Grid u Docker-u — tipicna postavka za paralelno izvrsavanje
-docker run -d -p 4444:4444 --shm-size=2g selenium/standalone-chrome
 
-// Test se povezuje na Grid umesto lokalnog drajvera
-var driver = new RemoteWebDriver(new Uri("http://localhost:4444/wd/hub"), options);</pre></div>
-<h2 class="sub-title">24.7 Cron — planiranje automatskih run-ova</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre># Format: minut sat dan-u-mesecu mesec dan-u-nedelji komanda
-0 2 * * *      /scripts/run-nightly-regression.sh   # svaki dan u 02:00
-*/15 * * * *   /scripts/health-check.sh             # svakih 15 minuta
-0 6 * * 1-5    /scripts/smoke-test.sh               # radnim danima u 06:00
+<h2 class="sub-title">24.2 xUnit</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Koncept</th><th>Kod</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Jedan test</td><td><code>[Fact] public void Method_State_Expected() { ... }</code></td><td>s18.3</td></tr>
+<tr><td>Data-driven</td><td><code>[Theory] [InlineData("a", 1)] public void Test(string x, int y)</code></td><td>s18.3</td></tr>
+<tr><td>Jednakost</td><td><code>Assert.Equal(expected, actual)</code></td><td>s18</td></tr>
+<tr><td>Sadrzi</td><td><code>Assert.Contains(substring, fullString)</code></td><td>s18</td></tr>
+<tr><td>Teardown</td><td><code>IDisposable</code> — <code>Dispose()</code> umesto <code>[TearDown]</code></td><td>s18.5</td></tr>
+<tr><td>Conditional skip</td><td><code>Skip.If(!Config.HasFeature, "reason")</code></td><td>s10.6</td></tr>
+</tbody></table></div>
 
-crontab -l     # prikaz trenutno zakazanih job-ova
-crontab -e     # izmena zakazanih job-ova</pre></div>
-<div class="note">U praksi nightly regression u enterprise timovima cesce ide preko Azure DevOps scheduled trigger-a (Sekcija 15) nego preko cron-a direktno — ali ako pipeline agent sam nesto zakazuje lokalno (npr. cleanup skriptu), ovo je mehanizam.</div>
-<h2 class="sub-title">24.8 Mrezne komande — brza dijagnostika</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>curl -I https://qa.plm.com/api/health     # brza provera da li API endpoint uopste odgovara (samo headeri)
-curl -X POST https://api/.../login -d '{"user":"qa"}' -H "Content-Type: application/json"
-ping qa.plm.com                           # da li je host dostupan na mrezi
-ss -tulpn | grep 4444                     # koji proces slusa na portu 4444 (npr. Selenium Grid)</pre></div>
-<div class="note">Cest prvi korak kad automatizovani test ne moze da se poveze ni na sta: <code>curl</code> istog endpoint-a rucno iskljucuje da li je problem u mrezi/servisu ili u samom test kodu.</div>
+<h2 class="sub-title">24.3 Page Object Model</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Sloj</th><th>Odgovornost</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Wrapper</td><td>Apstrakcija WebDriver poziva — kontrole, wait, retry</td><td>s13, s16</td></tr>
+<tr><td>GuiLayer (Page Object)</td><td>Biznis-level akcije: <code>page.CreateSpecification("title")</code></td><td>s14</td></tr>
+<tr><td>GuiCustomizationLayer</td><td>Tenant/version override lokatorima i flow koraka</td><td>s10.6, s13</td></tr>
+<tr><td>RegressionPlan (Test)</td><td>Intent-level scenariji sa xUnit asercijama</td><td>s18</td></tr>
+</tbody></table></div>
 
+<h2 class="sub-title">24.4 API testiranje</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Akcija</th><th>Kod / Pattern</th><th>Ref</th></tr></thead><tbody>
+<tr><td>RestSharp GET</td><td><code>var response = client.Execute&lt;UserDto&gt;(new RestRequest("/users/1", Method.Get))</code></td><td>s15.5</td></tr>
+<tr><td>RestSharp POST</td><td><code>request.AddJsonBody(new { Email = "x@test.com" })</code></td><td>s15.5</td></tr>
+<tr><td>Postman assert</td><td><code>pm.response.to.have.status(200)</code></td><td>s15.4</td></tr>
+<tr><td>Auth matrix</td><td>no token→401, expired→401, wrong role→403, valid→200</td><td>s15.8</td></tr>
+<tr><td>Contract</td><td>Consumer Pact → Pact Broker → Provider verifikacija</td><td>s15.7</td></tr>
+<tr><td>Newman CI</td><td><code>newman run collection.json --environment staging.json</code></td><td>s15.6</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">24.5 CI/CD (Azure DevOps)</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Tip pipeline-a</th><th>YAML kljuc</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Standard CI</td><td><code>trigger: branches: include: [main, develop]</code></td><td>s16.3</td></tr>
+<tr><td>Gated Build (PR)</td><td><code>trigger: none</code> + <code>pr: branches: include: [main]</code></td><td>s16.6</td></tr>
+<tr><td>Nightly Scheduled</td><td><code>schedules: - cron: "0 2 * * *"</code></td><td>s16.6</td></tr>
+<tr><td>Test results</td><td><code>PublishTestResults@2</code> sa TRX formatom</td><td>s16.3</td></tr>
+<tr><td>Secrets</td><td><code>$(db-password)</code> iz Variable Groups</td><td>s16.4</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">24.6 SQL verifikacija</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Faza</th><th>SQL</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Seed</td><td><code>INSERT INTO Users (Email, Role) VALUES ('qa@test.internal', 'QA')</code></td><td>s10.5</td></tr>
+<tr><td>Assert</td><td><code>SELECT Status FROM Specifications WHERE SpecId = @id</code></td><td>s10.5</td></tr>
+<tr><td>Cleanup</td><td><code>DELETE FROM ...</code> (obrnut redosled) ili <code>ROLLBACK</code></td><td>s10.5</td></tr>
+<tr><td>C# integracija</td><td><code>new SqlConnection(connStr)</code> → <code>SqlCommand</code> → <code>ExecuteScalar()</code></td><td>s10.5</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">24.7 Appium / Mobile</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Akcija</th><th>C# primer</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Setup</td><td><code>new AppiumOptions(); options["platformName"] = "Android"</code></td><td>s20.3</td></tr>
+<tr><td>Lokator</td><td><code>MobileBy.AccessibilityId("login_button")</code></td><td>s20.3</td></tr>
+<tr><td>Swipe</td><td><code>PointerInputDevice</code> + <code>ActionSequence</code></td><td>s20.5</td></tr>
+<tr><td>Mobile POM</td><td>Isti princip kao web — <code>LoginScreen</code> klasa sa <code>AppiumElement</code></td><td>s20.6</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">24.8 Performance</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Alat / Metrika</th><th>Detalj</th><th>Ref</th></tr></thead><tbody>
+<tr><td>NBomber</td><td><code>Scenario.Create("name", async ctx => { ... })</code> — .NET native</td><td>s19.5</td></tr>
+<tr><td>k6</td><td>JavaScript skripte, open-source, laksi za API load</td><td>s19.6</td></tr>
+<tr><td>p95 / p99</td><td>95% (99%) zahteva &lt; X ms — bolji od proseka</td><td>s19</td></tr>
+<tr><td>Throughput</td><td>req/s — koliko zahteva sistem obradjuje</td><td>s19</td></tr>
+<tr><td>TTFB</td><td>Time To First Byte — server-side latency</td><td>s19</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">24.9 Git za QA</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Komanda</th><th>QA kontekst</th><th>Ref</th></tr></thead><tbody>
+<tr><td><code>git pull origin develop</code></td><td>Sync sa poslednjim promenama — svako jutro</td><td>s16.7</td></tr>
+<tr><td><code>git checkout -b fix/lov-stale</code></td><td>Nova grana za fix ili feature</td><td>s16.7</td></tr>
+<tr><td><code>git add Pages/X.cs Tests/X.cs</code></td><td>Stage samo relevantne fajlove</td><td>s16.7</td></tr>
+<tr><td><code>git commit -m "Fix: ..."</code></td><td>Atomski commit — jedan fix, jedna poruka</td><td>s16.7</td></tr>
+<tr><td><code>git push origin fix/lov-stale</code></td><td>Push → PR → code review → merge</td><td>s16.7</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">24.10 AI testiranje</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Dimenzija</th><th>Sta proveriti</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Relevantnost</td><td>Odgovor adresira temu iz prompta</td><td>s21.6</td></tr>
+<tr><td>Grounding</td><td>Podaci iz dozvoljenih izvora, bez fabriciranja</td><td>s21.6</td></tr>
+<tr><td>Permissions</td><td>RBAC postovan — nema data leak-a kroz AI</td><td>s21.6</td></tr>
+<tr><td>Format</td><td>Output prati ocekivanu strukturu / schema</td><td>s21.6</td></tr>
+<tr><td>Latency</td><td>Response &lt; SLA, nema fallback greske</td><td>s21.6</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">24.11 JIRA / Bug tracking</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Akcija</th><th>Detalj</th><th>Ref</th></tr></thead><tbody>
+<tr><td>JQL filter</td><td><code>project = PLM AND type = Bug AND status != Closed</code></td><td>s09.6</td></tr>
+<tr><td>Workflow</td><td>Open → In Progress → Fixed → Verified → Closed</td><td>s09.6</td></tr>
+<tr><td>Triage kategorije</td><td>App regresija / Script issue / Environment issue</td><td>s06</td></tr>
+<tr><td>Bug report</td><td>Summary + Steps + Expected/Actual + Screenshot + Severity</td><td>s06</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">24.12 Kljucne formule i pravila</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Formula / Pravilo</th><th>Objasnjenje</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Automation ROI</td><td>Breakeven = Vreme pisanja skripta / Manuelno vreme po run-u</td><td>s11</td></tr>
+<tr><td>Risk</td><td>Rizik = Verovatnoca × Uticaj → prioritizacija testova</td><td>s07</td></tr>
+<tr><td>Test Piramida</td><td>Mnogo Unit &gt; srednje Integration &gt; malo E2E</td><td>s18</td></tr>
+<tr><td>Pareto (80/20)</td><td>80% bagova dolazi iz 20% modula</td><td>s01</td></tr>
+<tr><td>LLM boilerplate</td><td>AI stedi 60-70% na boilerplate, QA review obavezan</td><td>s21.2</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">24.13 DevTools brzi pregled</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Tab</th><th>Sta traziti</th><th>Ref</th></tr></thead><tbody>
+<tr><td>Network</td><td>Status kod, payload, response body, "nema zahteva = UI bug"</td><td>s13.8</td></tr>
+<tr><td>Console</td><td>CORS, 401, unhandled rejection, mixed content</td><td>s13.8</td></tr>
+<tr><td>Elements</td><td>data-testid atributi, aria-*, live CSS edit</td><td>s13.8</td></tr>
+<tr><td>Copy as cURL</td><td>Brza reprodukcija API poziva bez UI-ja</td><td>s13.8</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">24.14 Alat i protokol poredjenja</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Poredjenje</th><th>Kljucna razlika</th></tr></thead><tbody>
+<tr><td>Selenium vs. Playwright</td><td>Selenium — zreo, svi jezici, rucno podesavanje wait-ova. Playwright — noviji, auto-wait, ugradjeno upravljanje browser-ima, network interception. Oba podrzavaju POM.</td></tr>
+<tr><td>Cypress vs. Playwright</td><td>Cypress — samo JS, izvrsava se unutar browsera, jedan tab. Playwright — vise jezika, vise browsera, vise tabova, bolji za kompleksne aplikacije.</td></tr>
+<tr><td>REST vs. SOAP</td><td>REST — HTTP, JSON, lagan. SOAP — XML, strogi kontrakti, ugradjena bezbednost. REST dominira modernim API-jima, SOAP jos zivi u enterprise/banking sistemima.</td></tr>
+<tr><td>REST vs. GraphQL</td><td>REST — jedan endpoint po resursu, server odredjuje oblik odgovora. GraphQL — jedan endpoint, klijent sam bira koja polja zeli.</td></tr>
+</tbody></table></div>
