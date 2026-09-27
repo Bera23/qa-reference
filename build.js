@@ -30,8 +30,9 @@ function renderSidebarNav(sections, activeId) {
       const active = s.id === activeId ? ' active' : '';
       return `      <a class="nav-item${active}" href="${s.id}.html"><span class="nav-icon">${s.icon}</span><span class="nav-item-text">${s.title}</span><span class="nav-check" onclick="toggleRead(event,'${s.id}')"></span></a>`;
     }).join('\n');
+    const ids = items.map(s => s.id).join(',');
     return `    <div class="nav-deo-wrap">
-      <span class="nav-deo">${label}</span>
+      <span class="nav-deo">${label} <span class="nav-deo-progress" data-ids="${ids}"></span></span>
       <button class="nav-collapse" onclick="toggleGroup('${groupId}')">▾</button>
     </div>
     <div class="nav-group" id="${groupId}">
