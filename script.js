@@ -65,6 +65,7 @@ function markRead(id) {
   if (idx === -1) reads.push(id); else reads.splice(idx, 1);
   localStorage.setItem('qa_reads', JSON.stringify(reads));
   applyReadState(id, reads.includes(id));
+  updateGroupProgress();
 }
 function toggleRead(e, id) { e.preventDefault(); e.stopPropagation(); markRead(id); }
 function applyReadState(id, isRead) {
@@ -74,6 +75,14 @@ function applyReadState(id, isRead) {
   if (btn) { btn.classList.toggle('done', isRead); btn.textContent = isRead ? '✓ Procitano' : 'Oznaci kao procitano'; }
   const badge = document.querySelector(`#t-${id} .read-badge`);
   if (badge) badge.classList.toggle('visible', isRead);
+}
+function updateGroupProgress() {
+  const reads = new Set(JSON.parse(localStorage.getItem('qa_reads') || '[]'));
+  document.querySelectorAll('.nav-deo-progress').forEach(el => {
+    const ids = (el.dataset.ids || '').split(',').filter(Boolean);
+    const done = ids.filter(id => reads.has(id)).length;
+    el.textContent = `(${done}/${ids.length})`;
+  });
 }
 
 // ═══════════════════════════════════════════════════════
@@ -268,14 +277,25 @@ function copyCode(btn) {
 // SYNTAX HIGHLIGHT
 // ═══════════════════════════════════════════════════════
 function initSyntaxHighlight() {
+  // Single capture group kept intact ($1 in replacement below relies on this) —
+  // C# keywords extended with ones used in newer OOP/Framework examples (struct,
+  // protected, virtual, try/catch...), plus distinctive SQL keywords. Common short
+  // SQL words (IN, ON, AS, IS, AND, OR...) deliberately excluded — they collide too
+  // often with ordinary Serbian/English words inside inline trailing comments.
+  const KEYWORDS = /\b(public|private|protected|internal|static|void|class|struct|interface|new|return|var|string|bool|int|if|else|true|false|null|this|using|namespace|override|abstract|virtual|sealed|readonly|const|async|await|foreach|for|while|try|catch|finally|throw|get|set|SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|DELETE|JOIN|INNER|LEFT|RIGHT|OUTER|GROUP|HAVING|ORDER|DISTINCT|COUNT|SUM|LIMIT|CREATE|TABLE|ALTER|DROP|BEGIN|TRANSACTION|ROLLBACK|COMMIT|EXISTS|UNION|NULL|CASE|WHEN|THEN|ELSE)\b/g;
   document.querySelectorAll('.code-block pre').forEach(pre => {
     let lines = pre.innerHTML.split('\n');
     lines = lines.map(line => {
-      if (line.trimStart().startsWith('//') || line.trimStart().startsWith('#')) {
+      const trimmed = line.trimStart();
+      // Whole-line comments: //, # (bash/Docker/cron), -- (SQL)
+      if (trimmed.startsWith('//') || trimmed.startsWith('#') || /^--(\s|$)/.test(trimmed)) {
         return '<span class="cm">' + line + '</span>';
       }
-      line = line.replace(/\b(public|private|static|void|class|new|return|var|string|bool|int|if|else|true|false|null|this|using|namespace|override|abstract|readonly|const|async|await|foreach)\b/g, '<span class="kw">$1</span>');
-      line = line.replace(/('[^']*')/g, '<span class="st">$1</span>');
+      // Keywords first (on clean text), THEN strings (last pass) — reversing this
+      // order would let the keyword regex re-match the word "class" inside the
+      // class="st" attribute the string pass injects, corrupting the markup.
+      line = line.replace(KEYWORDS, '<span class="kw">$1</span>');
+      line = line.replace(/('[^']*'|"[^"]*")/g, '<span class="st">$1</span>');
       return line;
     });
     pre.innerHTML = lines.join('\n');
@@ -311,6 +331,7 @@ function restoreState() {
   applyFontSize();
   const reads = JSON.parse(localStorage.getItem('qa_reads') || '[]');
   reads.forEach(id => applyReadState(id, true));
+  updateGroupProgress();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -361,3 +382,36 @@ function filterGlosar(q) {
   var el = document.getElementById('glosar-count');
   if (el) el.textContent = query ? (visible + ' od ' + items.length) : (items.length + ' termina');
 }
+
+// ═══════════════════════════════════════════════════════
+// SWIPE NAVIGATION (mobile) — swipe left/right between prev/next section.
+// Excluded over code blocks, tables, sidebar and panels so their own
+// horizontal scroll / taps aren't hijacked into a page navigation.
+// ═══════════════════════════════════════════════════════
+(function initSwipeNav() {
+  const EXCLUDE = '.code-block, .tbl-wrap, #sidebar, #bm-panel, #quickref, #overflow-menu';
+  let startX = 0, startY = 0, tracking = false;
+
+  document.addEventListener('touchstart', e => {
+    const sidebar = document.getElementById('sidebar');
+    if (e.touches.length !== 1 || e.target.closest(EXCLUDE) || (sidebar && sidebar.classList.contains('open'))) {
+      tracking = false;
+      return;
+    }
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    tracking = true;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    if (!tracking) return;
+    tracking = false;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) < 90 || Math.abs(dy) > 60) return;   // needs a clear horizontal swipe
+    const page = window.QA_PAGE || {};
+    if (dx < 0 && page.nextUrl) window.location.href = page.nextUrl;
+    else if (dx > 0 && page.prevUrl) window.location.href = page.prevUrl;
+  }, { passive: true });
+})();
+
