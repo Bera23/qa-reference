@@ -81,6 +81,14 @@ h1.sec-title{font-size:26px;font-weight:700;color:var(--h1c);padding:24px 0 10px
 .mark-read-btn{background:none;border:1px solid var(--border);color:var(--text3);font-size:11px;padding:3px 10px;border-radius:12px;cursor:pointer;transition:all .2s;font-family:'Courier New',monospace;}
 .mark-read-btn:hover{border-color:var(--read-clr);color:var(--read-clr);}
 .mark-read-btn.done{background:var(--read-clr);border-color:var(--read-clr);color:#fff;}
+.quiz-toggle-btn{background:none;border:1px solid var(--border);color:var(--text3);font-size:11px;padding:3px 10px;border-radius:12px;cursor:pointer;transition:all .2s;font-family:'Courier New',monospace;}
+.quiz-toggle-btn:hover{border-color:var(--accent);color:var(--accent);}
+.quiz-toggle-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.qa-question{cursor:pointer;position:relative;padding-right:26px;user-select:none;}
+.qa-question:hover{color:var(--accent2);}
+.qa-question::after{content:'▾';position:absolute;right:2px;top:2px;font-size:12px;color:var(--text3);}
+.qa-item.qa-collapsed .qa-question::after{content:'▸';}
+.qa-item.qa-collapsed .qa-answer{display:none;}
 h2.sub-title{font-size:16.5px;font-weight:600;color:var(--h2c);padding-top:26px;margin-bottom:8px;font-family:'Georgia',serif;border-bottom:1px solid var(--border);padding-bottom:5px;display:flex;align-items:center;gap:6px;}
 .anchor{font-size:12px;color:var(--text3);text-decoration:none;opacity:0;transition:opacity .2s;font-family:'Courier New',monospace;margin-left:auto;}
 h2.sub-title:hover .anchor{opacity:1;}
@@ -229,7 +237,9 @@ body.light .warning{background:#fffbeb;color:#92400e;}
 /* ── Print ────────────────── */
 @media print{
   #sidebar,#topbar,#progress-bar,#back-top,#bm-panel,#menu-btn,
-  #read-exit,.copy-btn,.bm-btn,.mark-read-btn,.section-nav,#quickref,.lang-badge{display:none!important;}
+  #read-exit,.copy-btn,.bm-btn,.mark-read-btn,.section-nav,#quickref,.lang-badge,.quiz-toggle-btn{display:none!important;}
+  .qa-item.qa-collapsed .qa-answer{display:block!important;}
+  .qa-question::after{display:none!important;}
   #main{margin-left:0!important;}
   body{background:#fff!important;color:#000!important;font-size:11pt;}
   h1.sec-title{color:#000!important;border-bottom:2pt solid #000!important;font-size:17pt;}

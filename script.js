@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   restoreState();
   initSyntaxHighlight();
   initLangBadges();
+  initQuizMode();
   updateBmCount();
   initNavHeights();
   filterGlosar('');
@@ -328,6 +329,54 @@ function initLangBadges() {
     badge.textContent = hit.lang;
     block.insertBefore(badge, block.firstChild);
   });
+}
+
+// ═══════════════════════════════════════════════════════
+// Q&A QUIZ MODE — only on the "Pitanja i odgovori" page. Groups each
+// h3.sub-sub-title question with its following answer paragraphs into
+// a collapsible .qa-item, and adds a bulk toggle button (in the same
+// bar as "Oznaci kao procitano") to hide all answers at once for
+// active-recall self-testing instead of always-visible passive reading.
+// ═══════════════════════════════════════════════════════
+function initQuizMode() {
+  if (!window.QA_PAGE || !/Pitanja i odgovori/.test(window.QA_PAGE.title || '')) return;
+  const content = document.getElementById('content');
+  if (!content) return;
+  const headers = Array.from(content.querySelectorAll('h3.sub-sub-title'));
+  if (headers.length === 0) return;
+
+  const items = headers.map(h3 => {
+    const wrap = document.createElement('div');
+    wrap.className = 'qa-item';
+    h3.parentNode.insertBefore(wrap, h3);
+    h3.classList.add('qa-question');
+    wrap.appendChild(h3);
+
+    const answer = document.createElement('div');
+    answer.className = 'qa-answer';
+    let next = wrap.nextSibling;
+    while (next && !(next.nodeType === 1 && (next.matches('h3.sub-sub-title') || next.matches('h2.sub-title')))) {
+      const toMove = next;
+      next = next.nextSibling;
+      answer.appendChild(toMove);
+    }
+    wrap.appendChild(answer);
+    h3.addEventListener('click', () => wrap.classList.toggle('qa-collapsed'));
+    return wrap;
+  });
+
+  const meta = document.querySelector('.section-meta');
+  if (!meta) return;
+  const btn = document.createElement('button');
+  btn.className = 'quiz-toggle-btn';
+  btn.textContent = '🎯 Kviz mod';
+  btn.onclick = () => {
+    const turningOn = !btn.classList.contains('active');
+    btn.classList.toggle('active', turningOn);
+    btn.textContent = turningOn ? '👁 Prikazi odgovore' : '🎯 Kviz mod';
+    items.forEach(w => w.classList.toggle('qa-collapsed', turningOn));
+  };
+  meta.appendChild(btn);
 }
 
 // ═══════════════════════════════════════════════════════
