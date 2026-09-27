@@ -93,4 +93,27 @@ public class MaterialPage
     public void ClickApprove() => _retry.Execute(() => Driver.FindElement(By.Id("approve")).Click());
 }</pre></div>
 <div class="note">Pravilo: nasledi kad je odnos zaista "je vrsta od" (MaterialPage je Page). Za deljeno ponasanje koje vise klasa treba (retry, logging, screenshot-on-fail) koristi composition — sprecava "God base class" koja vremenom nabubri.</div>
+<h2 class="sub-title">12.9 Dependency Injection</h2>
+<p class="body-text">DI je primena Dependency Inversion principa (12.5) u praksi — objekat ne kreira sam svoje zavisnosti, vec ih prima spolja (najcesce kroz konstruktor). U test frameworku ovo omogucava da se ista klasa testira sa razlicitim (realnim ili mock) zavisnostima bez izmene same klase.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Bez DI — LoginPage sam kreira svoj WebDriver, nemoguce zameniti u testu
+public class LoginPage
+{
+    private IWebDriver _driver = new ChromeDriver();  // hard-coded, krhko
+}
+
+// Sa DI — WebDriver se INJEKTUJE kroz konstruktor
+public class LoginPage : BasePage
+{
+    public LoginPage(IWebDriver driver) : base(driver) { }
+    // driver moze biti ChromeDriver, RemoteWebDriver (Grid), ili mock za unit test frameworka
+}
+
+// xUnit ConstructorInjection — BaseTest inicijalizuje driver, sve child test klase ga nasledjuju
+public class BaseTest : IDisposable
+{
+    protected IWebDriver Driver;
+    public BaseTest() => Driver = DriverFactory.Create(Config.Browser);  // "injektuje" se pri svakom testu
+    public void Dispose() => Driver.Quit();
+}</pre></div>
+<div class="note">Vecina enterprise .NET projekata koristi DI kontejner (Microsoft.Extensions.DependencyInjection) da automatski razresi ove zavisnosti umesto rucnog "wiring-a" — vredi znati pojam "DI kontejner" i "service lifetime" (Transient/Scoped/Singleton) i za intervju, iako test frameworci cesto rucno injektuju driver bez punog kontejnera.</div>
 

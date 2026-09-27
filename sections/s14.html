@@ -51,3 +51,30 @@
 <li class="bullet-item">Ugnjezdeni Page objekti — navigacija postaje komplikovana.</li>
 </ul>
 <div class="note">Alternativa za kompleksne scenarije: Screenplay pattern — modelira interakcije kao User + Abilities + Tasks + Questions.</div>
+<h2 class="sub-title">14.6 Component Object Pattern — za ponovljive UI komponente</h2>
+<p class="body-text">Kad se ista UI komponenta (grid, modal, LOV dropdown, bookmark navigacija) ponavlja na vise stranica, ne kopira se lokator-po-lokator u svaki Page — komponenta dobija SVOJU klasu koju vise Page objekata ponovo koristi (composition, videti Sekciju 12.8).</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Component klasa — enkapsulira DevExpress grid, koristi je bilo koji Page koji ima grid
+public class DevExpressGrid
+{
+    private readonly IWebDriver _driver;
+    private readonly By _gridRoot;   // scoped root, ne ceo document
+
+    public DevExpressGrid(IWebDriver driver, By gridRoot)
+    {
+        _driver = driver;
+        _gridRoot = gridRoot;
+    }
+
+    public IWebElement GetRowByText(string text) =>
+        _driver.FindElement(_gridRoot).FindElements(By.CssSelector(".dxgvDataRow"))
+            .First(row => row.Text.Contains(text));
+
+    public void ClickCellInRow(string rowText, string columnHeader) { /* ... */ }
+}
+
+// Page koristi komponentu kroz composition, ne duplira grid logiku
+public class MaterialListPage : BasePage
+{
+    public DevExpressGrid MaterialsGrid => new DevExpressGrid(Driver, By.Id("materialsGrid"));
+}</pre></div>
+<div class="note">Isto vazi za LOV overlay dropdown i bookmark navigaciju (videti learnings o DevExpress DOM scoping) — svaka od njih je kandidat za sopstvenu Component klasu umesto da se lokatori za overlay kopiraju u svaki Page koji ga koristi. Prednost: fix jednog bug-a u overlay logici (npr. scoping na vidljivi "display: inline-block" overlay) automatski popravlja SVE stranice koje tu komponentu koriste.</div>

@@ -127,3 +127,29 @@ driver.SwitchTo().Window(newHandle);
 driver.Close();
 driver.SwitchTo().Window(originalHandle);</pre></div>
 <div class="note">Cest uzrok NoSuchElementException-a: element realno postoji na strani, ali se trazi izvan aktivnog iframe/window konteksta. Prva provera pri debugovanju — u kom frame-u/handle-u driver trenutno "gleda".</div>
+<h2 class="sub-title">13.10 JavaScriptExecutor — kad Selenium API nije dovoljan</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>var js = (IJavaScriptExecutor)driver;
+
+// Klik kad standardni .Click() ne radi (element prekriven, ali "logicki" klikabilan)
+js.ExecuteScript("arguments[0].click();", element);
+
+// Scroll do elementa pre interakcije
+js.ExecuteScript("arguments[0].scrollIntoView(true);", element);
+
+// Citanje vrednosti koju Selenium API ne izlaze direktno
+var scrollHeight = js.ExecuteScript("return document.body.scrollHeight;");
+
+// Postavljanje vrednosti direktno u DOM (zaobilazi validaciju - koristiti oprezno)
+js.ExecuteScript("arguments[0].value = arguments[1];", inputElement, "test-value");</pre></div>
+<div class="note">JS klik je fallback, ne prvi izbor — zaobilazi realnu korisnicku interakciju (ne testira da li je element STVARNO klikabilan za covjeka). Koristiti samo kad je element funkcionalno klikabilan ali ga prekriva overlay koji standardni .Click() pogresno detektuje kao blokirajuci (cesta situacija sa DevExpress komponentama).</div>
+<h2 class="sub-title">13.11 Cookies</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>driver.Manage().Cookies.AddCookie(new Cookie("session_id", "abc123"));
+var cookie = driver.Manage().Cookies.GetCookieNamed("session_id");
+driver.Manage().Cookies.DeleteCookieNamed("session_id");
+driver.Manage().Cookies.DeleteAllCookies();
+
+// Cest use-case: preskociti login flow ubacivanjem vec validnog session cookie-ja
+driver.Navigate().GoToUrl(baseUrl);         // prvo mora posetiti domen
+driver.Manage().Cookies.AddCookie(sessionCookie);
+driver.Navigate().Refresh();                // refresh da app prepozna cookie</pre></div>
+<div class="note">Ubacivanje session cookie-ja umesto UI login-a na pocetku svakog testa moze znacajno ubrzati suite — ali nosi rizik da test vise ne pokriva sam login flow, pa se zadrzava barem par dedikovanih login testova koji i dalje idu kroz UI.</div>
