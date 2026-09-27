@@ -1,0 +1,33 @@
+<p class="body-text">OOP koncepti se u intervjuima pitaju u teoriji, ali za QA automation inzenjera vaznije je gde se svakodnevno koriste u Page Object Model-u i test framework-u.</p>
+<h2 class="sub-title">23.1 Class i Object</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Class</td><td>Nacrt koji definise properties i metode — npr. <code>LoginPage</code> klasa definise lokatore i akcije forme za prijavu.</td></tr>
+<tr><td>Object</td><td>Instanca klase sa konkretnim podacima — <code>new LoginPage(driver)</code> je jedan konkretan objekat vezan za trenutni WebDriver.</td></tr>
+<tr><td>Constructor</td><td>Specijalna metoda pozvana pri kreiranju objekta — inicijalizuje stanje (npr. prima <code>IWebDriver</code> i inicijalizuje lokatore preko Page Factory-ja).</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">23.2 Cetiri stuba OOP-a</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Princip</th><th>Objasnjenje</th><th>Primer iz automatizacije</th></tr></thead><tbody>
+<tr><td>Encapsulation</td><td>Sakrivanje internih detalja, izlaganje samo javnog interfejsa.</td><td>Page Object skriva lokatore (private) i izlaze samo metode kao <code>Login(user, pass)</code> — test ne zna kako je login implementiran, samo poziva metodu.</td></tr>
+<tr><td>Inheritance</td><td>Child klasa nasledjuje ponasanje parent klase.</td><td>Sve Page klase nasledjuju <code>BasePage</code> koja ima zajednicke metode (WaitForPageLoad, GetTitle, Screenshot).</td></tr>
+<tr><td>Polymorphism</td><td>Isti interfejs, razlicito ponasanje u zavisnosti od konkretne klase.</td><td>Tenant-specific override klasa (GuiCustomizationLayer) redefinise metodu iz generickog GuiLayer-a za konkretnog klijenta.</td></tr>
+<tr><td>Abstraction</td><td>Sakrivanje kompleksnosti iza jednostavnog interfejsa.</td><td>Test poziva <code>SeleniumBlock.Execute(action)</code> bez da zna za retry logiku, stale element handling i logovanje ispod.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">23.3 Method overloading vs. overriding</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Overloading — isto ime, razliciti parametri (compile-time, u istoj klasi)
+public void FillForm(string name) { ... }
+public void FillForm(string name, string email) { ... }
+
+// Overriding — child klasa redefinise metodu parent-a (runtime, virtual/override)
+public class BasePage
+{
+    public virtual void WaitForPageLoad() { /* generic wait */ }
+}
+public class MaterialPage : BasePage
+{
+    public override void WaitForPageLoad()
+    {
+        base.WaitForPageLoad();
+        // + cekanje na DevExpress grid da zavrsi render
+    }
+}</pre></div>
+<div class="note">U intervjuu je cesta zamka mesati overloading i overriding — overloading je ista klasa/razliciti parametri, overriding je child/parent i zahteva <code>virtual</code>/<code>override</code> (ili <code>abstract</code>) kljucne reci u C#.</div>

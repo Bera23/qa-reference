@@ -146,3 +146,32 @@ public void ExcelUpload_ValidFile_ShouldCreateSpecifications()
   [ ] Konfiguracija okruzenja odgovara ocekivanoj (env vars, feature flags)
   [ ] Smoke test okruzenja prolazi pre pocetka punog test run-a
   [ ] Monitoring i logovi su dostupni za debugging</pre></div>
+<h2 class="sub-title">10.9 SQL upiti za slozeniju verifikaciju — JOIN, GROUP BY, subquery</h2>
+<p class="body-text">Iznad seed/assert/cleanup patterna iz 10.5, ovi upiti se koriste kad verifikacija zahteva podatke iz vise povezanih tabela odgovarace u testovima gde se pojedinacna SQL-om proverava vezanih zapisa.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>-- INNER JOIN — samo redovi koji imaju par u obe tabele
+SELECT s.Title, u.Email
+FROM Specifications s
+INNER JOIN Users u ON s.OwnerId = u.Id
+WHERE s.Status = 'Approved';
+
+-- LEFT JOIN — svi redovi leve tabele + NULL gde nema para
+-- Tipican slucaj: pronaci specifikacije BEZ dodeljenog owner-a
+SELECT s.SpecId FROM Specifications s
+LEFT JOIN Users u ON s.OwnerId = u.Id
+WHERE u.Id IS NULL;
+
+-- GROUP BY + HAVING — WHERE filtrira pre agregacije, HAVING posle
+SELECT OwnerId, COUNT(*) AS SpecCount
+FROM Specifications
+GROUP BY OwnerId
+HAVING COUNT(*) >= 5
+ORDER BY SpecCount DESC;
+
+-- Subquery — zapisi koji IMAJU povezane audit unose
+SELECT SpecId, Title FROM Specifications
+WHERE SpecId IN (SELECT EntityId FROM AuditLog WHERE Action = 'StatusChange');
+
+-- Subquery — zapisi koji NEMAJU povezane audit unose (potencijalni bug)
+SELECT SpecId, Title FROM Specifications
+WHERE SpecId NOT IN (SELECT EntityId FROM AuditLog WHERE Action = 'StatusChange');</pre></div>
+<div class="note">WHERE vs. HAVING je cesta zabuna: WHERE filtrira redove pre GROUP BY (ne moze da referencira agregatnu funkciju), HAVING filtrira grupe posle agregacije.</div>

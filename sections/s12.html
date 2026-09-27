@@ -103,3 +103,27 @@ Uncaught (in promise) TypeError: Cannot read property 'name' of null
 Mixed Content: The page was loaded over HTTPS but requested
 an insecure resource</pre></div>
 <div class="note">Uvek otvoriti DevTools pre reprodukcije baga — Network tab cuva samo zahteve nastale dok je otvoren. Za bug report: screenshot Network tab-a sa statusom i response-om je jaci dokaz nego samo "ne radi".</div>
+<h2 class="sub-title">12.9 Alert-i, iframe-ovi i novi tabovi</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Alert / Confirm / Prompt</td><td>Driver blokira dok se alert ne obradi — ne moze mu se pristupiti kroz normalni DOM.</td></tr>
+<tr><td>Iframe</td><td>Elementi unutar iframe-a nisu vidljivi driveru dok se eksplicitno ne prebaci kontekst.</td></tr>
+<tr><td>Novi tab / prozor</td><td>Klik koji otvara novi tab ne prebacuje driver automatski na njega — ostaje na originalnom handle-u.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Alert
+var alert = driver.SwitchTo().Alert();
+alert.Accept();      // ili alert.Dismiss();
+
+// Iframe — obavezno switch nazad posle rada unutra
+driver.SwitchTo().Frame("frameNameOrId");
+// ... rad unutar iframe-a ...
+driver.SwitchTo().DefaultContent();
+
+// Novi tab/prozor — window handles
+var originalHandle = driver.CurrentWindowHandle;
+driver.FindElement(By.Id("openInNewTab")).Click();
+var newHandle = driver.WindowHandles.Except(new[] { originalHandle }).Single();
+driver.SwitchTo().Window(newHandle);
+// ... rad u novom tabu ...
+driver.Close();
+driver.SwitchTo().Window(originalHandle);</pre></div>
+<div class="note">Cest uzrok NoSuchElementException-a: element realno postoji na strani, ali se trazi izvan aktivnog iframe/window konteksta. Prva provera pri debugovanju — u kom frame-u/handle-u driver trenutno "gleda".</div>

@@ -98,3 +98,19 @@ git commit -m "Fix: re-find LOV overlay before click to prevent stale ref"
 git push origin fix/material-lov
 
 # Kreirati PR → code review → merge → nightly suite pokuplja promenu</pre></div>
+<h2 class="sub-title">15.8 fetch vs. pull, merge vs. rebase</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>fetch vs. pull</td><td><code>git fetch</code> preuzima promene sa remote-a ali ne dira trenutnu granu — bezbedno, samo za pregled. <code>git pull</code> = fetch + merge, odmah menja radnu granu.</td></tr>
+<tr><td>merge vs. rebase</td><td>Merge pravi merge commit i cuva kompletnu istoriju grananja. Rebase "prevlaci" commit-e na vrh druge grane i prepisuje istoriju — linearnija ali opasnija na deljenim granama. Za feature branch pre PR-a rebase je cesto ok; na <code>develop</code>/<code>main</code> koristiti merge.</td></tr>
+<tr><td>.gitignore</td><td>Iskljucuje build output (<code>bin/</code>, <code>obj/</code>), IDE fajlove (<code>.vs/</code>), test rezultate (<code>TestResults/</code>) i kredencijale iz repo-a.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Resavanje merge konflikta u Page Object-u
+// 1. git status -> vidi koji fajl je u konfliktu
+// 2. Otvoriti fajl, naci markere:
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+lokator koji si ti promenio
+=======
+lokator koji je kolega promenio
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; branch-name
+// 3. Odluciti koji lokator je tacan (ili spojiti oba), obrisati markere
+// 4. git add <fajl> -> git commit -> git push</pre></div>

@@ -1,0 +1,16 @@
+<p class="body-text">Enterprise CI/CD agenti i deployment okruzenja su cesto Linux masine — poznavanje osnovnih komandi je korisno za debugovanje pipeline-a i provere okruzenja bez oslanjanja na DevOps tim za svaku sitnicu.</p>
+<h2 class="sub-title">24.1 Logovi i pretraga</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>grep -i "error" /var/log/app.log     # trazi "error" bez obzira na velika/mala slova
+tail -f /var/log/app.log             # prati log u realnom vremenu (novi redovi odmah vidljivi)
+tail -f log.txt | grep -i "error"    # filtrira live log samo na greske
+cat / head / tail / wc -l            # citanje fajla / pocetak / kraj / broj redova
+find / -name "*.log"                 # pronadji sve .log fajlove na sistemu</pre></div>
+<h2 class="sub-title">24.2 Procesi i servisi</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>ps aux | grep service_name    # da li servis/proces radi
+systemctl status service_name # status servisa (running/failed/stopped)
+top / htop                    # procesi uzivo, CPU/RAM po procesu</pre></div>
+<h2 class="sub-title">24.3 Resursi i dozvole</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>df -h            # slobodan prostor na disku (cest uzrok "environment down" incidenata)
+free -h          # iskoriscenost memorije
+chmod 755 script.sh   # owner: read+write+execute, ostali: read+execute</pre></div>
+<div class="note">Cest scenario: CI pipeline pocne da failuje bez promene u kodu — pre nego sto se sumnja na test, proveriti <code>df -h</code> (disk pun na agentu) i <code>systemctl status</code> za servise od kojih pipeline zavisi (baza, mock servisi).</div>
