@@ -99,7 +99,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s16">
 <h1 class="sec-title" id="t-s16">⚙️ 16. CI/CD integracija<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~4 min citanja</span><button class="mark-read-btn" id="mrb-s16" onclick="markRead('s16')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~5 min citanja</span><button class="mark-read-btn" id="mrb-s16" onclick="markRead('s16')">Oznaci kao procitano</button></div>
 <h2 class="sub-title">16.1 Sta je CI/CD i uloga QA-a</h2>
 <p class="body-text">CI (Continuous Integration) je praksa automatskog build-ovanja i testiranja koda pri svakom commit-u. CD (Continuous Delivery) prosiruje CI automatskim deploy-om na visa okruzenja.</p>
 <p class="body-text">QA uloga: automatizovani testovi su gatekeeper koji sprecava isporuku defektnog koda. Svaki failovani test blokira pipeline.</p>
@@ -216,6 +216,27 @@ lokator koji je kolega promenio
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; branch-name
 // 3. Odluciti koji lokator je tacan (ili spojiti oba), obrisati markere
 // 4. git add <fajl> -> git commit -> git push</pre></div>
+<h2 class="sub-title">16.9 Test parallelizacija u praksi</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>xUnit — Collections</td><td>Testovi u istoj <code>[Collection("...")]</code> se izvrsavaju sekvencijalno medju sobom, ali razlicite kolekcije paralelno. Default: xUnit paralelizuje po test klasi.</td></tr>
+<tr><td>Thread-safety drajvera</td><td>Svaki paralelni test MORA imati svoju IWebDriver instancu (npr. kroz <code>[ThreadStatic]</code> ili DI per-test lifetime) — deljeni drajver izmedju paralelnih testova izaziva nasumicne, tesko-reprodukovive failove.</td></tr>
+<tr><td>Selenium Grid / Docker</td><td>Paralelni testovi trebaju paralelne browser instance — Grid sa vise node-ova (videti Sekciju 17.6) omogucava da 10 testova stvarno rade istovremeno umesto da cekaju jedan browser.</td></tr>
+<tr><td>Test izolacija podataka</td><td>Preduslov za bezbednu paralelizaciju — ako dva paralelna testa dele isti test podatak (npr. isti SpecId), nastaje race condition. Svaki test kreira svoje podatke sa unikatnim sufiksom.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// xUnit — onemoguciti paralelizaciju izmedju SPECIFICNIH testova koji dele resurs (npr. isti DB seed)
+[Collection("DatabaseCollection")]
+public class MaterialTests { ... }
+
+[Collection("DatabaseCollection")]
+public class SpecificationTests { ... }
+// Obe klase sad idu sekvencijalno jedna za drugom, ali paralelno sa svim ostalim kolekcijama
+
+// xunit.runner.json — globalno podesavanje paralelizma
+{
+  "parallelizeTestCollections": true,
+  "maxParallelThreads": 4
+}</pre></div>
+<div class="note">Paralelizacija ubrzava regression suite, ali uvodi novu klasu flaky testova (deljeni resurs, race condition) — uvek prvo obezbediti izolaciju podataka (Sekcija 10.2), tek onda ukljuciti paralelizam.</div>
 
 <div class="section-nav"><a class="snav-btn" href="s15.html"><span class="snav-label">← Prethodna</span><span class="snav-title">15. API testiranje</span></a><a class="snav-btn next" href="s17.html"><span class="snav-label">Sledeca →</span><span class="snav-title">17. Linux osnove za QA</span></a></div>
 </div>

@@ -99,7 +99,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s18">
 <h1 class="sec-title" id="t-s18">🔧 18. Framework arhitektura<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~2 min citanja</span><button class="mark-read-btn" id="mrb-s18" onclick="markRead('s18')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~3 min citanja</span><button class="mark-read-btn" id="mrb-s18" onclick="markRead('s18')">Oznaci kao procitano</button></div>
 <h2 class="sub-title">18.1 Komponente robustnog test framework-a</h2>
 <div class="tbl-wrap tall"><table><thead><tr><th>Komponenta</th><th>Opis</th></tr></thead><tbody>
 <tr><td>Driver Management</td><td>Centralizovana inicijalizacija i teardown WebDriver-a. DriverFactory.</td></tr>
@@ -176,6 +176,25 @@ public class LoginTests : IDisposable
 <li class="bullet-item">Test podaci su parametrizovani, ne hard-coded u kodu.</li>
 <li class="bullet-item">Test prolazi lokalno i u CI okruzenju.</li>
 </ul>
+<h2 class="sub-title">18.7 Logging strategija</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Nivo</th><th>Kada koristiti</th></tr></thead><tbody>
+<tr><td>Trace/Debug</td><td>Detaljan tok izvrsavanja (koji lokator se trazi, koji retry pokusaj) — ukljuceno samo lokalno ili kad se istrazuje konkretan fail, previse "sum" za normalan CI log.</td></tr>
+<tr><td>Info</td><td>Visok nivo koraka testa (test pocinje, test zavrsen, glavna akcija izvrsena) — ono sto ostaje ukljuceno u CI da bi log bio citljiv bez preplavljivanja.</td></tr>
+<tr><td>Warning</td><td>Nesto neocekivano ali test je nastavio (npr. retry je bio potreban, fallback logika aktivirana) — signal da nesto vredi istraziti iako test nije pao.</td></tr>
+<tr><td>Error</td><td>Test je pao ili je exception uhvacen. Uvek uz kontekst — koji korak, koji podatak, screenshot ako je moguce.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Prazan catch blok NIKAD ne sme ostati bez loga — ako se greska guta necujno,
+// sledeci fail na istom mestu je nemoguce dijagnostikovati unazad
+try
+{
+    element.Click();
+}
+catch (ElementClickInterceptedException ex)
+{
+    TestLog.Assert.Trace(TraceMode.Warning, $"Klik presretnut, pokusavam JS fallback: {ex.Message}");
+    js.ExecuteScript("arguments[0].click();", element);
+}</pre></div>
+<div class="note">Korelacija: dobar log ukljucuje test ime i identifikator podatka (npr. SpecId) u svakoj liniji, ne samo poruku — kad 200 testova pise u isti nightly log, "Element not found" bez konteksta je beskorisno; "Element not found [MaterialTests.EditSpec, SpecId=SPEC-TEST-001]" nije.</div>
 
 <div class="section-nav"><a class="snav-btn" href="s17.html"><span class="snav-label">← Prethodna</span><span class="snav-title">17. Linux osnove za QA</span></a><a class="snav-btn next" href="s19.html"><span class="snav-label">Sledeca →</span><span class="snav-title">19. Performance testing</span></a></div>
 </div>

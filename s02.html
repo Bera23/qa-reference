@@ -99,7 +99,7 @@
 <div class="deo-banner">DEO I — MANUALNO TESTIRANJE</div>
 <div class="section" id="s02">
 <h1 class="sec-title" id="t-s02">🔄 2. SDLC i STLC<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~2 min citanja</span><button class="mark-read-btn" id="mrb-s02" onclick="markRead('s02')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~3 min citanja</span><button class="mark-read-btn" id="mrb-s02" onclick="markRead('s02')">Oznaci kao procitano</button></div>
 <h2 class="sub-title">2.1 SDLC — faze i QA uloga</h2>
 <div class="tbl-wrap"><table><thead><tr><th>SDLC Faza</th><th>QA Aktivnost</th></tr></thead><tbody>
 <tr><td>Requirements</td><td>Review zahteva, identifikacija ambiguiteta, procena testabilnosti.</td></tr>
@@ -141,6 +141,14 @@
 <tr><td>Entry Criteria (Test Execution)</td><td>Build uspesno deployovan. Smoke test prolazi (bar 90%). Nema otvorenih Blocker defekata. Test case-ovi su odobreni. Test podaci su pripremljeni.</td></tr>
 <tr><td>Exit Criteria (Test Execution)</td><td>95%+ TC izvrseno. 100% Blocker i Critical zatvoreno. Preostali Major defekti dokumentovani i prihvaceni od PO-a. Regression suite prolazi.</td></tr>
 </tbody></table></div>
+<h2 class="sub-title">2.6 SDLC modeli — Waterfall, Agile, Iterative, Spiral</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Model</th><th>Karakteristika</th><th>QA implikacija</th></tr></thead><tbody>
+<tr><td>Waterfall</td><td>Linearne, sekvencijalne faze — sledeca pocinje tek kad prethodna zavrsi.</td><td>Testiranje dolazi tek na kraju — kasno otkrivanje defekata, skup fix. Rigidan na promene zahteva.</td></tr>
+<tr><td>Agile (Scrum/Kanban)</td><td>Kratke iteracije (sprintovi), kontinualna isporuka i feedback.</td><td>QA je uključen od prvog dana sprinta (Shift-Left), testira se paralelno sa razvojem, ne na kraju.</td></tr>
+<tr><td>Iterative</td><td>Sistem se gradi u ciklusima, svaki ciklus dodaje funkcionalnost na prethodni.</td><td>Regression raste sa svakim ciklusom — pritisak da regression suite bude automatizovan raste.</td></tr>
+<tr><td>Spiral</td><td>Kombinuje iterativni razvoj sa formalnom analizom rizika na pocetku svake faze.</td><td>Koristi se u velikim/kriticnim projektima (npr. aerospace, medicinski uredjaji) gde je risk-based testing (Sekcija 7.3) formalizovan deo procesa.</td></tr>
+</tbody></table></div>
+<div class="note">V-Model (2.2) nije zaseban SDLC model vec nacin da se testiranje eksplicitno mapira na Waterfall faze — cesto se pita zajedno u intervjuu, ali su to dva razlicita koncepta (SDLC model vs. mapiranje testiranja na taj model).</div>
 
 <div class="section-nav"><a class="snav-btn" href="s01.html"><span class="snav-label">← Prethodna</span><span class="snav-title">1. Osnove i terminologija</span></a><a class="snav-btn next" href="s03.html"><span class="snav-label">Sledeca →</span><span class="snav-title">3. Tipovi i nivoi testiranja</span></a></div>
 </div>

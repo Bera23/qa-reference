@@ -99,7 +99,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s24">
 <h1 class="sec-title" id="t-s24">⚡ 24. Cheat Sheet<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~4 min citanja</span><button class="mark-read-btn" id="mrb-s24" onclick="markRead('s24')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~5 min citanja</span><button class="mark-read-btn" id="mrb-s24" onclick="markRead('s24')">Oznaci kao procitano</button></div>
 <p class="body-text">Kompaktni pregled najvaznijih komandi, pattern-a i formula — za brzi podsetnik pre intervjua ili tokom rada. Svaki red linkuje na detaljnu sekciju.</p>
 
 <h2 class="sub-title">24.1 Selenium / WebDriver</h2>
@@ -224,6 +224,25 @@
 <tr><td>Cypress vs. Playwright</td><td>Cypress — samo JS, izvrsava se unutar browsera, jedan tab. Playwright — vise jezika, vise browsera, vise tabova, bolji za kompleksne aplikacije.</td></tr>
 <tr><td>REST vs. SOAP</td><td>REST — HTTP, JSON, lagan. SOAP — XML, strogi kontrakti, ugradjena bezbednost. REST dominira modernim API-jima, SOAP jos zivi u enterprise/banking sistemima.</td></tr>
 <tr><td>REST vs. GraphQL</td><td>REST — jedan endpoint po resursu, server odredjuje oblik odgovora. GraphQL — jedan endpoint, klijent sam bira koja polja zeli.</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">24.15 OOP brzi pregled</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Pojam</th><th>Jednom recenicom</th><th>Ref</th></tr></thead><tbody>
+<tr><td>4 stuba</td><td>Encapsulation, Inheritance, Polymorphism, Abstraction</td><td>s12.2</td></tr>
+<tr><td>Interface vs. Abstract</td><td>Interface = samo ugovor, vise ih mozes implementirati. Abstract = deli i stanje i implementaciju, samo jedna po klasi.</td><td>s12.4</td></tr>
+<tr><td>SOLID</td><td>Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion</td><td>s12.5</td></tr>
+<tr><td>Overload vs. Override</td><td>Overload = isto ime, razliciti parametri, ista klasa. Override = child redefinise parent metodu (virtual/override).</td><td>s12.3</td></tr>
+<tr><td>Composition over Inheritance</td><td>Nasledi samo za pravi is-a odnos; deljeno ponasanje (retry, log) ide kroz composition.</td><td>s12.8</td></tr>
+</tbody></table></div>
+
+<h2 class="sub-title">24.16 Linux brzi pregled</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Komanda</th><th>Upotreba</th><th>Ref</th></tr></thead><tbody>
+<tr><td>grep -i / tail -f</td><td>Pretraga i praćenje logova uzivo na CI agentu.</td><td>s17.1</td></tr>
+<tr><td>systemctl status / ps aux</td><td>Da li servis od kog test zavisi uopste radi.</td><td>s17.2</td></tr>
+<tr><td>df -h / chmod</td><td>Disk pun (cest "environment down" uzrok) / dozvole nad skriptom.</td><td>s17.3</td></tr>
+<tr><td>ssh / scp</td><td>Konekcija i prenos fajlova (logova) sa/na CI agent.</td><td>s17.4</td></tr>
+<tr><td>docker ps / logs / exec</td><td>Da li kontejner (Selenium Grid, mock servis) radi i sta govori.</td><td>s17.6</td></tr>
+<tr><td>curl -I / ping / ss</td><td>Brza provera da li je endpoint/host/port uopste dostupan pre sumnje na test kod.</td><td>s17.8</td></tr>
 </tbody></table></div>
 
 <div class="section-nav"><a class="snav-btn" href="s23.html"><span class="snav-label">← Prethodna</span><span class="snav-title">23. Pitanja i odgovori</span></a></div>

@@ -99,7 +99,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s14">
 <h1 class="sec-title" id="t-s14">🏗️ 14. Page Object Model<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~2 min citanja</span><button class="mark-read-btn" id="mrb-s14" onclick="markRead('s14')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~3 min citanja</span><button class="mark-read-btn" id="mrb-s14" onclick="markRead('s14')">Oznaci kao procitano</button></div>
 <h2 class="sub-title">14.1 Sta je POM i zasto postoji</h2>
 <p class="body-text">Page Object Model je design pattern koji enkapsulira UI lokatore i interakcije za odredjenu stranicu u posebnu klasu. Test kod komunicira sa stranicom iskljucivo kroz metode te klase — nikad direktno sa lokatorima.</p>
 <ul><li class="bullet-item">Separacija brige — lokatori i UI logika odvojeni od test logike.</li>
@@ -153,6 +153,33 @@
 <li class="bullet-item">Ugnjezdeni Page objekti — navigacija postaje komplikovana.</li>
 </ul>
 <div class="note">Alternativa za kompleksne scenarije: Screenplay pattern — modelira interakcije kao User + Abilities + Tasks + Questions.</div>
+<h2 class="sub-title">14.6 Component Object Pattern — za ponovljive UI komponente</h2>
+<p class="body-text">Kad se ista UI komponenta (grid, modal, LOV dropdown, bookmark navigacija) ponavlja na vise stranica, ne kopira se lokator-po-lokator u svaki Page — komponenta dobija SVOJU klasu koju vise Page objekata ponovo koristi (composition, videti Sekciju 12.8).</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Component klasa — enkapsulira DevExpress grid, koristi je bilo koji Page koji ima grid
+public class DevExpressGrid
+{
+    private readonly IWebDriver _driver;
+    private readonly By _gridRoot;   // scoped root, ne ceo document
+
+    public DevExpressGrid(IWebDriver driver, By gridRoot)
+    {
+        _driver = driver;
+        _gridRoot = gridRoot;
+    }
+
+    public IWebElement GetRowByText(string text) =>
+        _driver.FindElement(_gridRoot).FindElements(By.CssSelector(".dxgvDataRow"))
+            .First(row => row.Text.Contains(text));
+
+    public void ClickCellInRow(string rowText, string columnHeader) { /* ... */ }
+}
+
+// Page koristi komponentu kroz composition, ne duplira grid logiku
+public class MaterialListPage : BasePage
+{
+    public DevExpressGrid MaterialsGrid => new DevExpressGrid(Driver, By.Id("materialsGrid"));
+}</pre></div>
+<div class="note">Isto vazi za LOV overlay dropdown i bookmark navigaciju (videti learnings o DevExpress DOM scoping) — svaka od njih je kandidat za sopstvenu Component klasu umesto da se lokatori za overlay kopiraju u svaki Page koji ga koristi. Prednost: fix jednog bug-a u overlay logici (npr. scoping na vidljivi "display: inline-block" overlay) automatski popravlja SVE stranice koje tu komponentu koriste.</div>
 
 <div class="section-nav"><a class="snav-btn" href="s13.html"><span class="snav-label">← Prethodna</span><span class="snav-title">13. Selenium / WebDriver</span></a><a class="snav-btn next" href="s15.html"><span class="snav-label">Sledeca →</span><span class="snav-title">15. API testiranje</span></a></div>
 </div>

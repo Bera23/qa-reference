@@ -149,6 +149,14 @@
 <tr><td>Faza</td><td>Pre Beta, pre javnog release-a</td><td>Pre finalnog release-a</td></tr>
 <tr><td>Cilj</td><td>Pronaci sto vise defekata</td><td>Validacija u realnom kontekstu, feedback</td></tr>
 </tbody></table></div>
+<h2 class="sub-title">3.7 Integration testing — pristupi</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Big Bang</td><td>Svi moduli se integrisu odjednom i testiraju kao celina. Jednostavno za male sisteme, ali kad nesto pukne tesko je izolovati koji modul je kriv.</td></tr>
+<tr><td>Top-down</td><td>Testira se od najvise komponente ka nizim — nize komponente koje jos ne postoje zamenjuju se Stub-ovima (lazna implementacija koja vraca fiksni odgovor).</td></tr>
+<tr><td>Bottom-up</td><td>Testira se od najnizih komponenti ka visim — visa komponenta koja jos ne postoji zamenjuje se Driver-om (privremeni "pozivalac" koji simulira poziv iz gornjeg sloja).</td></tr>
+<tr><td>Sandwich / Hybrid</td><td>Kombinacija top-down i bottom-up istovremeno — brze pokriva ceo sistem, ali zahteva vise koordinacije i stub-ova/driver-a paralelno.</td></tr>
+</tbody></table></div>
+<div class="note">Cesta zabuna u intervjuu: Stub simulira komponentu KOJU testirana komponenta POZIVA (nizi sloj), Driver simulira komponentu KOJA POZIVA testiranu komponentu (visi sloj). Videti i Sekciju 11.5 za razliku Mock/Stub/Spy u kontekstu automatizacije.</div>
 
 <div class="section-nav"><a class="snav-btn" href="s02.html"><span class="snav-label">← Prethodna</span><span class="snav-title">2. SDLC i STLC</span></a><a class="snav-btn next" href="s04.html"><span class="snav-label">Sledeca →</span><span class="snav-title">4. Tehnike dizajniranja TC</span></a></div>
 </div>
