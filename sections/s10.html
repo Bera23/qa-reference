@@ -175,3 +175,22 @@ WHERE SpecId IN (SELECT EntityId FROM AuditLog WHERE Action = 'StatusChange');
 SELECT SpecId, Title FROM Specifications
 WHERE SpecId NOT IN (SELECT EntityId FROM AuditLog WHERE Action = 'StatusChange');</pre></div>
 <div class="note">WHERE vs. HAVING je cesta zabuna: WHERE filtrira redove pre GROUP BY (ne moze da referencira agregatnu funkciju), HAVING filtrira grupe posle agregacije.</div>
+<h2 class="sub-title">10.10 MSSQL vs. PostgreSQL — razlike koje hvataju test skriptu</h2>
+<p class="body-text">Query logika (JOIN, GROUP BY, subquery iz 10.9) je identicna na oba sistema — razlike su u sintaksi funkcija i C# konektoru, i bas tu skripta pisana za jednu bazu pukne na drugoj.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Sta</th><th>MSSQL</th><th>PostgreSQL</th></tr></thead><tbody>
+<tr><td>Trenutni datum/vreme</td><td><code>GETDATE()</code></td><td><code>NOW()</code></td></tr>
+<tr><td>Limit broja redova</td><td><code>SELECT TOP 10 * FROM ...</code></td><td><code>SELECT * FROM ... LIMIT 10</code></td></tr>
+<tr><td>String concat</td><td><code>'a' + 'b'</code></td><td><code>'a' || 'b'</code></td></tr>
+<tr><td>Auto-increment kolona</td><td><code>IDENTITY(1,1)</code></td><td><code>SERIAL</code> / <code>GENERATED ALWAYS AS IDENTITY</code></td></tr>
+<tr><td>Case-sensitivity identifikatora</td><td>Case-insensitive po default-u.</td><td>Case-sensitive ako je identifikator naveden pod navodnicima (<code>"ColumnName"</code>) — cest izvor razlike izmedju QA (MSSQL) i produkcije koja koristi Postgres.</td></tr>
+<tr><td>C# konektor</td><td><code>SqlConnection</code>, <code>SqlCommand</code> (System.Data.SqlClient)</td><td><code>NpgsqlConnection</code>, <code>NpgsqlCommand</code> (Npgsql paket)</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// C# DB assertion protiv PostgreSQL — isti princip kao 10.5, drugi konektor
+using var conn = new NpgsqlConnection(_pgConnectionString);
+conn.Open();
+var cmd = new NpgsqlCommand("SELECT status FROM specifications WHERE spec_id = @id", conn);
+cmd.Parameters.AddWithValue("id", "SPEC-TEST-001");
+
+var status = (string)cmd.ExecuteScalar();
+Assert.Equal("approved", status);</pre></div>
+<div class="note">pgAdmin je Postgres ekvivalent SSMS-a (SQL Server Management Studio) — koristi se za rucnu inspekciju/debug upita pre nego sto se ubace u automatizovani test, isto kao SSMS za MSSQL.</div>
