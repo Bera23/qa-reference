@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   addBookmarkButtons();
   restoreState();
   initSyntaxHighlight();
+  initLangBadges();
   updateBmCount();
   initNavHeights();
   filterGlosar('');
@@ -299,6 +300,33 @@ function initSyntaxHighlight() {
       return line;
     });
     pre.innerHTML = lines.join('\n');
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// LANGUAGE BADGE — heuristic detection, first confident match wins.
+// No badge is shown rather than a wrong one when nothing matches clearly.
+// ═══════════════════════════════════════════════════════
+function initLangBadges() {
+  const RULES = [
+    { lang: 'SQL', re: /\b(SELECT|INSERT INTO|UPDATE\s+\w+\s+SET|DELETE FROM|CREATE TABLE|BEGIN TRANSACTION)\b/ },
+    { lang: 'JSON', re: /^\s*[{[][\s\S]*[}\]]\s*$/, extra: /"[A-Za-z_]+"\s*:/ },
+    { lang: 'YAML', re: /^\s*(trigger|pool|steps|variables|jobs|env|stages|resources)\s*:/m },
+    { lang: 'Gherkin', re: /^\s*(Feature|Scenario|Given|When|Then)\s*:/m },
+    { lang: 'JS', re: /\bpm\.(test|response|expect)\b/ },
+    { lang: 'C#', re: /\b(public|private|protected|internal)\s+\w|using\s+System|\[Fact\]|\[Theory\]|namespace\s+\w|\bvar\s+\w+\s*=\s*new\s+\w|Assert\.(Equal|True|False|Contains)|TestLog\.|new Mock<|driver\.\w+\(|\bI[A-Z]\w{2,}\b/ },
+    { lang: 'bash', re: /^\s*(git |docker |curl |ssh |scp |chmod |grep |tail -f|ps aux|systemctl |df -h|free -h|ping |ss -|export |crontab|npm |pip )/m },
+  ];
+  document.querySelectorAll('.code-block').forEach(block => {
+    const pre = block.querySelector('pre');
+    if (!pre) return;
+    const text = pre.textContent;
+    const hit = RULES.find(r => r.re.test(text) && (!r.extra || r.extra.test(text)));
+    if (!hit) return;
+    const badge = document.createElement('span');
+    badge.className = 'lang-badge';
+    badge.textContent = hit.lang;
+    block.insertBefore(badge, block.firstChild);
   });
 }
 
