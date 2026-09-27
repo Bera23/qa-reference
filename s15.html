@@ -60,6 +60,8 @@
       <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
       <a class="nav-item" href="s21.html"><span class="nav-icon">🎤</span><span class="nav-item-text">21. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
       <a class="nav-item" href="s22.html"><span class="nav-icon">⚡</span><span class="nav-item-text">22. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s22')"></span></a>
+      <a class="nav-item" href="s23.html"><span class="nav-icon">🧩</span><span class="nav-item-text">23. OOP koncepti (C#)</span><span class="nav-check" onclick="toggleRead(event,'s23')"></span></a>
+      <a class="nav-item" href="s24.html"><span class="nav-icon">🐧</span><span class="nav-item-text">24. Linux osnove za QA</span><span class="nav-check" onclick="toggleRead(event,'s24')"></span></a>
     </div>
   </nav>
 </div>
@@ -97,7 +99,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s15">
 <h1 class="sec-title" id="t-s15">⚙️ 15. CI/CD integracija<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~3 min citanja</span><button class="mark-read-btn" id="mrb-s15" onclick="markRead('s15')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~4 min citanja</span><button class="mark-read-btn" id="mrb-s15" onclick="markRead('s15')">Oznaci kao procitano</button></div>
 <h2 class="sub-title">15.1 Sta je CI/CD i uloga QA-a</h2>
 <p class="body-text">CI (Continuous Integration) je praksa automatskog build-ovanja i testiranja koda pri svakom commit-u. CD (Continuous Delivery) prosiruje CI automatskim deploy-om na visa okruzenja.</p>
 <p class="body-text">QA uloga: automatizovani testovi su gatekeeper koji sprecava isporuku defektnog koda. Svaki failovani test blokira pipeline.</p>
@@ -198,6 +200,22 @@ git commit -m "Fix: re-find LOV overlay before click to prevent stale ref"
 git push origin fix/material-lov
 
 # Kreirati PR → code review → merge → nightly suite pokuplja promenu</pre></div>
+<h2 class="sub-title">15.8 fetch vs. pull, merge vs. rebase</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>fetch vs. pull</td><td><code>git fetch</code> preuzima promene sa remote-a ali ne dira trenutnu granu — bezbedno, samo za pregled. <code>git pull</code> = fetch + merge, odmah menja radnu granu.</td></tr>
+<tr><td>merge vs. rebase</td><td>Merge pravi merge commit i cuva kompletnu istoriju grananja. Rebase "prevlaci" commit-e na vrh druge grane i prepisuje istoriju — linearnija ali opasnija na deljenim granama. Za feature branch pre PR-a rebase je cesto ok; na <code>develop</code>/<code>main</code> koristiti merge.</td></tr>
+<tr><td>.gitignore</td><td>Iskljucuje build output (<code>bin/</code>, <code>obj/</code>), IDE fajlove (<code>.vs/</code>), test rezultate (<code>TestResults/</code>) i kredencijale iz repo-a.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Resavanje merge konflikta u Page Object-u
+// 1. git status -> vidi koji fajl je u konfliktu
+// 2. Otvoriti fajl, naci markere:
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+lokator koji si ti promenio
+=======
+lokator koji je kolega promenio
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; branch-name
+// 3. Odluciti koji lokator je tacan (ili spojiti oba), obrisati markere
+// 4. git add <fajl> -> git commit -> git push</pre></div>
 
 <div class="section-nav"><a class="snav-btn" href="s14.html"><span class="snav-label">← Prethodna</span><span class="snav-title">14. API testiranje</span></a><a class="snav-btn next" href="s16.html"><span class="snav-label">Sledeca →</span><span class="snav-title">16. Framework arhitektura</span></a></div>
 </div>

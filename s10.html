@@ -60,6 +60,8 @@
       <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
       <a class="nav-item" href="s21.html"><span class="nav-icon">🎤</span><span class="nav-item-text">21. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
       <a class="nav-item" href="s22.html"><span class="nav-icon">⚡</span><span class="nav-item-text">22. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s22')"></span></a>
+      <a class="nav-item" href="s23.html"><span class="nav-icon">🧩</span><span class="nav-item-text">23. OOP koncepti (C#)</span><span class="nav-check" onclick="toggleRead(event,'s23')"></span></a>
+      <a class="nav-item" href="s24.html"><span class="nav-icon">🐧</span><span class="nav-item-text">24. Linux osnove za QA</span><span class="nav-check" onclick="toggleRead(event,'s24')"></span></a>
     </div>
   </nav>
 </div>
@@ -97,7 +99,7 @@
 <div class="deo-banner">DEO I — MANUALNO TESTIRANJE</div>
 <div class="section" id="s10">
 <h1 class="sec-title" id="t-s10">🗄️ 10. Test okruzenje i podaci<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~5 min citanja</span><button class="mark-read-btn" id="mrb-s10" onclick="markRead('s10')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~6 min citanja</span><button class="mark-read-btn" id="mrb-s10" onclick="markRead('s10')">Oznaci kao procitano</button></div>
 <h2 class="sub-title">10.1 Test environment vs. produkcija</h2>
 <div class="tbl-wrap"><table><thead><tr><th>Aspekt</th><th>Test okruzenje</th><th>Produkcija</th></tr></thead><tbody>
 <tr><td>Podaci</td><td>Sinteticki ili anonimizovani</td><td>Realni korisnici</td></tr>
@@ -246,6 +248,35 @@ public void ExcelUpload_ValidFile_ShouldCreateSpecifications()
   [ ] Konfiguracija okruzenja odgovara ocekivanoj (env vars, feature flags)
   [ ] Smoke test okruzenja prolazi pre pocetka punog test run-a
   [ ] Monitoring i logovi su dostupni za debugging</pre></div>
+<h2 class="sub-title">10.9 SQL upiti za slozeniju verifikaciju — JOIN, GROUP BY, subquery</h2>
+<p class="body-text">Iznad seed/assert/cleanup patterna iz 10.5, ovi upiti se koriste kad verifikacija zahteva podatke iz vise povezanih tabela odgovarace u testovima gde se pojedinacna SQL-om proverava vezanih zapisa.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>-- INNER JOIN — samo redovi koji imaju par u obe tabele
+SELECT s.Title, u.Email
+FROM Specifications s
+INNER JOIN Users u ON s.OwnerId = u.Id
+WHERE s.Status = 'Approved';
+
+-- LEFT JOIN — svi redovi leve tabele + NULL gde nema para
+-- Tipican slucaj: pronaci specifikacije BEZ dodeljenog owner-a
+SELECT s.SpecId FROM Specifications s
+LEFT JOIN Users u ON s.OwnerId = u.Id
+WHERE u.Id IS NULL;
+
+-- GROUP BY + HAVING — WHERE filtrira pre agregacije, HAVING posle
+SELECT OwnerId, COUNT(*) AS SpecCount
+FROM Specifications
+GROUP BY OwnerId
+HAVING COUNT(*) >= 5
+ORDER BY SpecCount DESC;
+
+-- Subquery — zapisi koji IMAJU povezane audit unose
+SELECT SpecId, Title FROM Specifications
+WHERE SpecId IN (SELECT EntityId FROM AuditLog WHERE Action = 'StatusChange');
+
+-- Subquery — zapisi koji NEMAJU povezane audit unose (potencijalni bug)
+SELECT SpecId, Title FROM Specifications
+WHERE SpecId NOT IN (SELECT EntityId FROM AuditLog WHERE Action = 'StatusChange');</pre></div>
+<div class="note">WHERE vs. HAVING je cesta zabuna: WHERE filtrira redove pre GROUP BY (ne moze da referencira agregatnu funkciju), HAVING filtrira grupe posle agregacije.</div>
 
 <div class="section-nav"><a class="snav-btn" href="s09.html"><span class="snav-label">← Prethodna</span><span class="snav-title">9. Test dokumentacija</span></a><a class="snav-btn next" href="s11.html"><span class="snav-label">Sledeca →</span><span class="snav-title">11. Uvod u automatizaciju</span></a></div>
 </div>

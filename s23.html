@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌐 12. Selenium / WebDriver — QA Referentni Dokument</title>
+<title>🧩 23. OOP koncepti (C#) — QA Referentni Dokument</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -49,7 +49,7 @@
     </div>
     <div class="nav-group" id="g2">
       <a class="nav-item" href="s11.html"><span class="nav-icon">🤖</span><span class="nav-item-text">11. Uvod u automatizaciju</span><span class="nav-check" onclick="toggleRead(event,'s11')"></span></a>
-      <a class="nav-item active" href="s12.html"><span class="nav-icon">🌐</span><span class="nav-item-text">12. Selenium / WebDriver</span><span class="nav-check" onclick="toggleRead(event,'s12')"></span></a>
+      <a class="nav-item" href="s12.html"><span class="nav-icon">🌐</span><span class="nav-item-text">12. Selenium / WebDriver</span><span class="nav-check" onclick="toggleRead(event,'s12')"></span></a>
       <a class="nav-item" href="s13.html"><span class="nav-icon">🏗️</span><span class="nav-item-text">13. Page Object Model</span><span class="nav-check" onclick="toggleRead(event,'s13')"></span></a>
       <a class="nav-item" href="s14.html"><span class="nav-icon">🔌</span><span class="nav-item-text">14. API testiranje</span><span class="nav-check" onclick="toggleRead(event,'s14')"></span></a>
       <a class="nav-item" href="s15.html"><span class="nav-icon">⚙️</span><span class="nav-item-text">15. CI/CD integracija</span><span class="nav-check" onclick="toggleRead(event,'s15')"></span></a>
@@ -60,7 +60,7 @@
       <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
       <a class="nav-item" href="s21.html"><span class="nav-icon">🎤</span><span class="nav-item-text">21. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
       <a class="nav-item" href="s22.html"><span class="nav-icon">⚡</span><span class="nav-item-text">22. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s22')"></span></a>
-      <a class="nav-item" href="s23.html"><span class="nav-icon">🧩</span><span class="nav-item-text">23. OOP koncepti (C#)</span><span class="nav-check" onclick="toggleRead(event,'s23')"></span></a>
+      <a class="nav-item active" href="s23.html"><span class="nav-icon">🧩</span><span class="nav-item-text">23. OOP koncepti (C#)</span><span class="nav-check" onclick="toggleRead(event,'s23')"></span></a>
       <a class="nav-item" href="s24.html"><span class="nav-icon">🐧</span><span class="nav-item-text">24. Linux osnove za QA</span><span class="nav-check" onclick="toggleRead(event,'s24')"></span></a>
     </div>
   </nav>
@@ -73,7 +73,7 @@
     <button id="menu-btn" class="tb-btn" onclick="toggleSidebar()" title="Meni" aria-label="Meni">☰</button>
     <a class="tb-btn" href="index.html" title="Pocetna" aria-label="Pocetna">🏠</a>
     <span id="topbar-meta">QA Ref · v2.0 · 2026</span>
-    <span id="breadcrumb"><span>🌐 12. Selenium / WebDriver</span></span>
+    <span id="breadcrumb"><span>🧩 23. OOP koncepti (C#)</span></span>
   </div>
   <div id="topbar-right">
     <button class="tb-btn" onclick="toggleQuickRef()" title="Quick Reference" aria-label="Quick Reference">⚡</button>
@@ -97,140 +97,44 @@
 
   <div id="content">
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
-<div class="section" id="s12">
-<h1 class="sec-title" id="t-s12">🌐 12. Selenium / WebDriver<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~4 min citanja</span><button class="mark-read-btn" id="mrb-s12" onclick="markRead('s12')">Oznaci kao procitano</button></div>
-<h2 class="sub-title">12.1 Selenium arhitektura i W3C protokol</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [Test kod (C#/Java/Python)]
-          |  WebDriver API pozivi
-          v
-  [Browser Driver (chromedriver / geckodriver / msedgedriver)]
-          |  W3C WebDriver Protocol (HTTP/JSON Wire)
-          v
-  [Browser (Chrome / Firefox / Edge)]
-
-  Selenium Manager (4.x): automatski preuzima kompatibilni driver.
-  Selenium Grid: paralelno izvrsavanje na vise masina i browser-a.</pre></div>
-<h2 class="sub-title">12.2 Lokatori elemenata — hijerarhija stabilnosti</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Lokator</th><th>Preporuka</th><th>C# primer</th></tr></thead><tbody>
-<tr><td>ID</td><td>Uvek koristiti kada je dostupan. Najbrzi i najstabilniji.</td><td>By.Id(btn)</td></tr>
-<tr><td>data-testid</td><td>Atribut koji tim dodaje iskljucivo za testove. Idealan.</td><td>By.CssSelector([data-testid=login-btn])</td></tr>
-<tr><td>Name</td><td>Korisno za forme.</td><td>By.Name(username)</td></tr>
-<tr><td>CSS Selector</td><td>Fleksibilan, brz, citljiv. Preferovati nad XPath-om.</td><td>By.CssSelector(.btn-primary)</td></tr>
-<tr><td>XPath</td><td>Najfleksibilniji, sporiji i krhkiji. Za kompleksne slucajeve.</td><td>By.XPath(//button[text()])</td></tr>
-<tr><td>Class Name</td><td>Nestabilan ako je CSS class deljeni. Izbegavati.</td><td>By.ClassName(btn)</td></tr>
-</tbody></table></div>
-<div class="note">Dogovoriti se sa development timom da dodaju data-testid atribute na kljucne elemente. Izbegavati XPath sa indeksima (//div[3]/span[2]) — krhak pri svakoj UI promeni.</div>
-<h2 class="sub-title">12.3 Waits — sinhronizacija sa browser-om</h2>
-<div class="warning">Thread.Sleep() nije wait strategija. Uvodi fiksna kasnjenja i cini testove sporim i nestabilnim.</div>
+<div class="section" id="s23">
+<h1 class="sec-title" id="t-s23">🧩 23. OOP koncepti (C#)<span class="read-badge">✓ Procitano</span></h1>
+<div class="section-meta"><span class="read-time">⏱ ~1 min citanja</span><button class="mark-read-btn" id="mrb-s23" onclick="markRead('s23')">Oznaci kao procitano</button></div>
+<p class="body-text">OOP koncepti se u intervjuima pitaju u teoriji, ali za QA automation inzenjera vaznije je gde se svakodnevno koriste u Page Object Model-u i test framework-u.</p>
+<h2 class="sub-title">23.1 Class i Object</h2>
 <div class="tbl-wrap"><table><tbody>
-<tr><td>Implicit Wait</td><td>Globalno podesavanje na svaki FindElement poziv. Lose — moze maskirati probleme i usporiti testove. Izbegavati.</td></tr>
-<tr><td>Explicit Wait</td><td>Ceka na konkretan uslov za konkretan element. Preporuceni pristup.</td></tr>
-<tr><td>Fluent Wait</td><td>Explicit wait sa konfigurabilnim polling intervalom i ignorisanjem odredjenih exception-a.</td></tr>
+<tr><td>Class</td><td>Nacrt koji definise properties i metode — npr. <code>LoginPage</code> klasa definise lokatore i akcije forme za prijavu.</td></tr>
+<tr><td>Object</td><td>Instanca klase sa konkretnim podacima — <code>new LoginPage(driver)</code> je jedan konkretan objekat vezan za trenutni WebDriver.</td></tr>
+<tr><td>Constructor</td><td>Specijalna metoda pozvana pri kreiranju objekta — inicijalizuje stanje (npr. prima <code>IWebDriver</code> i inicijalizuje lokatore preko Page Factory-ja).</td></tr>
 </tbody></table></div>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Explicit Wait — preporuceno
-var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-var el = wait.Until(ExpectedConditions.ElementIsVisible(By.Id(btn)));
-
-// Korisne ExpectedConditions metode:
-//   ElementIsVisible, ElementToBeClickable, InvisibilityOfElement,
-//   TextToBePresentInElement, UrlContains</pre></div>
-<h2 class="sub-title">12.4 Cesti exception-i i resenja</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Exception</th><th>Uzrok</th><th>Resenje</th></tr></thead><tbody>
-<tr><td>NoSuchElementException</td><td>Element nije pronadjen u trenutku pretrage.</td><td>Proveriti lokator. Dodati Explicit Wait.</td></tr>
-<tr><td>StaleElementReferenceException</td><td>Element pronadjen ali DOM promenjen pre interakcije.</td><td>Re-locate element. Retry logika.</td></tr>
-<tr><td>ElementNotInteractableException</td><td>Element skriven, disabled ili prekriven.</td><td>Cekati na clickability. JS executor kao fallback.</td></tr>
-<tr><td>ElementClickInterceptedException</td><td>Drugi element prekriva ciljni (modal, overlay).</td><td>Sacekati da overlay nestane. Scroll do elementa.</td></tr>
-<tr><td>TimeoutException</td><td>Explicit Wait nije pronasao uslov u zadatom vremenu.</td><td>Povecati timeout ili proveriti lokator.</td></tr>
+<h2 class="sub-title">23.2 Cetiri stuba OOP-a</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Princip</th><th>Objasnjenje</th><th>Primer iz automatizacije</th></tr></thead><tbody>
+<tr><td>Encapsulation</td><td>Sakrivanje internih detalja, izlaganje samo javnog interfejsa.</td><td>Page Object skriva lokatore (private) i izlaze samo metode kao <code>Login(user, pass)</code> — test ne zna kako je login implementiran, samo poziva metodu.</td></tr>
+<tr><td>Inheritance</td><td>Child klasa nasledjuje ponasanje parent klase.</td><td>Sve Page klase nasledjuju <code>BasePage</code> koja ima zajednicke metode (WaitForPageLoad, GetTitle, Screenshot).</td></tr>
+<tr><td>Polymorphism</td><td>Isti interfejs, razlicito ponasanje u zavisnosti od konkretne klase.</td><td>Tenant-specific override klasa (GuiCustomizationLayer) redefinise metodu iz generickog GuiLayer-a za konkretnog klijenta.</td></tr>
+<tr><td>Abstraction</td><td>Sakrivanje kompleksnosti iza jednostavnog interfejsa.</td><td>Test poziva <code>SeleniumBlock.Execute(action)</code> bez da zna za retry logiku, stale element handling i logovanje ispod.</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">12.5 Actions klasa</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>var actions = new Actions(driver);
+<h2 class="sub-title">23.3 Method overloading vs. overriding</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Overloading — isto ime, razliciti parametri (compile-time, u istoj klasi)
+public void FillForm(string name) { ... }
+public void FillForm(string name, string email) { ... }
 
-actions.MoveToElement(menuItem).Perform();      // Hover
-actions.ContextClick(element).Perform();         // Right-click
-actions.DoubleClick(element).Perform();          // Double-click
-actions.DragAndDrop(source, target).Perform();   // Drag and drop
-actions.KeyDown(Keys.Control).SendKeys(a)
-       .KeyUp(Keys.Control).Perform();           // Ctrl+A</pre></div>
-<h2 class="sub-title">12.6 File upload i download</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// File Upload — SendKeys direktno na input[type=file]
-// Zaobilazi file dialog, radi i u headless modu
-var fileInput = driver.FindElement(By.CssSelector(input[type=file]));
-fileInput.SendKeys(C:\TestData\test-image.jpg);
+// Overriding — child klasa redefinise metodu parent-a (runtime, virtual/override)
+public class BasePage
+{
+    public virtual void WaitForPageLoad() { /* generic wait */ }
+}
+public class MaterialPage : BasePage
+{
+    public override void WaitForPageLoad()
+    {
+        base.WaitForPageLoad();
+        // + cekanje na DevExpress grid da zavrsi render
+    }
+}</pre></div>
+<div class="note">U intervjuu je cesta zamka mesati overloading i overriding — overloading je ista klasa/razliciti parametri, overriding je child/parent i zahteva <code>virtual</code>/<code>override</code> (ili <code>abstract</code>) kljucne reci u C#.</div>
 
-// Verifikacija da je fajl preuzet
-var filePath = Path.Combine(downloadPath, export.csv);
-wait.Until(_ => File.Exists(filePath));</pre></div>
-<h2 class="sub-title">12.7 Screenshot i headless mode</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Screenshot na failovanom testu
-var screenshot = ((ITakesScreenshot)driver).GetScreenshot();
-screenshot.SaveAsFile(path/fail_testname_timestamp.png);
-
-// Headless Chrome za CI/CD
-var options = new ChromeOptions();
-options.AddArgument(--headless=new);
-options.AddArgument(--no-sandbox);
-options.AddArgument(--window-size=1920x1080);</pre></div>
-<h2 class="sub-title">12.8 Browser DevTools za QA debugging</h2>
-<p class="body-text">Browser DevTools (F12) su svakodnevni alat za QA — ne samo za developere. Tri tab-a su najkorisnija za testiranje:</p>
-<div class="tbl-wrap"><table><thead><tr><th>Tab</th><th>QA upotreba</th></tr></thead><tbody>
-<tr><td>Network</td><td>Praćenje HTTP zahteva: status kodovi, response body, trajanje, payload. Provera da li UI šalje ispravne API pozive.</td></tr>
-<tr><td>Console</td><td>JavaScript greške, console.log poruke, unhandled promise rejections. Često otkriva greške koje UI ne prikazuje.</td></tr>
-<tr><td>Elements</td><td>Inspekcija DOM-a, provera atributa (data-testid, aria-*), live CSS editing za reprodukciju layout bagova.</td></tr>
-</tbody></table></div>
-<h3 class="sub-sub-title">Network tab — šta QA traži</h3>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Scenario: klik na "Save" dugme ne prikazuje grešku, ali podatak
-         nije sačuvan u bazi.
-
-DevTools → Network tab → filter: Fetch/XHR
-  1. Pronaći POST/PUT zahtev koji se šalje na klik
-  2. Proveriti Status: 200, 201 (uspeh) ili 400, 500 (greška)
-  3. Proveriti Request Payload — da li su poslati ispravni podaci
-  4. Proveriti Response Body — da li server vraca ocekivani odgovor
-  5. Ako nema zahteva uopste — UI bug, dugme ne triggeruje API poziv
-
-Korisno: desni klik na zahtev → Copy as cURL → paste u terminal
-         za brzu reprodukciju bez UI-ja</pre></div>
-<h3 class="sub-sub-title">Console tab — česti signali</h3>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// CORS greška — API poziv blokiran od browsera
-Access to fetch at 'https://api...' has been blocked by CORS policy
-
-// 401 Unauthorized — istekao token, nedostaje auth header
-POST https://api.myapp.com/users 401 (Unauthorized)
-
-// Unhandled rejection — frontend ne hendluje API grešku
-Uncaught (in promise) TypeError: Cannot read property 'name' of null
-
-// Mixed content — HTTPS stranica poziva HTTP resurs
-Mixed Content: The page was loaded over HTTPS but requested
-an insecure resource</pre></div>
-<div class="note">Uvek otvoriti DevTools pre reprodukcije baga — Network tab cuva samo zahteve nastale dok je otvoren. Za bug report: screenshot Network tab-a sa statusom i response-om je jaci dokaz nego samo "ne radi".</div>
-<h2 class="sub-title">12.9 Alert-i, iframe-ovi i novi tabovi</h2>
-<div class="tbl-wrap"><table><tbody>
-<tr><td>Alert / Confirm / Prompt</td><td>Driver blokira dok se alert ne obradi — ne moze mu se pristupiti kroz normalni DOM.</td></tr>
-<tr><td>Iframe</td><td>Elementi unutar iframe-a nisu vidljivi driveru dok se eksplicitno ne prebaci kontekst.</td></tr>
-<tr><td>Novi tab / prozor</td><td>Klik koji otvara novi tab ne prebacuje driver automatski na njega — ostaje na originalnom handle-u.</td></tr>
-</tbody></table></div>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Alert
-var alert = driver.SwitchTo().Alert();
-alert.Accept();      // ili alert.Dismiss();
-
-// Iframe — obavezno switch nazad posle rada unutra
-driver.SwitchTo().Frame("frameNameOrId");
-// ... rad unutar iframe-a ...
-driver.SwitchTo().DefaultContent();
-
-// Novi tab/prozor — window handles
-var originalHandle = driver.CurrentWindowHandle;
-driver.FindElement(By.Id("openInNewTab")).Click();
-var newHandle = driver.WindowHandles.Except(new[] { originalHandle }).Single();
-driver.SwitchTo().Window(newHandle);
-// ... rad u novom tabu ...
-driver.Close();
-driver.SwitchTo().Window(originalHandle);</pre></div>
-<div class="note">Cest uzrok NoSuchElementException-a: element realno postoji na strani, ali se trazi izvan aktivnog iframe/window konteksta. Prva provera pri debugovanju — u kom frame-u/handle-u driver trenutno "gleda".</div>
-
-<div class="section-nav"><a class="snav-btn" href="s11.html"><span class="snav-label">← Prethodna</span><span class="snav-title">11. Uvod u automatizaciju</span></a><a class="snav-btn next" href="s13.html"><span class="snav-label">Sledeca →</span><span class="snav-title">13. Page Object Model</span></a></div>
+<div class="section-nav"><a class="snav-btn" href="s22.html"><span class="snav-label">← Prethodna</span><span class="snav-title">22. Cheat Sheet</span></a><a class="snav-btn next" href="s24.html"><span class="snav-label">Sledeca →</span><span class="snav-title">24. Linux osnove za QA</span></a></div>
 </div>
   </div>
 
@@ -287,7 +191,7 @@ driver.SwitchTo().Window(originalHandle);</pre></div>
 
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<script>window.QA_PAGE = {"id":"s12","title":"12. Selenium / WebDriver","prevUrl":"s11.html","nextUrl":"s13.html"};</script>
+<script>window.QA_PAGE = {"id":"s23","title":"23. OOP koncepti (C#)","prevUrl":"s22.html","nextUrl":"s24.html"};</script>
 <script src="script.js"></script>
 </body>
 </html>

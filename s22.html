@@ -60,6 +60,8 @@
       <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
       <a class="nav-item" href="s21.html"><span class="nav-icon">🎤</span><span class="nav-item-text">21. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
       <a class="nav-item active" href="s22.html"><span class="nav-icon">⚡</span><span class="nav-item-text">22. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s22')"></span></a>
+      <a class="nav-item" href="s23.html"><span class="nav-icon">🧩</span><span class="nav-item-text">23. OOP koncepti (C#)</span><span class="nav-check" onclick="toggleRead(event,'s23')"></span></a>
+      <a class="nav-item" href="s24.html"><span class="nav-icon">🐧</span><span class="nav-item-text">24. Linux osnove za QA</span><span class="nav-check" onclick="toggleRead(event,'s24')"></span></a>
     </div>
   </nav>
 </div>
@@ -97,7 +99,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s22">
 <h1 class="sec-title" id="t-s22">⚡ 22. Cheat Sheet<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~3 min citanja</span><button class="mark-read-btn" id="mrb-s22" onclick="markRead('s22')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~4 min citanja</span><button class="mark-read-btn" id="mrb-s22" onclick="markRead('s22')">Oznaci kao procitano</button></div>
 <p class="body-text">Kompaktni pregled najvaznijih komandi, pattern-a i formula — za brzi podsetnik pre intervjua ili tokom rada. Svaki red linkuje na detaljnu sekciju.</p>
 
 <h2 class="sub-title">22.1 Selenium / WebDriver</h2>
@@ -216,7 +218,15 @@
 <tr><td>Copy as cURL</td><td>Brza reprodukcija API poziva bez UI-ja</td><td>s12.8</td></tr>
 </tbody></table></div>
 
-<div class="section-nav"><a class="snav-btn" href="s21.html"><span class="snav-label">← Prethodna</span><span class="snav-title">21. Pitanja i odgovori</span></a></div>
+<h2 class="sub-title">22.14 Alat i protokol poredjenja</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Poredjenje</th><th>Kljucna razlika</th></tr></thead><tbody>
+<tr><td>Selenium vs. Playwright</td><td>Selenium — zreo, svi jezici, rucno podesavanje wait-ova. Playwright — noviji, auto-wait, ugradjeno upravljanje browser-ima, network interception. Oba podrzavaju POM.</td></tr>
+<tr><td>Cypress vs. Playwright</td><td>Cypress — samo JS, izvrsava se unutar browsera, jedan tab. Playwright — vise jezika, vise browsera, vise tabova, bolji za kompleksne aplikacije.</td></tr>
+<tr><td>REST vs. SOAP</td><td>REST — HTTP, JSON, lagan. SOAP — XML, strogi kontrakti, ugradjena bezbednost. REST dominira modernim API-jima, SOAP jos zivi u enterprise/banking sistemima.</td></tr>
+<tr><td>REST vs. GraphQL</td><td>REST — jedan endpoint po resursu, server odredjuje oblik odgovora. GraphQL — jedan endpoint, klijent sam bira koja polja zeli.</td></tr>
+</tbody></table></div>
+
+<div class="section-nav"><a class="snav-btn" href="s21.html"><span class="snav-label">← Prethodna</span><span class="snav-title">21. Pitanja i odgovori</span></a><a class="snav-btn next" href="s23.html"><span class="snav-label">Sledeca →</span><span class="snav-title">23. OOP koncepti (C#)</span></a></div>
 </div>
   </div>
 
@@ -273,7 +283,7 @@
 
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<script>window.QA_PAGE = {"id":"s22","title":"22. Cheat Sheet","prevUrl":"s21.html","nextUrl":null};</script>
+<script>window.QA_PAGE = {"id":"s22","title":"22. Cheat Sheet","prevUrl":"s21.html","nextUrl":"s23.html"};</script>
 <script src="script.js"></script>
 </body>
 </html>

@@ -60,6 +60,8 @@
       <a class="nav-item" href="s20.html"><span class="nav-icon">📚</span><span class="nav-item-text">20. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
       <a class="nav-item active" href="s21.html"><span class="nav-icon">🎤</span><span class="nav-item-text">21. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
       <a class="nav-item" href="s22.html"><span class="nav-icon">⚡</span><span class="nav-item-text">22. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s22')"></span></a>
+      <a class="nav-item" href="s23.html"><span class="nav-icon">🧩</span><span class="nav-item-text">23. OOP koncepti (C#)</span><span class="nav-check" onclick="toggleRead(event,'s23')"></span></a>
+      <a class="nav-item" href="s24.html"><span class="nav-icon">🐧</span><span class="nav-item-text">24. Linux osnove za QA</span><span class="nav-check" onclick="toggleRead(event,'s24')"></span></a>
     </div>
   </nav>
 </div>
@@ -97,7 +99,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s21">
 <h1 class="sec-title" id="t-s21">🎤 21. Pitanja i odgovori<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~31 min citanja</span><button class="mark-read-btn" id="mrb-s21" onclick="markRead('s21')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~34 min citanja</span><button class="mark-read-btn" id="mrb-s21" onclick="markRead('s21')">Oznaci kao procitano</button></div>
 <p class="body-text">Najcesca intervju pitanja za QA pozicije — od manuelnog testiranja do automatizacije. Svaki odgovor pocinje definicijom, a zatim sledi primer iz prakse kako bi se odgovor dao na intervjuu.</p>
 
 <h2 class="sub-title">Deo I — Manuelno testiranje</h2>
@@ -317,6 +319,10 @@
 <p class="body-text"><strong>Definicija:</strong> AI alati kao GitHub Copilot, M365 Copilot i ChatGPT/Claude su produktivni alati za QA — autocomplete za kod, analiza failure logova, generisanje test podataka, brainstorming edge case-ova.</p>
 <p class="body-text"><strong>U praksi:</strong> "GitHub Copilot mi stedi 60-70% vremena na boilerplate kodu — Page Object metode, assertion patterns, setup/teardown. M365 Copilot koristim za analizu nightly failure-a: paste-ujem stack trace sa kontekstom ('prosao je do juce, poslednji changeset je refaktor LOV komponente') i dobijem hipotezu za root cause koju onda verifikujem. ChatGPT/Claude koristim za generisanje test podataka, review test case design-a i brainstorming edge case-ova koje sam propustio. Kljucno: AI generisani kod je QA odgovornost — uvek review-ujem, nikad slepo prihvatam."</p>
 
+<h3 class="sub-sub-title">Test pada samo na CI-ju, lokalno prolazi — kako pristupas?</h3>
+<p class="body-text"><strong>Definicija:</strong> Najcesci uzroci: CI masina je sporija (timing), headless mod se ponasa drugacije od headed-a, drugacija verzija browsera/drajvera, razlicita rezolucija ekrana, ili config razlika (env varijable, connection string).</p>
+<p class="body-text"><strong>U praksi:</strong> "Prvo uporedim pipeline log i screenshot/video artifact sa lokalnim run-om — najcesce se vidi da je element jos u tranziciji (animacija, spinner) kad CI, koji je sporiji, pokusa interakciju, dok lokalna masina to stigne pre wait timeout-a. Zatim probam da repliciram lokalno u headless modu sa istom rezolucijom kao CI agent. Ako i dalje ne mogu da repliciram, povecam explicit wait timeout kao privremenu meru i dodam dodatni log (screenshot + DOM stanje) tacno na mestu gde CI padne, da sledeci fail nosi dokaz umesto nagadjanja."</p>
+
 <h2 class="sub-title">Deo III — Behavioral / Situaciona pitanja</h2>
 <p class="body-text">Intervjui za senior pozicije ukljucuju i pitanja o ponasanju u realnim situacijama. Odgovori prate STAR format: Situation → Task → Action → Result.</p>
 
@@ -355,6 +361,30 @@
 <p class="body-text"><strong>Task:</strong> Skratiti ramp-up period za buducu novu osobu sa 3 nedelje na manje od jedne.</p>
 <p class="body-text"><strong>Action:</strong> Napravio sam 'starter' test koji pokriva ceo flow: login → navigacija → akcija → asercija → screenshot na fail. Komentarisao sam svaki sloj koji test koristi — wrapper metode, Page Object pattern, config pristup. Uz test sam napisao kratki dokument: 'Tvoj prvi test za 2 sata' sa koracima: kloniraj repo → podesi config → pokreni starter test → modifikuj ga za novi scenario.</p>
 <p class="body-text"><strong>Result:</strong> Sledeca nova osoba je pokrenula prvi test za pola dana umesto tri nedelje. Starter test je postao deo onboarding procesa. Dokumentacija nije bila savrsena, ali je bila dovoljna da osoba ne bude blokirana dok ceka moj slobodan termin za pair session."</p>
+
+<h3 class="sub-sub-title">Fix je pokvario drugu funkcionalnost tokom regression-a — sta radis?</h3>
+<p class="body-text"><strong>Situation:</strong> Regression suite je pokazao novi fail u modulu koji sam vec proglasio stabilnim — poklopio se sa merge-om nezavisnog bugfix-a u drugom delu aplikacije.</p>
+<p class="body-text"><strong>Task:</strong> Potvrditi da je regression realna (ne flaky) pre nego sto ukljucim tim, i uraditi to pre nego sto build ode dalje ka release-u.</p>
+<p class="body-text"><strong>Action:</strong> Prvo sam ponovio test lokalno da iskljucim flaky uzrok, zatim uporedio changeset koji je uveo fix sa kodom modula koji je pukao — ispostavilo se da su delili zajednicku validation funkciju koju je fix promenio. Prijavio sam odmah, sa oba changeset-a i koracima za reprodukciju, i oznacio prioritet kao blocker za release jer je u pitanju bio deljeni kod, ne izolovan modul.</p>
+<p class="body-text"><strong>Result:</strong> Developer je popravio deljenu funkciju istog dana, pre release-a. Ovo je razlog zbog kojeg regression suite postoji — bez njega bi ova regresija stigla na produkciju.</p>
+
+<h3 class="sub-sub-title">Zahtevi se promene usred sprinta — kako se prilagodjavas?</h3>
+<p class="body-text"><strong>Situation:</strong> Tokom sprinta, PO je promenio pravilo validacije na formi koju sam vec pola pokrio test case-ovima i delimicno automatizovao.</p>
+<p class="body-text"><strong>Task:</strong> Prilagoditi test pokrivenost novom pravilu bez da tiho apsorbujem dodatni obim posla u isti rok.</p>
+<p class="body-text"><strong>Action:</strong> Proverio sam koji test case-ovi i koji automatizovani testovi su pogodjeni promenom, procenio dodatni effort, i to komunicirao PO-u i developeru pre nego sto sam pocelo prepravku — novi scenario ide u prioritet jer je svez i rizican, dok deo regresionih provera koje nisu direktno pogodjene cekaju sledeci nightly run umesto da ih forsiram u isti dan.</p>
+<p class="body-text"><strong>Result:</strong> Promena je pokrivena bez da je ugrozila ostatak sprinta. PO je dobio realnu procenu umesto tihog kasnjenja koje bi se otkrilo tek na kraju sprinta.</p>
+
+<h3 class="sub-sub-title">Automatizacija je propustila bag koji je manuelno testiranje uhvatilo — zasto?</h3>
+<p class="body-text"><strong>Situation:</strong> Manuelni tester je prijavio da forma posle uspesnog submit-a ne prikazuje azurirani status, dok je automatizovani regression test za isti flow bio zelen.</p>
+<p class="body-text"><strong>Task:</strong> Razumeti gap izmedju onoga sto automatizacija proverava i stvarnog ponasanja, i odluciti da li dodati asertiju ili je u pitanju bio flaky UI signal.</p>
+<p class="body-text"><strong>Action:</strong> Pogledao sam automatizovani test i video da je proveravao samo da se success poruka pojavila — nije proveravao da se prikazani status na strani zaista promenio, niti da je vrednost u bazi azurirana. Dodao sam asertiju na oba nivoa: UI status posle refresh-a i DB vrednost preko SQL provere (Sekcija 10.5).</p>
+<p class="body-text"><strong>Result:</strong> Test je posle toga hvatao istu klasu bug-a. Pouka koju sam preneo timu: "success poruka" nije dokaz da je akcija zavrsena — automatizacija mora da proveri stvarnu posledicu akcije, ne samo povrsinski signal.</p>
+
+<h3 class="sub-sub-title">Kako bi ubedio tim/menadzment da ulozi vise u automatizaciju?</h3>
+<p class="body-text"><strong>Situation:</strong> Regression pre svakog release-a se radio uglavnom manuelno i trajao je vise od dana, sto je usporavalo release cycle.</p>
+<p class="body-text"><strong>Task:</strong> Dobiti odobrenje da odvojim vreme za automatizaciju umesto da ceo sprint odem na manuelni regression.</p>
+<p class="body-text"><strong>Action:</strong> Umesto da govorim o alatima, izmerio sam trenutno stanje: koliko sati manuelni regression kosta po release-u i koliko releasa mesecno imamo. Predlozio sam da prvo automatizujemo najkriticniji i najcesce ponavljani flow kao proof of concept, sa procenom vremena izrade i ocekivane usteda po release-u.</p>
+<p class="body-text"><strong>Result:</strong> Nakon prvog flow-a automatizacija je smanjila taj deo regression-a sa nekoliko sati na par minuta, sto je bio konkretan argument za dalje siriti pokrivenost — brojka je uverljivija od "automatizacija je dobra praksa".</p>
 
 <div class="section-nav"><a class="snav-btn" href="s20.html"><span class="snav-label">← Prethodna</span><span class="snav-title">20. Glosar</span></a><a class="snav-btn next" href="s22.html"><span class="snav-label">Sledeca →</span><span class="snav-title">22. Cheat Sheet</span></a></div>
 </div>
