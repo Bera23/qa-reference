@@ -164,6 +164,15 @@ var mock = new Mock<IPaymentService>();
 mock.Setup(p => p.Charge(99.99m)).Returns(new Result { Success = true });
 // ... izvrsiti kod ...
 mock.Verify(p => p.Charge(99.99m), Times.Once);</pre></div>
+<h2 class="sub-title">11.6 xUnit vs. NUnit — koji izabrati</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Koncept</th><th>xUnit</th><th>NUnit</th></tr></thead><tbody>
+<tr><td>Jedan test</td><td><code>[Fact]</code></td><td><code>[Test]</code></td></tr>
+<tr><td>Data-driven test</td><td><code>[Theory] [InlineData(...)]</code></td><td><code>[TestCase(...)]</code></td></tr>
+<tr><td>Setup pre testa</td><td>Konstruktor klase (novi instance po testu — izolacija po default-u)</td><td><code>[SetUp]</code> metoda (deljena instanca klase izmedju testova)</td></tr>
+<tr><td>Teardown</td><td><code>IDisposable.Dispose()</code></td><td><code>[TearDown]</code> metoda</td></tr>
+<tr><td>Grupisanje testova</td><td><code>[Collection("...")]</code></td><td><code>[TestFixture]</code> + kategorije</td></tr>
+</tbody></table></div>
+<div class="note">Kljucna arhitekturna razlika: xUnit pravi NOVU instancu test klase za SVAKI test (konstruktor = setup) — sprecava slucajno deljenje stanja izmedju testova. NUnit deli jednu instancu i oslanja se na <code>[SetUp]</code>/<code>[TearDown]</code> da eksplicitno resetuju stanje. Oba su podjednako validan izbor — projekat obicno vec ima jedan uspostavljen, retko se menja usred puta.</div>
 
 <div class="section-nav"><a class="snav-btn" href="s10.html"><span class="snav-label">← Prethodna</span><span class="snav-title">10. Test okruzenje i podaci</span></a><a class="snav-btn next" href="s12.html"><span class="snav-label">Sledeca →</span><span class="snav-title">12. OOP koncepti (C#)</span></a></div>
 </div>
