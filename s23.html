@@ -99,7 +99,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s23">
 <h1 class="sec-title" id="t-s23">🎤 23. Pitanja i odgovori<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~34 min citanja</span><button class="mark-read-btn" id="mrb-s23" onclick="markRead('s23')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~40 min citanja</span><button class="mark-read-btn" id="mrb-s23" onclick="markRead('s23')">Oznaci kao procitano</button></div>
 <p class="body-text">Najcesca intervju pitanja za QA pozicije — od manuelnog testiranja do automatizacije. Svaki odgovor pocinje definicijom, a zatim sledi primer iz prakse kako bi se odgovor dao na intervjuu.</p>
 
 <h2 class="sub-title">Deo I — Manuelno testiranje</h2>
@@ -124,6 +124,10 @@
 <p class="body-text"><strong>Definicija:</strong> SDLC (Software Development Life Cycle) je celokupan proces razvoja softvera od zahteva do odrzavanja. STLC (Software Testing Life Cycle) je podskup SDLC-a koji se fokusira iskljucivo na faze testiranja: planiranje, dizajn TC-ova, priprema okruzenja, izvrsavanje, izvestavanje, zatvaranje.</p>
 <p class="body-text"><strong>U praksi:</strong> "Dok dev tim radi na implementaciji u okviru SDLC-a, ja paralelno radim STLC aktivnosti — piseм test plan, dizajniram test case-ove na osnovu zahteva, pripremam test podatke. Kada build stigne na QA okruzenje, vec imam sve spremno za izvrsavanje."</p>
 
+<h3 class="sub-sub-title">Koji su glavni SDLC modeli?</h3>
+<p class="body-text"><strong>Definicija:</strong> Waterfall — linearne sekvencijalne faze, testiranje na kraju. Agile — kratke iteracije, kontinualna isporuka, QA ukljucen od prvog dana. Iterative — sistem raste u ciklusima, regression raste sa svakim ciklusom. Spiral — iterativan razvoj plus formalna analiza rizika na pocetku svake faze.</p>
+<p class="body-text"><strong>U praksi:</strong> "Radim u Agile/Scrum okruzenju — QA je ukljucen od Sprint Refinement-a, ne cekam da developer zavrsi da bih pocela da testiram. Najveca razlika u odnosu na Waterfall koji sam ucila u teoriji: regression suite nije nesto sto se radi jednom na kraju, vec svaki sprint dodaje na postojeci automatizovan set koji mora ostati brz i pouzdan."</p>
+
 <h3 class="sub-sub-title">Objasni V-Model.</h3>
 <p class="body-text"><strong>Definicija:</strong> V-Model je SDLC model koji eksplicitno mapira svaku razvojnu fazu na odgovarajuci nivo testiranja. Leva strana V-a su faze razvoja (zahtevi → dizajn → kodiranje), desna strana su faze testiranja (unit → integration → system → acceptance).</p>
 <p class="body-text"><strong>U praksi:</strong> "Svaki nivo testiranja ima jasnog 'para' na razvojnoj strani. Kad radim system testing, moj test basis su sistemski zahtevi, ne kod. Kad developer pise unit testove, njegov test basis je detaljan dizajn. V-Model nam pomaze da ne preskocimo nivo — ne mozes raditi UAT ako nisi prosao system testing."</p>
@@ -139,6 +143,10 @@
 <h3 class="sub-sub-title">Objasni Black-box, White-box i Grey-box testiranje.</h3>
 <p class="body-text"><strong>Definicija:</strong> Black-box testiranje se izvrsava bez uvida u kod — samo ulaz i izlaz. White-box testiranje zahteva potpun uvid u internu implementaciju. Grey-box kombinuje oba — parcijalno poznavanje sistema (npr. baza, API) uz fokus na funkcionalne scenarije.</p>
 <p class="body-text"><strong>U praksi:</strong> "Vecinu svog rada bih opisao kao grey-box. Testiram UI kao black-box — ne gledam frontend kod, gledam ponasanje. Ali istovremeno imam pristup bazi i API-ju, pa mogu da proverim da li je akcija zaista zapisana u bazi ili da direktno gadjam API da vidim sta vraca. Cistog black-box-a skoro nema u praksi."</p>
+
+<h3 class="sub-sub-title">Koji su pristupi Integration testing-u?</h3>
+<p class="body-text"><strong>Definicija:</strong> Big Bang — svi moduli se integrisu odjednom, tesko je izolovati kriv modul kad nesto pukne. Top-down — testira se od najvise komponente ka nizim, nedostajuce nize komponente se zamenjuju Stub-ovima. Bottom-up — obrnuto, nedostajuca visa komponenta se zamenjuje Driver-om. Sandwich kombinuje oba paralelno.</p>
+<p class="body-text"><strong>U praksi:</strong> "U praksi retko biramo eksplicitno jedan pristup — vecina enterprise sistema se gradi inkrementalno pa je prirodno bottom-up: testiram nizи servis cim je gotov, pa ga integrisem sa visim slojem kad i taj stigne. Kljucna stvar koju uvek proverim: da li je nesto stvarno testirano end-to-end ili je samo stub/driver simulirao ponasanje — to su dve razlicite stvari, i lako se pomesaju u statusnom izvestaju."</p>
 
 <h3 class="sub-sub-title">Sta su Equivalence Partitioning i Boundary Value Analysis?</h3>
 <p class="body-text"><strong>Definicija:</strong> EP deli ulazni skup na particije u kojima se ocekuje isto ponasanje — testira se jedan predstavnik iz svake. BVA testira vrednosti na granicama particija jer se tu najcesce javljaju greske.</p>
@@ -210,6 +218,22 @@
 <p class="body-text"><strong>Definicija:</strong> Stub vraca predefinisani odgovor bez logike — zamenjuje zavisnost. Mock verifikuje i kako je pozvan: koliko puta, sa kojim argumentima. Spy je omotac oko realne implementacije — poziva pravu metodu ali belezi pozive.</p>
 <p class="body-text"><strong>U praksi:</strong> "Kad testiram checkout, payment servis stub-ujem da uvek vraca Success — ne zelim da gadjam Stripe u testu. Kad testiram da li notifikacioni servis SALJE email, koristim mock — proveravam da je metoda pozvana tacno jednom sa ispravnim argumentima. Spy koristim retko — kad zelim da realna metoda prodje ali da proverim da je pozvana."</p>
 
+<h3 class="sub-sub-title">Objasni 4 stuba OOP-a sa primerima iz tvog frameworka.</h3>
+<p class="body-text"><strong>Definicija:</strong> Encapsulation — sakrivanje internih detalja, izlaganje samo javnog interfejsa. Inheritance — child klasa nasledjuje ponasanje parenta. Polymorphism — isti interfejs, razlicito ponasanje po konkretnoj klasi. Abstraction — sakrivanje kompleksnosti iza jednostavnog interfejsa.</p>
+<p class="body-text"><strong>U praksi:</strong> "Svaki Page Object je encapsulation u praksi — lokatori su private, test poziva samo javne metode kao Login(). Sve Page klase nasledjuju BasePage (inheritance) sa zajednickim WaitForPageLoad(). Tenant-specific override klasa redefinise metodu iz genericnog sloja za konkretnog klijenta — to je polymorphism. A retry mehanizam koji test poziva bez da zna za stale element handling ispod — to je abstraction."</p>
+
+<h3 class="sub-sub-title">Koja je razlika izmedju Interface i Abstract klase?</h3>
+<p class="body-text"><strong>Definicija:</strong> Interface je samo ugovor bez stanja — klasa moze implementirati vise interfejsa. Abstract klasa moze imati i implementirane i apstraktne metode plus stanje (fields), ali klasa moze naslediti samo jednu.</p>
+<p class="body-text"><strong>U praksi:</strong> "Selenium sam je izgradjen na interfejsima — IWebDriver, IWebElement — pa mogu da pisem kod protiv apstrakcije i zamenim ChromeDriver za RemoteWebDriver na Grid-u bez izmene testa. BasePage kod nas je abstract klasa jer nosi zajednicko stanje (Driver) i delimicnu implementaciju, ali zahteva da svaka Page implementira svoj IsLoaded()."</p>
+
+<h3 class="sub-sub-title">Sta je Dependency Injection i zasto je bitan za testabilnost?</h3>
+<p class="body-text"><strong>Definicija:</strong> DI znaci da objekat ne kreira sam svoje zavisnosti vec ih prima spolja, najcesce kroz konstruktor. Omogucava da se ista klasa testira sa razlicitim (realnim ili mock) zavisnostima bez izmene same klase.</p>
+<p class="body-text"><strong>U praksi:</strong> "Svaki Page kod nas prima IWebDriver kroz konstruktor umesto da ga sam kreira. Zvuci trivijalno, ali to je razlog zasto mogu da testiram isti Page protiv ChromeDriver-a lokalno i RemoteWebDriver-a na Grid-u u CI-ju bez ijedne izmene u Page klasi — samo BaseTest odlucuje sta injektuje."</p>
+
+<h3 class="sub-sub-title">Objasni SOLID principe kroz primer iz automatizacije.</h3>
+<p class="body-text"><strong>Definicija:</strong> Single Responsibility — jedan razlog za izmenu. Open/Closed — otvoreno za prosirenje, zatvoreno za izmenu. Liskov Substitution — child mora moci da zameni parent bez da pokvari ugovor. Interface Segregation — manji specificni interfejsi. Dependency Inversion — zavisi od apstrakcije, ne konkretne implementacije.</p>
+<p class="body-text"><strong>U praksi:</strong> "Najcesce krsenje koje vidim u code review-u je Single Responsibility — Page Object koji uz UI interakcije radi i asercije i logovanje. Insistiram da Page samo enkapsulira interakcije, asercije ostaju u testu. Dependency Inversion mi je najkorisniji svakodnevno — sve zavisi od IWebDriver interfejsa, nikad od konkretnog ChromeDriver-a."</p>
+
 <h3 class="sub-sub-title">Sta je Selenium WebDriver i kako radi?</h3>
 <p class="body-text"><strong>Definicija:</strong> Selenium WebDriver je W3C standard protokol za automatizaciju web browser-a. Test kod salje HTTP komande WebDriver-u, koji ih prevodi u native komande za browser (ChromeDriver, GeckoDriver).</p>
 <p class="body-text"><strong>U praksi:</strong> "Piseм testove u C# koji koriste IWebDriver interfejs. Kad pozovem FindElement().Click(), to postaje HTTP POST na ChromeDriver koji ga prevodi u Chrome DevTools Protocol komandu. Nikad ne radim direktno sa browser DOM-om — sve ide kroz WebDriver sloj. To znaci da isti test moze da radi na Chrome, Firefox, Edge bez promene koda — samo promeniш driver."</p>
@@ -222,6 +246,10 @@
 <p class="body-text"><strong>Definicija:</strong> Prioritet lokatorima: 1) ID ili stabilan data atribut. 2) CSS sa semantickim atributima. 3) XPath samo kada je neophodno — kompleksna hijerarhija, label-to-control veze, dinamicke tabele.</p>
 <p class="body-text"><strong>U praksi:</strong> "Izbegavam pozicione selektore (nth-child), duge fragile XPath lance, i text-match selektore koji pucaju sa lokalizacijom. Kad aplikacija nema stabilne identifikatore — a to se desava — short-term gradim najrobusniji fallback koji mogu (parent kontekst + atribut + tip kontrole + wait). Medium-term trazim od dev tima da dodaju data-testid atribute — developer je obicno receptivan kad mu pokаzeм konkretan flaky test koji bi njegov atribut resio."</p>
 
+<h3 class="sub-sub-title">Kako testiras iframe, popup i multi-tab scenarije u Seleniumu?</h3>
+<p class="body-text"><strong>Definicija:</strong> Iframe zahteva eksplicitan switch konteksta (SwitchTo().Frame()) pre interakcije i switch nazad (DefaultContent()) posle. Alert/Confirm blokira driver dok se ne obradi kroz SwitchTo().Alert(). Novi tab ne prebacuje driver automatski — treba uzeti window handle-ove i eksplicitno switch-ovati.</p>
+<p class="body-text"><strong>U praksi:</strong> "Najcesci uzrok NoSuchElementException-a koji vidim kod junior kolega je bas ovo — element realno postoji na strani, ali driver 'gleda' u pogresan frame ili window handle. Prva stvar koju proverim kod takvog fail-a nije lokator, vec u kom kontekstu se driver trenutno nalazi. Za novi tab uvek cuvam originalni handle pre klika koji ga otvara, jer posle zatvaranja moram eksplicitno da se vratim na njega."</p>
+
 <h3 class="sub-sub-title">Sta je Page Object Model i zasto ga koristis?</h3>
 <p class="body-text"><strong>Definicija:</strong> POM je design pattern koji enkapsulira UI lokatore i interakcije za stranicu u posebnu klasu. Test kod komunicira sa stranicom kroz metode te klase, nikad direktno sa lokatorima. Prednosti: separacija briga, odrzivost, citljivost, ponovna upotreba.</p>
 <p class="body-text"><strong>U praksi:</strong> "U nasem framework-u imamo slojevit model. Na dnu je wrapper sloj koji apstrahuje WebDriver pozive — kontrole, wait logiku, retry mehanizme. Iznad toga je sloj Page Object-a sa biznis-level akcijama: test ne kaze 'nadji element i klikni', vec 'kreiraj novu specifikaciju' ili 'dodeli atribut'. Postoji i customization sloj za tenant-specificne override-ove jer je ovo multi-tenant PLM platforma. Test scenariji na vrhu pozivaju intent-level metode bez da znaju za implementacione detalje."</p>
@@ -229,6 +257,10 @@
 <h3 class="sub-sub-title">Sta radis kad POM postane problem?</h3>
 <p class="body-text"><strong>Definicija:</strong> POM postaje problem kad Page klase postanu prevelike (50+ metoda), kad se over-engineeruje na jednostavnim projektima, ili kad ugnjezdeni Page objekti cine navigaciju komplikovanom. Alternativa za kompleksne scenarije: Screenplay pattern.</p>
 <p class="body-text"><strong>U praksi:</strong> "Kad Page klasa naraste previše, delim je po odgovornosti — LoginPage, LoginValidationPage, LoginSocialPage. Kad isti 'custom' kod pocne da se ponavlja u vise tenant override-ova, refaktorisem ga nazad u bazni sloj. Pravilo je jednostavno: ako je stabilno i deljeno — ide u bazu. Ako devira po tenantu — ide u customization sloj."</p>
+
+<h3 class="sub-sub-title">Sta je Component Object Pattern i kada ga koristis?</h3>
+<p class="body-text"><strong>Definicija:</strong> Kad se ista UI komponenta (grid, modal, dropdown) ponavlja na vise stranica, dobija svoju klasu koju vise Page objekata ponovo koristi kroz composition, umesto da se lokatori kopiraju u svaki Page koji je koristi.</p>
+<p class="body-text"><strong>U praksi:</strong> "Radim sa DevExpress komponentama koje se ponavljaju svuda — grid, LOV overlay dropdown, bookmark navigacija. Svaka od njih ima svoju Component klasu sa scoped root lokatorom. Prednost koju sam osetio direktno: kad sam popravio scoping bug u LOV overlay logici (trazenje moralo da bude ograniceno na vidljivi overlay, ne ceo DOM), fix se automatski primenio na SVE stranice koje taj dropdown koriste — nisam morao da menjam desetine Page klasa pojedinacno."</p>
 
 <h3 class="sub-sub-title">Sta testiras na API-ju?</h3>
 <p class="body-text"><strong>Definicija:</strong> Status kod, response body (kontrakt), auth/authz, response time, idempotencija, i schema validacija prema OpenAPI/Swagger kontraktu.</p>
@@ -249,6 +281,18 @@
 <h3 class="sub-sub-title">Kako tvoj framework izgleda arhitekturalno?</h3>
 <p class="body-text"><strong>Definicija:</strong> Robustan test framework ima: Driver Management (DriverFactory), Page Objects (POM), Base Test Class, Configuration Layer, Test Data Management, Utility/Helper Layer, Reporting (Allure/ExtentReports), Logging (NLog/log4net).</p>
 <p class="body-text"><strong>U praksi:</strong> "Nas framework je slojevit C#/Selenium/xUnit stack. Na dnu je wrapper sloj koji apstrahuje WebDriver — kontrole, wait logika, retry mehanizmi. Test kod nikad ne dodiruje WebDriver direktno. Iznad je Page Object sloj sa biznis-level akcijama. Na vrhu su test scenariji u xUnit projektu sa asercijama. Konfiguracija je u runsettings/testsettings fajlovima — isti test kod radi na vise okruzenja bez promene. Pravilo: nijedan test ne hardkoduje URL, credential ili environment detalj."</p>
+
+<h3 class="sub-sub-title">Kako pristupas logging strategiji u frameworku?</h3>
+<p class="body-text"><strong>Definicija:</strong> Nivoi loga (Trace/Debug, Info, Warning, Error) sluze razlicitim svrhama — Info ostaje ukljucen u CI za citljiv log bez preplavljivanja, Warning signalizira da je nesto neocekivano ali test nastavlja (npr. retry je bio potreban), Error uvek nosi kontekst (korak, podatak, screenshot).</p>
+<p class="body-text"><strong>U praksi:</strong> "Pravilo koje se strogo drzim: prazan catch blok nikad ne ostaje bez loga. Ako se greska guta necujno, sledeci fail na istom mestu je nemoguce dijagnostikovati unazad. Svaka linija loga kod nas ukljucuje test ime i identifikator podatka — kad 47 suita pise u isti nightly log, 'Element not found' bez konteksta je beskorisno, 'Element not found [MaterialTests.EditSpec, SpecId=SPEC-123]' nije."</p>
+
+<h3 class="sub-sub-title">xUnit vs. NUnit — koji biras i zasto?</h3>
+<p class="body-text"><strong>Definicija:</strong> Kljucna arhitekturna razlika: xUnit pravi novu instancu test klase za svaki test (konstruktor = setup), sto sprecava slucajno deljenje stanja izmedju testova. NUnit deli jednu instancu klase i oslanja se na [SetUp]/[TearDown] da eksplicitno resetuju stanje.</p>
+<p class="body-text"><strong>U praksi:</strong> "Radim sa xUnit-om — [Fact] za pojedinacne testove, [Theory]+[InlineData] za data-driven. Prednost koju cenim je bas ta izolacija po konstruktoru — ne moram da brinem da je prethodni test ostavio state koji ce pokvariti sledeci. Oba su podjednako validan izbor, ali kad projekat vec ima jedan uspostavljen, retko ima smisla menjati ga usred puta."</p>
+
+<h3 class="sub-sub-title">MSSQL vs. PostgreSQL — na sta pazis kad prelazis sa jedne na drugu?</h3>
+<p class="body-text"><strong>Definicija:</strong> Query logika (JOIN, GROUP BY, subquery) je identicna na oba sistema — razlike su u sintaksi funkcija (GETDATE() vs NOW(), TOP vs LIMIT, IDENTITY vs SERIAL) i C# konektoru (SqlConnection vs NpgsqlConnection).</p>
+<p class="body-text"><strong>U praksi:</strong> "Trenutno radim sa MSSQL i Oracle na PLM-u, ali sam ranije radila API-to-DB validaciju protiv PostgreSQL-a pgAdmin-om. Najveca zamka koja me je jednom uhvatila: case-sensitivity identifikatora. MSSQL je case-insensitive po default-u, Postgres je case-sensitive ako je identifikator pod navodnicima — upit koji prolazi na QA (MSSQL) okruzenju moze tiho da vraca prazan rezultat na Postgres produkciji."</p>
 
 <h3 class="sub-sub-title">Sta je Data-driven Testing?</h3>
 <p class="body-text"><strong>Definicija:</strong> Isti test scenario se izvrsava sa razlicitim skupovima ulaznih podataka. U xUnit-u se implementira sa [Theory] i [InlineData] atributima. Izvori podataka: inline, JSON, CSV, baza.</p>
