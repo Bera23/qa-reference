@@ -116,4 +116,56 @@ public class BaseTest : IDisposable
     public void Dispose() => Driver.Quit();
 }</pre></div>
 <div class="note">Vecina enterprise .NET projekata koristi DI kontejner (Microsoft.Extensions.DependencyInjection) da automatski razresi ove zavisnosti umesto rucnog "wiring-a" — vredi znati pojam "DI kontejner" i "service lifetime" (Transient/Scoped/Singleton) i za intervju, iako test frameworci cesto rucno injektuju driver bez punog kontejnera.</div>
+<h2 class="sub-title">12.10 Value type vs. Reference type</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Value type (struct, int, bool, enum)</td><td>Kopira se PO VREDNOSTI pri dodeli/prosledjivanju. Dve promenljive su nezavisne kopije. Zivi na stack-u (osim kad je polje unutar klase).</td></tr>
+<tr><td>Reference type (class, string je izuzetak — immutable)</td><td>Kopira se REFERENCA (adresa). Dve promenljive pokazuju na ISTI objekat — izmena kroz jednu se vidi kroz drugu. Zivi na heap-u.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Value type — svaka promenljiva je nezavisna kopija
+struct Point { public int X, Y; }
+Point p1 = new Point { X = 1 };
+Point p2 = p1;      // KOPIJA
+p2.X = 99;
+// p1.X je i dalje 1
+
+// Reference type — obe promenljive pokazuju na isti objekat
+var page1 = new LoginPage(driver);
+var page2 = page1;  // ISTA referenca, ne kopija
+page2.SomeProperty = "x";
+// page1.SomeProperty je TAKODJE "x" — isti objekat u memoriji</pre></div>
+<div class="note">Cesta zamka: <code>IWebElement</code> je reference type — kad Selenium kaze "stale element", referenca i dalje "postoji" u C# smislu (nije null), ali objekat na koji pokazuje vise nije validan u DOM-u. Zato provera <code>== null</code> ne hvata StaleElementReferenceException.</div>
+<h2 class="sub-title">12.11 Properties — enkapsulacija u praksi kroz C#</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Puna property sintaksa — kontrola nad get/set logikom
+private string _email;
+public string Email
+{
+    get => _email;
+    set => _email = value?.Trim().ToLower();   // normalizacija pri svakom set-u
+}
+
+// Auto-implemented property — kompajler generise skriveno private polje
+public string BaseUrl { get; set; }
+
+// Read-only property (samo get, cesto init-only ili computed)
+public bool IsLoaded => Driver.FindElements(LoadedMarker).Any();</pre></div>
+<div class="note">Properties su C#-ov nacin da se enkapsulacija (12.2) primeni bez da spoljni kod ikad direktno dira polje — <code>Email</code> izgleda kao javno polje spolja, ali svaki set prolazi kroz normalizacionu logiku. Ovo je razlog zasto se u Page Object-ima lokatori pisu kao <code>By EmailField => ...</code> (expression-bodied property) umesto obicnog polja.</div>
+<h2 class="sub-title">12.12 LINQ i Extension metode</h2>
+<p class="body-text">LINQ metode (<code>.Where()</code>, <code>.Select()</code>, <code>.FirstOrDefault()</code>, <code>.Any()</code>...) koje se koriste svuda u ovom dokumentu (Sekcija 13.9, 14.6) su Extension metode — jezicka OOP-adjacent osobina koja "dodaje" metode postojecem tipu (npr. <code>IEnumerable&lt;T&gt;</code>) bez izmene te klase.</p>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>.FirstOrDefault(predicate)</td><td>Prvi element koji zadovoljava uslov, ili <code>default</code> (null za reference type) ako nijedan ne zadovoljava. Ne baca exception.</td></tr>
+<tr><td>.Single(predicate)</td><td>Ocekuje TACNO jedan element koji zadovoljava uslov — baca exception ako ih ima 0 ili vise od 1. Koristi se kad je "tacno jedan" invarijanta (npr. tacno jedan novi window handle).</td></tr>
+<tr><td>.Where(predicate)</td><td>Filtrira kolekciju — vraca sve elemente koji zadovoljavaju uslov (lazy — ne izvrsava se dok se ne iterira/materijalizuje).</td></tr>
+<tr><td>.Any(predicate)</td><td>Da li BAR JEDAN element zadovoljava uslov — vraca bool, cesto brze i citljivije od <code>.Count() > 0</code>.</td></tr>
+<tr><td>.Select(transform)</td><td>Transformise svaki element u nesto drugo (npr. lista IWebElement -> lista string teksta).</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Sopstvena Extension metoda — "dodaje" metodu na IWebElement bez izmene Selenium biblioteke
+public static class WebElementExtensions
+{
+    public static bool IsReallyVisible(this IWebElement element)
+        => element.Displayed && element.Size.Height > 0 && element.Size.Width > 0;
+}
+
+// Upotreba — izgleda kao da je metoda oduvek postojala na IWebElement
+if (button.IsReallyVisible()) { button.Click(); }</pre></div>
+<div class="note">Extension metode su cest nacin da se doda helper funkcionalnost na Selenium tipove (IWebElement, IWebDriver) bez nasledjivanja ili wrapper klase — <code>this</code> kljucna rec ispred prvog parametra je ono sto pravi metodu "extension".</div>
 
