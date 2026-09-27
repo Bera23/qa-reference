@@ -14,3 +14,44 @@ top / htop                    # procesi uzivo, CPU/RAM po procesu</pre></div>
 free -h          # iskoriscenost memorije
 chmod 755 script.sh   # owner: read+write+execute, ostali: read+execute</pre></div>
 <div class="note">Cest scenario: CI pipeline pocne da failuje bez promene u kodu — pre nego sto se sumnja na test, proveriti <code>df -h</code> (disk pun na agentu) i <code>systemctl status</code> za servise od kojih pipeline zavisi (baza, mock servisi).</div>
+<h2 class="sub-title">24.4 SSH i rad na udaljenom agentu</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>ssh user@ci-agent-01                     # konekcija na udaljenu masinu (npr. Linux CI agent)
+ssh -i ~/.ssh/id_rsa user@host           # sa konkretnim privatnim kljucem
+scp report.trx user@host:/tmp/           # kopiranje fajla NA udaljenu masinu
+scp user@host:/var/log/app.log ./       # kopiranje fajla SA udaljene masine (npr. logovi za analizu)</pre></div>
+<div class="note">Tipican scenario: test padne samo na CI agentu, ne lokalno (videti Sekciju 21). SSH na agenta i provera logova/resursa direktno na masini je prvi korak pre nego sto se sumnja na sam test kod.</div>
+<h2 class="sub-title">24.5 Environment varijable</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>export BASE_URL="https://qa.plm.com"     # postavljanje env varijable za trenutnu sesiju
+echo $BASE_URL                           # ispis vrednosti
+printenv | grep -i base                  # pretraga svih env varijabli koje sadrze "base"
+env BASE_URL=https://staging.plm.com dotnet test   # override samo za jednu komandu</pre></div>
+<div class="note">Direktna veza sa Sekcijom 15.4 (Secrets i environment variables u Azure DevOps) — Variable Groups u ADO se na agentu na kraju materijalizuju kao env varijable koje pipeline korak cita ovako.</div>
+<h2 class="sub-title">24.6 Docker osnove za QA</h2>
+<p class="body-text">Selenium Grid, izolovani test environment-i i CI agenti se sve cesce pokrecu kao Docker kontejneri — korisno je razumeti osnovne komande i bez da si DevOps.</p>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>docker ps</td><td>Lista pokrenutih kontejnera — provera da li Selenium Grid/mock servis uopste radi.</td></tr>
+<tr><td>docker logs -f container_name</td><td>Prati logove kontejnera uzivo — prvi korak kad test ne moze da se poveze na servis.</td></tr>
+<tr><td>docker exec -it container_name bash</td><td>Otvara shell UNUTAR kontejnera — za direktnu inspekciju (fajlovi, procesi) bez da se kontejner rusi.</td></tr>
+<tr><td>docker restart container_name</td><td>Restart kontejnera — cest brzi fix kad je servis "zaglavljen".</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Selenium Grid u Docker-u — tipicna postavka za paralelno izvrsavanje
+docker run -d -p 4444:4444 --shm-size=2g selenium/standalone-chrome
+
+// Test se povezuje na Grid umesto lokalnog drajvera
+var driver = new RemoteWebDriver(new Uri("http://localhost:4444/wd/hub"), options);</pre></div>
+<h2 class="sub-title">24.7 Cron — planiranje automatskih run-ova</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre># Format: minut sat dan-u-mesecu mesec dan-u-nedelji komanda
+0 2 * * *      /scripts/run-nightly-regression.sh   # svaki dan u 02:00
+*/15 * * * *   /scripts/health-check.sh             # svakih 15 minuta
+0 6 * * 1-5    /scripts/smoke-test.sh               # radnim danima u 06:00
+
+crontab -l     # prikaz trenutno zakazanih job-ova
+crontab -e     # izmena zakazanih job-ova</pre></div>
+<div class="note">U praksi nightly regression u enterprise timovima cesce ide preko Azure DevOps scheduled trigger-a (Sekcija 15) nego preko cron-a direktno — ali ako pipeline agent sam nesto zakazuje lokalno (npr. cleanup skriptu), ovo je mehanizam.</div>
+<h2 class="sub-title">24.8 Mrezne komande — brza dijagnostika</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>curl -I https://qa.plm.com/api/health     # brza provera da li API endpoint uopste odgovara (samo headeri)
+curl -X POST https://api/.../login -d '{"user":"qa"}' -H "Content-Type: application/json"
+ping qa.plm.com                           # da li je host dostupan na mrezi
+ss -tulpn | grep 4444                     # koji proces slusa na portu 4444 (npr. Selenium Grid)</pre></div>
+<div class="note">Cest prvi korak kad automatizovani test ne moze da se poveze ni na sta: <code>curl</code> istog endpoint-a rucno iskljucuje da li je problem u mrezi/servisu ili u samom test kodu.</div>
+

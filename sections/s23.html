@@ -31,3 +31,66 @@ public class MaterialPage : BasePage
     }
 }</pre></div>
 <div class="note">U intervjuu je cesta zamka mesati overloading i overriding — overloading je ista klasa/razliciti parametri, overriding je child/parent i zahteva <code>virtual</code>/<code>override</code> (ili <code>abstract</code>) kljucne reci u C#.</div>
+<h2 class="sub-title">23.4 Interface vs. Abstract klasa</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Interface</td><td>Samo ugovor (metode/properties bez implementacije, C# 8+ dozvoljava default implementaciju). Klasa moze implementirati vise interfejsa. Nema stanja (fields).</td></tr>
+<tr><td>Abstract klasa</td><td>Moze imati i implementirane i apstraktne metode, i stanje (fields). Klasa moze naslediti samo JEDNU abstract klasu.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Selenium je izgradjen na interfejsima — ovo koristis svaki dan i ne primecujes
+IWebDriver driver = new ChromeDriver();   // IWebDriver je interfejs, ChromeDriver implementacija
+IWebElement el = driver.FindElement(By.Id("btn"));  // isto - IWebElement
+
+// Zasto je ovo bitno za testove: mozes da napises kod protiv interfejsa IWebDriver
+// i promenis implementaciju (Chrome -> Edge -> RemoteWebDriver za Grid) bez izmene testa
+
+// Abstract klasa u frameworku — BasePage nosi zajednicko stanje i delimicnu implementaciju
+public abstract class BasePage
+{
+    protected IWebDriver Driver;
+    protected BasePage(IWebDriver driver) => Driver = driver;
+    public abstract bool IsLoaded();       // svaka Page MORA implementirati
+    public virtual void WaitForPageLoad() { /* default, moze se override-ovati */ }
+}</pre></div>
+<div class="note">Pravilo palca: interface kad definises "sta neko moze da radi" bez zajednickog stanja (npr. <code>IRetryable</code>, <code>ITestDataProvider</code>); abstract klasa kad postoji zajednicko stanje i delimicna implementacija koju dele svi naslednici (kao <code>BasePage</code>).</div>
+<h2 class="sub-title">23.5 SOLID principi — sa primerima iz test frameworka</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Princip</th><th>Objasnjenje</th><th>Primer iz automatizacije</th></tr></thead><tbody>
+<tr><td>S — Single Responsibility</td><td>Klasa ima jedan razlog da se menja.</td><td>Page Object samo enkapsulira UI interakcije stranice — ne sadrzi i assertion logiku i test podatke i reporting.</td></tr>
+<tr><td>O — Open/Closed</td><td>Otvoreno za prosirenje, zatvoreno za izmenu.</td><td>Novi tip lokatora ili nov browser se dodaje kroz novu implementaciju interfejsa, ne izmenom postojeceg <code>DriverFactory</code> koda.</td></tr>
+<tr><td>L — Liskov Substitution</td><td>Child klasa mora moci da zameni parent bez da pokvari ponasanje.</td><td>Ako <code>MaterialPage : BasePage</code> override-uje <code>WaitForPageLoad()</code>, i dalje mora da zadovolji ugovor (stranica MORA biti ucitana kad metoda zavrsi).</td></tr>
+<tr><td>I — Interface Segregation</td><td>Manji, specificni interfejsi umesto jednog velikog.</td><td><code>IRetryable</code> i <code>ILoggable</code> odvojeno, umesto jednog <code>ITestHelper</code> interfejsa sa 20 metoda koje vecina implementacija ne koristi.</td></tr>
+<tr><td>D — Dependency Inversion</td><td>Zavisi od apstrakcije (interfejsa), ne konkretne implementacije.</td><td>Page konstruktor prima <code>IWebDriver</code> (ne <code>ChromeDriver</code> direktno) — omogucava injektovanje mock drajvera za unit testiranje samog frameworka.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">23.6 Access modifiers i enkapsulacija u C#</h2>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>private</td><td>Vidljivo samo unutar iste klase. Podrazumevano za lokatore u Page Object-u.</td></tr>
+<tr><td>protected</td><td>Vidljivo u klasi i svim naslednicima. Koristi se za deljeno stanje u <code>BasePage</code> (npr. <code>protected IWebDriver Driver</code>).</td></tr>
+<tr><td>internal</td><td>Vidljivo unutar istog assembly-ja (projekta). Korisno za helper klase koje ne treba da budu javni API frameworka.</td></tr>
+<tr><td>public</td><td>Vidljivo svuda. Samo metode koje test kod treba da poziva (npr. <code>Login()</code>, ne pojedinacni lokatori).</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">23.7 Generics — jedna implementacija, vise tipova</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Bez generics-a bi trebalo pisati posebnu Wait metodu za svaki tip
+public static T WaitUntil&lt;T&gt;(IWebDriver driver, Func&lt;IWebDriver, T&gt; condition, int timeoutSec = 10)
+{
+    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutSec));
+    return wait.Until(condition);
+}
+
+// Upotreba — isti metod, razliciti povratni tipovi
+var element = WaitUntil(driver, ExpectedConditions.ElementIsVisible(By.Id("btn")));
+var isGone  = WaitUntil(driver, ExpectedConditions.InvisibilityOfElementLocated(By.Id("spinner")));</pre></div>
+<div class="note">SelectElement.Options koji vraca <code>List&lt;IWebElement&gt;</code> (pominjano u B7 quick referenci) je generics u praksi — <code>List&lt;T&gt;</code> je generic kolekcija.</div>
+<h2 class="sub-title">23.8 Composition over Inheritance</h2>
+<p class="body-text">Duboka hijerarhija nasledjivanja (Page -> BasePage -> BaseComponent -> ...) postaje krhka kad promena u vrhu hijerarhije pokvari sve naslednike. Composition — klasa sadrzi instancu druge klase umesto da je nasledi — je fleksibilnije za deljeno ponasanje koje ne opisuje "je-vrsta-od" (is-a) odnos.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Inheritance — MaterialPage JE VRSTA BasePage-a (ispravan is-a odnos, OK)
+public class MaterialPage : BasePage { ... }
+
+// Composition — Page NEMA is-a odnos sa "retry logikom", vec je KORISTI
+public class MaterialPage
+{
+    private readonly RetryHelper _retry;   // composition: sadrzi, ne nasledjuje
+    public MaterialPage(IWebDriver driver) => _retry = new RetryHelper(driver);
+
+    public void ClickApprove() => _retry.Execute(() => Driver.FindElement(By.Id("approve")).Click());
+}</pre></div>
+<div class="note">Pravilo: nasledi kad je odnos zaista "je vrsta od" (MaterialPage je Page). Za deljeno ponasanje koje vise klasa treba (retry, logging, screenshot-on-fail) koristi composition — sprecava "God base class" koja vremenom nabubri.</div>
+
