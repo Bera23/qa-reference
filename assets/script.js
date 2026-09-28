@@ -279,26 +279,28 @@ function copyCode(btn) {
 // SYNTAX HIGHLIGHT
 // ═══════════════════════════════════════════════════════
 function initSyntaxHighlight() {
-  // Single capture group kept intact ($1 in replacement below relies on this) —
-  // C# keywords extended with ones used in newer OOP/Framework examples (struct,
-  // protected, virtual, try/catch...), plus distinctive SQL keywords. Common short
-  // SQL words (IN, ON, AS, IS, AND, OR...) deliberately excluded — they collide too
-  // often with ordinary Serbian/English words inside inline trailing comments.
-  const KEYWORDS = /\b(public|private|protected|internal|static|void|class|struct|interface|new|return|var|string|bool|int|if|else|true|false|null|this|using|namespace|override|abstract|virtual|sealed|readonly|const|async|await|foreach|for|while|try|catch|finally|throw|get|set|SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|DELETE|JOIN|INNER|LEFT|RIGHT|OUTER|GROUP|HAVING|ORDER|DISTINCT|COUNT|SUM|LIMIT|CREATE|TABLE|ALTER|DROP|BEGIN|TRANSACTION|ROLLBACK|COMMIT|EXISTS|UNION|NULL|CASE|WHEN|THEN|ELSE)\b/g;
+  // C# keywords (used in the OOP/Framework/live-coding examples) plus distinctive SQL keywords.
+  // Common short SQL words (IN, ON, AS, IS, AND, OR...) are deliberately excluded — they collide
+  // too often with ordinary words inside comments.
+  const KEYWORDS = 'public|private|protected|internal|static|void|class|struct|interface|new|return|var|string|bool|int|if|else|true|false|null|this|using|namespace|override|abstract|virtual|sealed|readonly|const|async|await|foreach|for|while|try|catch|finally|throw|get|set|SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|DELETE|JOIN|INNER|LEFT|RIGHT|OUTER|GROUP|HAVING|ORDER|DISTINCT|COUNT|SUM|LIMIT|CREATE|TABLE|ALTER|DROP|BEGIN|TRANSACTION|ROLLBACK|COMMIT|EXISTS|UNION|NULL|CASE|WHEN|THEN|ELSE';
+  // ONE combined regex, ONE pass over the original text: string | trailing // comment | keyword.
+  // The leftmost match wins, so a keyword inside a string or comment is never colored separately,
+  // and the markup we inject is never scanned again. (An earlier two-pass version let the string
+  // pattern match class="kw" and corrupted the visible text.)
+  // The comment alternative needs whitespace or line start before // so URLs (https://...) survive.
+  const TOKEN = new RegExp('(\'[^\'\\n]*\'|"[^"\\n]*")|(^|\\s)(//.*$)|\\b(' + KEYWORDS + ')\\b', 'g');
   document.querySelectorAll('.code-block pre').forEach(pre => {
-    let lines = pre.innerHTML.split('\n');
-    lines = lines.map(line => {
+    const lines = pre.innerHTML.split('\n').map(line => {
       const trimmed = line.trimStart();
       // Whole-line comments: //, # (bash/Docker/cron), -- (SQL)
       if (trimmed.startsWith('//') || trimmed.startsWith('#') || /^--(\s|$)/.test(trimmed)) {
         return '<span class="cm">' + line + '</span>';
       }
-      // Keywords first (on clean text), THEN strings (last pass) — reversing this
-      // order would let the keyword regex re-match the word "class" inside the
-      // class="st" attribute the string pass injects, corrupting the markup.
-      line = line.replace(KEYWORDS, '<span class="kw">$1</span>');
-      line = line.replace(/('[^']*'|"[^"]*")/g, '<span class="st">$1</span>');
-      return line;
+      return line.replace(TOKEN, (match, str, lead, comment, keyword) => {
+        if (str) return '<span class="st">' + str + '</span>';
+        if (comment) return lead + '<span class="cm">' + comment + '</span>';
+        return '<span class="kw">' + keyword + '</span>';
+      });
     });
     pre.innerHTML = lines.join('\n');
   });

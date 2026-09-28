@@ -54,6 +54,10 @@ dist/                 — build output; this is what gets pushed and served by G
 - `node build.js` — regenerates `dist/` from `sections/` + `data/sections.json` + `template.html`.
   Run after every content edit, before committing.
 - Open `dist/index.html` directly in a browser to preview — no dev server needed.
+- Syntax highlighter (`initSyntaxHighlight` in `assets/script.js`) must stay a SINGLE pass over the
+  original text. Chaining `.replace()` calls re-scans markup it just injected (e.g. a string pattern
+  matched `class="kw"`) and silently corrupts the visible code. After touching it, check that
+  `pre.textContent` is identical before/after highlighting on every code block, not just that spans balance.
 - No test suite / linter for this project. Verification = build succeeds + manual click-through
   of nav/search/bookmarks/theme toggle/prev-next on a couple of generated pages before pushing.
 
