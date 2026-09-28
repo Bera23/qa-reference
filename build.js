@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const ROOT = __dirname;
 const SECTIONS_JSON = path.join(ROOT, 'data', 'sections.json');
@@ -131,6 +132,30 @@ function buildSearchIndex(sections) {
 function copyAssets() {
   fs.copyFileSync(path.join(ASSETS_DIR, 'style.css'), path.join(DIST_DIR, 'style.css'));
   fs.copyFileSync(path.join(ASSETS_DIR, 'script.js'), path.join(DIST_DIR, 'script.js'));
+  // PWA: manifest + icons
+  fs.copyFileSync(path.join(ASSETS_DIR, 'manifest.json'), path.join(DIST_DIR, 'manifest.json'));
+  fs.mkdirSync(path.join(DIST_DIR, 'icons'), { recursive: true });
+  fs.readdirSync(path.join(ASSETS_DIR, 'icons')).forEach(f =>
+    fs.copyFileSync(path.join(ASSETS_DIR, 'icons', f), path.join(DIST_DIR, 'icons', f)));
+}
+
+// Service worker: precache list is derived from the SAME sources the build just produced
+// (not from a directory listing, so stale leftovers in dist/ can never end up cached).
+// The cache name carries a content hash -> any content change invalidates old caches.
+function buildServiceWorker(sections) {
+  const files = ['index.html', ...sections.map(s => `${s.id}.html`),
+    'style.css', 'script.js', 'search-index.json', 'manifest.json',
+    ...fs.readdirSync(path.join(ASSETS_DIR, 'icons')).map(f => `icons/${f}`)];
+  const hash = crypto.createHash('sha1');
+  files.forEach(f => { hash.update(f); hash.update(fs.readFileSync(path.join(DIST_DIR, f))); });
+  const version = hash.digest('hex').slice(0, 10);
+  const precache = ['./', ...files.map(f => `./${f}`)];
+  const sw = fs.readFileSync(path.join(ASSETS_DIR, 'sw.js'), 'utf8')
+    .split('__VERSION__').join(version)
+    .split('__PRECACHE__').join(JSON.stringify(precache, null, 2));
+  if (/__(VERSION|PRECACHE)__/.test(sw)) throw new Error('sw.js: unreplaced placeholder left in output');
+  fs.writeFileSync(path.join(DIST_DIR, 'sw.js'), sw, 'utf8');
+  return { version, count: precache.length };
 }
 
 function main() {
@@ -141,7 +166,9 @@ function main() {
   buildIndexPage(sections, template);
   buildSearchIndex(sections);
   copyAssets();
+  const sw = buildServiceWorker(sections);
   console.log(`Built ${sections.length} topic pages + index.html + search-index.json into dist/`);
+  console.log(`Service worker: cache qa-ref-${sw.version}, ${sw.count} precached URLs`);
 }
 
 if (require.main === module) main();

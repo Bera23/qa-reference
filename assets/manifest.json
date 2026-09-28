@@ -1,0 +1,16 @@
+{
+  "name": "QA Referentni Dokument",
+  "short_name": "QA Ref",
+  "description": "QA i test automation referentni dokument: manualno testiranje, Selenium/C#, API, CI/CD, priprema za intervju.",
+  "lang": "sr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

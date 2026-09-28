@@ -16,8 +16,8 @@
 ## Project Goal
 
 A personal QA/test-automation reference document (Serbian language, ekavica) covering manual
-testing (Deo I, 10 topics) and automation (Deo II, 10 topics: C#/Selenium/API/CI-CD/Appium/
-AI-testing) — written to match Uros's real day-to-day work (see "User" below) so it doubles as
+testing (Deo I, 10 topics) and automation (Deo II, 15 topics: C#/OOP/Selenium/API/CI-CD/Linux/Appium/
+AI-testing, plus glossary, Q&A, interview strategy and cheat sheet) — written to match Uros's real day-to-day work (see "User" below) so it doubles as
 active interview/refresher study material, not generic textbook content.
 
 **Status (2026-07-30): implemented and live** at https://bera23.github.io/qa-reference/. Original
@@ -37,10 +37,14 @@ source of truth — edit `sections/*.html` instead.
 ## Project Structure (target — not yet built)
 
 ```
-sections/*.html      — one content partial per topic (20 total, matches data/sections.json)
+sections/*.html      — one content partial per topic (25 total, matches data/sections.json;
+                        file number == section number, keep them in sync when reordering)
 data/sections.json   — id, title, icon, deo (I/II), read-time metadata per topic
 template.html         — shared page shell (sidebar/topbar), content placeholder
 assets/style.css, assets/script.js  — shared styling/behavior across all generated pages
+assets/sw.js, manifest.json, icons/ — PWA (offline + install). sw.js is a TEMPLATE: build.js fills in
+                        the cache version (content hash) and precache list. Never write the two
+                        placeholder tokens anywhere else in sw.js (build fails if any survive).
 build.js              — Node script: sections/ + data + template -> dist/
 dist/                 — build output; this is what gets pushed and served by GitHub Pages
 ```

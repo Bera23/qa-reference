@@ -492,3 +492,12 @@ function filterGlosar(q) {
   }, { passive: true });
 })();
 
+// ═══════════════════════════════════════════════════════
+// OFFLINE / INSTALL (PWA) — registers the service worker built by build.js.
+// Skipped on file:// (service workers need http(s) or localhost).
+// ═══════════════════════════════════════════════════════
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW registration failed:', err));
+  });
+}
