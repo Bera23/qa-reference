@@ -16,8 +16,8 @@
 ## Project Goal
 
 A personal QA/test-automation reference document (Serbian language, ekavica) covering manual
-testing (Deo I, 10 topics) and automation (Deo II, 15 topics: C#/OOP/Selenium/API/CI-CD/Linux/Appium/
-AI-testing, plus glossary, Q&A, interview strategy and cheat sheet) — written to match Uros's real day-to-day work (see "User" below) so it doubles as
+testing (Deo I, 10 topics) and automation (Deo II, 16 topics: C#/OOP/Selenium/API/CI-CD/Linux/Appium/
+AI-testing, plus glossary, Q&A, interview strategy, live coding and cheat sheet) — written to match Uros's real day-to-day work (see "User" below) so it doubles as
 active interview/refresher study material, not generic textbook content.
 
 **Status (2026-07-30): implemented and live** at https://bera23.github.io/qa-reference/. Original
@@ -37,7 +37,7 @@ source of truth — edit `sections/*.html` instead.
 ## Project Structure (target — not yet built)
 
 ```
-sections/*.html      — one content partial per topic (25 total, matches data/sections.json;
+sections/*.html      — one content partial per topic (26 total, matches data/sections.json;
                         file number == section number, keep them in sync when reordering)
 data/sections.json   — id, title, icon, deo (I/II), read-time metadata per topic
 template.html         — shared page shell (sidebar/topbar), content placeholder
