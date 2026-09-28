@@ -279,6 +279,21 @@
       <div class="qr-item has-tip"><span class="qr-key">Minor</span><span class="qr-tooltip">Manja funkcionalnost ostecena. Prihvatljiv workaround postoji.</span><span class="qr-val">Manja funkcionalnost, postoji workaround</span></div>
       <div class="qr-item has-tip"><span class="qr-key">Trivial</span><span class="qr-tooltip">Estetski problem — UI, tekst, formatiranje. Nema funkcionalnog uticaja.</span><span class="qr-val">Estetski problem, bez funkcionalnog uticaja</span></div>
     </div>
+    <div class="qr-card"><h4>Severity vs. Priority</h4>
+      <div class="qr-item has-tip"><span class="qr-key">Severity</span><span class="qr-tooltip">Tehnicki uticaj na sistem — koliko je funkcionalnost ostecena (Sekcija 6.3).</span><span class="qr-val">Tehnicki uticaj</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Priority</span><span class="qr-tooltip">Poslovni uticaj i hitnost ispravke (Sekcija 6.3).</span><span class="qr-val">Poslovna hitnost</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">High S · High P</span><span class="qr-tooltip">Crash na checkout-u u produkciji. Hitno, odmah.</span><span class="qr-val">Crash na checkout-u u produkciji</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">High S · Low P</span><span class="qr-tooltip">Crash na admin stranici koju koristi 1 osoba mesecno. Vazno, ali ne hitno.</span><span class="qr-val">Crash na retko koriscenoj stranici</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Low S · High P</span><span class="qr-tooltip">Logo klijenta pogresno napisan dan pre prezentacije. Kosmeticko, ali hitno.</span><span class="qr-val">Pogresan logo pred prezentaciju</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Low S · Low P</span><span class="qr-tooltip">Typo u footer-u. Fiksirati kad bude prilike.</span><span class="qr-val">Typo u footer-u</span></div>
+    </div>
+    <div class="qr-card"><h4>HTTP metode</h4>
+      <div class="qr-item has-tip"><span class="qr-key">GET</span><span class="qr-tooltip">Citanje resursa, bez side-effecta. Idempotentna i safe (Sekcija 15.1).</span><span class="qr-val">Cita · idempotentna, safe</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">POST</span><span class="qr-tooltip">Kreiranje novog resursa. Ponovljen POST moze napraviti duplikat — zato je idempotentnost vazna za testiranje.</span><span class="qr-val">Kreira · nije idempotentna</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">PUT</span><span class="qr-tooltip">Potpuna zamena resursa. Isti zahtev poslat dvaput daje isto stanje.</span><span class="qr-val">Puna zamena · idempotentna</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">PATCH</span><span class="qr-tooltip">Parcijalna izmena. Ne garantuje idempotentnost — zavisi od implementacije.</span><span class="qr-val">Parcijalna izmena · nije idempotentna</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">DELETE</span><span class="qr-tooltip">Brisanje resursa. Drugi poziv ne menja stanje (odgovor moze biti drugaciji, npr. 404).</span><span class="qr-val">Brise · idempotentna</span></div>
+    </div>
     <div class="qr-card"><h4>HTTP status kodovi</h4>
       <div class="qr-item has-tip"><span class="qr-key">200 OK</span><span class="qr-tooltip">Uspesno obradjen zahtev. Vraca se za GET i za akcije koje ne kreiraju resurs.</span><span class="qr-val">Uspesno</span></div>
       <div class="qr-item has-tip"><span class="qr-key">201 Created</span><span class="qr-tooltip">Resurs je kreiran. Vraca se za uspesni POST. Obicno ukljucuje Location header.</span><span class="qr-val">Resurs kreiran (POST)</span></div>
@@ -293,6 +308,15 @@
       <div class="qr-item has-tip"><span class="qr-key">500</span><span class="qr-tooltip">Greska na serveru. Uvek je defekt — developer mora da je ispravi.</span><span class="qr-val">Greska na serveru — uvek defekt</span></div>
       <div class="qr-item has-tip"><span class="qr-key">502 / 503</span><span class="qr-tooltip">502: upstream servis ne odgovara. 503: servis trenutno nedostupan. Najcesce infrastruktura ili dostupnost servisa — proveriti okruzenje pre prijave defekta.</span><span class="qr-val">Servis nedostupan — proveri okruzenje</span></div>
     </div>
+    <div class="qr-card"><h4>Selenium: lokatori i wait-ovi</h4>
+      <div class="qr-item has-tip"><span class="qr-key">ID</span><span class="qr-tooltip">Uvek koristiti kada je dostupan. Najbrzi i najstabilniji (Sekcija 13.2).</span><span class="qr-val">Prvi izbor, najstabilniji</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">data-testid</span><span class="qr-tooltip">Atribut koji tim dodaje iskljucivo za testove. Idealan — dogovori se sa development timom.</span><span class="qr-val">Idealan, dogovori sa dev timom</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">CSS</span><span class="qr-tooltip">Fleksibilan, brz, citljiv. Preferovati nad XPath-om.</span><span class="qr-val">Preferiraj nad XPath-om</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">XPath</span><span class="qr-tooltip">Najfleksibilniji, ali sporiji i krhkiji. Izbegavati indekse (//div[3]/span[2]) — krhko pri svakoj UI promeni.</span><span class="qr-val">Poslednja opcija</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Thread.Sleep</span><span class="qr-tooltip">Nije wait strategija. Uvodi fiksna kasnjenja i cini testove sporim i nestabilnim (Sekcija 13.3).</span><span class="qr-val">Nije wait strategija</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Explicit Wait</span><span class="qr-tooltip">Ceka na konkretan uslov za konkretan element. Preporuceni pristup.</span><span class="qr-val">Preporuceno</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Implicit Wait</span><span class="qr-tooltip">Globalno podesavanje na svaki FindElement. Moze maskirati probleme i usporiti testove.</span><span class="qr-val">Izbegavati</span></div>
+    </div>
     <div class="qr-card"><h4>Selenium exception-i</h4>
       <div class="qr-item has-tip"><span class="qr-key">NoSuchElement</span><span class="qr-tooltip">Element nije pronadjen u DOM-u. Proveriti lokator, dodati Explicit Wait i proveriti da li je driver u pravom iframe/window kontekstu (Sekcija 13.9).</span><span class="qr-val">Lokator, Wait, frame kontekst</span></div>
       <div class="qr-item has-tip"><span class="qr-key">StaleElement</span><span class="qr-tooltip">Element pronadjen ali DOM se promenio pre interakcije. Re-locate element.</span><span class="qr-val">Re-locate element</span></div>
@@ -305,6 +329,14 @@
       <div class="qr-item has-tip"><span class="qr-key">Sanity</span><span class="qr-tooltip">Narrow + Deep. Pokrece se nakon specificnog bugfix-a ili nove funkcionalnosti.</span><span class="qr-val">Narrow + Deep · nakon fix-a</span></div>
       <div class="qr-item has-tip"><span class="qr-key">Regression</span><span class="qr-tooltip">Broad + Deep. Pokrece se pre svakog release-a. Pokriva ceo scope.</span><span class="qr-val">Broad + Deep · pre release-a</span></div>
       <div class="qr-item has-tip"><span class="qr-key">Retesting</span><span class="qr-tooltip">Ponovo se izvrsava konkretan TC koji je prethodno failovao, nakon bugfix-a.</span><span class="qr-val">Konkretan TC koji je failovao</span></div>
+    </div>
+    <div class="qr-card"><h4>Test tehnike — sta kad</h4>
+      <div class="qr-item has-tip"><span class="qr-key">EP + BVA</span><span class="qr-tooltip">EP: jedan reprezentativni element iz svake particije. BVA: granica, jedan ispod i jedan iznad. Godine 18-65: 17, 18, 19, 64, 65, 66 (Sekcija 4.1-4.2).</span><span class="qr-val">Numericka polja, datumi, opsezi</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Decision Table</span><span class="qr-tooltip">Kombinacije uslova i ocekivanih akcija (Sekcija 4.3).</span><span class="qr-val">Vise uslova, biznis pravila</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">State Transition</span><span class="qr-tooltip">Ponasanje zavisi od trenutnog stanja i prelaza (Sekcija 4.4).</span><span class="qr-val">Workflow, statusi, multi-step</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Pairwise</span><span class="qr-tooltip">Vecina defekata nastaje pri interakciji dva parametra, ne svih N. 3 x 3 x 3 = 27 kombinacija svodi se na oko 9 (Sekcija 4.5).</span><span class="qr-val">Vise parametara, compatibility</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Exploratory</span><span class="qr-tooltip">Kad nema dovoljno specifikacije — istrazivanje uz beleske (Sekcija 4.8).</span><span class="qr-val">Novi feature, slaba specifikacija</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Error Guessing</span><span class="qr-tooltip">Iskustvo o tome sta tipicno pukne. Kao dopuna, ne zamena (Sekcija 4.6).</span><span class="qr-val">Dopuna, iskusan QA</span></div>
     </div>
     <div class="qr-card"><h4>Test case checklist</h4>
       <div class="qr-item"><span class="qr-key">✓ Naziv</span><span class="qr-val">Method_State_Expected format</span></div>
