@@ -1,28 +1,127 @@
 'use strict';
 
 // ═══════════════════════════════════════════════════════
+// HELPERS: safe storage, stable keys, clipboard
+// ═══════════════════════════════════════════════════════
+// localStorage can throw (blocked storage) and can hold garbage; neither may break the page.
+const store = {
+  get(key) { try { return localStorage.getItem(key); } catch (e) { return null; } },
+  set(key, value) { try { localStorage.setItem(key, value); return true; } catch (e) { return false; } },
+  remove(key) { try { localStorage.removeItem(key); } catch (e) { /* storage unavailable */ } },
+  getJSON(key, fallback) {
+    try {
+      const parsed = JSON.parse(this.get(key));
+      return Array.isArray(fallback) ? (Array.isArray(parsed) ? parsed : fallback) : (parsed === null ? fallback : parsed);
+    } catch (e) { return fallback; }
+  },
+};
+
+// Section/heading numbers change whenever content is reordered, so identity is based on the TEXT.
+function slugify(text) {
+  return String(text).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60).replace(/-+$/, '');
+}
+function stripNumber(text) { return String(text).replace(/^\s*\d+(\.\d+)*\.?\s+/, '').trim(); }
+function pageKey(title) { return slugify(stripNumber(title)) || 'stranica'; }
+function currentPageKey() { return pageKey(window.QA_PAGE.title); }
+function navItemForPage(key) {
+  const items = document.querySelectorAll('#nav .nav-item');
+  for (let i = 0; i < items.length; i++) {
+    const label = items[i].querySelector('.nav-item-text');
+    if (label && pageKey(label.textContent) === key) return items[i];
+  }
+  return null;
+}
+function hrefForPage(key) {
+  const item = navItemForPage(key);
+  if (item) return item.getAttribute('href');
+  return key === pageKey('QA Referentni Dokument') ? 'index.html' : null;
+}
+function navTitleForPage(key) {
+  const item = navItemForPage(key);
+  return item ? item.querySelector('.nav-item-text').textContent : null;
+}
+
+// Clipboard: the async API only exists in secure contexts and can be denied; fall back to
+// execCommand and always report the real outcome (true/false) instead of assuming success.
+function copyText(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text).then(() => true, () => legacyCopy(text));
+  }
+  return Promise.resolve(legacyCopy(text));
+}
+function legacyCopy(text) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:-1000px;left:0;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return !!ok;
+  } catch (e) { return false; }
+}
+
+// One-time upgrade of data saved by older versions (see comments for what can and cannot be kept).
+const DATA_VERSION = '2';
+function migrateStorage() {
+  if (store.get('qa_data_v') === DATA_VERSION) return;
+  // Old bookmarks were {slug:'h-3', url:'s12.html', title:'12.4 ...', section:'12. Selenium / WebDriver'}.
+  // slug/url were positional and went stale when sections were reordered, but title and section
+  // describe the target, so the stable identity is rebuilt from them.
+  const seen = new Set(), migrated = [];
+  store.getJSON('qa_bookmarks', []).forEach(b => {
+    if (!b || typeof b !== 'object') return;
+    const entry = b.page ? b : {
+      page: pageKey(b.section || ''), slug: slugify(stripNumber(b.title || '')),
+      title: stripNumber(b.title || ''), section: stripNumber(b.section || ''),
+    };
+    if (!entry.page || !entry.slug || seen.has(entry.page + '#' + entry.slug)) return;
+    seen.add(entry.page + '#' + entry.slug);
+    migrated.push(entry);
+  });
+  store.set('qa_bookmarks', JSON.stringify(migrated));
+  // Old read marks were keyed by file id (s12...), and those ids changed meaning when sections were
+  // reordered, so they cannot be mapped safely. A wrong "read" mark is worse than none: keep the old
+  // data under another key instead of showing it.
+  const legacyReads = store.get('qa_reads');
+  if (legacyReads !== null) { store.set('qa_reads_legacy', legacyReads); store.remove('qa_reads'); }
+  store.set('qa_data_v', DATA_VERSION);
+}
+// ═══════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', () => {
-  addAnchorLinks();
-  addBookmarkButtons();
-  restoreState();
-  initSyntaxHighlight();
-  initLangBadges();
-  initQuizMode();
-  updateBmCount();
-  initNavHeights();
-  filterGlosar('');
-  loadSearchIndex();
-});
 
+// Every step runs in its own try/catch, so one failing step (for example a storage problem)
+// can no longer abort the rest of the page initialisation.
+document.addEventListener('DOMContentLoaded', () => {
+  const steps = [migrateStorage, addAnchorLinks, addBookmarkButtons, restoreState, initSyntaxHighlight,
+    initLangBadges, initQuizMode, updateBmCount, initNavHeights, () => filterGlosar(''), loadSearchIndex, scrollToHash];
+  steps.forEach(step => {
+    try { step(); } catch (err) { console.error('Init step failed:', step.name || '(anonymous)', err); }
+  });
+});
 // ═══════════════════════════════════════════════════════
 // ANCHOR LINKS on h2
 // ═══════════════════════════════════════════════════════
+
+// Anchor ids are derived from the heading TEXT (without its number), not from its position on the
+// page. Positional ids (h-3) silently pointed to a different heading whenever a subsection was
+// inserted or sections were renumbered, which broke bookmarks and shared links.
 function addAnchorLinks() {
+  const used = {};
   document.querySelectorAll('h2.sub-title').forEach((h2, i) => {
-    const slug = 'h-' + i;
+    const text = stripNumber(h2.textContent);
+    let slug = slugify(text) || ('h-' + i);
+    const existing = document.getElementById(slug);
+    if (existing && existing !== h2) slug = 'sec-' + slug;          // never collide with #search, #nav, ...
+    used[slug] = (used[slug] || 0) + 1;
+    if (used[slug] > 1) slug += '-' + used[slug];                     // duplicate headings on one page
     h2.id = slug;
+    h2.dataset.title = text;
     const a = document.createElement('a');
     a.className = 'anchor';
     a.href = '#' + slug;
@@ -30,80 +129,112 @@ function addAnchorLinks() {
     a.title = 'Kopiraj link';
     a.onclick = (e) => {
       e.preventDefault();
-      navigator.clipboard.writeText(location.href.split('#')[0] + '#' + slug);
-      a.textContent = '✓'; setTimeout(() => a.textContent = '#', 1500);
+      copyText(location.href.split('#')[0] + '#' + slug).then(ok => {
+        a.textContent = ok ? '✓' : '!';
+        setTimeout(() => a.textContent = '#', 1500);
+      });
     };
     h2.appendChild(a);
   });
 }
 
+// Scroll to #hash once the ids exist (they are assigned by JS). Old positional links like #h-3
+// are still honoured as a fallback.
+function scrollToHash() {
+  if (!location.hash) return;
+  let id;
+  try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) { return; }
+  let target = document.getElementById(id);
+  if (!target) {
+    const legacy = /^h-(\d+)$/.exec(id);
+    if (legacy) target = document.querySelectorAll('h2.sub-title')[Number(legacy[1])];
+  }
+  if (target) target.scrollIntoView();
+}
 // ═══════════════════════════════════════════════════════
 // BOOKMARK BUTTONS on h2
 // ═══════════════════════════════════════════════════════
+
 function addBookmarkButtons() {
   document.querySelectorAll('h2.sub-title').forEach(h2 => {
-    const slug = h2.id;
-    const title = h2.innerText.replace('#', '').trim();
     const btn = document.createElement('button');
     btn.className = 'bm-btn';
     btn.textContent = '★';
     btn.title = 'Bookmark';
-    btn.dataset.slug = slug;
-    btn.dataset.title = title;
-    btn.dataset.section = window.QA_PAGE.title;
-    btn.dataset.url = window.QA_PAGE.id + '.html';
+    btn.dataset.slug = h2.id;
+    btn.dataset.title = h2.dataset.title || stripNumber(h2.textContent);
+    btn.dataset.section = stripNumber(window.QA_PAGE.title);
+    btn.dataset.page = currentPageKey();
     btn.onclick = () => toggleBookmark(btn);
     h2.insertBefore(btn, h2.querySelector('.anchor') || null);
   });
   refreshAllBmButtons();
 }
-
 // ═══════════════════════════════════════════════════════
 // MARK READ
 // ═══════════════════════════════════════════════════════
+
+// Read marks are stored by PAGE KEY (the section title without its number), not by file id, so they
+// survive sections being renumbered or reordered.
+function idToKey(id) {
+  const el = document.querySelector('#nav .nav-item[href="' + id + '.html"] .nav-item-text');
+  return el ? pageKey(el.textContent) : null;
+}
+function getReadKeys() { return store.getJSON('qa_read_pages', []); }
 function markRead(id) {
-  const reads = JSON.parse(localStorage.getItem('qa_reads') || '[]');
-  const idx = reads.indexOf(id);
-  if (idx === -1) reads.push(id); else reads.splice(idx, 1);
-  localStorage.setItem('qa_reads', JSON.stringify(reads));
-  applyReadState(id, reads.includes(id));
+  const key = idToKey(id);
+  if (!key) return;
+  const keys = getReadKeys();
+  const idx = keys.indexOf(key);
+  if (idx === -1) keys.push(key); else keys.splice(idx, 1);
+  store.set('qa_read_pages', JSON.stringify(keys));
+  applyReadState(id, idx === -1);
   updateGroupProgress();
 }
 function toggleRead(e, id) { e.preventDefault(); e.stopPropagation(); markRead(id); }
 function applyReadState(id, isRead) {
-  const check = document.querySelector(`.nav-check[onclick*="${id}"]`);
+  const check = document.querySelector('#nav .nav-item[href="' + id + '.html"] .nav-check');
   if (check) { check.classList.toggle('done', isRead); check.textContent = isRead ? '✓' : ''; }
   const btn = document.getElementById('mrb-' + id);
   if (btn) { btn.classList.toggle('done', isRead); btn.textContent = isRead ? '✓ Procitano' : 'Oznaci kao procitano'; }
-  const badge = document.querySelector(`#t-${id} .read-badge`);
+  const badge = document.querySelector('#t-' + id + ' .read-badge');
   if (badge) badge.classList.toggle('visible', isRead);
 }
-function updateGroupProgress() {
-  const reads = new Set(JSON.parse(localStorage.getItem('qa_reads') || '[]'));
-  document.querySelectorAll('.nav-deo-progress').forEach(el => {
-    const ids = (el.dataset.ids || '').split(',').filter(Boolean);
-    const done = ids.filter(id => reads.has(id)).length;
-    el.textContent = `(${done}/${ids.length})`;
+function restoreReadState() {
+  const keys = new Set(getReadKeys());
+  document.querySelectorAll('#nav .nav-item').forEach(a => {
+    const id = (a.getAttribute('href') || '').replace('.html', '');
+    if (keys.has(idToKey(id))) applyReadState(id, true);
   });
 }
+function updateGroupProgress() {
+  const keys = new Set(getReadKeys());
+  document.querySelectorAll('.nav-deo-progress').forEach(el => {
+    const ids = (el.dataset.ids || '').split(',').filter(Boolean);
+    const done = ids.filter(id => keys.has(idToKey(id))).length;
+    el.textContent = '(' + done + '/' + ids.length + ')';
+  });
+}
+// ═══════════════════════════════════════════════════════
+// BOOKMARKS (stable identity: page key + heading slug)
+// ═══════════════════════════════════════════════════════
 
-// ═══════════════════════════════════════════════════════
-// BOOKMARKS (now store a `url` alongside `slug`, since a slug like
-// "h-0" is only unique WITHIN one page, not across the whole site)
-// ═══════════════════════════════════════════════════════
-function getBookmarks() { return JSON.parse(localStorage.getItem('qa_bookmarks') || '[]'); }
-function saveBookmarks(bms) { localStorage.setItem('qa_bookmarks', JSON.stringify(bms)); }
+// Bookmarks are {page, slug, title, section}: `page` is the page key (section title without number)
+// and `slug` the heading slug. The file to open is looked up in the sidebar at click time, so a
+// bookmark keeps working when sections are renumbered or their files renamed.
+function getBookmarks() { return store.getJSON('qa_bookmarks', []); }
+function saveBookmarks(bms) { store.set('qa_bookmarks', JSON.stringify(bms)); }
 function refreshAllBmButtons() {
-  const keySet = new Set(getBookmarks().map(b => b.url + '#' + b.slug));
+  const keySet = new Set(getBookmarks().map(b => b.page + '#' + b.slug));
   document.querySelectorAll('.bm-btn').forEach(btn => {
-    btn.classList.toggle('active', keySet.has(btn.dataset.url + '#' + btn.dataset.slug));
+    btn.classList.toggle('active', keySet.has(btn.dataset.page + '#' + btn.dataset.slug));
   });
 }
 function toggleBookmark(btn) {
-  const { slug, title, section, url } = btn.dataset;
-  let bms = getBookmarks();
-  const idx = bms.findIndex(b => b.slug === slug && b.url === url);
-  if (idx === -1) bms.push({ slug, title, section, url }); else bms.splice(idx, 1);
+  const { slug, title, section, page } = btn.dataset;
+  const bms = getBookmarks();
+  const idx = bms.findIndex(b => b.slug === slug && b.page === page);
+  if (idx === -1) bms.push({ page, slug, title, section }); else bms.splice(idx, 1);
   saveBookmarks(bms);
   refreshAllBmButtons();
   renderBookmarks();
@@ -112,50 +243,67 @@ function toggleBookmark(btn) {
 function updateBmCount() {
   const c = getBookmarks().length;
   const el = document.getElementById('bm-count');
+  if (!el) return;
   el.textContent = c; el.style.display = c > 0 ? 'inline' : 'none';
 }
 function renderBookmarks() {
   const bms = getBookmarks();
   const list = document.getElementById('bm-list');
+  list.textContent = '';
   if (bms.length === 0) {
     list.innerHTML = '<div id="bm-empty">Nema bookmarks-a.<br><small>Klikni ★ pored bilo kog podnaslova.</small></div>';
     return;
   }
-  list.innerHTML = bms.map(b => `
-    <div class="bm-entry" onclick="goToBookmark('${b.url}','${b.slug}')">
-      <button class="bm-entry-del" onclick="removeBm(event,'${b.slug}','${b.url}')">✕</button>
-      <div class="bm-entry-title">${b.title}</div>
-      <div class="bm-entry-section">${b.section}</div>
-    </div>`).join('');
+  bms.forEach(b => {
+    const entry = document.createElement('div');
+    entry.className = 'bm-entry';
+    entry.onclick = () => goToBookmark(b.page, b.slug);
+    const del = document.createElement('button');
+    del.className = 'bm-entry-del';
+    del.textContent = '✕';
+    del.onclick = (e) => removeBm(e, b.page, b.slug);
+    const title = document.createElement('div');
+    title.className = 'bm-entry-title';
+    title.textContent = b.title;                    // textContent: titles are never parsed as HTML
+    const section = document.createElement('div');
+    section.className = 'bm-entry-section';
+    section.textContent = navTitleForPage(b.page) || b.section;   // current numbering, from the sidebar
+    entry.appendChild(del); entry.appendChild(title); entry.appendChild(section);
+    list.appendChild(entry);
+  });
 }
-function removeBm(e, slug, url) {
+function removeBm(e, page, slug) {
   e.stopPropagation();
-  let bms = getBookmarks().filter(b => !(b.slug === slug && b.url === url));
-  saveBookmarks(bms);
+  saveBookmarks(getBookmarks().filter(b => !(b.slug === slug && b.page === page)));
   refreshAllBmButtons();
   renderBookmarks();
   updateBmCount();
 }
-function goToBookmark(url, slug) {
-  if (url !== window.QA_PAGE.id + '.html') {
-    window.location.href = url + '#' + slug;
+function goToBookmark(page, slug) {
+  const url = hrefForPage(page);
+  if (!url) return;                                 // that page no longer exists
+  if (page === currentPageKey()) {
+    const el = document.getElementById(slug);
+    if (el) { el.scrollIntoView(); closeBmPanel(); }
     return;
   }
-  const el = document.getElementById(slug);
-  if (el) { el.scrollIntoView({ behavior: 'smooth' }); closeBmPanel(); }
+  window.location.href = url + '#' + encodeURIComponent(slug);
 }
 function openBmPanel() { renderBookmarks(); document.getElementById('bm-panel').classList.toggle('open'); }
 function closeBmPanel() { document.getElementById('bm-panel').classList.remove('open'); }
-
 // ═══════════════════════════════════════════════════════
 // SEARCH (sitewide — fetches the generated search-index.json once,
 // filters it client-side, shows a link dropdown instead of the
 // original's inline text-highlight, since matches can now live on
 // a different page than the one being viewed)
 // ═══════════════════════════════════════════════════════
+
 let searchIndex = null;
 function loadSearchIndex() {
   fetch('search-index.json').then(r => r.json()).then(data => { searchIndex = data; }).catch(() => {});
+}
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 let searchTimeout;
 function searchDoc(query) {
@@ -165,19 +313,29 @@ function searchDoc(query) {
     const countEl = document.getElementById('search-count');
     const q = query.trim().toLowerCase();
     if (!q || !searchIndex) { box.innerHTML = ''; box.classList.remove('visible'); countEl.textContent = ''; return; }
-    const hits = searchIndex.filter(s => s.title.toLowerCase().includes(q) || s.text.toLowerCase().includes(q));
-    countEl.textContent = hits.length > 0 ? `${hits.length} pogodak${hits.length === 1 ? '' : 'a'}` : 'Nema';
-    box.innerHTML = hits.map(h => {
-      const idx = h.text.toLowerCase().indexOf(q);
+    // Every word must appear (in any order); pages whose TITLE matches come first
+    const tokens = q.split(/\s+/).filter(Boolean);
+    const hits = [];
+    searchIndex.forEach(s => {
+      const title = s.title.toLowerCase(), text = s.text.toLowerCase();
+      if (!tokens.every(t => title.indexOf(t) !== -1 || text.indexOf(t) !== -1)) return;
+      hits.push({ s, titleHits: tokens.filter(t => title.indexOf(t) !== -1).length });
+    });
+    hits.sort((a, b) => b.titleHits - a.titleHits);
+    countEl.textContent = hits.length > 0 ? hits.length + ' pogodak' + (hits.length === 1 ? '' : 'a') : 'Nema';
+    box.innerHTML = hits.map(({ s }) => {
+      const lower = s.text.toLowerCase();
+      const first = tokens.find(t => lower.indexOf(t) !== -1);
+      const idx = first ? lower.indexOf(first) : -1;
       const snippet = idx >= 0
-        ? '…' + h.text.slice(Math.max(0, idx - 40), idx + 60) + '…'
-        : h.text.slice(0, 80) + '…';
-      return `<a class="search-result" href="${h.url}"><span class="sr-title">${h.title}</span><span class="sr-snippet">${snippet}</span></a>`;
+        ? '…' + s.text.slice(Math.max(0, idx - 40), idx + 60) + '…'
+        : s.text.slice(0, 80) + '…';
+      // Index text is plain text (may contain < and >), so it must be escaped before innerHTML
+      return '<a class="search-result" href="' + escapeHtml(s.url) + '"><span class="sr-title">' + escapeHtml(s.title) + '</span><span class="sr-snippet">' + escapeHtml(snippet) + '</span></a>';
     }).join('');
     box.classList.toggle('visible', hits.length > 0);
   }, 200);
 }
-
 // ═══════════════════════════════════════════════════════
 // COLLAPSE GROUPS
 // ═══════════════════════════════════════════════════════
@@ -195,17 +353,20 @@ function toggleGroup(id) {
 // ═══════════════════════════════════════════════════════
 // FONT SIZE
 // ═══════════════════════════════════════════════════════
-let fontSize = parseInt(localStorage.getItem('qa_fs') || '15');
+
+let fontSize = (function () {
+  const n = parseInt(store.get('qa_fs'), 10);
+  return n >= 12 && n <= 20 ? n : 15;               // ignore missing / corrupted stored values
+})();
 function applyFontSize() {
   document.documentElement.style.setProperty('--fs', fontSize + 'px');
   document.getElementById('fs-display').textContent = fontSize;
-  localStorage.setItem('qa_fs', fontSize);
+  store.set('qa_fs', fontSize);
 }
 function changeFont(delta) {
   fontSize = Math.min(20, Math.max(12, fontSize + delta));
   applyFontSize();
 }
-
 // ═══════════════════════════════════════════════════════
 // READING MODE
 // ═══════════════════════════════════════════════════════
@@ -232,23 +393,25 @@ function printDoc() { window.print(); }
 // scanned scroll position across 20 sections to guess "current"; a
 // generated page IS exactly one topic, so there's nothing to guess)
 // ═══════════════════════════════════════════════════════
-function shareSection() {
-  navigator.clipboard.writeText(location.href.split('#')[0]);
-  const toast = document.getElementById('share-toast');
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
-}
 
+function shareSection() {
+  copyText(location.href.split('#')[0]).then(ok => {
+    const toast = document.getElementById('share-toast');
+    toast.textContent = ok ? '🔗 Link kopiran!' : 'Kopiranje nije uspelo';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  });
+}
 // ═══════════════════════════════════════════════════════
 // THEME
 // ═══════════════════════════════════════════════════════
+
 function toggleTheme() {
   document.body.classList.toggle('light');
   const isLight = document.body.classList.contains('light');
   document.getElementById('theme-btn').textContent = isLight ? '☾' : '☀';
-  localStorage.setItem('qa_theme', isLight ? 'light' : 'dark');
+  store.set('qa_theme', isLight ? 'light' : 'dark');
 }
-
 // ═══════════════════════════════════════════════════════
 // SIDEBAR
 // ═══════════════════════════════════════════════════════
@@ -267,14 +430,15 @@ document.addEventListener('click', e => {
 // ═══════════════════════════════════════════════════════
 // COPY CODE
 // ═══════════════════════════════════════════════════════
+
 function copyCode(btn) {
   const pre = btn.nextElementSibling;
-  navigator.clipboard.writeText(pre.innerText).then(() => {
-    btn.textContent = '✓ copied'; btn.classList.add('copied');
+  copyText(pre.innerText).then(ok => {
+    btn.textContent = ok ? '✓ copied' : 'greska';
+    btn.classList.toggle('copied', ok);
     setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
   });
 }
-
 // ═══════════════════════════════════════════════════════
 // SYNTAX HIGHLIGHT
 // ═══════════════════════════════════════════════════════
@@ -386,33 +550,45 @@ function initQuizMode() {
 // scrolling within one — QA_PAGE.prevUrl/nextUrl come from the
 // per-page inline script Task 6 embeds)
 // ═══════════════════════════════════════════════════════
+
 document.addEventListener('keydown', e => {
-  if (e.target.tagName === 'INPUT') {
-    if (e.key === 'Escape') { e.target.blur(); searchDoc(''); }
+  const t = e.target, tag = t && t.tagName;
+  const typing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (t && t.isContentEditable);
+  if (typing) {
+    if (e.key === 'Escape' && tag === 'INPUT') { t.blur(); searchDoc(''); }
     return;
   }
+  // Ctrl/Cmd/Alt combinations belong to the browser (Ctrl+K, Ctrl+R, Ctrl+P, Cmd+J...) — never hijack them
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
   if (e.key === '/') { e.preventDefault(); document.getElementById('search').focus(); return; }
-  if (e.key === 'Escape') { closeBmPanel(); return; }
+  if (e.key === 'Escape') { closeAllPanels(); return; }
+  if (e.repeat) return;                              // holding a key must not page through the document
   if (e.key === 'j' || e.key === 'J') { if (window.QA_PAGE.nextUrl) window.location.href = window.QA_PAGE.nextUrl; }
   if (e.key === 'k' || e.key === 'K') { if (window.QA_PAGE.prevUrl) window.location.href = window.QA_PAGE.prevUrl; }
   if (e.key === 'r' || e.key === 'R') toggleReadingMode();
   if (e.key === 'p' || e.key === 'P') printDoc();
 });
-
+function closeAllPanels() {
+  closeBmPanel();
+  ['quickref', 'overflow-menu', 'sidebar'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('visible', 'open');
+  });
+  if (document.body.classList.contains('reading')) toggleReadingMode();
+}
 // ═══════════════════════════════════════════════════════
 // RESTORE STATE
 // ═══════════════════════════════════════════════════════
+
 function restoreState() {
-  if (localStorage.getItem('qa_theme') === 'light') {
+  if (store.get('qa_theme') === 'light') {
     document.body.classList.add('light');
     document.getElementById('theme-btn').textContent = '☾';
   }
   applyFontSize();
-  const reads = JSON.parse(localStorage.getItem('qa_reads') || '[]');
-  reads.forEach(id => applyReadState(id, true));
+  restoreReadState();
   updateGroupProgress();
 }
-
 // ═══════════════════════════════════════════════════════
 // SCROLL PROGRESS + BACK TO TOP
 // ═══════════════════════════════════════════════════════

@@ -49,6 +49,19 @@ build.js              — Node script: sections/ + data + template -> dist/
 dist/                 — build output; this is what gets pushed and served by GitHub Pages
 ```
 
+## Identity of pages and headings (bookmarks / read marks / anchors)
+
+- Anchors, bookmarks and "read" marks are keyed by the TEXT of the heading / section title with its
+  number stripped (`slugify(stripNumber(...))` in `assets/script.js`), never by position or file name.
+  So renumbering, reordering, inserting subsections or renaming `sNN.html` files is safe.
+- Consequence: RENAMING a heading or section title detaches bookmarks saved on it (they keep the old
+  text). Change numbers freely, change titles deliberately.
+- Saved data has a version (`qa_data_v`); `migrateStorage()` upgrades older data once. When the storage
+  format changes again, bump `DATA_VERSION` and extend that function. All storage goes through the `store`
+  helper (localStorage can be blocked or corrupted and must never break page init).
+- Everything that scales text must use `var(--fs,15px)` (see the font-size rules); a fixed `px` size on
+  content elements silently opts them out of the A-/A+ control.
+
 ## Commands
 
 - `node build.js` — regenerates `dist/` from `sections/` + `data/sections.json` + `template.html`.

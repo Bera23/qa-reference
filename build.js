@@ -20,6 +20,14 @@ function stripTags(html) {
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+// The index must hold the text a reader actually sees: "List&lt;string&gt;" in the source is
+// "List<string>" on the page. Without decoding, a search for "lt" matched every "&lt;" and a search
+// for "list<string>" found nothing. (Decode AFTER stripping tags, and &amp; last.)
+function decodeEntities(s) {
+  return s.replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
+}
+
 function computeReadTime(bodyHtml) {
   const words = stripTags(bodyHtml).split(' ').filter(Boolean).length;
   return Math.max(1, Math.round(words / 200));
@@ -124,7 +132,7 @@ ${renderList(deoII)}
 function buildSearchIndex(sections) {
   const index = sections.map(s => {
     const body = fs.readFileSync(path.join(SECTIONS_DIR, `${s.id}.html`), 'utf8');
-    return { id: s.id, title: s.title, deo: s.deo, url: `${s.id}.html`, text: stripTags(body) };
+    return { id: s.id, title: s.title, deo: s.deo, url: `${s.id}.html`, text: decodeEntities(stripTags(body)) };
   });
   fs.writeFileSync(path.join(DIST_DIR, 'search-index.json'), JSON.stringify(index), 'utf8');
 }
