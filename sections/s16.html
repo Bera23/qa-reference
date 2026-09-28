@@ -135,3 +135,16 @@ public class SpecificationTests { ... }
   "maxParallelThreads": 4
 }</pre></div>
 <div class="note">Paralelizacija ubrzava regression suite, ali uvodi novu klasu flaky testova (deljeni resurs, race condition) — uvek prvo obezbediti izolaciju podataka (Sekcija 10.2), tek onda ukljuciti paralelizam.</div>
+
+<h2 class="sub-title">16.10 TFVC vs. Git — changeset, shelveset, gated check-in</h2>
+<p class="body-text">Ako tim koristi TFVC (Team Foundation Version Control) umesto Git-a — na sta ukazuju termini kao sto su changeset, check-in i merge izmedju grana — razlike ispod su cesto pitanje, narocito uz "Gated Build" sa CV-a. Ako radite u Git-u, ovo je samo pozadina.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Pojam</th><th>Git</th><th>TFVC</th></tr></thead><tbody>
+<tr><td>Model</td><td>Distribuirani — svako ima kompletnu istoriju lokalno.</td><td>Centralizovani — istorija je na serveru, lokalno postoji samo workspace.</td></tr>
+<tr><td>Jedinica promene</td><td>Commit (hash).</td><td>Changeset (sekvencijalni numericki ID; check-in je atomican — ili prodje sve ili nista).</td></tr>
+<tr><td>Preuzimanje / slanje</td><td>pull / commit + push.</td><td>Get Latest / Check In.</td></tr>
+<tr><td>Privremeno odlaganje</td><td>stash ili privremena grana.</td><td>Shelveset — pending izmene sacuvane na serveru bez check-in-a (backup, deljenje, review).</td></tr>
+<tr><td>Grane</td><td>Jeftine i lokalne.</td><td>Grana je folder na serveru; merge je eksplicitna operacija izmedju dve grane (moze i za pojedinacne changeset-ove).</td></tr>
+<tr><td>Gate pre integracije</td><td>Branch policy: build validation na Pull Request-u (16.6).</td><td>Gated check-in: izmene se shelve-uju, build se pokrece, a check-in se desava samo ako build prodje.</td></tr>
+<tr><td>Review</td><td>Pull Request.</td><td>Code review nad shelveset-om ili changeset-om.</td></tr>
+</tbody></table></div>
+<div class="note">Sekcija 16.6 opisuje Gated Build kroz Git PR. Cilj je isti i u TFVC-u — nista ne ulazi u glavnu granu dok gate ne prodje — samo je mehanizam drugaciji (gated check-in umesto branch policy-ja). Zato u gate ide samo brz, stabilan smoke set, a pun regression ostaje u nightly-ju.</div>
