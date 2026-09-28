@@ -106,7 +106,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s24">
 <h1 class="sec-title" id="t-s24">💼 24. Intervju strategija<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~6 min citanja</span><button class="mark-read-btn" id="mrb-s24" onclick="markRead('s24')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~15 min citanja</span><button class="mark-read-btn" id="mrb-s24" onclick="markRead('s24')">Oznaci kao procitano</button></div>
 <p class="body-text">Tehnicko znanje (Sekcija 23) je pola intervjua. Druga polovina je kako ga ispricas: kratko, konkretno i sa brojevima. Ova sekcija je okvir za to, a primeri su gradjeni na tvom CV-u.</p>
 <h2 class="sub-title">24.1 Prica o sebi (60-90 sekundi)</h2>
 <div class="tbl-wrap"><table><thead><tr><th>Deo</th><th>Sta pokrivas</th><th>Trajanje</th></tr></thead><tbody>
@@ -169,9 +169,89 @@
 <tr><td>Rast i ocekivanja</td><td>Kako izgleda uspeh u prvih 90 dana? Koje su mogucnosti rasta (senior, lead, SDET putanja)?</td></tr>
 </tbody></table></div>
 <div class="note">Plata, beneficije i rad od kuce cekaju krajnji krug ili HR razgovor. Prva runda je za pokazivanje interesa za posao.</div>
-<h2 class="sub-title">24.7 Pre, tokom i posle intervjua</h2>
+<h2 class="sub-title">24.7 Odbrana CV-a — svaka tvrdnja je pitanje</h2>
+<p class="body-text">Intervjuer cita CV pored tebe i bira stavke koje ce da pritisne. Za svaku tvrdnju treba da imas tri stvari: definiciju svojim recima, jedan konkretan primer i broj. Tabela mapira tvrdnje iz tvog CV-a na verovatna potpitanja i na mesto u dokumentu gde je osnova odgovora.</p>
+<div class="tbl-wrap tall"><table><thead><tr><th>Tvrdnja iz CV-a</th><th>Verovatno potpitanje</th><th>Osnova u dokumentu</th></tr></thead><tbody>
+<tr><td>Sole owner of 1 of 22 parallel nightly regression protocols, daily failure triage</td><td>Kako izgleda tvoje jutro? Kako razdvajas pravu regresiju od pokvarene skripte i problema okruzenja? Sta radis kad padne 30 testova?</td><td>Sekcija 6.5 (Bug Triage); Sekcija 23 ("Kako izgleda tvoj dnevni triage?")</td></tr>
+<tr><td>Authored ~40% of the assertions in the inherited regression suite</td><td>Kako si usao u tudji kod? Sta si napisao, a sta samo menjao? Kako znas da je 40%?</td><td>Sekcija 18 (arhitektura framework-a); 24.8</td></tr>
+<tr><td>342 changesets: new scripts, attribute mappings, cross-stream merges</td><td>Sta je changeset kod vas? Sta je cross-stream merge? Kako resavas konflikte?</td><td>Sekcija 16.7 do 16.10 (verzionisanje); 24.8</td></tr>
+<tr><td>Full-cycle validation of change requests (test plan, HTTP/API, documentation review, manual, then automation)</td><td>Provedi me kroz jedan change request od pocetka do kraja. Kad odlucujes da nesto automatizujes?</td><td>Sekcija 7 (test plan); 15 (API); 13.8 (Network tab); 11 (kada automatizovati)</td></tr>
+<tr><td>Validated AI-powered PLM features (Copilot assistant, data extraction)</td><td>Kako testiras nedeterministican odgovor? Sta je halucinacija u tvom testu?</td><td>24.12; Sekcija 21.6; 10.7</td></tr>
+<tr><td>Stabilize flaky scripts (locators, waits, retry, test-data isolation)</td><td>Najcesci uzrok? Primer iz prakse? Da li retry sakriva pravi bag?</td><td>Sekcija 11 (flaky); 13.3 (waits); Sekcija 23 (pitanja o flaky testovima)</td></tr>
+<tr><td>Azure Pipelines — Standard Build, Gated Build, Deploy</td><td>Razlika izmedju Standard i Gated? Sta ide u gate, a sta u nightly?</td><td>Sekcija 16.6; 16.10</td></tr>
+<tr><td>SQL (MSSQL, Oracle), pgAdmin, API-to-database validation</td><td>Napisi JOIN. Kako proveravas da je API upis stigao u bazu? MSSQL vs. PostgreSQL?</td><td>Sekcija 10.5, 10.9, 10.10</td></tr>
+<tr><td>Appium (Android, C#)</td><td>Kako pokreces test na uredjaju? Sta je drugacije u odnosu na Selenium? Koliko je to produkciono iskustvo?</td><td>Sekcija 20. Ako je vise ucenje nego produkcija, reci to iskreno (24.3)</td></tr>
+<tr><td>Compliance Control System: token auth (rotation, session expiration), PostgreSQL</td><td>Kako testiras rotaciju tokena i istek sesije?</td><td>Sekcija 15.8; 10.10</td></tr>
+<tr><td>Internal Knowledge Sharing Platform: UI automation built from scratch</td><td>Kako si postavio framework od nule? Sta si uradio prvo i zasto?</td><td>Sekcija 14 (POM); 18 (arhitektura)</td></tr>
+<tr><td>Built 2 custom Copilot agents (Microsoft Agent Builder)</td><td>Opisi jednog agenta: cilj, instrukcije, ogranicenja, kako si ga testirao.</td><td>Sekcija 21.8; 24.12</td></tr>
+<tr><td>Certifikati: Test Techniques, SQL for Testers, Agile Testing</td><td>Sta si konkretno primenio iz toga u radu?</td><td>Sekcija 4 (tehnike); 10.9; 8 (Agile)</td></tr>
+</tbody></table></div>
+<div class="note">Pravilo: ako ne mozes da objasnis stavku sa CV-a u dve recenice i jednim primerom, ili je izbaci iz CV-a ili je nauci pre intervjua. Nista ne skodi vise od tvrdnje koja se raspadne na trecem potpitanju.</div>
+<h2 class="sub-title">24.8 Brojevi iz CV-a koje moras da objasnis</h2>
+<p class="body-text">Brojevi su snaga CV-a, ali samo ako izdrze potpitanje. Izvedene vrednosti u tabeli su moja racunica iz CV-a — proveri ih sa stvarnim podacima.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Broj</th><th>Sta moras da znas da objasnis</th></tr></thead><tbody>
+<tr><td>1 od 22 nightly protokola</td><td>Jednom recenicom: sta je "protokol" kod vas (npr. skup suita koji se nocu izvrsava nad jednom konfiguracijom — zameni tacnom definicijom). Intervjuer ne zna vas recnik.</td></tr>
+<tr><td>47 suita, ~5000 asercija</td><td>Asercija nije test: znaj i koliko je testova, ne samo asercija. Prosek je oko 106 asercija po suite-u (5000 / 47); ako je stvarno drugacije, znaj zasto. Znaj i koliko traje run i koliko u proseku padne.</td></tr>
+<tr><td>4-5 okruzenja, razlicite verzije proizvoda</td><td>Kako isti test radi na razlicitim verzijama (uslovno preskakanje, verzija u konfiguraciji, feature flag). Osnova: Sekcija 10.6.</td></tr>
+<tr><td>~40% asercija u nasledjenom suite-u</td><td>Kako si dosao do broja (istorija izmena) ili iskreno "priblizno, na osnovu istorije izmena". Nepouzdan broj je gori od nikakvog.</td></tr>
+<tr><td>342 changeset-a od marta 2025.</td><td>Izvedeno: oko 4 nedeljno. Znaj strukturu: koliko novih skripti, koliko attribute mapping-a, koliko merge-ova. Osnova: Sekcija 16.10.</td></tr>
+<tr><td>524 change request-a u 19 meseci</td><td>Izvedeno: oko 27 mesecno, oko 6 nedeljno. Definisi "tested and closed" (sta znaci zatvoren), koliki deo je imao automation coverage i koji je bio najsloziji.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">24.9 PLM u 30 sekundi</h2>
+<p class="body-text">Intervjuer cesto ne poznaje tvoj domen. Ako ga izgubis u prvoj recenici, izgubio si i sve brojeve posle nje. Pripremi dve recenice koje svako razume.</p>
+<p class="body-text"><strong>Srpski:</strong> "PLM (Product Lifecycle Management) je enterprise platforma u kojoj kompanija drzi podatke o proizvodu — specifikacije i atribute — na jednom mestu kroz ceo zivotni ciklus proizvoda i povezuje ih sa spoljnim sistemima. Kod nas razlicite role vide i menjaju razlicite podatke, a proizvod postoji u vise verzija paralelno, pa isti regression pokrecemo na 4-5 okruzenja."</p>
+<p class="body-text"><strong>English:</strong> "PLM stands for Product Lifecycle Management. It's an enterprise platform where a company keeps its product data — specifications, attributes — in one place across the whole product lifecycle, and connects it to third-party systems. In our case different roles see and edit different data, and several product versions run in parallel, so we run the same regression on four or five environments."</p>
+<p class="body-text">Zatim odgovori na pitanje koje sledi: <em>zasto je to zanimljivo za testiranje?</em></p>
+<div class="tbl-wrap"><table><thead><tr><th>Osobina domena</th><th>Sta to znaci za testiranje</th></tr></thead><tbody>
+<tr><td>Puno podataka i formi (specifikacije, atributi)</td><td>Validacija podataka i mapiranja, ne samo klikanje po ekranima.</td></tr>
+<tr><td>Role i permission matrica</td><td>Isti ekran, drugaciji sadrzaj po roli — svaki test treba da zna pod kojom rolom radi.</td></tr>
+<tr><td>Vise verzija paralelno</td><td>Isti regression puta broj okruzenja; test mora da tolerise razlike izmedju verzija.</td></tr>
+<tr><td>Integracije sa trecim stranama</td><td>HTTP/API provere iza UI-ja (Network tab, Postman).</td></tr>
+<tr><td>AI funkcionalnosti</td><td>Nedeterministican izlaz — testiraju se invarijante, ne tacan tekst (24.12).</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">24.10 Pitanja o karijeri i "rupama" u CV-u</h2>
+<p class="body-text">Ova pitanja ne testiraju znanje nego procenu i iskrenost. Odgovor mora da bude kratak (do 30 sekundi), stvaran i okrenut ka napred. Ne izmisljam tvoje razloge — mesta u zagradama popuni svojim.</p>
+<div class="tbl-wrap tall"><table><thead><tr><th>Pitanje</th><th>Okvir odgovora</th></tr></thead><tbody>
+<tr><td>Zasto QA, a ne razvoj? (diploma je iz elektrotehnike i racunarstva)</td><td>Pravi razlog [upisi svoj] + dokaz da to nije bekstvo od koda: svakodnevno pises C# automatizaciju (342 changeset-a). Pokazi da je izbor, ne zamena.</td></tr>
+<tr><td>Zasto menjas posao?</td><td>Uvek "ka necemu", nikad "od nekoga". Jedan konkretan razlog [npr. dublje backend/API testiranje, vise vlasnistva] + zahvalnost na onome sto si naucio. Bez zalbi na tim ili poslodavca.</td></tr>
+<tr><td>Zasto si otisao iz Qinshift-a posle tri godine?</td><td>Ista formula. Naglasi sta si tamo izgradio (test planovi, smoke/sanity/regression od nule) i sta te je odvelo u enterprise PLM.</td></tr>
+<tr><td>Sta je bilo izmedju diplome (2020.) i prvog posla (12/2021)?</td><td>CV to ne pokazuje, pa ce neko primetiti. Pripremi jednu-dve iskrene recenice [sta si radio ili ucio], bez izvinjavanja, i vrati razgovor na Qinshift. Bolje da odgovor smislis unapred nego da improvizujes.</td></tr>
+<tr><td>Gde se vidis za 3-5 godina?</td><td>Pravac (senior, lead, SDET) povezan sa vrednoscu koju donosis: vlasnistvo nad test strategijom, mentorstvo, sire tehnicko polje (backend, performance). Ne "na tvojoj poziciji".</td></tr>
+<tr><td>Kakva su ti ocekivanja u vezi plate?</td><td>Odgovori opsegom zasnovanim na trzistu i obimu uloge, ne jednim brojem. Ako je rano: "prvo bih zeleo da razumem obim uloge — koji je budzetirani opseg?". Istrazi opsege pre razgovora.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">24.11 Intervju na engleskom</h2>
+<p class="body-text">CV navodi engleski kao "professional working proficiency (daily written communication)". Pisani engleski nije isto sto i govorni: intervjui za medjunarodne timove idu naglas, pod pritiskom. Najvece rizike smanjuje samo vezba naglas — bar pitch i tri STAR price.</p>
+<p class="body-text"><strong>English pitch (60-90 s), built from your CV:</strong> "I'm a QA Automation Engineer at Trace One, working on an enterprise PLM web application. I'm the sole owner of one of our 22 parallel nightly regression protocols — 47 suites and around 5,000 assertions running on four or five environments with different product versions — and I triage its failures every morning, separating real regressions from broken scripts and environment issues. Before that I spent three years at Qinshift building Selenium and C# automation and doing API and SQL validation. Recently I've also been validating AI-powered features, such as a Copilot assistant grounded on product data. I'm looking for a role where [what draws you to this position]."</p>
+<div class="tbl-wrap"><table><thead><tr><th>Situacija</th><th>Fraza</th></tr></thead><tbody>
+<tr><td>Kupujes vreme</td><td>"That's a good question — let me think for a second." / "Let me structure my answer."</td></tr>
+<tr><td>Trazis razjasnjenje</td><td>"Just to make sure I understand — are you asking about X or Y?" / "Could you give me an example of the scenario?"</td></tr>
+<tr><td>Nisi culo</td><td>"Sorry, could you repeat that?" / "Could you say that a bit more slowly?"</td></tr>
+<tr><td>Struktura odgovora</td><td>"There are three things I'd look at. First... Second... Finally..."</td></tr>
+<tr><td>Iskren gap</td><td>"I haven't used X directly, but I've worked with Y, which is very similar. For example..."</td></tr>
+<tr><td>Ne znas sintaksu</td><td>"I'd need to check the documentation for the exact syntax, but conceptually it works like this..."</td></tr>
+<tr><td>Opis tvog rada</td><td>"Every morning I triage the nightly failures: first I check whether it reproduces, then whether the cause is the application, the script, or the environment."</td></tr>
+<tr><td>STAR okviri</td><td>"The situation was..." / "My responsibility was..." / "What I did was..." / "As a result..."</td></tr>
+<tr><td>Zavrsetak odgovora</td><td>"Does that answer your question, or should I go deeper on any part?"</td></tr>
+</tbody></table></div>
+<div class="note">Izgovor termina koji se cesto kvari: cache = "cash", queue = "kyoo", SQL moze i "sequel" i "S-Q-L", Selenium = "suh-LEE-nee-um", Azure = "AZH-er" (americki). Odgovaraj kratkim recenicama; bolje jasan jednostavan engleski nego slozen koji se raspadne na pola.</div>
+<h2 class="sub-title">24.12 Kako pricas o AI iskustvu</h2>
+<p class="body-text">AI je najistaknutiji deo tvog CV-a i zato najverovatniji pravac potpitanja. Ocekuje se dubina, ne samo pominjanje alata. Osnova je Sekcija 21.6; ovde je okvir kako to izgovoris.</p>
+<div class="tbl-wrap tall"><table><thead><tr><th>Sta si radio (CV)</th><th>Sta proveravas i kako znas da je ispravno</th></tr></thead><tbody>
+<tr><td>Copilot asistent zasnovan na podacima proizvoda — tacnost odgovora</td><td>Poredis sa izvorom istine, to jest podacima u samom sistemu. Proveravas cinjenice, a ne formulaciju, jer odgovor nije isti pri svakom pokretanju.</td></tr>
+<tr><td>Halucinacije</td><td>Pitanja na koja odgovor u podacima ne postoji. Ispravno ponasanje je "ne znam" ili odbijanje. Odgovor koji navodi nesto sto u sistemu ne postoji je pad, ma koliko ubedljivo zvucao.</td></tr>
+<tr><td>Out-of-scope provere</td><td>Pitanja van domena asistenta — mora da odbije ili preusmeri, ne da improvizuje.</td></tr>
+<tr><td>Permission-bound upiti</td><td>Isti upit pod razlicitim rolama; odgovor ne sme da otkrije podatke koje ta rola ne sme da vidi. Najvredniji test, jer je to problem autorizacije, a ne halucinacije.</td></tr>
+<tr><td>Data extraction (Excel upload)</td><td>Tacnost mapiranja svakog polja (ocekivano vs. dobijeno), malformed podaci (prazne celije, pogresan format, duplirane kolone, visak redova) i submit-to-form tok: mapirani podaci zavrsavaju ispravno u formi. Osnova: Sekcija 10.7.</td></tr>
+<tr><td>2 custom Copilot agenta (Agent Builder)</td><td>Opisi jednog: cilj, scoped system instrukcije, ograniceni izvori, multimodalni ulaz i kako si proverio da ne izlazi iz svog scope-a. Osnova: Sekcija 21.8.</td></tr>
+</tbody></table></div>
+<div class="tbl-wrap"><table><thead><tr><th>Potpitanje</th><th>Kratak odgovor</th></tr></thead><tbody>
+<tr><td>Kako testiras nedeterministican izlaz?</td><td>Asertujem invarijante (cinjenice iz izvora, format, granice dozvola), ne tacan tekst. Isti prompt pokrecem vise puta i koristim prag umesto egzaktnog poklapanja.</td></tr>
+<tr><td>Kako znas da model halucinira?</td><td>Poredim sa izvorom istine u sistemu. Sve sto je navedeno a ne postoji u podacima je halucinacija.</td></tr>
+<tr><td>Koji je najveci rizik?</td><td>Curenje podataka preko granica dozvola. Zato isti upit uvek testiram pod vise rola.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">24.13 Pre, tokom i posle intervjua</h2>
 <div class="tbl-wrap"><table><thead><tr><th>Faza</th><th>Checklista</th></tr></thead><tbody>
-<tr><td>Vece pre</td><td>Prodji pitanja iz Sekcije 23 naglas (kviz mod); osvezi 2-3 SQL upita (JOIN, GROUP BY, subquery); proveri kameru, mikrofon i link; pripremi CV, beleske i papir.</td></tr>
+<tr><td>Vece pre</td><td>Prodji pitanja iz Sekcije 23 naglas (kviz mod); ponovi pricu o sebi naglas, i na engleskom (24.11); prodji tabelu odbrane CV-a (24.7); osvezi 2-3 SQL upita (JOIN, GROUP BY, subquery); proveri kameru, mikrofon i link; pripremi CV, beleske i papir.</td></tr>
 <tr><td>Tokom</td><td>Misli naglas; trazi razjasnjenje pre odgovora; kad ne znas: "ne znam to, ali evo kako bih do odgovora dosao"; svako tvrdjenje pokusaj da potkrepis primerom iz rada.</td></tr>
 <tr><td>Posle</td><td>Odmah zapisi sva pitanja i gde si zapeo (to postaje novo pitanje u Sekciji 23); posalji kratak zahvalni mejl u roku od 24h.</td></tr>
 </tbody></table></div>
