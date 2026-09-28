@@ -434,6 +434,15 @@ document.addEventListener('click', function (e) {
 }, true);
 
 function toggleQuickRef() { document.getElementById('quickref').classList.toggle('visible'); }
+// Tap/click a Quick Reference row to show its explanation (only takes visual effect on touch
+// devices — see the (hover:none) rules in style.css; desktop keeps the hover tooltip).
+document.addEventListener('click', e => {
+  const item = e.target.closest('#quickref .qr-item');
+  if (!item || !item.querySelector('.qr-tooltip')) return;
+  const wasOpen = item.classList.contains('tip-open');
+  document.querySelectorAll('#quickref .qr-item.tip-open').forEach(i => i.classList.remove('tip-open'));
+  if (!wasOpen) item.classList.add('tip-open');
+});
 
 // ═══════════════════════════════════════════════════════
 // GLOSAR FILTER (only s20.html has .glosar-item elements — a no-op

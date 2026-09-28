@@ -145,6 +145,16 @@ td:first-child{font-weight:600;color:#93c5fd;min-width:110px;}
 .qr-val{color:var(--text2);text-align:right;font-size:11px;}
 .qr-tooltip{display:none;position:absolute;bottom:calc(100% + 6px);left:0;background:var(--bg);border:1px solid var(--accent);border-radius:6px;padding:8px 12px;font-size:11.5px;color:var(--text);width:220px;z-index:50;box-shadow:0 4px 16px rgba(0,0,0,.4);line-height:1.5;pointer-events:none;}
 .qr-item:hover .qr-tooltip{display:block;}
+/* Touch devices have no reliable :hover — tap a row to expand its explanation inline
+   (inline, not floating, so the scrolling panel can't clip it). */
+@media (hover:none){
+  .qr-item{flex-wrap:wrap;}
+  .qr-item.has-tip{cursor:pointer;}
+  .qr-item.has-tip .qr-key{text-decoration:underline dotted;text-underline-offset:3px;}
+  .qr-item:hover .qr-tooltip{display:none;}
+  .qr-tooltip{position:static;order:1;flex:1 0 100%;width:auto;margin-top:2px;pointer-events:auto;box-shadow:none;}
+  .qr-item.tip-open .qr-tooltip{display:block;}
+}
 
 /* ── Bookmarks panel ─────── */
 #bm-panel{position:fixed;top:0;right:-340px;width:320px;height:100vh;background:var(--bg2);border-left:1px solid var(--border);z-index:200;transition:right .3s;overflow-y:auto;padding:20px;}
