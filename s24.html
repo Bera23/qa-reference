@@ -264,33 +264,38 @@
   <h3>⚡ Quick Reference <button id="qr-close" onclick="toggleQuickRef()" aria-label="Zatvori">✕</button></h3>
   <div class="qr-grid">
     <div class="qr-card"><h4>Severity nivoi</h4>
-      <div class="qr-item"><span class="qr-key">Blocker</span><span class="qr-tooltip">Sistem se ne moze koristiti. Testiranje je blokirano. Nema workaround-a.</span><span class="qr-val">Sistem ne radi, nema workaround-a</span></div>
-      <div class="qr-item"><span class="qr-key">Critical</span><span class="qr-tooltip">Kriticna funkcionalnost je slomljena. Korisnik ne moze da dovrsi kljucni task.</span><span class="qr-val">Kriticna funkcionalnost slomljena</span></div>
-      <div class="qr-item"><span class="qr-key">Major</span><span class="qr-tooltip">Znacajna funkcionalnost ostecena. Workaround postoji ali je neudoban.</span><span class="qr-val">Znacajna funkcionalnost ostecena</span></div>
-      <div class="qr-item"><span class="qr-key">Minor</span><span class="qr-tooltip">Manja funkcionalnost ostecena. Prihvatljiv workaround postoji.</span><span class="qr-val">Manja funkcionalnost, postoji workaround</span></div>
-      <div class="qr-item"><span class="qr-key">Trivial</span><span class="qr-tooltip">Estetski problem — UI, tekst, formatiranje. Nema funkcionalnog uticaja.</span><span class="qr-val">Estetski problem, bez funkcionalnog uticaja</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Blocker</span><span class="qr-tooltip">Sistem se ne moze koristiti. Testiranje je blokirano. Nema workaround-a.</span><span class="qr-val">Sistem ne radi, nema workaround-a</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Critical</span><span class="qr-tooltip">Kriticna funkcionalnost je slomljena. Korisnik ne moze da dovrsi kljucni task.</span><span class="qr-val">Kriticna funkcionalnost slomljena</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Major</span><span class="qr-tooltip">Znacajna funkcionalnost ostecena. Workaround postoji ali je neudoban.</span><span class="qr-val">Znacajna funkcionalnost ostecena</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Minor</span><span class="qr-tooltip">Manja funkcionalnost ostecena. Prihvatljiv workaround postoji.</span><span class="qr-val">Manja funkcionalnost, postoji workaround</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Trivial</span><span class="qr-tooltip">Estetski problem — UI, tekst, formatiranje. Nema funkcionalnog uticaja.</span><span class="qr-val">Estetski problem, bez funkcionalnog uticaja</span></div>
     </div>
     <div class="qr-card"><h4>HTTP status kodovi</h4>
-      <div class="qr-item"><span class="qr-key">200 OK</span><span class="qr-tooltip">Uspesno obradjen zahtev. Vraca se za GET i za akcije koje ne kreiraju resurs.</span><span class="qr-val">Uspesno</span></div>
-      <div class="qr-item"><span class="qr-key">201 Created</span><span class="qr-tooltip">Resurs je kreiran. Vraca se za uspesni POST. Obicno ukljucuje Location header.</span><span class="qr-val">Resurs kreiran (POST)</span></div>
-      <div class="qr-item"><span class="qr-key">401</span><span class="qr-tooltip">Token nedostaje ili je neispravan. Klijent treba da se autentifikuje.</span><span class="qr-val">Nedostaje token</span></div>
-      <div class="qr-item"><span class="qr-key">403</span><span class="qr-tooltip">Autentifikacija je ok, ali korisnik nema prava na ovaj resurs.</span><span class="qr-val">Token validan, nema dozvolu</span></div>
-      <div class="qr-item"><span class="qr-key">404</span><span class="qr-tooltip">Resurs ne postoji na ovoj URL-i.</span><span class="qr-val">Resurs ne postoji</span></div>
-      <div class="qr-item"><span class="qr-key">422</span><span class="qr-tooltip">Format zahteva je ok, ali semanticki nije validan (narusena biznis pravila).</span><span class="qr-val">Semanticki nevalidan zahtev</span></div>
-      <div class="qr-item"><span class="qr-key">500</span><span class="qr-tooltip">Greska na serveru. Uvek je defekt — developer mora da je ispravi.</span><span class="qr-val">Greska na serveru — uvek defekt</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">200 OK</span><span class="qr-tooltip">Uspesno obradjen zahtev. Vraca se za GET i za akcije koje ne kreiraju resurs.</span><span class="qr-val">Uspesno</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">201 Created</span><span class="qr-tooltip">Resurs je kreiran. Vraca se za uspesni POST. Obicno ukljucuje Location header.</span><span class="qr-val">Resurs kreiran (POST)</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">204</span><span class="qr-tooltip">Uspesno obradjen zahtev, bez tela odgovora. Tipicno za DELETE.</span><span class="qr-val">Uspesno, bez tela (DELETE)</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">400</span><span class="qr-tooltip">Nevalidan zahtev — los JSON, nedostaju obavezna polja. Cest ishod negativnih testova.</span><span class="qr-val">Nevalidan zahtev</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">401</span><span class="qr-tooltip">Token nedostaje ili je neispravan. Klijent treba da se autentifikuje.</span><span class="qr-val">Nedostaje token</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">403</span><span class="qr-tooltip">Autentifikacija je ok, ali korisnik nema prava na ovaj resurs.</span><span class="qr-val">Token validan, nema dozvolu</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">404</span><span class="qr-tooltip">Resurs ne postoji na ovoj URL-i.</span><span class="qr-val">Resurs ne postoji</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">409</span><span class="qr-tooltip">Konflikt sa trenutnim stanjem — npr. kreiranje korisnika sa emailom koji vec postoji.</span><span class="qr-val">Konflikt (npr. duplikat)</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">422</span><span class="qr-tooltip">Format zahteva je ok, ali semanticki nije validan (narusena biznis pravila).</span><span class="qr-val">Semanticki nevalidan zahtev</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">429</span><span class="qr-tooltip">Previse zahteva u kratkom vremenu — rate limiting.</span><span class="qr-val">Rate limiting</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">500</span><span class="qr-tooltip">Greska na serveru. Uvek je defekt — developer mora da je ispravi.</span><span class="qr-val">Greska na serveru — uvek defekt</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">502 / 503</span><span class="qr-tooltip">502: upstream servis ne odgovara. 503: servis trenutno nedostupan. Najcesce infrastruktura ili dostupnost servisa — proveriti okruzenje pre prijave defekta.</span><span class="qr-val">Servis nedostupan — proveri okruzenje</span></div>
     </div>
     <div class="qr-card"><h4>Selenium exception-i</h4>
-      <div class="qr-item"><span class="qr-key">NoSuchElement</span><span class="qr-tooltip">Element nije pronadjen u DOM-u. Proveriti lokator i dodati Explicit Wait.</span><span class="qr-val">Proveriti lokator + dodati Wait</span></div>
-      <div class="qr-item"><span class="qr-key">StaleElement</span><span class="qr-tooltip">Element pronadjen ali DOM se promenio pre interakcije. Re-locate element.</span><span class="qr-val">Re-locate element</span></div>
-      <div class="qr-item"><span class="qr-key">NotInteractable</span><span class="qr-tooltip">Element postoji ali je skriven, disabled ili prekriven drugim elementom.</span><span class="qr-val">Cekati na clickability</span></div>
-      <div class="qr-item"><span class="qr-key">ClickIntercepted</span><span class="qr-tooltip">Drugi element (modal, overlay) prekriva ciljni element pri kliku.</span><span class="qr-val">Sacekati da overlay nestane</span></div>
-      <div class="qr-item"><span class="qr-key">Timeout</span><span class="qr-tooltip">Explicit Wait nije pronasao ocekivani uslov u zadatom vremenskom okviru.</span><span class="qr-val">Povecati timeout / proveriti lokator</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">NoSuchElement</span><span class="qr-tooltip">Element nije pronadjen u DOM-u. Proveriti lokator, dodati Explicit Wait i proveriti da li je driver u pravom iframe/window kontekstu (Sekcija 13.9).</span><span class="qr-val">Lokator, Wait, frame kontekst</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">StaleElement</span><span class="qr-tooltip">Element pronadjen ali DOM se promenio pre interakcije. Re-locate element.</span><span class="qr-val">Re-locate element</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">NotInteractable</span><span class="qr-tooltip">Element postoji ali je skriven, disabled ili prekriven drugim elementom.</span><span class="qr-val">Cekati na clickability</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">ClickIntercepted</span><span class="qr-tooltip">Drugi element (modal, overlay) prekriva ciljni element pri kliku.</span><span class="qr-val">Sacekati da overlay nestane</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Timeout</span><span class="qr-tooltip">Explicit Wait nije pronasao ocekivani uslov u zadatom vremenskom okviru.</span><span class="qr-val">Povecati timeout / proveriti lokator</span></div>
     </div>
     <div class="qr-card"><h4>Smoke / Sanity / Regression</h4>
-      <div class="qr-item"><span class="qr-key">Smoke</span><span class="qr-tooltip">Broad + Shallow. Pokrece se na svakom novom build-u. Go/No-Go odluka za dalji QA.</span><span class="qr-val">Broad + Shallow · svaki build</span></div>
-      <div class="qr-item"><span class="qr-key">Sanity</span><span class="qr-tooltip">Narrow + Deep. Pokrece se nakon specificnog bugfix-a ili nove funkcionalnosti.</span><span class="qr-val">Narrow + Deep · nakon fix-a</span></div>
-      <div class="qr-item"><span class="qr-key">Regression</span><span class="qr-tooltip">Broad + Deep. Pokrece se pre svakog release-a. Pokriva ceo scope.</span><span class="qr-val">Broad + Deep · pre release-a</span></div>
-      <div class="qr-item"><span class="qr-key">Retesting</span><span class="qr-tooltip">Ponovo se izvrsava konkretan TC koji je prethodno failovao, nakon bugfix-a.</span><span class="qr-val">Konkretan TC koji je failovao</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Smoke</span><span class="qr-tooltip">Broad + Shallow. Pokrece se na svakom novom build-u. Go/No-Go odluka za dalji QA.</span><span class="qr-val">Broad + Shallow · svaki build</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Sanity</span><span class="qr-tooltip">Narrow + Deep. Pokrece se nakon specificnog bugfix-a ili nove funkcionalnosti.</span><span class="qr-val">Narrow + Deep · nakon fix-a</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Regression</span><span class="qr-tooltip">Broad + Deep. Pokrece se pre svakog release-a. Pokriva ceo scope.</span><span class="qr-val">Broad + Deep · pre release-a</span></div>
+      <div class="qr-item has-tip"><span class="qr-key">Retesting</span><span class="qr-tooltip">Ponovo se izvrsava konkretan TC koji je prethodno failovao, nakon bugfix-a.</span><span class="qr-val">Konkretan TC koji je failovao</span></div>
     </div>
     <div class="qr-card"><h4>Test case checklist</h4>
       <div class="qr-item"><span class="qr-key">✓ Naziv</span><span class="qr-val">Method_State_Expected format</span></div>
