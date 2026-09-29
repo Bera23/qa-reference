@@ -504,6 +504,34 @@ function initLangBadges() {
 // bar as "Oznaci kao procitano") to hide all answers at once for
 // active-recall self-testing instead of always-visible passive reading.
 // ═══════════════════════════════════════════════════════
+// Per-question self-assessment, keyed by a stable slug of the question TEXT (same
+// principle as slugify() for anchors/bookmarks) so results survive question reordering.
+function quizStatsKey(questionText) { return 'q-' + slugify(questionText); }
+function getQuizStats() { return store.getJSON('qa_quiz_stats', {}); }
+function saveQuizStats(stats) { store.set('qa_quiz_stats', JSON.stringify(stats)); }
+function recordQuizAnswer(key, questionText, deo, wasCorrect) {
+  const stats = getQuizStats();
+  const entry = stats[key] || { correct: 0, incorrect: 0 };
+  entry.correct = entry.correct || 0;
+  entry.incorrect = entry.incorrect || 0;
+  if (wasCorrect) entry.correct++; else entry.incorrect++;
+  entry.lastResult = wasCorrect ? 'correct' : 'incorrect';
+  entry.lastSeen = Date.now();
+  entry.question = questionText;  // kept fresh so a later export/stats view doesn't need the DOM
+  entry.deo = deo;
+  stats[key] = entry;
+  saveQuizStats(stats);
+  return stats;
+}
+function downloadTextFile(filename, mime, text) {
+  const blob = new Blob([text], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 function initQuizMode() {
   if (!window.QA_PAGE || !/Pitanja i odgovori/.test(window.QA_PAGE.title || '')) return;
   const content = document.getElementById('content');
@@ -511,9 +539,24 @@ function initQuizMode() {
   const headers = Array.from(content.querySelectorAll('h3.sub-sub-title'));
   if (headers.length === 0) return;
 
+  let currentDeo = '';
   const items = headers.map(h3 => {
+    // h2.sub-title (Deo I / II / III) headers are siblings of the h3s in document order —
+    // walking previousElementSibling from each h3 as items are built keeps currentDeo correct.
+    let scan = h3.previousElementSibling;
+    while (scan) {
+      // dataset.title (set by addAnchorLinks(), which always runs first) is the clean heading
+      // text — plain textContent would also pick up the injected "#" anchor / "★" bookmark button.
+      if (scan.matches && scan.matches('h2.sub-title')) { currentDeo = scan.dataset.title || scan.textContent.trim(); break; }
+      scan = scan.previousElementSibling;
+    }
+    const questionText = h3.textContent.trim();
+    const key = quizStatsKey(questionText);
+
     const wrap = document.createElement('div');
     wrap.className = 'qa-item';
+    wrap.dataset.key = key;
+    wrap.dataset.deo = currentDeo;
     h3.parentNode.insertBefore(wrap, h3);
     h3.classList.add('qa-question');
     wrap.appendChild(h3);
@@ -527,22 +570,164 @@ function initQuizMode() {
       answer.appendChild(toMove);
     }
     wrap.appendChild(answer);
+
+    // Self-rating — only meaningfully visible in quiz mode (#content.quiz-active, see CSS).
+    // Rating re-collapses the item so the flow is: open -> read -> rate -> next question.
+    const rate = document.createElement('div');
+    rate.className = 'qa-rate';
+    const yes = document.createElement('button');
+    yes.className = 'qa-rate-btn correct'; yes.type = 'button'; yes.textContent = '✓ Znao sam';
+    const no = document.createElement('button');
+    no.className = 'qa-rate-btn incorrect'; no.type = 'button'; no.textContent = '✗ Nisam znao';
+    [[yes, true], [no, false]].forEach(([rateBtn, ok]) => {
+      rateBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        // Read from wrap.dataset.deo (set once, per-item, above), NOT the outer `currentDeo`
+        // closure variable — by the time any click fires the .map() loop has long finished, so
+        // `currentDeo` would hold whatever the LAST question's Deo was, not this item's.
+        recordQuizAnswer(key, questionText, wrap.dataset.deo, ok);
+        wrap.classList.add('qa-collapsed');
+        refreshStatsPanelIfOpen();
+      });
+    });
+    rate.appendChild(yes); rate.appendChild(no);
+    answer.appendChild(rate);
+
     h3.addEventListener('click', () => wrap.classList.toggle('qa-collapsed'));
     return wrap;
   });
 
   const meta = document.querySelector('.section-meta');
   if (!meta) return;
-  const btn = document.createElement('button');
-  btn.className = 'quiz-toggle-btn';
-  btn.textContent = '🎯 Kviz mod';
-  btn.onclick = () => {
-    const turningOn = !btn.classList.contains('active');
-    btn.classList.toggle('active', turningOn);
-    btn.textContent = turningOn ? '👁 Prikazi odgovore' : '🎯 Kviz mod';
+  const quizBtn = document.createElement('button');
+  quizBtn.className = 'quiz-toggle-btn';
+  quizBtn.textContent = '🎯 Kviz mod';
+  quizBtn.onclick = () => {
+    const turningOn = !quizBtn.classList.contains('active');
+    quizBtn.classList.toggle('active', turningOn);
+    quizBtn.textContent = turningOn ? '👁 Prikazi odgovore' : '🎯 Kviz mod';
+    content.classList.toggle('quiz-active', turningOn);
     items.forEach(w => w.classList.toggle('qa-collapsed', turningOn));
+    if (!turningOn) applyQuizFilter(null);  // leaving quiz mode also clears any random/weak-points filter
   };
-  meta.appendChild(btn);
+  meta.appendChild(quizBtn);
+
+  function applyQuizFilter(keySet) {
+    items.forEach(w => w.classList.toggle('qa-filtered', !!keySet && !keySet.has(w.dataset.key)));
+  }
+  function enterQuizMode() {
+    if (!quizBtn.classList.contains('active')) quizBtn.click();
+  }
+  function pickRandom(n) {
+    enterQuizMode();
+    const pool = items.map(w => w.dataset.key);
+    for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+    applyQuizFilter(new Set(pool.slice(0, Math.min(n, pool.length))));
+    items.forEach(w => w.classList.add('qa-collapsed'));
+  }
+  function pickWeakPoints() {
+    const stats = getQuizStats();
+    const weak = new Set(Object.keys(stats).filter(k => stats[k].lastResult === 'incorrect'));
+    if (weak.size === 0) { alert('Nema slabih tacaka jos — prvo odgovori na par pitanja u kviz modu.'); return; }
+    enterQuizMode();
+    applyQuizFilter(weak);
+    items.forEach(w => w.classList.add('qa-collapsed'));
+  }
+  function resetFilter() { applyQuizFilter(null); }
+
+  const toolbar = document.createElement('div');
+  toolbar.className = 'quiz-toolbar';
+  const toolbarBtns = [
+    ['🎲 10 nasumicnih', () => pickRandom(10)],
+    ['🎲 20 nasumicnih', () => pickRandom(20)],
+    ['🎯 Slabe tacke', pickWeakPoints],
+    ['📊 Statistika', toggleStatsPanel],
+    ['⬇ Export (.md)', exportQuizStats],
+    ['↺ Sve', resetFilter],
+  ];
+  toolbarBtns.forEach(([label, fn]) => {
+    const b = document.createElement('button');
+    b.className = 'quiz-toolbar-btn'; b.type = 'button'; b.textContent = label;
+    b.onclick = fn;
+    toolbar.appendChild(b);
+  });
+  meta.insertAdjacentElement('afterend', toolbar);
+
+  buildStatsPanel();
+}
+
+// ═══════════════════════════════════════════════════════
+// QUIZ STATS PANEL — slide-out panel (same pattern as #bm-panel), built once by
+// initQuizMode(). Shows % correct per Deo and the 5 most-missed questions.
+// ═══════════════════════════════════════════════════════
+function buildStatsPanel() {
+  if (document.getElementById('quiz-stats-panel')) return;
+  const panel = document.createElement('div');
+  panel.id = 'quiz-stats-panel';
+  panel.innerHTML = '<h3><span>📊 STATISTIKA</span><button type="button" onclick="toggleStatsPanel()" aria-label="Zatvori">✕</button></h3><div id="quiz-stats-body"></div>';
+  document.body.appendChild(panel);
+}
+function renderStatsPanel() {
+  const body = document.getElementById('quiz-stats-body');
+  if (!body) return;
+  const stats = getQuizStats();
+  const answered = Object.values(stats);
+  if (answered.length === 0) {
+    body.innerHTML = '<p class="qs-empty">Jos nema rezultata — odgovori na par pitanja u kviz modu.</p>';
+    return;
+  }
+  const byDeo = {};
+  answered.forEach(e => {
+    const d = e.deo || '(bez Deo oznake)';
+    byDeo[d] = byDeo[d] || { correct: 0, total: 0 };
+    byDeo[d].total++;
+    if (e.lastResult === 'correct') byDeo[d].correct++;
+  });
+  const deoRows = Object.keys(byDeo).map(d => {
+    const { correct, total } = byDeo[d];
+    return `<div class="qs-row"><span>${d}</span><span>${correct}/${total} (${Math.round(100 * correct / total)}%)</span></div>`;
+  }).join('');
+  const totalCorrect = answered.filter(e => e.lastResult === 'correct').length;
+  const overall = Math.round(100 * totalCorrect / answered.length);
+  const missed = Object.values(stats).filter(e => e.incorrect > 0)
+    .sort((a, b) => b.incorrect - a.incorrect).slice(0, 5)
+    .map(e => `<li>${e.question} <span class="qs-count">(${e.incorrect}×)</span></li>`).join('');
+  body.innerHTML =
+    `<div class="qs-overall">${overall}% ukupno (${totalCorrect}/${answered.length})</div>` +
+    `<div class="qs-section-title">Po Deo-u</div>${deoRows}` +
+    (missed ? `<div class="qs-section-title">Top 5 najcesce promaseno</div><ul class="qs-missed">${missed}</ul>` : '');
+}
+function toggleStatsPanel() {
+  const panel = document.getElementById('quiz-stats-panel');
+  if (!panel) return;
+  const opening = !panel.classList.contains('open');
+  if (opening) renderStatsPanel();
+  panel.classList.toggle('open', opening);
+}
+function refreshStatsPanelIfOpen() {
+  const panel = document.getElementById('quiz-stats-panel');
+  if (panel && panel.classList.contains('open')) renderStatsPanel();
+}
+function exportQuizStats() {
+  const stats = getQuizStats();
+  const entries = Object.values(stats);
+  if (entries.length === 0) { alert('Jos nema rezultata za export.'); return; }
+  const lines = ['# Kviz rezultati — ' + new Date().toLocaleDateString('sr-RS'), ''];
+  const byDeo = {};
+  entries.forEach(e => { (byDeo[e.deo || '(bez oznake)'] = byDeo[e.deo || '(bez oznake)'] || []).push(e); });
+  Object.keys(byDeo).forEach(deo => {
+    lines.push('## ' + deo, '');
+    byDeo[deo].forEach(e => {
+      lines.push(`- [${e.lastResult === 'correct' ? 'x' : ' '}] ${e.question} — ${e.correct}x tacno, ${e.incorrect}x netacno`);
+    });
+    lines.push('');
+  });
+  const missed = entries.filter(e => e.incorrect > 0).sort((a, b) => b.incorrect - a.incorrect);
+  if (missed.length) {
+    lines.push('## Najcesce promaseno', '');
+    missed.forEach(e => lines.push(`- ${e.question} (${e.incorrect}x)`));
+  }
+  downloadTextFile('qa-kviz-rezultati.md', 'text/markdown', lines.join('\n'));
 }
 
 // ═══════════════════════════════════════════════════════
