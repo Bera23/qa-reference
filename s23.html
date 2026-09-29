@@ -107,14 +107,14 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s23">
 <h1 class="sec-title" id="t-s23">🎤 23. Pitanja i odgovori<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~40 min citanja</span><button class="mark-read-btn" id="mrb-s23" onclick="markRead('s23')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~42 min citanja</span><button class="mark-read-btn" id="mrb-s23" onclick="markRead('s23')">Oznaci kao procitano</button></div>
 <p class="body-text">Najcesca intervju pitanja za QA pozicije — od manuelnog testiranja do automatizacije. Svaki odgovor pocinje definicijom, a zatim sledi primer iz prakse kako bi se odgovor dao na intervjuu.</p>
 
 <h2 class="sub-title">Deo I — Manuelno testiranje</h2>
 
 <h3 class="sub-sub-title">Koja je razlika izmedju QA i QC?</h3>
 <p class="body-text"><strong>Definicija:</strong> QA (Quality Assurance) je proaktivni proces fokusiran na poboljsanje procesa da bi se sprecilo nastajanje defekata. QC (Quality Control) je reaktivna aktivnost pronalazenja defekata u gotovom proizvodu kroz testiranje.</p>
-<p class="body-text"><strong>U praksi:</strong> "QA je kad na pocetku sprinta kazem 'hajde da definisemo acceptance criteria pre nego sto dev pocne da kodira' — sprecavam problem pre nego sto nastane. QC je kad posle toga sednем i izvrsavam test case-ove na gotovom buildu i prijavljujem bagove. U timu radim oba — i preventivno i detektivno."</p>
+<p class="body-text"><strong>U praksi:</strong> "QA je kad na pocetku sprinta kazem 'hajde da definisemo acceptance criteria pre nego sto dev pocne da kodira' — sprecavam problem pre nego sto nastane. QC je kad posle toga sednem i izvrsavam test case-ove na gotovom buildu i prijavljujem bagove. U timu radim oba — i preventivno i detektivno."</p>
 
 <h3 class="sub-sub-title">Objasni razliku izmedju Error, Defect i Failure.</h3>
 <p class="body-text"><strong>Definicija:</strong> Error je ljudska greska — pogresan pretpostavka ili propust developera. Defect je manifestacija te greske u kodu. Failure je vidljivi simptom defekta u runtime-u — sistem se ponasa drugacije od ocekivanog.</p>
@@ -130,7 +130,7 @@
 
 <h3 class="sub-sub-title">Sta je SDLC, a sta STLC?</h3>
 <p class="body-text"><strong>Definicija:</strong> SDLC (Software Development Life Cycle) je celokupan proces razvoja softvera od zahteva do odrzavanja. STLC (Software Testing Life Cycle) je podskup SDLC-a koji se fokusira iskljucivo na faze testiranja: planiranje, dizajn TC-ova, priprema okruzenja, izvrsavanje, izvestavanje, zatvaranje.</p>
-<p class="body-text"><strong>U praksi:</strong> "Dok dev tim radi na implementaciji u okviru SDLC-a, ja paralelno radim STLC aktivnosti — piseм test plan, dizajniram test case-ove na osnovu zahteva, pripremam test podatke. Kada build stigne na QA okruzenje, vec imam sve spremno za izvrsavanje."</p>
+<p class="body-text"><strong>U praksi:</strong> "Dok dev tim radi na implementaciji u okviru SDLC-a, ja paralelno radim STLC aktivnosti — pisem test plan, dizajniram test case-ove na osnovu zahteva, pripremam test podatke. Kada build stigne na QA okruzenje, vec imam sve spremno za izvrsavanje."</p>
 
 <h3 class="sub-sub-title">Koji su glavni SDLC modeli?</h3>
 <p class="body-text"><strong>Definicija:</strong> Waterfall — linearne sekvencijalne faze, testiranje na kraju. Agile — kratke iteracije, kontinualna isporuka, QA ukljucen od prvog dana. Iterative — sistem raste u ciklusima, regression raste sa svakim ciklusom. Spiral — iterativan razvoj plus formalna analiza rizika na pocetku svake faze.</p>
@@ -146,7 +146,7 @@
 
 <h3 class="sub-sub-title">Koja je razlika izmedju Regression i Retesting?</h3>
 <p class="body-text"><strong>Definicija:</strong> Retesting je ponovo izvrsavanje konkretnog test case-a koji je prethodno failovao, nakon bugfix-a — proverava da li je bug zaista fixovan. Regression testing proverava da bugfix ili nova funkcionalnost nisu narusili postojecu funkcionalnost koja je ranije radila.</p>
-<p class="body-text"><strong>U praksi:</strong> "Developer fixuje bug u kalkulaciji popusta. Retesting: izvrsim isti TC koji je failovao i potvrdim da sad prolazi. Regression: pokrenем ceo checkout suite da proverim da fix nije pokvario naplatu, isporuku ili inventar. Retesting je uzan i brz, regression je sirok i moze biti dug."</p>
+<p class="body-text"><strong>U praksi:</strong> "Developer fixuje bug u kalkulaciji popusta. Retesting: izvrsim isti TC koji je failovao i potvrdim da sad prolazi. Regression: pokrenem ceo checkout suite da proverim da fix nije pokvario naplatu, isporuku ili inventar. Retesting je uzan i brz, regression je sirok i moze biti dug."</p>
 
 <h3 class="sub-sub-title">Objasni Black-box, White-box i Grey-box testiranje.</h3>
 <p class="body-text"><strong>Definicija:</strong> Black-box testiranje se izvrsava bez uvida u kod — samo ulaz i izlaz. White-box testiranje zahteva potpun uvid u internu implementaciju. Grey-box kombinuje oba — parcijalno poznavanje sistema (npr. baza, API) uz fokus na funkcionalne scenarije.</p>
@@ -154,15 +154,15 @@
 
 <h3 class="sub-sub-title">Koji su pristupi Integration testing-u?</h3>
 <p class="body-text"><strong>Definicija:</strong> Big Bang — svi moduli se integrisu odjednom, tesko je izolovati kriv modul kad nesto pukne. Top-down — testira se od najvise komponente ka nizim, nedostajuce nize komponente se zamenjuju Stub-ovima. Bottom-up — obrnuto, nedostajuca visa komponenta se zamenjuje Driver-om. Sandwich kombinuje oba paralelno.</p>
-<p class="body-text"><strong>U praksi:</strong> "U praksi retko biramo eksplicitno jedan pristup — vecina enterprise sistema se gradi inkrementalno pa je prirodno bottom-up: testiram nizи servis cim je gotov, pa ga integrisem sa visim slojem kad i taj stigne. Kljucna stvar koju uvek proverim: da li je nesto stvarno testirano end-to-end ili je samo stub/driver simulirao ponasanje — to su dve razlicite stvari, i lako se pomesaju u statusnom izvestaju."</p>
+<p class="body-text"><strong>U praksi:</strong> "U praksi retko biramo eksplicitno jedan pristup — vecina enterprise sistema se gradi inkrementalno pa je prirodno bottom-up: testiram nizi servis cim je gotov, pa ga integrisem sa visim slojem kad i taj stigne. Kljucna stvar koju uvek proverim: da li je nesto stvarno testirano end-to-end ili je samo stub/driver simulirao ponasanje — to su dve razlicite stvari, i lako se pomesaju u statusnom izvestaju."</p>
 
 <h3 class="sub-sub-title">Sta su Equivalence Partitioning i Boundary Value Analysis?</h3>
 <p class="body-text"><strong>Definicija:</strong> EP deli ulazni skup na particije u kojima se ocekuje isto ponasanje — testira se jedan predstavnik iz svake. BVA testira vrednosti na granicama particija jer se tu najcesce javljaju greske.</p>
-<p class="body-text"><strong>U praksi:</strong> "Polje 'godine' prima 18-65. EP mi daje tri particije: ispod 18 (nevazece), 18-65 (vazece), iznad 65 (nevazece). BVA me fokusira na granične: 17, 18, 19, 64, 65, 66. Bez BVA bih mozda testirao sa 25 i 50 — i propustio off-by-one gresku na granici."</p>
+<p class="body-text"><strong>U praksi:</strong> "Polje 'godine' prima 18-65. EP mi daje tri particije: ispod 18 (nevazece), 18-65 (vazece), iznad 65 (nevazece). BVA me fokusira na granice: 17, 18, 19, 64, 65, 66. Bez BVA bih mozda testirao sa 25 i 50 — i propustio off-by-one gresku na granici."</p>
 
 <h3 class="sub-sub-title">Kako pises test case?</h3>
 <p class="body-text"><strong>Definicija:</strong> Test case je dokumentovan skup koraka, ulaznih podataka i ocekivanih rezultata. Struktura: ID, naslov (sta + uslov + ocekivani ishod), preconditions, koraci (atomski, numerisani), expected result (verifikabilan), test podaci.</p>
-<p class="body-text"><strong>U praksi:</strong> "Naslov nikad ne piseм kao 'Test login'. Uvek u formatu: 'Login sa validnim kredencijalima preusmerava na dashboard'. Koraci su atomski — jedan korak, jedna akcija. Expected result mora biti verifikabilan: ne 'radi kako treba', vec 'URL se menja na /dashboard i header prikazuje korisnicko ime'. Test podatke biram primenom EP i BVA tehnika, ne nasumicno."</p>
+<p class="body-text"><strong>U praksi:</strong> "Naslov nikad ne pisem kao 'Test login'. Uvek u formatu: 'Login sa validnim kredencijalima preusmerava na dashboard'. Koraci su atomski — jedan korak, jedna akcija. Expected result mora biti verifikabilan: ne 'radi kako treba', vec 'URL se menja na /dashboard i header prikazuje korisnicko ime'. Test podatke biram primenom EP i BVA tehnika, ne nasumicno."</p>
 
 <h3 class="sub-sub-title">Koja je razlika izmedju Severity i Priority?</h3>
 <p class="body-text"><strong>Definicija:</strong> Severity je tehnicki uticaj defekta na sistem (Blocker/Critical/Major/Minor/Trivial) — odredjuje ga QA. Priority je hitnost korekcije sa poslovnog aspekta (High/Medium/Low) — odredjuje ga Product Owner ili PM.</p>
@@ -170,7 +170,7 @@
 
 <h3 class="sub-sub-title">Sta je Bug Triage?</h3>
 <p class="body-text"><strong>Definicija:</strong> Bug triage je proces evaluacije i prioritizacije prijavljenih defekata. Ucestvuju QA (tehnicki kontekst), PM/PO (poslovni uticaj) i Tech Lead (effort korekcije). Odrzava se redovno — obicno jednom po sprintu ili nedeljno.</p>
-<p class="body-text"><strong>U praksi:</strong> "Na triage-u predstavljam svaki novi bug sa evidencijom — screenshot, koraci za reprodukciju, severity procena. PM odlucuje priority, dev procenjuje effort. Ako developer kaze 'nije bug, by design', idem na specifikaciju ili PO-a — ne prihvatam rejected bez dokaza. Svaki bug mora da zavrsi sa jasnim vlasnikoм i sledecim korakom."</p>
+<p class="body-text"><strong>U praksi:</strong> "Na triage-u predstavljam svaki novi bug sa evidencijom — screenshot, koraci za reprodukciju, severity procena. PM odlucuje priority, dev procenjuje effort. Ako developer kaze 'nije bug, by design', idem na specifikaciju ili PO-a — ne prihvatam rejected bez dokaza. Svaki bug mora da zavrsi sa jasnim vlasnikom i sledecim korakom."</p>
 
 <h3 class="sub-sub-title">Sta sadrzi Test Plan?</h3>
 <p class="body-text"><strong>Definicija:</strong> Test plan je dokument koji definise scope, pristup, resurse, raspored i kriterijume za testiranje. Po IEEE 829 standardu sadrzi: test items, features to test, features not to test, approach, pass/fail criteria, entry/exit criteria, deliverables, schedule, risks.</p>
@@ -186,7 +186,7 @@
 
 <h3 class="sub-sub-title">Sta je BDD i kako se koristi?</h3>
 <p class="body-text"><strong>Definicija:</strong> Behavior-Driven Development koristi Given/When/Then format za opis ponasanja sistema na jeziku razumljivom svim ulogama. Alati: SpecFlow (C#), Cucumber (Java/JS).</p>
-<p class="body-text"><strong>U praksi:</strong> "Given korisnik je na login stranici / When unese validan email i password / Then je preusmerен na dashboard. Ovaj format je koristan jer ga PO razume — moze da ga citа i potvrdi da li je ponasanje ispravno, bez citanja koda. U praksi koristim SpecFlow u C# projektu gde koraci mapiraju na step definicije koje pozivaju Page Object metode."</p>
+<p class="body-text"><strong>U praksi:</strong> "Given korisnik je na login stranici / When unese validan email i password / Then je preusmeren na dashboard. Ovaj format je koristan jer ga PO razume — moze da ga cita i potvrdi da li je ponasanje ispravno, bez citanja koda. U praksi koristim SpecFlow u C# projektu gde koraci mapiraju na step definicije koje pozivaju Page Object metode."</p>
 
 <h3 class="sub-sub-title">Koja je razlika izmedju Test Plan-a i Test Strategije?</h3>
 <p class="body-text"><strong>Definicija:</strong> Test strategija je dokument na nivou organizacije ili projekta — definise opsti pristup testiranju, tipove testiranja, alate, okruzenja. Test plan je konkretan, per-release — definise scope, raspored, resurse za odredjeni release ili sprint.</p>
@@ -194,7 +194,7 @@
 
 <h3 class="sub-sub-title">Sta su Entry i Exit Criteria?</h3>
 <p class="body-text"><strong>Definicija:</strong> Entry criteria su uslovi koji moraju biti ispunjeni da bi faza testiranja mogla da pocne. Exit criteria su uslovi cijim ispunjenjem se testiranje smatra zavrsenim.</p>
-<p class="body-text"><strong>U praksi:</strong> "Entry: build je deployovan na QA okruzenje, smoke prolazi, test podaci su pripremljeni. Bez toga ne pocinjем — gubim vreme na okruzenje umesto na testiranje. Exit: svi P1/P2 test case-ovi izvrseni, nema open blocker/critical bugova, test izvestaj dostavljen. Bez definisanih exit criteria, neko ce uvek reci 'mozda da testiramo jos malo'."</p>
+<p class="body-text"><strong>U praksi:</strong> "Entry: build je deployovan na QA okruzenje, smoke prolazi, test podaci su pripremljeni. Bez toga ne pocinjem — gubim vreme na okruzenje umesto na testiranje. Exit: svi P1/P2 test case-ovi izvrseni, nema open blocker/critical bugova, test izvestaj dostavljen. Bez definisanih exit criteria, neko ce uvek reci 'mozda da testiramo jos malo'."</p>
 
 <h3 class="sub-sub-title">Sta je RTM i zasto je vazna?</h3>
 <p class="body-text"><strong>Definicija:</strong> Requirements Traceability Matrix mapira zahteve na test case-ove i defekte. Omogucava odgovor na pitanje: koji zahtevi su pokriveni testovima, koji imaju otvorene defekte, i koji uopste nisu testirani.</p>
@@ -202,11 +202,11 @@
 
 <h3 class="sub-sub-title">Sta je Exploratory Testing?</h3>
 <p class="body-text"><strong>Definicija:</strong> Simultano ucenje, dizajniranje i izvrsavanje testova bez unapred definisanih koraka. Za razliku od ad-hoc testiranja, exploratory ima charter — definisan scope, cilj i vremenski okvir (time-boxed sesija).</p>
-<p class="body-text"><strong>U praksi:</strong> "Kad dobijem novi modul, prvo radim exploratory sesiju sa charter-om: 'Istrazi checkout flow sa fokusom na edge case-ove oko popusta, 45 minuta'. Ne piseм TC unapred — ucim aplikaciju dok je testiram. Belezim sve sto nadjem i posle formalizujem najvaznije scenarije kao test case-ove za regression."</p>
+<p class="body-text"><strong>U praksi:</strong> "Kad dobijem novi modul, prvo radim exploratory sesiju sa charter-om: 'Istrazi checkout flow sa fokusom na edge case-ove oko popusta, 45 minuta'. Ne pisem TC unapred — ucim aplikaciju dok je testiram. Belezim sve sto nadjem i posle formalizujem najvaznije scenarije kao test case-ove za regression."</p>
 
 <h3 class="sub-sub-title">Kako koristis JIRA za defect tracking?</h3>
 <p class="body-text"><strong>Definicija:</strong> JIRA je najrasprostranjeniji alat za pracenje defekata i upravljanje sprintom. Issue Types: Bug, Task, Story, Epic. Defekt ima workflow: Open → In Progress → Fixed → Verified → Closed. Filtri i JQL (JIRA Query Language) omogucavaju brz pregled stanja.</p>
-<p class="body-text"><strong>U praksi:</strong> "Svaki bug fajlujem sa strukturiranim sadrzajem: Summary sa tagom [Regression] ili [New], Steps to reproduce (atomski), Expected vs Actual, screenshot/video, Severity i Component. Koristim JQL za dnevni pregled: <code>project = PLM AND type = Bug AND status != Closed AND assignee = currentUser()</code>. Na sprint review-u filtriram otvorene po severity-ju da pokаzem risk exposure. Dashboard imam sa tri widgeta: bugs by status, bugs by severity, bugs po komponenti — to mi daje instant pregled zdravlja release-a."</p>
+<p class="body-text"><strong>U praksi:</strong> "Svaki bug fajlujem sa strukturiranim sadrzajem: Summary sa tagom [Regression] ili [New], Steps to reproduce (atomski), Expected vs Actual, screenshot/video, Severity i Component. Koristim JQL za dnevni pregled: <code>project = PLM AND type = Bug AND status != Closed AND assignee = currentUser()</code>. Na sprint review-u filtriram otvorene po severity-ju da pokazem risk exposure. Dashboard imam sa tri widgeta: bugs by status, bugs by severity, bugs po komponenti — to mi daje instant pregled zdravlja release-a."</p>
 
 <h2 class="sub-title">Deo II — Automatizacija</h2>
 
@@ -244,7 +244,7 @@
 
 <h3 class="sub-sub-title">Sta je Selenium WebDriver i kako radi?</h3>
 <p class="body-text"><strong>Definicija:</strong> Selenium WebDriver je W3C standard protokol za automatizaciju web browser-a. Test kod salje HTTP komande WebDriver-u, koji ih prevodi u native komande za browser (ChromeDriver, GeckoDriver).</p>
-<p class="body-text"><strong>U praksi:</strong> "Piseм testove u C# koji koriste IWebDriver interfejs. Kad pozovem FindElement().Click(), to postaje HTTP POST na ChromeDriver koji ga prevodi u Chrome DevTools Protocol komandu. Nikad ne radim direktno sa browser DOM-om — sve ide kroz WebDriver sloj. To znaci da isti test moze da radi na Chrome, Firefox, Edge bez promene koda — samo promeniш driver."</p>
+<p class="body-text"><strong>U praksi:</strong> "Pisem testove u C# koji koriste IWebDriver interfejs. Kad pozovem FindElement().Click(), to postaje HTTP POST na ChromeDriver koji ga prevodi u Chrome DevTools Protocol komandu. Nikad ne radim direktno sa browser DOM-om — sve ide kroz WebDriver sloj. To znaci da isti test moze da radi na Chrome, Firefox, Edge bez promene koda — samo promenis driver."</p>
 
 <h3 class="sub-sub-title">Objasni Explicit vs Implicit Wait u Seleniumu.</h3>
 <p class="body-text"><strong>Definicija:</strong> Implicit Wait postavlja globalan timeout za sve FindElement pozive — ceka do X sekundi pre nego sto baci exception. Explicit Wait (WebDriverWait) ceka konkretan uslov na konkretnom elementu — npr. element vidljiv, klikabilan, tekst prisutan.</p>
@@ -252,7 +252,7 @@
 
 <h3 class="sub-sub-title">Koja je tvoja lokator strategija?</h3>
 <p class="body-text"><strong>Definicija:</strong> Prioritet lokatorima: 1) ID ili stabilan data atribut. 2) CSS sa semantickim atributima. 3) XPath samo kada je neophodno — kompleksna hijerarhija, label-to-control veze, dinamicke tabele.</p>
-<p class="body-text"><strong>U praksi:</strong> "Izbegavam pozicione selektore (nth-child), duge fragile XPath lance, i text-match selektore koji pucaju sa lokalizacijom. Kad aplikacija nema stabilne identifikatore — a to se desava — short-term gradim najrobusniji fallback koji mogu (parent kontekst + atribut + tip kontrole + wait). Medium-term trazim od dev tima da dodaju data-testid atribute — developer je obicno receptivan kad mu pokаzeм konkretan flaky test koji bi njegov atribut resio."</p>
+<p class="body-text"><strong>U praksi:</strong> "Izbegavam pozicione selektore (nth-child), duge fragile XPath lance, i text-match selektore koji pucaju sa lokalizacijom. Kad aplikacija nema stabilne identifikatore — a to se desava — short-term gradim najrobusniji fallback koji mogu (parent kontekst + atribut + tip kontrole + wait). Medium-term trazim od dev tima da dodaju data-testid atribute — developer je obicno receptivan kad mu pokazem konkretan flaky test koji bi njegov atribut resio."</p>
 
 <h3 class="sub-sub-title">Kako testiras iframe, popup i multi-tab scenarije u Seleniumu?</h3>
 <p class="body-text"><strong>Definicija:</strong> Iframe zahteva eksplicitan switch konteksta (SwitchTo().Frame()) pre interakcije i switch nazad (DefaultContent()) posle. Alert/Confirm blokira driver dok se ne obradi kroz SwitchTo().Alert(). Novi tab ne prebacuje driver automatski — treba uzeti window handle-ove i eksplicitno switch-ovati.</p>
@@ -264,7 +264,7 @@
 
 <h3 class="sub-sub-title">Sta radis kad POM postane problem?</h3>
 <p class="body-text"><strong>Definicija:</strong> POM postaje problem kad Page klase postanu prevelike (50+ metoda), kad se over-engineeruje na jednostavnim projektima, ili kad ugnjezdeni Page objekti cine navigaciju komplikovanom. Alternativa za kompleksne scenarije: Screenplay pattern.</p>
-<p class="body-text"><strong>U praksi:</strong> "Kad Page klasa naraste previše, delim je po odgovornosti — LoginPage, LoginValidationPage, LoginSocialPage. Kad isti 'custom' kod pocne da se ponavlja u vise tenant override-ova, refaktorisem ga nazad u bazni sloj. Pravilo je jednostavno: ako je stabilno i deljeno — ide u bazu. Ako devira po tenantu — ide u customization sloj."</p>
+<p class="body-text"><strong>U praksi:</strong> "Kad Page klasa naraste previse, delim je po odgovornosti — LoginPage, LoginValidationPage, LoginSocialPage. Kad isti 'custom' kod pocne da se ponavlja u vise tenant override-ova, refaktorisem ga nazad u bazni sloj. Pravilo je jednostavno: ako je stabilno i deljeno — ide u bazu. Ako devira po tenantu — ide u customization sloj."</p>
 
 <h3 class="sub-sub-title">Sta je Component Object Pattern i kada ga koristis?</h3>
 <p class="body-text"><strong>Definicija:</strong> Kad se ista UI komponenta (grid, modal, dropdown) ponavlja na vise stranica, dobija svoju klasu koju vise Page objekata ponovo koristi kroz composition, umesto da se lokatori kopiraju u svaki Page koji je koristi.</p>
@@ -272,7 +272,7 @@
 
 <h3 class="sub-sub-title">Sta testiras na API-ju?</h3>
 <p class="body-text"><strong>Definicija:</strong> Status kod, response body (kontrakt), auth/authz, response time, idempotencija, i schema validacija prema OpenAPI/Swagger kontraktu.</p>
-<p class="body-text"><strong>U praksi:</strong> "Za svaki API endpoint proveravam pet stvari. Prvo, HTTP kontrakt — da li je 401 bez tokena, 403 sa pogresnоm rolom? Drugo, schema — da li su polja ispravnog tipa i da li su obavezna polja prisutna? Trece, biznis pravila — validni i nevalidni inputi, boundary vrednosti. Cetvrto, perzistencija — posle POST-a idem u bazu i proveravam SQL-om da li je zapis zaista napisan ispravno. Peto, backward kompatibilnost — da li postojeci consumer i dalje radi nakon promene."</p>
+<p class="body-text"><strong>U praksi:</strong> "Za svaki API endpoint proveravam pet stvari. Prvo, HTTP kontrakt — da li je 401 bez tokena, 403 sa pogresnom rolom? Drugo, schema — da li su polja ispravnog tipa i da li su obavezna polja prisutna? Trece, biznis pravila — validni i nevalidni inputi, boundary vrednosti. Cetvrto, perzistencija — posle POST-a idem u bazu i proveravam SQL-om da li je zapis zaista napisan ispravno. Peto, backward kompatibilnost — da li postojeci consumer i dalje radi nakon promene."</p>
 
 <h3 class="sub-sub-title">Sta je RestSharp i zasto ga koristis umesto Postmana?</h3>
 <p class="body-text"><strong>Definicija:</strong> RestSharp je C# HTTP klijent za API testiranje. Native .NET alternativa Postmanu — testovi se pisu u istom jeziku i solution-u kao Selenium testovi, sa deljenim assertion-ima i test data setup-om.</p>
@@ -357,7 +357,7 @@
 
 <h3 class="sub-sub-title">Kako upravljas testovima na vise okruzenja sa razlicitim verzijama?</h3>
 <p class="body-text"><strong>Definicija:</strong> Strategije: config per environment (appsettings.QA.json, appsettings.Staging.json), Page Object override za UI razlike izmedju verzija, conditional skip za feature-e koji ne postoje na svim verzijama, feature flags u config-u.</p>
-<p class="body-text"><strong>U praksi:</strong> "Isti test kod trci na tri okruzenja sa razlicitim verzijama proizvoda. Varijabilnost se apsorbuje u config sloju — URL, credentials, feature flags. Ako Copilot postoji samo na Staging 3.2 a ne na QA 3.1, test ima <code>Skip.If(!Config.HasCopilot)</code>. Ako se UI razlikuje izmedju tenanta, override-ujem Page Object sa tenant-specificnim lokatorima. Pravilo: test scenario ostaje isti, nikad ne dupliraš test za razlicitu verziju."</p>
+<p class="body-text"><strong>U praksi:</strong> "Isti test kod trci na tri okruzenja sa razlicitim verzijama proizvoda. Varijabilnost se apsorbuje u config sloju — URL, credentials, feature flags. Ako Copilot postoji samo na Staging 3.2 a ne na QA 3.1, test ima <code>Skip.If(!Config.HasCopilot)</code>. Ako se UI razlikuje izmedju tenanta, override-ujem Page Object sa tenant-specificnim lokatorima. Pravilo: test scenario ostaje isti, nikad ne dupliras test za razlicitu verziju."</p>
 
 <h3 class="sub-sub-title">Kako testiras data import/export workflow?</h3>
 <p class="body-text"><strong>Definicija:</strong> ETL (Extract-Transform-Load) testiranje pokriva: validan fajl, pogresan format, prazan fajl, malformed data, field mapping, duplikati, veliki fajl (performance), submit-to-form validaciju.</p>
@@ -382,7 +382,7 @@
 <p class="body-text"><strong>Situation:</strong> Prijavio sam bug gde approve workflow na specifikaciji nije upisivao audit trail zapis u bazu. Developer je rekao da je to by design jer je audit refaktorisan u novi servis.</p>
 <p class="body-text"><strong>Task:</strong> Morao sam ili da dokazem da je bug ili da prihvatim da je intended promena.</p>
 <p class="body-text"><strong>Action:</strong> Otisao sam na specifikaciju i nasao zahtev koji eksplicitno kaze 'svaka statusna promena mora imati audit trail entry'. Pokazao sam developeru requirement i uporedio sa SQL rezultatom koji je bio prazan. Predlozio sam: 'Ako je audit presao u novi servis, hajde da verifikujemo tamo — ali negde MORA postojati zapis.'</p>
-<p class="body-text"><strong>Result:</strong> Ispostavilo se da je migracija na novi audit servis bila nepotpuna — approve akcija nije bila mapirana. Developer je fixovao za isti sprint. Kljuc je bio da sam dosao sa dokazom (requirement + SQL), ne sa misljenjем.</p>
+<p class="body-text"><strong>Result:</strong> Ispostavilo se da je migracija na novi audit servis bila nepotpuna — approve akcija nije bila mapirana. Developer je fixovao za isti sprint. Kljuc je bio da sam dosao sa dokazom (requirement + SQL), ne sa misljenjem.</p>
 
 <h3 class="sub-sub-title">Kako si prioritizovao kad si imao previse posla a kratak rok?</h3>
 <p class="body-text"><strong>Situation:</strong> Pred release, imao sam 3 dana za full regression (200+ testova), 5 novih feature-a za validaciju, i 3 otvorena buga za retest — fizicki nemoguce sve zavrsiti.</p>
@@ -437,6 +437,18 @@
 <p class="body-text"><strong>Task:</strong> Dobiti odobrenje da odvojim vreme za automatizaciju umesto da ceo sprint odem na manuelni regression.</p>
 <p class="body-text"><strong>Action:</strong> Umesto da govorim o alatima, izmerio sam trenutno stanje: koliko sati manuelni regression kosta po release-u i koliko releasa mesecno imamo. Predlozio sam da prvo automatizujemo najkriticniji i najcesce ponavljani flow kao proof of concept, sa procenom vremena izrade i ocekivane usteda po release-u.</p>
 <p class="body-text"><strong>Result:</strong> Nakon prvog flow-a automatizacija je smanjila taj deo regression-a sa nekoliko sati na par minuta, sto je bio konkretan argument za dalje siriti pokrivenost — brojka je uverljivija od "automatizacija je dobra praksa".</p>
+
+<h3 class="sub-sub-title">Koji je najteziji bag koji si nasao — i kako si ga pratio unazad?</h3>
+<p class="body-text"><strong>Situation:</strong> Povremen defekt — podatak bi se ponekad sacuvao pogresno, ali samo kad je korisnik brzo prelazio izmedju dva polja na formi, i nije se reprodukovao po komandi.</p>
+<p class="body-text"><strong>Task:</strong> Pronaci uzrok necega sto se ne ponavlja dosledno, pre nego sto stigne u produkciju.</p>
+<p class="body-text"><strong>Action:</strong> Prvo sam iskljucila slucajnost — proverila da li se desava na odredjenoj kombinaciji polja ili bilo gde. Kad sam suzila na dva konkretna polja, otvorila sam DevTools Network tab i usporila konekciju (throttling) da vidim redosled zahteva. Ispostavilo se da su dva async poziva za cuvanje polja trkala jedan drugog — race condition, ne bag u samoj validaciji.</p>
+<p class="body-text"><strong>Result:</strong> Prijavila sam bag sa tacnim koracima za reprodukciju (throttled network + brzo kucanje) i objasnjenjem race condition-a, sto je developerima odmah dalo pravac za fix umesto nagadjanja. Pouka: kad se bag "ne ponavlja dosledno", pre nego sto ga proglasim flaky-jem, prvo proverim da li je u pitanju tajming, ne slucajnost.</p>
+
+<h3 class="sub-sub-title">Da li postoji odluka u testiranju koju bi danas doneo drugacije?</h3>
+<p class="body-text"><strong>Situation:</strong> Rano u radu na regresionom suite-u, birala sam da dodajem nove automatizovane testove sto brze, da povecam broj pokrivenih scenarija.</p>
+<p class="body-text"><strong>Task:</strong> Balans izmedju brzine dodavanja pokrivenosti i stabilnosti onoga sto vec postoji.</p>
+<p class="body-text"><strong>Action:</strong> Nisam dovoljno rano ulozila vreme u deljene helper metode i konzistentnu wait strategiju — svaki test je pomalo drugacije cekao elemente. Kad je broj testova narastao, flaky rate je narastao sa njim, i trebalo je vise vremena da se to naknadno konsoliduje nego da je uradjeno od pocetka.</p>
+<p class="body-text"><strong>Result:</strong> Danas bih prvo ulozila vreme u stabilan temelj (BasePage, retry helper, konzistentan wait pattern) i tek onda sirila broj testova brzo — pouka koju sam prenela i mladjim kolegama kad su pocinjali sopstvene suite-ove.</p>
 
 <div class="section-nav"><a class="snav-btn" href="s22.html"><span class="snav-label">← Prethodna</span><span class="snav-title">22. Glosar</span></a><a class="snav-btn next" href="s24.html"><span class="snav-label">Sledeca →</span><span class="snav-title">24. Intervju strategija</span></a></div>
 </div>
