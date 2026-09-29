@@ -99,7 +99,7 @@ function migrateStorage() {
 // can no longer abort the rest of the page initialisation.
 document.addEventListener('DOMContentLoaded', () => {
   const steps = [migrateStorage, addAnchorLinks, addBookmarkButtons, restoreState, initSyntaxHighlight,
-    initLangBadges, initQuizMode, updateBmCount, initNavHeights, () => filterGlosar(''), loadSearchIndex, scrollToHash];
+    initLangBadges, initQuizMode, initRelatedSections, updateBmCount, initNavHeights, () => filterGlosar(''), loadSearchIndex, scrollToHash];
   steps.forEach(step => {
     try { step(); } catch (err) { console.error('Init step failed:', step.name || '(anonymous)', err); }
   });
@@ -300,10 +300,29 @@ function closeBmPanel() { document.getElementById('bm-panel').classList.remove('
 
 let searchIndex = null;
 function loadSearchIndex() {
-  fetch('search-index.json').then(r => r.json()).then(data => { searchIndex = data; }).catch(() => {});
+  fetch('search-index.json').then(r => r.json()).then(data => { searchIndex = data; renderSearchTags(); }).catch(() => {});
 }
 function escapeHtml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+// Tag chips: built once the index (with its build-time-derived tags) loads. Shown while the
+// search box has focus/content, same visibility trigger as the results dropdown.
+function renderSearchTags() {
+  const box = document.getElementById('search-tags');
+  if (!box || !searchIndex) return;
+  const allTags = [...new Set(searchIndex.flatMap(s => s.tags || []))].sort();
+  box.innerHTML = allTags.map(t =>
+    '<button type="button" class="search-tag" onclick="runTagSearch(\'' + t + '\')">#' + escapeHtml(t) + '</button>').join('');
+}
+function runTagSearch(tag) {
+  const input = document.getElementById('search');
+  input.value = '#' + tag;
+  input.focus();
+  searchDoc(input.value);
+}
+function showSearchTags() {
+  const box = document.getElementById('search-tags');
+  if (box && searchIndex) box.classList.add('visible');
 }
 let searchTimeout;
 function searchDoc(query) {
@@ -311,28 +330,42 @@ function searchDoc(query) {
   searchTimeout = setTimeout(() => {
     const box = document.getElementById('search-results');
     const countEl = document.getElementById('search-count');
-    const q = query.trim().toLowerCase();
-    if (!q || !searchIndex) { box.innerHTML = ''; box.classList.remove('visible'); countEl.textContent = ''; return; }
-    // Every word must appear (in any order); pages whose TITLE matches come first
-    const tokens = q.split(/\s+/).filter(Boolean);
-    const hits = [];
-    searchIndex.forEach(s => {
-      const title = s.title.toLowerCase(), text = s.text.toLowerCase();
-      if (!tokens.every(t => title.indexOf(t) !== -1 || text.indexOf(t) !== -1)) return;
-      hits.push({ s, titleHits: tokens.filter(t => title.indexOf(t) !== -1).length });
-    });
-    hits.sort((a, b) => b.titleHits - a.titleHits);
+    const tagsBox = document.getElementById('search-tags');
+    const q = query.trim();
+    if (!q) {
+      box.innerHTML = ''; box.classList.remove('visible'); countEl.textContent = '';
+      if (tagsBox) tagsBox.classList.remove('visible');
+      return;
+    }
+    if (!searchIndex) return;
+    if (tagsBox) tagsBox.classList.remove('visible');   // a real query replaces the tag-picker with results
+
+    let hits;
+    if (q.startsWith('#')) {
+      // Tag mode: every page carrying this tag, unscored (no snippet highlight — tag is a
+      // category match, not a text match, so there's no single "found here" spot to show).
+      const tag = q.slice(1).toLowerCase();
+      hits = searchIndex.filter(s => (s.tags || []).includes(tag)).map(s => ({ s, snippet: s.text.slice(0, 90) + '…' }));
+    } else {
+      // Every word must appear (in any order); pages whose TITLE matches come first
+      const tokens = q.toLowerCase().split(/\s+/).filter(Boolean);
+      const scored = [];
+      searchIndex.forEach(s => {
+        const title = s.title.toLowerCase(), text = s.text.toLowerCase();
+        if (!tokens.every(t => title.indexOf(t) !== -1 || text.indexOf(t) !== -1)) return;
+        const first = tokens.find(t => text.indexOf(t) !== -1);
+        const idx = first ? text.indexOf(first) : -1;
+        const snippet = idx >= 0 ? '…' + s.text.slice(Math.max(0, idx - 40), idx + 60) + '…' : s.text.slice(0, 80) + '…';
+        scored.push({ s, titleHits: tokens.filter(t => title.indexOf(t) !== -1).length, snippet });
+      });
+      scored.sort((a, b) => b.titleHits - a.titleHits);
+      hits = scored;
+    }
     countEl.textContent = hits.length > 0 ? hits.length + ' pogodak' + (hits.length === 1 ? '' : 'a') : 'Nema';
-    box.innerHTML = hits.map(({ s }) => {
-      const lower = s.text.toLowerCase();
-      const first = tokens.find(t => lower.indexOf(t) !== -1);
-      const idx = first ? lower.indexOf(first) : -1;
-      const snippet = idx >= 0
-        ? '…' + s.text.slice(Math.max(0, idx - 40), idx + 60) + '…'
-        : s.text.slice(0, 80) + '…';
+    box.innerHTML = hits.map(({ s, snippet }) =>
       // Index text is plain text (may contain < and >), so it must be escaped before innerHTML
-      return '<a class="search-result" href="' + escapeHtml(s.url) + '"><span class="sr-title">' + escapeHtml(s.title) + '</span><span class="sr-snippet">' + escapeHtml(snippet) + '</span></a>';
-    }).join('');
+      '<a class="search-result" href="' + escapeHtml(s.url) + '"><span class="sr-title">' + escapeHtml(s.title) + '</span><span class="sr-snippet">' + escapeHtml(snippet) + '</span></a>'
+    ).join('');
     box.classList.toggle('visible', hits.length > 0);
   }, 200);
 }
@@ -424,6 +457,10 @@ document.addEventListener('click', e => {
       !document.getElementById('bm-panel').contains(e.target) &&
       !e.target.closest('.tb-btn')) {
     closeBmPanel();
+  }
+  const tagsBox = document.getElementById('search-tags');
+  if (tagsBox && tagsBox.classList.contains('visible') && !e.target.closest('.search-wrap')) {
+    tagsBox.classList.remove('visible');
   }
 });
 
@@ -728,6 +765,46 @@ function exportQuizStats() {
     missed.forEach(e => lines.push(`- ${e.question} (${e.incorrect}x)`));
   }
   downloadTextFile('qa-kviz-rezultati.md', 'text/markdown', lines.join('\n'));
+}
+
+// ═══════════════════════════════════════════════════════
+// RELATED SECTIONS — auto-extracted from the "Sekcija X" / "Sekcija X.Y" cross-references
+// already written into each page's own prose, instead of a hand-curated list: it stays in sync
+// automatically as content changes, and reuses references that are already kept correct (see
+// the renumbering work elsewhere in this project). Links go to the whole target PAGE — a
+// subsection anchor on a DIFFERENT page isn't known client-side without fetching that page.
+// ═══════════════════════════════════════════════════════
+function initRelatedSections() {
+  const content = document.getElementById('content');
+  if (!content || !window.QA_PAGE) return;
+  const byNumber = {};
+  document.querySelectorAll('#nav .nav-item').forEach(item => {
+    const label = item.querySelector('.nav-item-text');
+    const m = label && label.textContent.match(/^(\d+)\./);
+    if (m) byNumber[parseInt(m[1], 10)] = { title: label.textContent.trim(), href: item.getAttribute('href') };
+  });
+  const selfMatch = (window.QA_PAGE.title || '').match(/^(\d+)\./);
+  const selfNum = selfMatch ? parseInt(selfMatch[1], 10) : null;
+
+  const counts = {};
+  const order = [];
+  const re = /Sekcij[aeu]\s+(\d{1,2})(?:\.\d+)?/g;
+  let m;
+  while ((m = re.exec(content.textContent))) {
+    const num = parseInt(m[1], 10);
+    if (num === selfNum || !byNumber[num]) continue;
+    if (!(num in counts)) order.push(num);
+    counts[num] = (counts[num] || 0) + 1;
+  }
+  const top = order.sort((a, b) => counts[b] - counts[a]).slice(0, 8);
+  if (top.length === 0) return;
+
+  const box = document.createElement('div');
+  box.id = 'related-sections';
+  box.innerHTML = '<h3>🔗 Povezane sekcije</h3><div class="related-list">' +
+    top.map(n => '<a href="' + byNumber[n].href + '">' + escapeHtml(byNumber[n].title) + '</a>').join('') +
+    '</div>';
+  content.appendChild(box);
 }
 
 // ═══════════════════════════════════════════════════════

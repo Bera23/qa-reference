@@ -129,10 +129,41 @@ ${renderList(deoII)}
   fs.writeFileSync(path.join(DIST_DIR, 'index.html'), html, 'utf8');
 }
 
+// Tags are derived once at build time from each page's own title + text, not hand-curated per
+// page — a keyword hits its tag if it appears anywhere (case-insensitive, diacritics-stripped
+// since the corpus itself is ASCII-only). Order here is display order in the UI tag-chip row.
+const TAG_RULES = [
+  ['flaky', ['flaky']],
+  ['selenium', ['selenium', 'webdriver']],
+  ['pom', ['page object', 'page object model']],
+  ['api', ['api testiranje', 'rest api', 'restsharp', 'postman', 'http metod']],
+  ['sql', ['sql', 'mssql', 'postgresql', 'pgadmin']],
+  ['cicd', ['ci/cd', 'azure pipelines', 'azure devops', 'github actions', 'gitlab', 'jenkins', 'pipeline']],
+  ['git', ['git ', 'tfvc', 'changeset', 'shelveset']],
+  ['docker', ['docker']],
+  ['linux', ['linux', 'bash', 'grep -i', 'systemctl']],
+  ['oop', ['oop', 'solid princip', 'inheritance', 'interface vs']],
+  ['csharp', ['xunit', 'nunit', 'c#']],
+  ['mobile', ['appium', 'mobilno testiranje', 'android']],
+  ['ai', ['copilot', 'halucinacij', 'veroatno vestacka', 'ai-powered', 'ai u testiranju']],
+  ['security', ['owasp', 'sql injection', 'auth i security', 'bezbednosn']],
+  ['performance', ['performance testing', 'load testing', 'k6', 'jmeter', 'nbomber']],
+  ['agile', ['agile', 'scrum', 'sprint', 'definition of done']],
+  ['debugging', ['debugging', 'observability', 'elk', 'splunk', 'cloudwatch', 'distributed tracing']],
+  ['metrike', ['defect density', 'escape rate', 'mttr', 'flakiness rate']],
+  ['intervju', ['intervju', 'star format', 'behavioral']],
+  ['testni-dizajn', ['equivalence partitioning', 'boundary value', 'decision table', 'pairwise', 'use case testing']],
+];
+function deriveTags(text) {
+  const lower = text.toLowerCase();
+  return TAG_RULES.filter(([, keywords]) => keywords.some(k => lower.includes(k))).map(([tag]) => tag);
+}
+
 function buildSearchIndex(sections) {
   const index = sections.map(s => {
     const body = fs.readFileSync(path.join(SECTIONS_DIR, `${s.id}.html`), 'utf8');
-    return { id: s.id, title: s.title, deo: s.deo, url: `${s.id}.html`, text: decodeEntities(stripTags(body)) };
+    const text = decodeEntities(stripTags(body));
+    return { id: s.id, title: s.title, deo: s.deo, url: `${s.id}.html`, text, tags: deriveTags(s.title + ' ' + text) };
   });
   fs.writeFileSync(path.join(DIST_DIR, 'search-index.json'), JSON.stringify(index), 'utf8');
 }
