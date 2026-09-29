@@ -154,9 +154,21 @@ const TAG_RULES = [
   ['intervju', ['intervju', 'star format', 'behavioral']],
   ['testni-dizajn', ['equivalence partitioning', 'boundary value', 'decision table', 'pairwise', 'use case testing']],
 ];
+// Default match is plain substring — Serbian declines nouns (intervju/intervjuu/intervjua,
+// sprint/sprintu/sprinta...), so a word-boundary requirement would miss every inflected form
+// of a keyword and silently drop tags (this broke #intervju and #agile the first time it was
+// tried, here, across the whole ruleset). Word-boundary is used ONLY for keywords explicitly
+// listed in WORD_BOUNDARY_KEYWORDS below — short tokens confirmed to collide with an unrelated
+// substring (so far: "oop" inside "loop" — English tech loanwords don't decline, so the
+// boundary is safe for them specifically without cutting off a Serbian case ending).
+const WORD_BOUNDARY_KEYWORDS = new Set(['oop']);
+function keywordMatches(lower, keyword) {
+  if (WORD_BOUNDARY_KEYWORDS.has(keyword)) return new RegExp('\\b' + keyword + '\\b').test(lower);
+  return lower.includes(keyword);
+}
 function deriveTags(text) {
   const lower = text.toLowerCase();
-  return TAG_RULES.filter(([, keywords]) => keywords.some(k => lower.includes(k))).map(([tag]) => tag);
+  return TAG_RULES.filter(([, keywords]) => keywords.some(k => keywordMatches(lower, k))).map(([tag]) => tag);
 }
 
 function buildSearchIndex(sections) {

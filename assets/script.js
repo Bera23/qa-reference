@@ -704,17 +704,27 @@ function buildStatsPanel() {
   panel.innerHTML = '<h3><span>📊 STATISTIKA</span><button type="button" onclick="toggleStatsPanel()" aria-label="Zatvori">✕</button></h3><div id="quiz-stats-body"></div>';
   document.body.appendChild(panel);
 }
+function resetQuizQuestion(key) {
+  const stats = getQuizStats();
+  delete stats[key];
+  saveQuizStats(stats);
+  renderStatsPanel();
+}
+function resetAllQuizStats() {
+  if (!confirm('Obrisati SVE rezultate kviza? Ovo se ne moze vratiti.')) return;
+  store.remove('qa_quiz_stats');
+  renderStatsPanel();
+}
 function renderStatsPanel() {
   const body = document.getElementById('quiz-stats-body');
   if (!body) return;
-  const stats = getQuizStats();
-  const answered = Object.values(stats);
-  if (answered.length === 0) {
+  const entries = Object.entries(getQuizStats());   // [key, entry][]
+  if (entries.length === 0) {
     body.innerHTML = '<p class="qs-empty">Jos nema rezultata — odgovori na par pitanja u kviz modu.</p>';
     return;
   }
   const byDeo = {};
-  answered.forEach(e => {
+  entries.forEach(([, e]) => {
     const d = e.deo || '(bez Deo oznake)';
     byDeo[d] = byDeo[d] || { correct: 0, total: 0 };
     byDeo[d].total++;
@@ -722,17 +732,27 @@ function renderStatsPanel() {
   });
   const deoRows = Object.keys(byDeo).map(d => {
     const { correct, total } = byDeo[d];
-    return `<div class="qs-row"><span>${d}</span><span>${correct}/${total} (${Math.round(100 * correct / total)}%)</span></div>`;
+    return `<div class="qs-row"><span>${escapeHtml(d)}</span><span>${correct}/${total} (${Math.round(100 * correct / total)}%)</span></div>`;
   }).join('');
-  const totalCorrect = answered.filter(e => e.lastResult === 'correct').length;
-  const overall = Math.round(100 * totalCorrect / answered.length);
-  const missed = Object.values(stats).filter(e => e.incorrect > 0)
-    .sort((a, b) => b.incorrect - a.incorrect).slice(0, 5)
-    .map(e => `<li>${e.question} <span class="qs-count">(${e.incorrect}×)</span></li>`).join('');
+  const totalCorrect = entries.filter(([, e]) => e.lastResult === 'correct').length;
+  const overall = Math.round(100 * totalCorrect / entries.length);
+  // Rank by times-wrong, but SHOW attempts too — a question missed once out of one try reads
+  // very differently from one missed twice out of five, and the raw "(N×)" count alone blurred
+  // that distinction.
+  const missed = entries.filter(([, e]) => e.incorrect > 0)
+    .sort((a, b) => b[1].incorrect - a[1].incorrect).slice(0, 5)
+    .map(([key, e]) => {
+      const attempts = e.correct + e.incorrect;
+      return `<li><span class="qs-missed-text">${escapeHtml(e.question)}</span>` +
+        `<span class="qs-count">${e.incorrect}/${attempts} pokusaja</span>` +
+        `<button type="button" class="qs-reset" onclick="resetQuizQuestion('${key}')" title="Ukloni iz slabih tacaka">✕</button></li>`;
+    }).join('');
   body.innerHTML =
-    `<div class="qs-overall">${overall}% ukupno (${totalCorrect}/${answered.length})</div>` +
+    `<div class="qs-overall">${overall}% ukupno (${totalCorrect}/${entries.length})</div>` +
     `<div class="qs-section-title">Po Deo-u</div>${deoRows}` +
-    (missed ? `<div class="qs-section-title">Top 5 najcesce promaseno</div><ul class="qs-missed">${missed}</ul>` : '');
+    (missed ? `<div class="qs-section-title">Top 5 najcesce promaseno</div><ul class="qs-missed">${missed}</ul>` : '') +
+    `<div class="qs-note">Napredak se cuva lokalno u ovom browseru — ne prenosi se izmedju uredjaja, i "resetuje" se za pitanje ciji se tekst kasnije izmeni.</div>` +
+    `<button type="button" class="qs-reset-all" onclick="resetAllQuizStats()">Resetuj sve rezultate</button>`;
 }
 function toggleStatsPanel() {
   const panel = document.getElementById('quiz-stats-panel');
@@ -762,7 +782,7 @@ function exportQuizStats() {
   const missed = entries.filter(e => e.incorrect > 0).sort((a, b) => b.incorrect - a.incorrect);
   if (missed.length) {
     lines.push('## Najcesce promaseno', '');
-    missed.forEach(e => lines.push(`- ${e.question} (${e.incorrect}x)`));
+    missed.forEach(e => lines.push(`- ${e.question} (${e.incorrect}/${e.correct + e.incorrect} pokusaja)`));
   }
   downloadTextFile('qa-kviz-rezultati.md', 'text/markdown', lines.join('\n'));
 }
