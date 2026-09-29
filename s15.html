@@ -109,7 +109,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s15">
 <h1 class="sec-title" id="t-s15">🔌 15. API testiranje<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~4 min citanja</span><button class="mark-read-btn" id="mrb-s15" onclick="markRead('s15')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~5 min citanja</span><button class="mark-read-btn" id="mrb-s15" onclick="markRead('s15')">Oznaci kao procitano</button></div>
 <h2 class="sub-title">15.1 HTTP metode</h2>
 <div class="tbl-wrap"><table><thead><tr><th>Metoda</th><th>Svrha</th><th>Idempotentna</th><th>Safe</th></tr></thead><tbody>
 <tr><td>GET</td><td>Citanje resursa. Bez side-effecta.</td><td>Da</td><td>Da</td></tr>
@@ -188,6 +188,36 @@ public void CreateUser_WithValidData_ShouldReturn201()
  Assert.Contains("new@test.com", response.Content);
 }</pre></div>
 <div class="note">RestSharp je native C# HTTP klijent — prirodan izbor za API testove u istom solution-u sa Selenium testovima (videti Sekciju 19), bez prebacivanja na JavaScript/Newman.</div>
+<p class="body-text">Gornji primer koristi anonimni objekat za POST body — radi za brz test, ali se ne skalira. U vecem suite-u se umesto toga koriste dva pattern-a: POCO klase za (de)serializaciju i Builder za kreiranje test podataka.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Models/UserDto.cs — POCO za request/response
+public class UserDto
+{
+    public string Email { get; set; }
+    public string Role { get; set; }
+    [Required]
+    public string DisplayName { get; set; }
+}
+
+// Builders/UserBuilder.cs — fluent API, menja samo relevantno polje po testu
+public class UserBuilder
+{
+    private UserDto _user = new UserDto { Email = "default@test.com", Role = "User", DisplayName = "Default User" };
+
+    public static UserBuilder Default() => new UserBuilder();
+    public UserBuilder WithRole(string role) { _user.Role = role; return this; }
+    public UserBuilder WithEmail(string email) { _user.Email = email; return this; }
+    public UserDto Build() => _user;
+}
+
+// Upotreba u testu — citljivo, vidi se odmah sta je za TAJ test bitno
+var admin = UserBuilder.Default().WithRole("admin").Build();
+var request = new RestRequest("/users", Method.Post).AddJsonBody(admin);</pre></div>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>POCO umesto anonimnog objekta</td><td>Jaka tipizacija (compile-time greska umesto runtime typo-a u imenu polja), refaktorisanje bez string zamena, validacija preko atributa (<code>[Required]</code>), lako mapiranje na JSON schema (Sekcija 15.3).</td></tr>
+<tr><td>Builder umesto konstruktora sa svim poljima</td><td>Fluent API menja samo polje relevantno za taj test — <code>UserBuilder.Default().WithRole("admin").Build()</code> je citljivije od konstruktora sa 10 parametara gde vecina nema veze sa onim sto se testira. Kad model dobije novo polje, menja se samo Builder, ne svaki poziv konstruktora u suite-u.</td></tr>
+<tr><td>Factory (kad treba)</td><td>Za vrednosti koje MORAJU biti random/unikatne po pokretanju (email, timestamp) — da paralelni testovi (Sekcija 16.9) ne dele isti podatak.</td></tr>
+</tbody></table></div>
+<div class="note">Struktura u projektu: POCO klase u <code>Models/</code>, builderi u <code>Builders/</code>, factory samo za polja koja moraju biti random. Isti Builder pattern se koristi i za UI test podatke (ne samo API) — princip je identican.</div>
 <h2 class="sub-title">15.6 Newman — Postman u CI/CD-u</h2>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>npm install -g newman newman-reporter-htmlextra
 

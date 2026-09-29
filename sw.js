@@ -2,7 +2,7 @@
  * The cache version and the precache list below are placeholders that build.js fills in
  * (content hash + file list), so every content change produces a new cache and old
  * caches are deleted on activate. Do not write the placeholder tokens anywhere else. */
-const CACHE = 'qa-ref-d7c7be8d7a';
+const CACHE = 'qa-ref-5a60d40d96';
 const PRECACHE = [
   "./",
   "./index.html",
