@@ -109,8 +109,14 @@ h1.sec-title{font-size:26px;font-weight:700;color:var(--h1c);padding:24px 0 10px
 .qs-section-title{font-family:'Courier New',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:14px 0 6px;}
 .qs-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid var(--border);}
 .qs-missed{list-style:none;padding:0;margin:0;font-size:12.5px;line-height:1.5;}
-.qs-missed li{padding:5px 0;border-bottom:1px solid var(--border);}
-.qs-count{color:#e05252;font-family:'Courier New',monospace;}
+.qs-missed li{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--border);}
+.qs-missed-text{flex:1;}
+.qs-count{color:#e05252;font-family:'Courier New',monospace;font-size:11px;white-space:nowrap;}
+.qs-reset{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 4px;flex-shrink:0;}
+.qs-reset:hover{color:#e05252;}
+.qs-note{font-size:11px;color:var(--text3);line-height:1.5;margin-top:16px;padding-top:12px;border-top:1px solid var(--border);}
+.qs-reset-all{width:100%;margin-top:12px;background:none;border:1px solid var(--border);color:var(--text3);font-size:11px;padding:7px;border-radius:6px;cursor:pointer;font-family:'Courier New',monospace;transition:all .2s;}
+.qs-reset-all:hover{border-color:#e05252;color:#e05252;}
 #related-sections{margin-top:32px;padding-top:18px;border-top:1px solid var(--border);}
 #related-sections h3{font-family:'Courier New',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
 .related-list{display:flex;flex-wrap:wrap;gap:8px;}
