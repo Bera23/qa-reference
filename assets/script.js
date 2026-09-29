@@ -803,7 +803,10 @@ function exportQuizStats() {
 // ═══════════════════════════════════════════════════════
 function initRelatedSections() {
   const content = document.getElementById('content');
-  if (!content || !window.QA_PAGE) return;
+  // Skip the index page: it already IS the complete list of every section, so a "related"
+  // footer would be redundant, and its intro prose mentions section ranges in a way that isn't
+  // really a "see also" pointer (see data/intro.html).
+  if (!content || !window.QA_PAGE || window.QA_PAGE.id === 'index') return;
   const byNumber = {};
   document.querySelectorAll('#nav .nav-item').forEach(item => {
     const label = item.querySelector('.nav-item-text');

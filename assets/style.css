@@ -122,6 +122,8 @@ h1.sec-title{font-size:26px;font-weight:700;color:var(--h1c);padding:24px 0 10px
 .related-list{display:flex;flex-wrap:wrap;gap:8px;}
 .related-list a{display:inline-block;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:12.5px;padding:6px 12px;border-radius:6px;text-decoration:none;transition:all .2s;}
 .related-list a:hover{border-color:var(--accent);color:var(--accent);}
+.doc-version{margin-top:28px;padding-top:14px;border-top:1px solid var(--border);font-family:'Courier New',monospace;font-size:11px;color:var(--text3);}
+.doc-version code{color:var(--text2);}
 h2.sub-title{font-size:calc(var(--fs,15px)*1.1);font-weight:600;color:var(--h2c);padding-top:26px;margin-bottom:8px;font-family:'Georgia',serif;border-bottom:1px solid var(--border);padding-bottom:5px;display:flex;align-items:center;gap:6px;}
 .anchor{font-size:12px;color:var(--text3);text-decoration:none;opacity:0;transition:opacity .2s;font-family:'Courier New',monospace;margin-left:auto;}
 h2.sub-title:hover .anchor{opacity:1;}

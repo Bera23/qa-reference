@@ -95,21 +95,40 @@ function buildTopicPage(sections, index, template) {
   fs.writeFileSync(path.join(DIST_DIR, `${s.id}.html`), html, 'utf8');
 }
 
+// Best-effort: a short commit hash for the version footer. Falls back to null (footer omits it)
+// if git isn't available or this isn't a checkout — must never break the build over this.
+function getBuildVersion() {
+  let hash = null;
+  try {
+    hash = require('child_process')
+      .execSync('git rev-parse --short HEAD', { cwd: ROOT, stdio: ['ignore', 'pipe', 'ignore'] })
+      .toString().trim();
+  } catch (e) { /* not a git checkout, or git unavailable — hash stays null */ }
+  const date = new Date().toISOString().slice(0, 10);
+  return { hash, date };
+}
+
 function buildIndexPage(sections, template) {
   function renderList(items) {
     return items.map(s => `<li class="bullet-item"><a class="toc-link" href="${s.id}.html">${s.icon} ${s.title}</a></li>`).join('\n');
   }
   const deoI = sections.filter(s => s.deo === 'I');
   const deoII = sections.filter(s => s.deo === 'II');
-  const content = `<p class="body-text">Licni referentni materijal za manuelno i automatizovano testiranje — izaberi temu iz liste levo, ili ispod.</p>
-<h2 class="sub-title">Deo I — Manualno testiranje</h2>
+  const intro = fs.readFileSync(path.join(ROOT, 'data', 'intro.html'), 'utf8');
+  const { hash, date } = getBuildVersion();
+  const versionLine = `<div class="doc-version">Verzija: ${hash ? `<code>${hash}</code> · ` : ''}azurirano: ${date}</div>`;
+  const content = `${intro}
+<h2 class="sub-title">Sve sekcije</h2>
+<p class="body-text">Licni referentni materijal za manuelno i automatizovano testiranje — izaberi temu iz liste levo, ili ispod.</p>
+<h3 class="sub-sub-title">Deo I — Manualno testiranje</h3>
 <ul>
 ${renderList(deoI)}
 </ul>
-<h2 class="sub-title">Deo II — Automatizacija</h2>
+<h3 class="sub-sub-title">Deo II — Automatizacija</h3>
 <ul>
 ${renderList(deoII)}
-</ul>`;
+</ul>
+${versionLine}`;
 
   const html = fillTemplate(template, {
     PAGE_TITLE: '📘 QA Referentni Dokument',
