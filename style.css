@@ -111,6 +111,11 @@ h1.sec-title{font-size:26px;font-weight:700;color:var(--h1c);padding:24px 0 10px
 .qs-missed{list-style:none;padding:0;margin:0;font-size:12.5px;line-height:1.5;}
 .qs-missed li{padding:5px 0;border-bottom:1px solid var(--border);}
 .qs-count{color:#e05252;font-family:'Courier New',monospace;}
+#related-sections{margin-top:32px;padding-top:18px;border-top:1px solid var(--border);}
+#related-sections h3{font-family:'Courier New',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+.related-list{display:flex;flex-wrap:wrap;gap:8px;}
+.related-list a{display:inline-block;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:12.5px;padding:6px 12px;border-radius:6px;text-decoration:none;transition:all .2s;}
+.related-list a:hover{border-color:var(--accent);color:var(--accent);}
 h2.sub-title{font-size:calc(var(--fs,15px)*1.1);font-weight:600;color:var(--h2c);padding-top:26px;margin-bottom:8px;font-family:'Georgia',serif;border-bottom:1px solid var(--border);padding-bottom:5px;display:flex;align-items:center;gap:6px;}
 .anchor{font-size:12px;color:var(--text3);text-decoration:none;opacity:0;transition:opacity .2s;font-family:'Courier New',monospace;margin-left:auto;}
 h2.sub-title:hover .anchor{opacity:1;}
@@ -271,7 +276,7 @@ body.light .warning{background:#fffbeb;color:#92400e;}
 /* ── Print ────────────────── */
 @media print{
   #sidebar,#topbar,#progress-bar,#back-top,#bm-panel,#menu-btn,
-  #read-exit,.copy-btn,.bm-btn,.mark-read-btn,.section-nav,#quickref,.lang-badge,.quiz-toggle-btn{display:none!important;}
+  #read-exit,.copy-btn,.bm-btn,.mark-read-btn,.section-nav,#quickref,.lang-badge,.quiz-toggle-btn,.quiz-toolbar,#related-sections{display:none!important;}
   .qa-item.qa-collapsed .qa-answer{display:block!important;}
   .qa-question::after{display:none!important;}
   #main{margin-left:0!important;}
@@ -297,6 +302,10 @@ mark{background:rgba(79,142,247,.28);color:inherit;border-radius:2px;padding:0 2
 
 /* ── Search results dropdown (NEW — replaces original's inline-highlight search,
    see docs/superpowers/specs/2026-07-30-qa-reference-multipage-design.md) ── */
+#search-tags{display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px;z-index:151;box-shadow:0 8px 24px rgba(0,0,0,.45);flex-wrap:wrap;gap:6px;}
+#search-tags.visible{display:flex;}
+.search-tag{background:none;border:1px solid var(--border);color:var(--text3);font-size:10.5px;padding:3px 8px;border-radius:10px;cursor:pointer;font-family:'Courier New',monospace;transition:all .2s;}
+.search-tag:hover{border-color:var(--accent);color:var(--accent);}
 #search-results{display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--bg2);border:1px solid var(--border);border-radius:8px;max-height:60vh;overflow-y:auto;z-index:150;box-shadow:0 8px 24px rgba(0,0,0,.45);}
 #search-results.visible{display:block;}
 .search-result{display:block;padding:9px 12px;border-bottom:1px solid rgba(42,51,80,.4);text-decoration:none;}
