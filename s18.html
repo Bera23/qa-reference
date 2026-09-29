@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🔧 18. Framework arhitektura — QA Referentni Dokument</title>
+<title>🔍 18. Debugging i observability — QA Referentni Dokument</title>
 <link rel="stylesheet" href="style.css">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0d1117">
@@ -50,7 +50,7 @@
       <a class="nav-item" href="s10.html"><span class="nav-icon">🗄️</span><span class="nav-item-text">10. Test okruzenje i podaci</span><span class="nav-check" onclick="toggleRead(event,'s10')"></span></a>
     </div>
     <div class="nav-deo-wrap">
-      <span class="nav-deo">DEO II — Automatizacija <span class="nav-deo-progress" data-ids="s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21,s22,s23,s24,s25,s26"></span></span>
+      <span class="nav-deo">DEO II — Automatizacija <span class="nav-deo-progress" data-ids="s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21,s22,s23,s24,s25,s26,s27,s28"></span></span>
       <button class="nav-collapse" onclick="toggleGroup('g2')">▾</button>
     </div>
     <div class="nav-group" id="g2">
@@ -61,15 +61,17 @@
       <a class="nav-item" href="s15.html"><span class="nav-icon">🔌</span><span class="nav-item-text">15. API testiranje</span><span class="nav-check" onclick="toggleRead(event,'s15')"></span></a>
       <a class="nav-item" href="s16.html"><span class="nav-icon">⚙️</span><span class="nav-item-text">16. CI/CD integracija</span><span class="nav-check" onclick="toggleRead(event,'s16')"></span></a>
       <a class="nav-item" href="s17.html"><span class="nav-icon">🐧</span><span class="nav-item-text">17. Linux osnove za QA</span><span class="nav-check" onclick="toggleRead(event,'s17')"></span></a>
-      <a class="nav-item active" href="s18.html"><span class="nav-icon">🔧</span><span class="nav-item-text">18. Framework arhitektura</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
-      <a class="nav-item" href="s19.html"><span class="nav-icon">📈</span><span class="nav-item-text">19. Performance testing</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
-      <a class="nav-item" href="s20.html"><span class="nav-icon">📱</span><span class="nav-item-text">20. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
-      <a class="nav-item" href="s21.html"><span class="nav-icon">🧠</span><span class="nav-item-text">21. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
-      <a class="nav-item" href="s22.html"><span class="nav-icon">📚</span><span class="nav-item-text">22. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s22')"></span></a>
-      <a class="nav-item" href="s23.html"><span class="nav-icon">🎤</span><span class="nav-item-text">23. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s23')"></span></a>
-      <a class="nav-item" href="s24.html"><span class="nav-icon">💼</span><span class="nav-item-text">24. Intervju strategija</span><span class="nav-check" onclick="toggleRead(event,'s24')"></span></a>
-      <a class="nav-item" href="s25.html"><span class="nav-icon">⌨️</span><span class="nav-item-text">25. Live coding (C#)</span><span class="nav-check" onclick="toggleRead(event,'s25')"></span></a>
-      <a class="nav-item" href="s26.html"><span class="nav-icon">⚡</span><span class="nav-item-text">26. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s26')"></span></a>
+      <a class="nav-item active" href="s18.html"><span class="nav-icon">🔍</span><span class="nav-item-text">18. Debugging i observability</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
+      <a class="nav-item" href="s19.html"><span class="nav-icon">🔧</span><span class="nav-item-text">19. Framework arhitektura</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
+      <a class="nav-item" href="s20.html"><span class="nav-icon">📈</span><span class="nav-item-text">20. Performance testing</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+      <a class="nav-item" href="s21.html"><span class="nav-icon">📱</span><span class="nav-item-text">21. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
+      <a class="nav-item" href="s22.html"><span class="nav-icon">🧠</span><span class="nav-item-text">22. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s22')"></span></a>
+      <a class="nav-item" href="s23.html"><span class="nav-icon">📚</span><span class="nav-item-text">23. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s23')"></span></a>
+      <a class="nav-item" href="s24.html"><span class="nav-icon">🎤</span><span class="nav-item-text">24. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s24')"></span></a>
+      <a class="nav-item" href="s25.html"><span class="nav-icon">💼</span><span class="nav-item-text">25. Intervju strategija</span><span class="nav-check" onclick="toggleRead(event,'s25')"></span></a>
+      <a class="nav-item" href="s26.html"><span class="nav-icon">⌨️</span><span class="nav-item-text">26. Live coding (C#)</span><span class="nav-check" onclick="toggleRead(event,'s26')"></span></a>
+      <a class="nav-item" href="s27.html"><span class="nav-icon">📄</span><span class="nav-item-text">27. Templates</span><span class="nav-check" onclick="toggleRead(event,'s27')"></span></a>
+      <a class="nav-item" href="s28.html"><span class="nav-icon">⚡</span><span class="nav-item-text">28. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s28')"></span></a>
     </div>
   </nav>
 </div>
@@ -81,7 +83,7 @@
     <button id="menu-btn" class="tb-btn" onclick="toggleSidebar()" title="Meni" aria-label="Meni">☰</button>
     <a class="tb-btn" href="index.html" title="Pocetna" aria-label="Pocetna">🏠</a>
     <span id="topbar-meta">QA Ref · v2.0 · 2026</span>
-    <span id="breadcrumb"><span>🔧 18. Framework arhitektura</span></span>
+    <span id="breadcrumb"><span>🔍 18. Debugging i observability</span></span>
   </div>
   <div id="topbar-right">
     <button class="tb-btn" onclick="toggleQuickRef()" title="Quick Reference" aria-label="Quick Reference">⚡</button>
@@ -106,105 +108,97 @@
   <div id="content">
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s18">
-<h1 class="sec-title" id="t-s18">🔧 18. Framework arhitektura<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~3 min citanja</span><button class="mark-read-btn" id="mrb-s18" onclick="markRead('s18')">Oznaci kao procitano</button></div>
-<h2 class="sub-title">18.1 Komponente robustnog test framework-a</h2>
-<div class="tbl-wrap tall"><table><thead><tr><th>Komponenta</th><th>Opis</th></tr></thead><tbody>
-<tr><td>Driver Management</td><td>Centralizovana inicijalizacija i teardown WebDriver-a. DriverFactory.</td></tr>
-<tr><td>Page Objects (POM)</td><td>Enkapsulacija UI lokatorima i interakcija po stranicama.</td></tr>
-<tr><td>Base Test Class</td><td>Zajednicki setUp/tearDown, driver inicijalizacija, logging.</td></tr>
-<tr><td>Configuration Layer</td><td>Upravljanje okruzenjima (URL, credentials) via config fajlovi ili environment variables.</td></tr>
-<tr><td>Test Data Management</td><td>Separacija test podataka od test logike. JSON, CSV, Database ili builder pattern.</td></tr>
-<tr><td>Utility / Helper Layer</td><td>Reusable metode: screenshot, JS executor, file reader, waits.</td></tr>
-<tr><td>Reporting</td><td>Allure ili ExtentReports — screenshots za failove, step-by-step log.</td></tr>
-<tr><td>Logging</td><td>NLog, log4net — tracing toka testa za debugging.</td></tr>
+<h1 class="sec-title" id="t-s18">🔍 18. Debugging i observability<span class="read-badge">✓ Procitano</span></h1>
+<div class="section-meta"><span class="read-time">⏱ ~8 min citanja</span><button class="mark-read-btn" id="mrb-s18" onclick="markRead('s18')">Oznaci kao procitano</button></div>
+<p class="body-text">Kad se nesto pokvari u enterprise sistemu, retko je greska tacno tamo gde je vidljiva — problem moze biti u bazi, u redu poruka, u drugom servisu ili u mreznom sloju. Ova sekcija pokriva alate i koncepte za trazenje uzroka izvan samog UI-ja, plus metrike koje pokazuju da li se kvalitet stvarno popravlja.</p>
+<h2 class="sub-title">18.1 SQL — transakcije i isolation levels</h2>
+<p class="body-text">Transakcija grupise vise SQL operacija u jednu celinu — ili se sve izvrse (COMMIT) ili nijedna (ROLLBACK). Isolation level odredjuje sta jedna transakcija "vidi" od izmena koje druga, paralelna transakcija jos nije potvrdila — direktno relevantno za testiranje paralelnih korisnika na istom podatku.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Isolation level</th><th>Sta dozvoljava</th><th>Rizik</th></tr></thead><tbody>
+<tr><td>Read Uncommitted</td><td>Cita i nepotvrdjene (uncommitted) izmene drugih transakcija.</td><td>Dirty read — moze procitati podatak koji ce biti rollback-ovan.</td></tr>
+<tr><td>Read Committed (default u MSSQL/PostgreSQL)</td><td>Cita samo potvrdjene izmene.</td><td>Non-repeatable read — isti upit u istoj transakciji moze dva puta vratiti razlicit rezultat ako je medjutim neko drugi commit-ovao izmenu.</td></tr>
+<tr><td>Repeatable Read</td><td>Isti redovi se ne menjaju u toku transakcije.</td><td>Phantom read — novi redovi koji zadovoljavaju uslov mogu se pojaviti (INSERT od drugog korisnika).</td></tr>
+<tr><td>Serializable</td><td>Najstrozi — transakcije se ponasaju kao da se izvrsavaju jedna za drugom.</td><td>Najveci rizik od deadlock-a i najsporiji.</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">18.2 Design patterns u test automatizaciji</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Pattern</th><th>Svrha</th><th>Primer</th></tr></thead><tbody>
-<tr><td>Page Object Model</td><td>Enkapsulacija UI po stranicama. Standardni pattern za Selenium.</td><td>Videti Sekciju 14.</td></tr>
-<tr><td>Factory Pattern</td><td>Kreiranje WebDriver instanci bez eksplicitnog navodjenja tipa.</td><td>DriverFactory.Create(chrome)</td></tr>
-<tr><td>Builder Pattern</td><td>Fleksibilno kreiranje test objekata korak po korak.</td><td>new UserBuilder().WithEmail().WithRole(admin).Build()</td></tr>
-<tr><td>Singleton / ThreadLocal</td><td>Osigurava jednu instancu driver-a po thread-u.</td><td>ThreadLocal<IWebDriver></td></tr>
-<tr><td>Fluent Interface</td><td>Method chaining za citljiviji test kod.</td><td>page.EnterEmail().EnterPass().Submit()</td></tr>
-<tr><td>Strategy Pattern</td><td>Zamenjive strategije (razliciti browser-i, okruzenja).</td><td>IBrowserStrategy -> ChromeStrategy</td></tr>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>BEGIN TRANSACTION;
+
+UPDATE Specifications SET Status = 'Approved' WHERE SpecId = 'SPEC-TEST-001';
+INSERT INTO AuditLog (EntityId, Action) VALUES ('SPEC-TEST-001', 'StatusChange');
+
+-- Test scenario: proveriti da li OBE operacije uspevaju zajedno ili NIJEDNA
+-- Namerno izazvati gresku posle prve operacije i proveriti da UPDATE nije ostao
+ROLLBACK; -- ili COMMIT; ako obe operacije prodju</pre></div>
+<div class="note">Test-relevantno pitanje: "sta se desava ako dva korisnika istovremeno menjaju isti zapis?" Odgovor zavisi od isolation level-a i od toga da li aplikacija koristi optimisticko zakljucavanje (proverava verziju/timestamp pre write-a) ili pesimisticko (fizicki zakljucava red). Ovo je cest scenario za multi-user enterprise sisteme sa role-based pristupom (videti Sekciju 10.3).</div>
+<h2 class="sub-title">18.2 SQL — indeksi i performanse upita</h2>
+<p class="body-text">Indeks je struktura koja ubrzava pretragu (kao sadrzaj knjige) na racun sporijeg upisa i dodatnog prostora. Za QA je relevantno kad test prolazi lokalno na malom dataset-u, ali API/upit postane spor na produkcijskoj kolicini podataka.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>-- Bez indeksa na Email koloni: full table scan, sporo na velikom broju redova
+SELECT * FROM Users WHERE Email = 'test@example.com';
+
+-- EXPLAIN (PostgreSQL) / SET STATISTICS (MSSQL) pokazuje da li se indeks koristi
+EXPLAIN ANALYZE SELECT * FROM Users WHERE Email = 'test@example.com';
+
+CREATE INDEX idx_users_email ON Users(Email);</pre></div>
+<div class="note">Test-relevantno pitanje za performance/load testiranje (Sekcija 20): ako se API poziv usporava tek sa velikim brojem test podataka, prvo posumnjati na nedostajuci indeks pre nego na kod aplikacije — <code>EXPLAIN</code> plan brzo pokazuje da li upit radi full table scan.</div>
+<h2 class="sub-title">18.3 Centralizovano logovanje — ELK, Splunk, CloudWatch</h2>
+<p class="body-text">Sekcija 17.1 pokriva <code>grep</code>/<code>tail</code> na jednoj masini — u sistemu sa vise servisa/instanci logovi se agregiraju na jedno mesto da se ne bi rucno pretrazivalo desetine masina pojedinacno.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Alat</th><th>Sta je</th><th>Tipican upit</th></tr></thead><tbody>
+<tr><td>ELK (Elasticsearch, Logstash, Kibana)</td><td>Logstash prikuplja i parsira logove, Elasticsearch ih indeksira za pretragu, Kibana je UI za pretragu/dashboard.</td><td>Kibana Query Language: <code>level:ERROR AND service:"api-gateway" AND @timestamp:[now-1h TO now]</code></td></tr>
+<tr><td>Splunk</td><td>Komercijalna platforma sa slicnom svrhom — prikupljanje, indeksiranje, pretraga i alerting nad logovima.</td><td>SPL (Search Processing Language): <code>index=prod service=api status&gt;=500 | stats count by endpoint</code></td></tr>
+<tr><td>CloudWatch (AWS) / Azure Monitor</td><td>Cloud-native logging i metrike integrisane sa ostatkom platforme (Lambda, EC2 / Azure Functions, App Service).</td><td>CloudWatch Logs Insights: <code>fields @timestamp, @message | filter @message like /ERROR/ | sort @timestamp desc</code></td></tr>
 </tbody></table></div>
-<h2 class="sub-title">18.3 Data-driven testing — xUnit primeri</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[Theory]
-[InlineData("user@test.com", "Test1234!", true)]
-[InlineData("invalid@test.com", "Wrong", false)]
-[InlineData("", "Test1234!", false)]
-public void Login_WithCredentials_ReturnsExpectedResult(
-    string email, string password, bool expectedSuccess)
-{
- var result = new LoginPage(Driver).LoginAs(email, password);
- Assert.Equal(expectedSuccess, result.IsSuccessful);
-}</pre></div>
-<h2 class="sub-title">18.4 Test naming konvencija</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Format: MethodName_StateUnderTest_ExpectedBehavior
-
-Login_WithValidCredentials_ShouldRedirectToDashboard()
-Login_WithEmptyPassword_ShouldShowRequiredError()
-GetUser_WithNonExistentId_ShouldReturn404()
-
-// Izbegavati:
-Test1()      // bez konteksta
-LoginTest()  // nema state i expected result</pre></div>
-<h2 class="sub-title">18.5 Reporting — Allure i ExtentReports</h2>
-<h3 class="sub-sub-title">Allure</h3>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[Fact]
-[AllureFeature("Login")]
-[AllureSeverity(SeverityLevel.Critical)]
-public void ValidCredentials_ShouldRedirectToDashboard()
-{
- AllureApi.Step("Open login page", () => Driver.Navigate().GoToUrl(url));
- AllureApi.Step("Verify dashboard", () =>
- Assert.Contains("/dashboard", Driver.Url));
-}</pre></div>
-<h3 class="sub-sub-title">ExtentReports</h3>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// xUnit: teardown kroz IDisposable umesto [TearDown] atributa
-public class LoginTests : IDisposable
-{
- private readonly ExtentTest _test;
-
- public LoginTests() { /* setup */ }
-
- public void Dispose()
- {
-  var screenshot = ((ITakesScreenshot)Driver).GetScreenshot();
-  _test.Info("Screenshot").AddScreenCaptureFromPath(path);
-  _extent.Flush();
- }
-}</pre></div>
-<h2 class="sub-title">18.6 Pre-commit checklist za automatizovani test</h2>
-<ul><li class="bullet-item">Test ima jasan naziv po konvenciji (Method_State_Expected).</li>
-<li class="bullet-item">Testuje tacno jednu stvar.</li>
-<li class="bullet-item">Nezavistan od redosleda izvrsavanja i od stanja koje ostavljaju drugi testovi.</li>
-<li class="bullet-item">Koristi Explicit Wait, ne Thread.Sleep().</li>
-<li class="bullet-item">Lokatori su stabilni (data-testid, ID, CSS — ne pun XPath sa indeksima).</li>
-<li class="bullet-item">Test podaci su parametrizovani, ne hard-coded u kodu.</li>
-<li class="bullet-item">Test prolazi lokalno i u CI okruzenju.</li>
-</ul>
-<h2 class="sub-title">18.7 Logging strategija</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Nivo</th><th>Kada koristiti</th></tr></thead><tbody>
-<tr><td>Trace/Debug</td><td>Detaljan tok izvrsavanja (koji lokator se trazi, koji retry pokusaj) — ukljuceno samo lokalno ili kad se istrazuje konkretan fail, previse "sum" za normalan CI log.</td></tr>
-<tr><td>Info</td><td>Visok nivo koraka testa (test pocinje, test zavrsen, glavna akcija izvrsena) — ono sto ostaje ukljuceno u CI da bi log bio citljiv bez preplavljivanja.</td></tr>
-<tr><td>Warning</td><td>Nesto neocekivano ali test je nastavio (npr. retry je bio potreban, fallback logika aktivirana) — signal da nesto vredi istraziti iako test nije pao.</td></tr>
-<tr><td>Error</td><td>Test je pao ili je exception uhvacen. Uvek uz kontekst — koji korak, koji podatak, screenshot ako je moguce.</td></tr>
+<div class="note">Princip pretrage je isti u sva tri alata bez obzira na sintaksu: filtriraj po servisu, po vremenskom prozoru, po nivou (ERROR/WARN), pa trazi korelacioni identifikator (18.6) da povezes sve logove jednog zahteva kroz vise servisa.</div>
+<h2 class="sub-title">18.4 Mrezno debugovanje — Charles / Fiddler vs. Browser DevTools</h2>
+<p class="body-text">Browser DevTools (Sekcija 13.9) pokazuje samo saobracaj TOG taba. Proxy alati kao Charles i Fiddler presrecu SAV mrezni saobracaj sa masine — korisno za mobilne aplikacije (Appium, Sekcija 21), desktop klijente ili kad treba da se modifikuje zahtev/odgovor u letu (request/response tampering) da se testira kako se app ponasa na neocekivan odgovor.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Sta</th><th>Browser DevTools</th><th>Charles / Fiddler</th></tr></thead><tbody>
+<tr><td>Obuhvat</td><td>Samo taj browser tab.</td><td>Sav saobracaj sa masine/uredjaja (browser, mobilna app, desktop klijent).</td></tr>
+<tr><td>HTTPS</td><td>Vidi dekriptovano automatski (isti proces).</td><td>Zahteva instalaciju root sertifikata za SSL proxying (MITM za sopstveni uredjaj).</td></tr>
+<tr><td>Izmena zahteva/odgovora</td><td>Ograniceno (override kroz DevTools Overrides).</td><td>Breakpoints — presretni zahtev/odgovor i izmeni pre nego sto stigne do klijenta/servera.</td></tr>
+<tr><td>Throttling mreze</td><td>Ugradjeno (Slow 3G, Offline).</td><td>Ugradjeno, plus fino podesavanje latencije po domenu.</td></tr>
 </tbody></table></div>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Prazan catch blok NIKAD ne sme ostati bez loga — ako se greska guta necujno,
-// sledeci fail na istom mestu je nemoguce dijagnostikovati unazad
-try
-{
-    element.Click();
-}
-catch (ElementClickInterceptedException ex)
-{
-    TestLog.Assert.Trace(TraceMode.Warning, $"Klik presretnut, pokusavam JS fallback: {ex.Message}");
-    js.ExecuteScript("arguments[0].click();", element);
-}</pre></div>
-<div class="note">Korelacija: dobar log ukljucuje test ime i identifikator podatka (npr. SpecId) u svakoj liniji, ne samo poruku — kad 200 testova pise u isti nightly log, "Element not found" bez konteksta je beskorisno; "Element not found [MaterialTests.EditSpec, SpecId=SPEC-TEST-001]" nije.</div>
+<div class="note">Tipican use case za Charles/Fiddler: aplikacija normalno vraca 200 sa punim podatkom — sta se desava ako presretnem odgovor i vratim isti status ali prazan niz, ili 500 usred korisnicke akcije? Ovo testira error handling koji je tesko izazvati prirodno.</div>
+<h2 class="sub-title">18.5 Message queue osnove — Kafka, RabbitMQ</h2>
+<p class="body-text">Kad sistem koristi asinhronu komunikaciju izmedju servisa (umesto direktnog API poziva), poruka ide u red i konzumira se kasnije — sto znaci da test ne moze samo proveriti trenutni HTTP odgovor, mora proveriti da je poruka STVARNO obradjena.</p>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Producer / Consumer</td><td>Producer salje poruku u queue/topic, Consumer je cita i obradjuje. Test cesto igra ulogu jednog ili drugog.</td></tr>
+<tr><td>Kafka — topic i partition</td><td>Poruke se organizuju po topic-u, topic se deli na partitions radi paralelizma. Redosled je garantovan samo unutar jedne partition.</td></tr>
+<tr><td>RabbitMQ — queue i exchange</td><td>Exchange rutira poruku ka jednoj ili vise queue-ova na osnovu pravila (routing key). Queue cuva poruke dok ih consumer ne preuzme.</td></tr>
+<tr><td>At-least-once delivery</td><td>Cesta garancija — poruka moze stici VISE puta. Test mora proveriti da je obrada idempotentna (drugi put ne pravi duplikat), slicno PUT idempotentnosti u API testiranju (Sekcija 15.1).</td></tr>
+</tbody></table></div>
+<div class="note">Test pristup bez dubokog poznavanja infrastrukture: umesto da se direktno gadja Kafka/RabbitMQ, cesce se proverava POSLEDICA — da li se ocekivani zapis pojavio u bazi (10.5) ili log liniji (18.3) posle slanja poruke, sa retry/wait logikom umesto fiksnog cekanja (slicno flaky test strategijama iz Sekcije 11).</div>
+<h2 class="sub-title">18.6 Pracenje zahteva kroz sistem — distributed tracing</h2>
+<p class="body-text">Kad jedan korisnicki klik prolazi kroz vise servisa (frontend -> API gateway -> backend servis -> baza), jedan correlation ID (ili trace ID) se prosledjuje kroz sve njih — omogucava da se u centralizovanom logu (18.3) filtrira TACNO taj zahtev kroz ceo put, ne samo jedan servis.</p>
+<div class="tbl-wrap"><table><tbody>
+<tr><td>Correlation ID / Trace ID</td><td>Jedinstven identifikator generisan na pocetku zahteva (obicno u header-u, npr. <code>X-Correlation-Id</code>), prosledjen kroz svaki dalji poziv.</td></tr>
+<tr><td>Span</td><td>Jedan "korak" u putanji zahteva (npr. poziv ka jednom servisu) — vise span-ova cini jedan trace.</td></tr>
+<tr><td>Alati</td><td>Jaeger, Zipkin, Application Insights (Azure) — vizualizuju ceo put zahteva kao vremensku liniju.</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// U API testu — dodati sopstveni correlation ID i pretraziti ga u logovima posle poziva
+var correlationId = Guid.NewGuid().ToString();
+var response = await client.PostAsync(url, content, req => req.Headers.Add("X-Correlation-Id", correlationId));
 
-<div class="section-nav"><a class="snav-btn" href="s17.html"><span class="snav-label">← Prethodna</span><span class="snav-title">17. Linux osnove za QA</span></a><a class="snav-btn next" href="s19.html"><span class="snav-label">Sledeca →</span><span class="snav-title">19. Performance testing</span></a></div>
+// Zatim u ELK/Splunk (18.3): pretraga "correlationId:GUID" pokazuje SVAKI servis
+// kroz koji je taj zahtev prosao, redosledom, sa vremenom na svakom koraku</pre></div>
+<div class="note">Ovo najvise pomaze kod pitanja "gde tacno usporava" — bez trace-a, spor odgovor je jedna cifra (ukupno vreme); sa trace-om, vidljivo je koji od pet servisa u lancu je uzeo 90% tog vremena.</div>
+<h2 class="sub-title">18.7 Metrike kvaliteta</h2>
+<div class="tbl-wrap tall"><table><thead><tr><th>Metrika</th><th>Definicija</th><th>Sta pokazuje</th></tr></thead><tbody>
+<tr><td>Test Coverage</td><td>% koda ili zahteva pokriveno testovima.</td><td>Oprezno — 100% coverage ne znaci 0 bagova, samo da je svaka linija/zahtev BAR jednom izvrsen testom.</td></tr>
+<tr><td>Pass Rate</td><td>% testova koji su prosli od ukupno izvrsenih.</td><td>Zdravlje suite-a u trenutku merenja — pada kad ima realnih regresija ILI kad ima flaky testova (razlikovati ta dva, Sekcija 11).</td></tr>
+<tr><td>Defect Density</td><td>Broj defekata po jedinici (obicno po 1000 linija koda ili po modulu/feature-u).</td><td>Koji delovi sistema su rizicniji — usmerava gde staviti vise testerskog fokusa.</td></tr>
+<tr><td>Defect Escape Rate</td><td>% bagova pronadjenih U PRODUKCIJI od ukupnog broja bagova (produkcija + pre-release).</td><td>Najvaznija metrika efikasnosti QA procesa — visok escape rate znaci da testiranje ne hvata dovoljno pre release-a.</td></tr>
+<tr><td>MTTR (Mean Time To Repair/Resolve)</td><td>Prosecno vreme od prijave defekta do njegovog resenja.</td><td>Brzina reagovanja tima, ne kvalitet samog koda — spor MTTR moze znaciti los proces triage-a, ne los kod.</td></tr>
+<tr><td>Flakiness Rate</td><td>% testova koji su nekonzistentni (prolaze pa padaju bez izmene koda) od ukupnog broja testova.</td><td>Poverenje u regression suite — visok flakiness rate znaci da tim pocinje da ignorise crvene rezultate (Sekcija 11).</td></tr>
+<tr><td>Test Execution Time</td><td>Ukupno vreme izvrsavanja suite-a (ili pojedinacnog testa).</td><td>Direktno utice na brzinu feedback petlje u CI/CD-u (Sekcija 16) — raste sa brojem testova ako se ne paralelizuje (16.9).</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">18.8 Kako prikazati kvalitet menadzmentu</h2>
+<p class="body-text">Menadzment retko zeli listu bagova — zeli trend i rizik. Isti princip kao "izmeri pa predlozi" iz Sekcije 24 (argument za ulaganje u automatizaciju): brojka nosi vise tezine od opisa.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Umesto</th><th>Reci</th></tr></thead><tbody>
+<tr><td>"Ima puno bagova"</td><td>"Defect density je porasla sa 3 na 7 po modulu u poslednja dva sprinta, koncentrisano u payment flow-u."</td></tr>
+<tr><td>"Testovi cesto padaju"</td><td>"Flakiness rate je 12% — od toga, 8% je jedan nestabilan lokator koji planiram da popravim ovaj sprint."</td></tr>
+<tr><td>"Sporo nam ide regression"</td><td>"Suite sada traje 45 min, sa paralelizacijom bi bio ~12 min — predlog za sledeci sprint."</td></tr>
+<tr><td>"Nasli smo dosta toga u produkciji"</td><td>"Escape rate je 15% ovog kvartala, prosek je bio 8% — najveci deo dolazi iz X modula koji nema automatizovanu pokrivenost."</td></tr>
+</tbody></table></div>
+<div class="note">Grafikon trenda kroz vreme (npr. escape rate po kvartalu) je uvek jaci argument od jedne apsolutne brojke — pokazuje pravac (poboljsava se ili pogorsava), ne samo trenutno stanje.</div>
+
+<div class="section-nav"><a class="snav-btn" href="s17.html"><span class="snav-label">← Prethodna</span><span class="snav-title">17. Linux osnove za QA</span></a><a class="snav-btn next" href="s19.html"><span class="snav-label">Sledeca →</span><span class="snav-title">19. Framework arhitektura</span></a></div>
 </div>
   </div>
 
@@ -298,7 +292,7 @@ catch (ElementClickInterceptedException ex)
 
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<script>window.QA_PAGE = {"id":"s18","title":"18. Framework arhitektura","prevUrl":"s17.html","nextUrl":"s19.html"};</script>
+<script>window.QA_PAGE = {"id":"s18","title":"18. Debugging i observability","prevUrl":"s17.html","nextUrl":"s19.html"};</script>
 <script src="script.js"></script>
 </body>
 </html>

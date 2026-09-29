@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🧠 21. AI u testiranju — QA Referentni Dokument</title>
+<title>📱 21. Mobile testing (Appium) — QA Referentni Dokument</title>
 <link rel="stylesheet" href="style.css">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0d1117">
@@ -50,7 +50,7 @@
       <a class="nav-item" href="s10.html"><span class="nav-icon">🗄️</span><span class="nav-item-text">10. Test okruzenje i podaci</span><span class="nav-check" onclick="toggleRead(event,'s10')"></span></a>
     </div>
     <div class="nav-deo-wrap">
-      <span class="nav-deo">DEO II — Automatizacija <span class="nav-deo-progress" data-ids="s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21,s22,s23,s24,s25,s26"></span></span>
+      <span class="nav-deo">DEO II — Automatizacija <span class="nav-deo-progress" data-ids="s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21,s22,s23,s24,s25,s26,s27,s28"></span></span>
       <button class="nav-collapse" onclick="toggleGroup('g2')">▾</button>
     </div>
     <div class="nav-group" id="g2">
@@ -61,15 +61,17 @@
       <a class="nav-item" href="s15.html"><span class="nav-icon">🔌</span><span class="nav-item-text">15. API testiranje</span><span class="nav-check" onclick="toggleRead(event,'s15')"></span></a>
       <a class="nav-item" href="s16.html"><span class="nav-icon">⚙️</span><span class="nav-item-text">16. CI/CD integracija</span><span class="nav-check" onclick="toggleRead(event,'s16')"></span></a>
       <a class="nav-item" href="s17.html"><span class="nav-icon">🐧</span><span class="nav-item-text">17. Linux osnove za QA</span><span class="nav-check" onclick="toggleRead(event,'s17')"></span></a>
-      <a class="nav-item" href="s18.html"><span class="nav-icon">🔧</span><span class="nav-item-text">18. Framework arhitektura</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
-      <a class="nav-item" href="s19.html"><span class="nav-icon">📈</span><span class="nav-item-text">19. Performance testing</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
-      <a class="nav-item" href="s20.html"><span class="nav-icon">📱</span><span class="nav-item-text">20. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
-      <a class="nav-item active" href="s21.html"><span class="nav-icon">🧠</span><span class="nav-item-text">21. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
-      <a class="nav-item" href="s22.html"><span class="nav-icon">📚</span><span class="nav-item-text">22. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s22')"></span></a>
-      <a class="nav-item" href="s23.html"><span class="nav-icon">🎤</span><span class="nav-item-text">23. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s23')"></span></a>
-      <a class="nav-item" href="s24.html"><span class="nav-icon">💼</span><span class="nav-item-text">24. Intervju strategija</span><span class="nav-check" onclick="toggleRead(event,'s24')"></span></a>
-      <a class="nav-item" href="s25.html"><span class="nav-icon">⌨️</span><span class="nav-item-text">25. Live coding (C#)</span><span class="nav-check" onclick="toggleRead(event,'s25')"></span></a>
-      <a class="nav-item" href="s26.html"><span class="nav-icon">⚡</span><span class="nav-item-text">26. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s26')"></span></a>
+      <a class="nav-item" href="s18.html"><span class="nav-icon">🔍</span><span class="nav-item-text">18. Debugging i observability</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
+      <a class="nav-item" href="s19.html"><span class="nav-icon">🔧</span><span class="nav-item-text">19. Framework arhitektura</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
+      <a class="nav-item" href="s20.html"><span class="nav-icon">📈</span><span class="nav-item-text">20. Performance testing</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+      <a class="nav-item active" href="s21.html"><span class="nav-icon">📱</span><span class="nav-item-text">21. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
+      <a class="nav-item" href="s22.html"><span class="nav-icon">🧠</span><span class="nav-item-text">22. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s22')"></span></a>
+      <a class="nav-item" href="s23.html"><span class="nav-icon">📚</span><span class="nav-item-text">23. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s23')"></span></a>
+      <a class="nav-item" href="s24.html"><span class="nav-icon">🎤</span><span class="nav-item-text">24. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s24')"></span></a>
+      <a class="nav-item" href="s25.html"><span class="nav-icon">💼</span><span class="nav-item-text">25. Intervju strategija</span><span class="nav-check" onclick="toggleRead(event,'s25')"></span></a>
+      <a class="nav-item" href="s26.html"><span class="nav-icon">⌨️</span><span class="nav-item-text">26. Live coding (C#)</span><span class="nav-check" onclick="toggleRead(event,'s26')"></span></a>
+      <a class="nav-item" href="s27.html"><span class="nav-icon">📄</span><span class="nav-item-text">27. Templates</span><span class="nav-check" onclick="toggleRead(event,'s27')"></span></a>
+      <a class="nav-item" href="s28.html"><span class="nav-icon">⚡</span><span class="nav-item-text">28. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s28')"></span></a>
     </div>
   </nav>
 </div>
@@ -81,7 +83,7 @@
     <button id="menu-btn" class="tb-btn" onclick="toggleSidebar()" title="Meni" aria-label="Meni">☰</button>
     <a class="tb-btn" href="index.html" title="Pocetna" aria-label="Pocetna">🏠</a>
     <span id="topbar-meta">QA Ref · v2.0 · 2026</span>
-    <span id="breadcrumb"><span>🧠 21. AI u testiranju</span></span>
+    <span id="breadcrumb"><span>📱 21. Mobile testing (Appium)</span></span>
   </div>
   <div id="topbar-right">
     <button class="tb-btn" onclick="toggleQuickRef()" title="Quick Reference" aria-label="Quick Reference">⚡</button>
@@ -106,132 +108,113 @@
   <div id="content">
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s21">
-<h1 class="sec-title" id="t-s21">🧠 21. AI u testiranju<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~5 min citanja</span><button class="mark-read-btn" id="mrb-s21" onclick="markRead('s21')">Oznaci kao procitano</button></div>
-<h2 class="sub-title">21.1 Kako AI menja QA</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Oblast</th><th>Opis</th></tr></thead><tbody>
-<tr><td>Generisanje test case-ova</td><td>AI analizira specifikaciju ili user story i predlaze test case-ove, posebno edge case-ove koje je lako propustiti.</td></tr>
-<tr><td>Vizuelna regresija</td><td>AI poredi screenshotove i detektuje vizuelne promene (Applitools, Percy).</td></tr>
-<tr><td>Generisanje test podataka</td><td>LLM-ovi generisu realisticne, raznovrsne test podatke za data-driven scenarije.</td></tr>
-<tr><td>Analiza defekata</td><td>AI analizira log fajlove, stack trace-ove i sugerise root cause.</td></tr>
-<tr><td>Odrzavanje lokatorima</td><td>Healenium automatski azurira lokatore kada se UI promeni.</td></tr>
+<h1 class="sec-title" id="t-s21">📱 21. Mobile testing (Appium)<span class="read-badge">✓ Procitano</span></h1>
+<div class="section-meta"><span class="read-time">⏱ ~2 min citanja</span><button class="mark-read-btn" id="mrb-s21" onclick="markRead('s21')">Oznaci kao procitano</button></div>
+<h2 class="sub-title">21.1 Sta je Appium i kako funkcionise</h2>
+<p class="body-text">Appium je open-source alat za automatizaciju mobilnih aplikacija. Koristi WebDriver protokol — ista arhitektura kao Selenium, ali sa mobilnim driver-ima.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [Test kod (C#/Java/Python)]
+          |  WebDriver API pozivi
+          v
+  [Appium Server]
+          |  XCUITest (iOS) / UIAutomator2 (Android)
+          v
+  [Realni uredjaj / Emulator]</pre></div>
+<h2 class="sub-title">21.2 Tipovi mobilnih aplikacija</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Tip</th><th>Opis</th><th>Appium podrska</th></tr></thead><tbody>
+<tr><td>Native</td><td>Pisana u Swift/Kotlin, koristi native UI komponente.</td><td>Puna podrska. Pristup svim native elementima.</td></tr>
+<tr><td>Hybrid</td><td>Web view unutar native shell-a. React Native, Ionic.</td><td>Puna podrska. Context switching izmedju native i web.</td></tr>
+<tr><td>Mobile Web</td><td>Browser aplikacija — Safari, Chrome na mobilnom.</td><td>Podrska kroz mobile browser driver.</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">21.2 LLM za generisanje Selenium C# test skripti</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Primer prompta:
+<h2 class="sub-title">21.3 Appium C# — setup i osnovni test</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Capabilities i driver inicijalizacija (Android)
+var options = new AppiumOptions();
+options.PlatformName = "Android";
+options.AutomationName = "UIAutomator2";
+options.DeviceName = "emulator-5554";
+options.App = "/path/to/app.apk";
 
-  'Ti si senior QA automation inzenjer koji pise Selenium C# testove.
-   Koristi xUnit, Page Object Model i FluentAssertions.
-   Generisi test klasu za sledeci scenario:
+var driver = new AndroidDriver(
+    new Uri("http://localhost:4723"), options);
 
-   Feature:  Forgot Password funkcionalnost
-   URL:      /forgot-password
-   Elementi: input[name=email], button[type=submit], .success-message
+// Lociranje elementa i interakcija
+var loginBtn = driver.FindElement(
+    MobileBy.AccessibilityId("loginButton"));
+loginBtn.Click();
 
-   Scenariji:
-   1. Validan email -> prikazuje se success poruka
-   2. Nevalidan email format -> prikazuje se validaciona greska
-   3. Nepostojeci email -> prikazuje se ista success poruka (security by design)
-
-   Koristi BasePage sa WaitForVisible metodom.
-   Naming konvencija: MethodName_StateUnderTest_ExpectedBehavior'
-
-Workflow:
-  LLM generise skelet -> QA proverava lokatore -> QA dodaje specificne
-  test podatke -> QA verifikuje Expected Result-e -> QA pokrecepokalno.</pre></div>
-<div class="note">LLM stedi 60-70% vremena na boilerplate kodu. Generisani kod treba da prati POM strukturu (Sekcija 14) i naming konvenciju (Sekcija 18). Ostatak — domain znanje, specificnosti aplikacije, edge case-ovi — ostaje iskljucivo odgovornost QA inzenjera.</div>
-<h2 class="sub-title">21.3 Vizuelna regresija</h2>
-<div class="tbl-wrap"><table><tbody>
-<tr><td>Applitools Eyes</td><td>AI-powered vizuelni testing. Koristi ML da razlikuje significantne vizuelne promene od nebitnih (anti-aliasing, font rendering razlike). Integracija sa Selenium, Cypress, Playwright.</td></tr>
-<tr><td>Percy (BrowserStack)</td><td>Vizuelna regresija integrisana sa CI/CD pipeline-om. Svaki PR dobija vizuelni diff review.</td></tr>
+// Assertion (xUnit)
+var welcomeMsg = driver.FindElement(
+    MobileBy.AccessibilityId("welcomeLabel"));
+Assert.Equal("Dobrodosli", welcomeMsg.Text);</pre></div>
+<div class="note">Ista WebDriver arhitektura kao Selenium (videti Sekciju 13) — poznavanje lokator strategija i wait mehanizama se direktno prenosi.</div>
+<h2 class="sub-title">21.4 Lokatori u Appium-u</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Lokator</th><th>iOS</th><th>Android</th></tr></thead><tbody>
+<tr><td>Accessibility ID</td><td>accessibilityIdentifier atribut</td><td>content-desc atribut — preporuceni</td></tr>
+<tr><td>XPath</td><td>Dostupan, ali sporiji</td><td>Dostupan, ali sporiji</td></tr>
+<tr><td>Class Name</td><td>XCUIElementTypeButton</td><td>android.widget.Button</td></tr>
+<tr><td>ID</td><td>Bez direktnog ekvivalenta</td><td>Resource ID (com.app:id/btn)</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">21.4 Granice i rizici AI u testiranju</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Rizik</th><th>Objasnjenje</th></tr></thead><tbody>
-<tr><td>Hallucination</td><td>LLM-ovi mogu generisati plausibilne ali pogresne test case-ove ili nepostojece API endpoint-e. Uvek review-ovati output.</td></tr>
-<tr><td>Nedostatak konteksta</td><td>AI ne zna biznis pravila, istoriju projekta ni specificnosti sistema.</td></tr>
-<tr><td>False confidence</td><td>Vizuelni AI alati mogu propustiti relevantne promene ili prijaviti lazne pozitive.</td></tr>
-<tr><td>Odgovornost</td><td>AI generisani test case-ovi su QA odgovornost. Nema opravdanja 'AI je to generisao'.</td></tr>
-</tbody></table></div>
-<h2 class="sub-title">21.5 Generisanje Selenium C# koda</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// LLM generisani skelet — potrebna QA revizija
-public class ForgotPasswordPage : BasePage
+<h2 class="sub-title">21.5 Gesture akcije u C#</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Swipe gore (scroll down)
+var size = driver.Manage().Window.Size;
+var finger = new PointerInputDevice(PointerKind.Touch, "finger");
+var swipe = new ActionSequence(finger);
+swipe.AddAction(finger.CreatePointerMove(
+    CoordinateOrigin.Viewport, size.Width / 2, size.Height * 3 / 4));
+swipe.AddAction(finger.CreatePointerDown(MouseButton.Left));
+swipe.AddAction(finger.CreatePointerMove(
+    CoordinateOrigin.Viewport, size.Width / 2, size.Height / 4,
+    TimeSpan.FromMilliseconds(500)));
+swipe.AddAction(finger.CreatePointerUp(MouseButton.Left));
+driver.PerformActions(new List&lt;ActionSequence&gt; { swipe });
+
+// Tap na koordinate
+var tap = new ActionSequence(finger);
+tap.AddAction(finger.CreatePointerMove(
+    CoordinateOrigin.Viewport, 200, 400));
+tap.AddAction(finger.CreatePointerDown(MouseButton.Left));
+tap.AddAction(finger.CreatePointerUp(MouseButton.Left));
+driver.PerformActions(new List&lt;ActionSequence&gt; { tap });</pre></div>
+<h2 class="sub-title">21.6 Page Object Model za mobilne aplikacije</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// POM za Appium — isti princip kao web (videti Sekciju 14)
+public class LoginScreen
 {
- private By EmailField   => By.CssSelector(input[name=email]);
- private By SubmitButton => By.CssSelector(button[type=submit]);
- private By SuccessMsg  => By.CssSelector(.success-message);
+ private readonly AndroidDriver _driver;
 
-    [Fact]
-    public void ValidEmail_ShouldShowSuccessMessage()
-    {
- var page = new ForgotPasswordPage(Driver);
- page.Navigate();
- page.EnterEmail("user@test.com");
- page.Submit();
- Assert.Contains("Check your email", page.GetSuccessMessage());
-    }
+ private AppiumElement UsernameField =>
+  _driver.FindElement(MobileBy.AccessibilityId("username"));
+ private AppiumElement PasswordField =>
+  _driver.FindElement(MobileBy.AccessibilityId("password"));
+ private AppiumElement LoginButton =>
+  _driver.FindElement(MobileBy.AccessibilityId("loginBtn"));
+
+ public LoginScreen(AndroidDriver driver) => _driver = driver;
+
+ public HomeScreen LoginAs(string user, string pass)
+ {
+  UsernameField.SendKeys(user);
+  PasswordField.SendKeys(pass);
+  LoginButton.Click();
+  return new HomeScreen(_driver);
+ }
 }</pre></div>
-<h2 class="sub-title">21.6 Testiranje AI-powered feature-a</h2>
-<p class="body-text">Kada aplikacija sama koristi AI (npr. Copilot, chatbot, AI preporuke), output je nedeterministicki — ne moze se asertovati na tacan tekst. Umesto toga, testiraju se invarijante po pet dimenzija:</p>
-<div class="tbl-wrap tall"><table><thead><tr><th>Dimenzija</th><th>Sta se proverava</th><th>Primer asercije</th></tr></thead><tbody>
-<tr><td>Relevantnost</td><td>Da li odgovor adresira temu iz prompta?</td><td>Prompt o specifikaciji materijala → odgovor sadrzi atribute tog materijala, ne genericke informacije.</td></tr>
-<tr><td>Grounding</td><td>Da li se odgovor oslanja na dozvoljene izvore podataka, bez fabriciranja cinjenica?</td><td>Copilot navodi specifikaciju koja postoji u sistemu, ne izmisljenu.</td></tr>
-<tr><td>Permission boundaries</td><td>Da li AI postuje RBAC? Korisnik bez pristupa kategoriji X ne sme dobiti podatke iz nje.</td><td>User sa rolom "Viewer" pita za confidential BOM → odgovor je prazan ili access denied.</td></tr>
-<tr><td>Format contract</td><td>Da li odgovor prati ocekivanu strukturu — obavezna polja, output shape?</td><td>JSON odgovor sadrzi "source", "confidence", "text" polja.</td></tr>
-<tr><td>Latency / error budget</td><td>Da li odgovor stize u okviru SLA bez fallback greske?</td><td>Response time &lt; 5s, nema generic error poruke.</td></tr>
+<h2 class="sub-title">21.7 Realni uredaji vs. Emulatori</h2>
+<div class="tbl-wrap"><table><thead><tr><th></th><th>Emulatori / Simulatori</th><th>Realni uredaji</th></tr></thead><tbody>
+<tr><td>Brzina setup-a</td><td>Brzo, bez hardvera</td><td>Zahteva fizicki pristup</td></tr>
+<tr><td>Tacnost</td><td>Dobra za funkcionalne testove</td><td>Neophodna za hardware, senzore, performanse</td></tr>
+<tr><td>Cena</td><td>Besplatno</td><td>Kupovina ili cloud (BrowserStack, Sauce Labs)</td></tr>
+<tr><td>Interruptions</td><td>Ne simulira pozive, SMS</td><td>Realni interruptions</td></tr>
+<tr><td>Preporuka</td><td>Regression, funkcionalni testovi</td><td>Release testing, performance, UAT</td></tr>
 </tbody></table></div>
-<h3 class="sub-sub-title">Strategije za stabilno AI testiranje</h3>
-<ul><li class="bullet-item"><strong>Golden intent prompts</strong> — skup poznatih upita sa ocekivanim ponasanjem. Threshold-based pass/fail umesto egzaktnog poklapanja.</li>
-<li class="bullet-item"><strong>Negativni testovi</strong> — out-of-scope prompti koji treba da budu odbijeni, adversarial inputs, permission boundary probes gde odgovor mora biti prazan iako podaci postoje u sistemu.</li>
-<li class="bullet-item"><strong>Fiksirani kontekst</strong> — isti korisnik, ista rola, isti dataset za svaki test run. Varijabla je samo prompt.</li>
+<div class="note">Cloud device farme (BrowserStack, Sauce Labs, AWS Device Farm) nude stotine realnih uredaja bez kupovine — idealno za cross-device testing.</div>
+<h2 class="sub-title">21.8 Specificnosti mobilnog testiranja</h2>
+<ul><li class="bullet-item">Razlicite rezolucije i gustine piksela — testirati na vise uredjaja.</li>
+<li class="bullet-item">Interruptions: pozivi, notifikacije, low battery — sistem mora da se ponasa predvidivo.</li>
+<li class="bullet-item">Network conditions — testirati na 3G, 4G, offline modu.</li>
+<li class="bullet-item">Permissions — kamera, lokacija, kontakti — testirati scenarije odbijanja dozvola.</li>
+<li class="bullet-item">Orientation — portrait i landscape mod.</li>
 </ul>
-<div class="warning">Permission-bound testiranje je cesto najvrednije — otkriva slucajeve gde AI leak-uje podatke iz kategorija kojima korisnikova rola nema pristup. To nije hallucination problem, to je autorizacioni propust surfaced kroz AI — i klasicno testiranje ga nece uhvatiti.</div>
-<h2 class="sub-title">21.7 AI alati u svakodnevnom QA radu</h2>
-<p class="body-text">AI alati nisu samo objekat testiranja — oni su i alat koji QA koristi svaki dan za produktivnost.</p>
-<div class="tbl-wrap"><table><thead><tr><th>Alat</th><th>QA upotreba</th></tr></thead><tbody>
-<tr><td>GitHub Copilot</td><td>Autocomplete za automation kod — Page Object metode, assertion patterns, boilerplate. Stedi 60-70% vremena na repetitivnom kodu (videti 19.2).</td></tr>
-<tr><td>M365 Copilot</td><td>Analiza nightly failure logova — paste stack trace, pitaj za root cause. Sumarizacija dugackih bug threadova. Drafting bug reporta iz beleski.</td></tr>
-<tr><td>ChatGPT / Claude</td><td>Generisanje test podataka, review test case design-a, objasnjavanje nepoznatog koda, brainstorming edge case-ova.</td></tr>
-</tbody></table></div>
-<h3 class="sub-sub-title">Primer: AI-assisted failure analysis</h3>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Prompt za M365 Copilot / ChatGPT:
 
-  "Ovo je stack trace iz nightly regression testa koji je prosao
-   do jucerasnjeg build-a, a sada pada:
-
-   [StaleElementReferenceException at MaterialPage.SelectLOV()]
-
-   Test scenario: kreiranje nove specifikacije sa Material atributom.
-   Poslednji changeset na aplikaciji: refaktor LOV dropdown komponente.
-
-   Sta je najerovatniji uzrok i koji je najbrzi fix?"
-
-Odgovor: AI sugerise re-find pattern jer LOV re-renderuje DOM.
-QA verifikuje hipotezu, implementira fix, check-in.</pre></div>
-<h2 class="sub-title">21.8 Custom Copilot agenti (Microsoft Agent Builder)</h2>
-<p class="body-text">QA moze kreirati custom AI agente za specificne zadatke koristeci Microsoft Copilot Studio / Agent Builder — bez pisanja koda, samo sa system instructions i definisanim izvorima podataka.</p>
-<div class="tbl-wrap"><table><thead><tr><th>Agent</th><th>System instruction</th><th>Data source</th><th>QA vrednost</th></tr></thead><tbody>
-<tr><td>Test Oracle Agent</td><td>"Ti si QA ekspert za PLM sistem. Odgovaraj samo na osnovu specifikacije."</td><td>Produktna dokumentacija, specifikacija</td><td>Brza verifikacija expected behavior-a bez pretrazivanja dokumenata.</td></tr>
-<tr><td>Bug Triage Assistant</td><td>"Klasifikuj failure u: app regresija, script issue, environment issue."</td><td>Istorija nightly rezultata, poznati flaky testovi</td><td>Ubrzava dnevni triage — AI predlaze kategoriju, QA potvrdjuje.</td></tr>
-</tbody></table></div>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Custom Agent — kljucni elementi:
-
-  System Instructions:
-    - Definisi ulogu, ton, ogranicenja
-    - "Odgovaraj samo na osnovu prilozenog dokumenta"
-    - "Ako nemas odgovor, reci 'nije u specifikaciji'"
-
-  Data Sources:
-    - Upload dokumenata (PDF, Word, Excel)
-    - SharePoint stranice
-    - Web URL-ovi
-
-  Testiranje agenta:
-    - Isti 5-dimenzionalni pristup kao za AI feature (19.6)
-    - Da li odgovara samo iz dozvoljenih izvora (grounding)?
-    - Da li odbija pitanja van scope-a?
-    - Da li multimodalni input (slika + tekst) radi ispravno?</pre></div>
-<div class="note">Izgradnja custom AI agenata je differentiator na intervjuu — pokazuje da QA ne samo testira AI, vec i koristi AI za unapredjenje sopstvenog rada.</div>
-
-<div class="section-nav"><a class="snav-btn" href="s20.html"><span class="snav-label">← Prethodna</span><span class="snav-title">20. Mobile testing (Appium)</span></a><a class="snav-btn next" href="s22.html"><span class="snav-label">Sledeca →</span><span class="snav-title">22. Glosar</span></a></div>
+<div class="section-nav"><a class="snav-btn" href="s20.html"><span class="snav-label">← Prethodna</span><span class="snav-title">20. Performance testing</span></a><a class="snav-btn next" href="s22.html"><span class="snav-label">Sledeca →</span><span class="snav-title">22. AI u testiranju</span></a></div>
 </div>
   </div>
 
@@ -325,7 +308,7 @@ QA verifikuje hipotezu, implementira fix, check-in.</pre></div>
 
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<script>window.QA_PAGE = {"id":"s21","title":"21. AI u testiranju","prevUrl":"s20.html","nextUrl":"s22.html"};</script>
+<script>window.QA_PAGE = {"id":"s21","title":"21. Mobile testing (Appium)","prevUrl":"s20.html","nextUrl":"s22.html"};</script>
 <script src="script.js"></script>
 </body>
 </html>

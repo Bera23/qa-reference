@@ -50,7 +50,7 @@
       <a class="nav-item" href="s10.html"><span class="nav-icon">🗄️</span><span class="nav-item-text">10. Test okruzenje i podaci</span><span class="nav-check" onclick="toggleRead(event,'s10')"></span></a>
     </div>
     <div class="nav-deo-wrap">
-      <span class="nav-deo">DEO II — Automatizacija <span class="nav-deo-progress" data-ids="s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21,s22,s23,s24,s25,s26"></span></span>
+      <span class="nav-deo">DEO II — Automatizacija <span class="nav-deo-progress" data-ids="s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21,s22,s23,s24,s25,s26,s27,s28"></span></span>
       <button class="nav-collapse" onclick="toggleGroup('g2')">▾</button>
     </div>
     <div class="nav-group" id="g2">
@@ -61,15 +61,17 @@
       <a class="nav-item active" href="s15.html"><span class="nav-icon">🔌</span><span class="nav-item-text">15. API testiranje</span><span class="nav-check" onclick="toggleRead(event,'s15')"></span></a>
       <a class="nav-item" href="s16.html"><span class="nav-icon">⚙️</span><span class="nav-item-text">16. CI/CD integracija</span><span class="nav-check" onclick="toggleRead(event,'s16')"></span></a>
       <a class="nav-item" href="s17.html"><span class="nav-icon">🐧</span><span class="nav-item-text">17. Linux osnove za QA</span><span class="nav-check" onclick="toggleRead(event,'s17')"></span></a>
-      <a class="nav-item" href="s18.html"><span class="nav-icon">🔧</span><span class="nav-item-text">18. Framework arhitektura</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
-      <a class="nav-item" href="s19.html"><span class="nav-icon">📈</span><span class="nav-item-text">19. Performance testing</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
-      <a class="nav-item" href="s20.html"><span class="nav-icon">📱</span><span class="nav-item-text">20. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
-      <a class="nav-item" href="s21.html"><span class="nav-icon">🧠</span><span class="nav-item-text">21. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
-      <a class="nav-item" href="s22.html"><span class="nav-icon">📚</span><span class="nav-item-text">22. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s22')"></span></a>
-      <a class="nav-item" href="s23.html"><span class="nav-icon">🎤</span><span class="nav-item-text">23. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s23')"></span></a>
-      <a class="nav-item" href="s24.html"><span class="nav-icon">💼</span><span class="nav-item-text">24. Intervju strategija</span><span class="nav-check" onclick="toggleRead(event,'s24')"></span></a>
-      <a class="nav-item" href="s25.html"><span class="nav-icon">⌨️</span><span class="nav-item-text">25. Live coding (C#)</span><span class="nav-check" onclick="toggleRead(event,'s25')"></span></a>
-      <a class="nav-item" href="s26.html"><span class="nav-icon">⚡</span><span class="nav-item-text">26. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s26')"></span></a>
+      <a class="nav-item" href="s18.html"><span class="nav-icon">🔍</span><span class="nav-item-text">18. Debugging i observability</span><span class="nav-check" onclick="toggleRead(event,'s18')"></span></a>
+      <a class="nav-item" href="s19.html"><span class="nav-icon">🔧</span><span class="nav-item-text">19. Framework arhitektura</span><span class="nav-check" onclick="toggleRead(event,'s19')"></span></a>
+      <a class="nav-item" href="s20.html"><span class="nav-icon">📈</span><span class="nav-item-text">20. Performance testing</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
+      <a class="nav-item" href="s21.html"><span class="nav-icon">📱</span><span class="nav-item-text">21. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
+      <a class="nav-item" href="s22.html"><span class="nav-icon">🧠</span><span class="nav-item-text">22. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s22')"></span></a>
+      <a class="nav-item" href="s23.html"><span class="nav-icon">📚</span><span class="nav-item-text">23. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s23')"></span></a>
+      <a class="nav-item" href="s24.html"><span class="nav-icon">🎤</span><span class="nav-item-text">24. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s24')"></span></a>
+      <a class="nav-item" href="s25.html"><span class="nav-icon">💼</span><span class="nav-item-text">25. Intervju strategija</span><span class="nav-check" onclick="toggleRead(event,'s25')"></span></a>
+      <a class="nav-item" href="s26.html"><span class="nav-icon">⌨️</span><span class="nav-item-text">26. Live coding (C#)</span><span class="nav-check" onclick="toggleRead(event,'s26')"></span></a>
+      <a class="nav-item" href="s27.html"><span class="nav-icon">📄</span><span class="nav-item-text">27. Templates</span><span class="nav-check" onclick="toggleRead(event,'s27')"></span></a>
+      <a class="nav-item" href="s28.html"><span class="nav-icon">⚡</span><span class="nav-item-text">28. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s28')"></span></a>
     </div>
   </nav>
 </div>
@@ -185,7 +187,7 @@ public void CreateUser_WithValidData_ShouldReturn201()
  Assert.Equal(HttpStatusCode.Created, response.StatusCode);
  Assert.Contains("new@test.com", response.Content);
 }</pre></div>
-<div class="note">RestSharp je native C# HTTP klijent — prirodan izbor za API testove u istom solution-u sa Selenium testovima (videti Sekciju 18), bez prebacivanja na JavaScript/Newman.</div>
+<div class="note">RestSharp je native C# HTTP klijent — prirodan izbor za API testove u istom solution-u sa Selenium testovima (videti Sekciju 19), bez prebacivanja na JavaScript/Newman.</div>
 <h2 class="sub-title">15.6 Newman — Postman u CI/CD-u</h2>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>npm install -g newman newman-reporter-htmlextra
 
