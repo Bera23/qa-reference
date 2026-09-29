@@ -111,8 +111,41 @@
 <div class="section" id="index">
 <h1 class="sec-title" id="t-index">📘 QA Referentni Dokument<span class="read-badge">✓ Procitano</span></h1>
 
+<h2 class="sub-title">O ovom dokumentu</h2>
+<p class="body-text"><strong>Sta je:</strong> Licna QA referenca i sistem za pripremu intervjua. Nije udzbenik, nije blog, nije zamena za iskustvo — dokument koji raste kroz rad i kroz intervjue.</p>
+<p class="body-text"><strong>Kako je organizovan:</strong> Sekcije 1-22 su referentni materijal — tehnicke teme sa primerima i "zasto", ne samo definicije. Sekcije 23-28 su licni sloj: Glosar, Q&A sa kviz modom i STAR pricama, intervju strategija (CV odbrana, tool rationale, lessons learned), live coding, sabloni, cheat sheet.</p>
+<p class="body-text"><strong>Kako se koristi:</strong> Tri rezima, u zavisnosti od vremena. Pet minuta pred poziv — sekcije 24-28, kviz mod za brzo ponavljanje. Ucim temu iz nule — 1-22 za dubinu, pa kviz mod za tu temu kasnije. Posle intervjua — 25.17 (dnevnik sta me je zeznulo) i 25.18 (lessons learned).</p>
+
+<h3 class="sub-sub-title">Principi</h3>
+<ul>
+<li class="bullet-item">Samo ono sto sam stvarno radio — nema alata i tehnika koje nisam koristio, cak i ako su popularne. Bolje praznina nego lazna dubina.</li>
+<li class="bullet-item">Referenca + licni sloj, ne jedno ili drugo — dubina za ucenje, price za intervju. Ne rusiti tu strukturu u jednu listu.</li>
+<li class="bullet-item">Osnovne stvari ostaju — HTTP kodovi, severity/priority, wait strategije. Zvuce trivijalno, ali se pod pritiskom magle. Kviz mod postoji bas za to.</li>
+<li class="bullet-item">Metrike samo prave — bez izmisljanja brojeva u CV-u ili pricama, cak ni kao "procena".</li>
+<li class="bullet-item">Testovi za logiku koja se ne vidi golim okom — closure, filter, multi-step tok. Ne za sve, samo gde stvarno puca.</li>
+</ul>
+
+<h3 class="sub-sub-title">Mapa dokumenta</h3>
+<div class="tbl-wrap"><table><thead><tr><th>Opseg</th><th>Sta pokriva</th></tr></thead><tbody>
+<tr><td>1-10</td><td>Osnove i metodologija manuelnog testiranja — terminologija, SDLC/STLC, tipovi, tehnike dizajna, test case i bug report, test plan, Agile, dokumentacija, test okruzenje.</td></tr>
+<tr><td>11-22</td><td>Automatizacija i tehnicke teme — OOP, Selenium, POM, API, SQL, CI/CD, Linux, debugging/observability, framework arhitektura, performance, mobile, AI.</td></tr>
+<tr><td>23</td><td>Glosar — pojmovi po azbucnom redu.</td></tr>
+<tr><td>24</td><td>Pitanja i odgovori — kviz mod za aktivno ponavljanje (nasumican izbor, slabe tacke, statistika), STAR price u Deo III.</td></tr>
+<tr><td>25</td><td>Intervju strategija — prica o sebi, odbrana CV-a, "zasto ovaj alat", moje slabosti, post-intervju dnevnik (25.17), lessons learned/decision log (25.18).</td></tr>
+<tr><td>26-28</td><td>Live coding (C#), prazni sabloni za copy-paste, cheat sheet za brzo skeniranje.</td></tr>
+</tbody></table></div>
+
+<h3 class="sub-sub-title">Sta nije u ovom dokumentu</h3>
+<ul>
+<li class="bullet-item">Alati koje nisam koristio dublje od poredjenja — npr. Playwright se pominje u odnosu na Selenium, ali nema svoju sekciju. Svesno izostavljeno, ne zato sto ne znam da postoji.</li>
+<li class="bullet-item">Security testing kao samostalna disciplina — dodirnut kao tip testiranja (Sekcija 3.4) i OWASP/SQL injection u API/debugging kontekstu, ne kao posebna dubinska sekcija.</li>
+<li class="bullet-item">Duboka akademska teorija test dizajna — ovo je radna referenca, ne udzbenik.</li>
+<li class="bullet-item">Timske konvencije i interni procesi konkretnog poslodavca — ovo je licni dokument, ne projektna dokumentacija.</li>
+</ul>
+
+<h2 class="sub-title">Sve sekcije</h2>
 <p class="body-text">Licni referentni materijal za manuelno i automatizovano testiranje — izaberi temu iz liste levo, ili ispod.</p>
-<h2 class="sub-title">Deo I — Manualno testiranje</h2>
+<h3 class="sub-sub-title">Deo I — Manualno testiranje</h3>
 <ul>
 <li class="bullet-item"><a class="toc-link" href="s01.html">📖 1. Osnove i terminologija</a></li>
 <li class="bullet-item"><a class="toc-link" href="s02.html">🔄 2. SDLC i STLC</a></li>
@@ -125,7 +158,7 @@
 <li class="bullet-item"><a class="toc-link" href="s09.html">📊 9. Test dokumentacija</a></li>
 <li class="bullet-item"><a class="toc-link" href="s10.html">🗄️ 10. Test okruzenje i podaci</a></li>
 </ul>
-<h2 class="sub-title">Deo II — Automatizacija</h2>
+<h3 class="sub-sub-title">Deo II — Automatizacija</h3>
 <ul>
 <li class="bullet-item"><a class="toc-link" href="s11.html">🤖 11. Uvod u automatizaciju</a></li>
 <li class="bullet-item"><a class="toc-link" href="s12.html">🧩 12. OOP koncepti (C#)</a></li>
@@ -146,6 +179,7 @@
 <li class="bullet-item"><a class="toc-link" href="s27.html">📄 27. Templates</a></li>
 <li class="bullet-item"><a class="toc-link" href="s28.html">⚡ 28. Cheat Sheet</a></li>
 </ul>
+<div class="doc-version">Verzija: <code>7af91f6</code> · azurirano: 2026-09-29</div>
 <div class="section-nav"><div></div><div></div></div>
 </div>
   </div>
