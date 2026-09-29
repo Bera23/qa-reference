@@ -161,6 +161,8 @@ const TAG_RULES = [
 // listed in WORD_BOUNDARY_KEYWORDS below — short tokens confirmed to collide with an unrelated
 // substring (so far: "oop" inside "loop" — English tech loanwords don't decline, so the
 // boundary is safe for them specifically without cutting off a Serbian case ending).
+// RULE for adding to this set: only English acronyms/loanwords that Serbian does NOT decline
+// (no case ending gets glued on) belong here — a normal Serbian noun/keyword never should.
 const WORD_BOUNDARY_KEYWORDS = new Set(['oop']);
 function keywordMatches(lower, keyword) {
   if (WORD_BOUNDARY_KEYWORDS.has(keyword)) return new RegExp('\\b' + keyword + '\\b').test(lower);
