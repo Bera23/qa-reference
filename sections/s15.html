@@ -75,7 +75,7 @@ public void CreateUser_WithValidData_ShouldReturn201()
  Assert.Equal(HttpStatusCode.Created, response.StatusCode);
  Assert.Contains("new@test.com", response.Content);
 }</pre></div>
-<div class="note">RestSharp je native C# HTTP klijent — prirodan izbor za API testove u istom solution-u sa Selenium testovima (videti Sekciju 18), bez prebacivanja na JavaScript/Newman.</div>
+<div class="note">RestSharp je native C# HTTP klijent — prirodan izbor za API testove u istom solution-u sa Selenium testovima (videti Sekciju 19), bez prebacivanja na JavaScript/Newman.</div>
 <h2 class="sub-title">15.6 Newman — Postman u CI/CD-u</h2>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>npm install -g newman newman-reporter-htmlextra
 

@@ -1,534 +1,198 @@
-<p class="body-text">Live coding u QA automation intervjuu retko je tezak algoritam. Proverava se da li pod pritiskom pises citljiv C#, da li razmisljas naglas i da li testiras sopstveni kod. Ispod su najcesci zadaci (FizzBuzz, obrtanje stringa, duplikati...), grupisani, sa resenjem, edge case-ovima i tipicnim potpitanjem.</p>
-<div class="note">Svi primeri pretpostavljaju <code>using System; using System.Collections.Generic; using System.Linq; using System.Text; using System.Threading;</code> i da se metode nalaze u statickoj klasi <code>Solutions</code>. Sva resenja su kompajlirana i pokrenuta (.NET 8) nad test primerima, ukljucujuci edge case-ove. Komentari u kodu su na engleskom, kao u pravom projektu.</div>
-<h2 class="sub-title">25.1 Kako pristupiti live coding zadatku</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Korak</th><th>Sta radis</th><th>Primer recenice</th></tr></thead><tbody>
-<tr><td>1. Razjasni</td><td>Tip i opseg ulaza, da li moze biti null ili prazan, da li je poredjenje case-sensitive, sta se vraca kad nema resenja.</td><td>"Da li ulaz moze biti null? Da li su velika i mala slova ista?"</td></tr>
-<tr><td>2. Primeri</td><td>Napisi 2-3 primera i jedan edge case pre koda.</td><td>"Za hello ocekujem olleh, a za prazan string prazan string."</td></tr>
-<tr><td>3. Pristup</td><td>Reci najjednostavnije resenje, njegovu slozenost, pa moguce poboljsanje.</td><td>"Prvo bih uradio sa dve petlje, O(n^2), pa zamenio HashSet-om."</td></tr>
-<tr><td>4. Kod</td><td>Male metode, jasna imena, guard klauze. Ne optimizuj prerano.</td><td>"Pocinjem sa proverom null ulaza."</td></tr>
-<tr><td>5. Dry run</td><td>Prodji jedan primer rucno kroz kod, pa edge case.</td><td>"Za ulaz aab, prvi prolaz daje a:2 i b:1..."</td></tr>
-<tr><td>6. Testovi</td><td>Predlozi ili napisi testove (25.7). To je tvoja QA prednost.</td><td>"Dodao bih Theory sa praznim stringom, jednim znakom i null-om."</td></tr>
+<p class="body-text">Tehnicko znanje (Sekcija 24) je pola intervjua. Druga polovina je kako ga ispricas: kratko, konkretno i sa brojevima. Ova sekcija je okvir za to, a primeri su gradjeni na tvom CV-u.</p>
+<h2 class="sub-title">25.1 Prica o sebi (60-90 sekundi)</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Deo</th><th>Sta pokrivas</th><th>Trajanje</th></tr></thead><tbody>
+<tr><td>Sadasnjost</td><td>Trenutna uloga, sta tacno radis i jedan konkretan broj koji pokazuje obim.</td><td>~30s</td></tr>
+<tr><td>Proslost</td><td>Kratko: gde si gradio temelje (prethodni posao) i sta si tamo naucio sto se direktno prenosi.</td><td>~20s</td></tr>
+<tr><td>Buducnost</td><td>Zasto bas ova pozicija — jedna recenica koja spaja tvoje iskustvo sa onim sto oni traze.</td><td>~15s</td></tr>
 </tbody></table></div>
-<div class="tbl-wrap"><table><thead><tr><th>Cest pad</th><th>Sta umesto toga</th></tr></thead><tbody>
-<tr><td>Tisina dok pises</td><td>Misli naglas, i kad si zaglavljen. Intervjuer ocenjuje razmisljanje, ne samo rezultat.</td></tr>
-<tr><td>Skok u kod bez pitanja</td><td>Prvo razjasni ulaz i edge case-ove (korak 1).</td></tr>
-<tr><td>Ignorisanje null i praznog ulaza</td><td>Guard klauza ili eksplicitno pitanje o ugovoru metode.</td></tr>
-<tr><td>Nema dry run-a</td><td>Prodji jedan primer kroz kod pre nego sto kazes "gotovo".</td></tr>
-<tr><td>Prerano optimizovanje</td><td>Prvo tacno i citljivo, pa slozenost.</td></tr>
-<tr><td>Panika oko sintakse</td><td>"Tacnu sintaksu bih proverio u dokumentaciji, logika je ovakva." Logika je bitnija od napamet naucene sintakse.</td></tr>
+<p class="body-text"><strong>Primer (gradjen na CV-u — prilagodi poslednju recenicu svakoj poziciji):</strong> "Radim kao QA Automation Engineer u Trace One-u na enterprise PLM web aplikaciji. Vlasnik sam jednog od 22 paralelna nightly regression protokola — 47 suita i oko 5000 asercija na 4-5 okruzenja sa razlicitim verzijama proizvoda — i svakog jutra radim triage padova: razdvajam prave regresije od pokvarenih skripti i problema okruzenja. Pre toga sam u Qinshift-u tri godine gradio Selenium/C# automatizaciju i radio API i SQL validaciju. U poslednje vreme testiram i AI funkcionalnosti, Copilot asistenta i data extraction. Trazim ulogu gde mogu da [ono sto te vuce ka toj poziciji]."</p>
+<div class="note">Ne recituj CV redom. Biraj 2-3 stvari sa brojevima i ostavi ostalo za potpitanja. Brojeve iz CV-a (47 suita, 342 changeset-a, 524 change request-a) proveri i osvezi pre svakog intervjua.</div>
+<h2 class="sub-title">25.2 STAR metoda i priprema prica</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Slovo</th><th>Sta kazes</th><th>Cesta greska</th></tr></thead><tbody>
+<tr><td>Situation</td><td>Kontekst u 1-2 recenice: projekat, tim, problem.</td><td>Predugo uvodjenje, do price se stize tek posle minuta.</td></tr>
+<tr><td>Task</td><td>Sta je tacno bilo TVOJE da resis.</td><td>Govorenje "mi" umesto "ja" — intervjuer ne moze da izmeri tvoj doprinos.</td></tr>
+<tr><td>Action</td><td>2-3 konkretna koraka koja si TI preduzeo, i zasto bas ta.</td><td>Nabrajanje alata umesto odluka.</td></tr>
+<tr><td>Result</td><td>Ishod, po mogucnosti sa brojem, i sta si naucio.</td><td>Price bez kraja ("i onda je nekako proslo").</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">25.2 Sta moras da znas napamet</h2>
-<p class="body-text">Manje od 20 poziva pokriva veliku vecinu zadataka. Objasnjenje LINQ-a je u Sekciji 12.12.</p>
-<div class="tbl-wrap"><table><thead><tr><th>Potreba</th><th>C#</th><th>Napomena</th></tr></thead><tbody>
-<tr><td>Podela i spajanje stringa</td><td><code>text.Split(' ')</code>, <code>string.Join(" ", parts)</code></td><td>Sa <code>StringSplitOptions.RemoveEmptyEntries</code> nestaju prazne reci.</td></tr>
-<tr><td>String u niz znakova i nazad</td><td><code>ToCharArray()</code>, <code>new string(chars)</code></td><td>Osnova za obrtanje i zamene u mestu.</td></tr>
-<tr><td>Obrtanje niza</td><td><code>Array.Reverse(arr)</code></td><td>Menja niz u mestu i ne vraca nista.</td></tr>
-<tr><td>Provera znaka</td><td><code>char.IsLetterOrDigit(c)</code>, <code>char.ToLowerInvariant(c)</code></td><td>Invariant je bezbedniji od kulture racunara.</td></tr>
-<tr><td>Gradjenje stringa u petlji</td><td><code>StringBuilder.Append(...)</code>, <code>ToString()</code></td><td><code>+=</code> u petlji je O(n^2).</td></tr>
-<tr><td>Recnik</td><td><code>TryGetValue(key, out int v)</code>, <code>counts[key] = v + 1</code></td><td><code>counts[key]++</code> baca KeyNotFoundException za novi kljuc.</td></tr>
-<tr><td>Skup</td><td><code>HashSet&lt;T&gt;.Add(x)</code></td><td>Vraca false ako element vec postoji.</td></tr>
-<tr><td>LINQ</td><td><code>Where</code>, <code>Select</code>, <code>GroupBy</code>, <code>Any</code>, <code>All</code>, <code>Distinct</code>, <code>OrderBy</code>, <code>ToDictionary</code></td><td>Lazy: izvrsava se tek pri iteraciji ili <code>ToList()</code>.</td></tr>
-<tr><td>Poredjenje stringova</td><td><code>string.Equals(a, b, StringComparison.OrdinalIgnoreCase)</code></td><td>Ne koristi <code>ToLower()</code> samo za poredjenje.</td></tr>
-<tr><td>Parsiranje broja</td><td><code>int.TryParse(text, out int n)</code></td><td>Ne baca izuzetak za los ulaz.</td></tr>
+<p class="body-text">Pripremi 4-5 prica koje mozes da savijes na vise pitanja (sukob, greska, prioritizacija, poboljsanje procesa, ucenje novog). Iz CV-a vec imas materijal:</p>
+<div class="tbl-wrap"><table><thead><tr><th>Prica iz tvog iskustva</th><th>Na koja pitanja radi</th></tr></thead><tbody>
+<tr><td>Stabilizacija flaky skripti (lokatori, wait-ovi, retry, izolacija podataka)</td><td>Tehnicki izazov, poboljsanje procesa, odrzavanje kvaliteta.</td></tr>
+<tr><td>Jedini vlasnik jednog od 22 nightly protokola, dnevni triage</td><td>Odgovornost, prioritizacija, rad pod pritiskom, samostalnost.</td></tr>
+<tr><td>Validacija AI funkcionalnosti (hallucination, permission-bound upiti)</td><td>Ucenje novog, rad bez gotovog recepta, inicijativa.</td></tr>
+<tr><td>~40% asercija u nasledjenom regression suite-u, 342 changeset-a</td><td>Vlasnistvo nad kodom, doprinos timu, kvalitet koda.</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">25.3 Brojevi i petlje</h2>
-<h3 class="sub-sub-title">FizzBuzz</h3>
-<p class="body-text"><strong>Zadatak:</strong> Za brojeve od 1 do 100 ispisi "Fizz" za umnoske broja 3, "Buzz" za umnoske broja 5 i "FizzBuzz" za umnoske oba; za ostale sam broj.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static string FizzBuzz(int n)
-{
-    // Check the combined case first, otherwise 15 would stop at the Fizz branch
-    if (n % 15 == 0) return "FizzBuzz";
-    if (n % 3 == 0) return "Fizz";
-    if (n % 5 == 0) return "Buzz";
-    return n.ToString();
-}
-
-// Variant that is easy to extend when the interviewer adds a rule (for example 7 = Bazz)
-public static string FizzBuzzConcat(int n)
-{
-    string result = "";
-    if (n % 3 == 0) result += "Fizz";
-    if (n % 5 == 0) result += "Buzz";
-    return result.Length == 0 ? n.ToString() : result;
-}</pre></div>
-<div class="note">Klasicna zamka je redosled: kombinovani slucaj (<code>n % 15</code>) mora prvi. Ispis je petlja <code>for (int i = 1; i &lt;= 100; i++)</code> koja poziva metodu. Druga varijanta se lakse prosiruje, pa je dobar odgovor na pitanje "sta ako dodam jos jedno pravilo?".</div>
-<h3 class="sub-sub-title">Da li je broj prost</h3>
-<p class="body-text"><strong>Zadatak:</strong> Napisi metodu koja vraca <code>true</code> ako je broj prost. Primer: 7 je prost, 9 nije, 1 i negativni brojevi nisu.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static bool IsPrime(int n)
-{
-    if (n &lt; 2) return false;
-    // Only divisors up to the square root need to be checked
-    // The long cast prevents overflow of i * i for values close to int.MaxValue
-    for (int i = 2; (long)i * i &lt;= n; i++)
-    {
-        if (n % i == 0) return false;
-    }
-    return true;
-}</pre></div>
-<div class="note">Naivno resenje (deljenje do n - 1) je O(n); do korena je O(sqrt n). Edge case-ovi koje intervjuer voli: 0, 1, 2 (jedini paran prost) i negativni brojevi.</div>
-<h3 class="sub-sub-title">Zbir cifara</h3>
-<p class="body-text"><strong>Zadatak:</strong> Vrati zbir cifara celog broja. Primer: 1234 daje 10.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static int SumOfDigits(int n)
-{
-    // Math.Abs would throw for int.MinValue, so widen to long first
-    long value = Math.Abs((long)n);
-    int sum = 0;
-    while (value &gt; 0)
-    {
-        sum += (int)(value % 10);
-        value /= 10;
-    }
-    return sum;
-}</pre></div>
-<div class="note">Modulo 10 daje poslednju cifru, deljenje sa 10 je odsece. Pitanje "sta sa negativnim brojem?" je cesto; <code>Math.Abs(int.MinValue)</code> baca <code>OverflowException</code>, zato prvo prosirenje na <code>long</code>.</div>
-<h3 class="sub-sub-title">Zameni dve promenljive bez trece</h3>
-<p class="body-text"><strong>Zadatak:</strong> Zameni vrednosti dva cela broja bez pomocne (temp) promenljive.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static void Swap(ref int a, ref int b)
-{
-    // Tuple deconstruction (C# 7+): the usual modern answer
-    (a, b) = (b, a);
-}
-
-public static void SwapXor(ref int a, ref int b)
-{
-    // XOR swap: no third variable and no overflow
-    // Breaks if both parameters refer to the same variable (the value becomes 0)
-    a ^= b;
-    b ^= a;
-    a ^= b;
-}</pre></div>
-<div class="note">Stara varijanta <code>a = a + b; b = a - b; a = a - b;</code> radi, ali moze da preplavi <code>int</code>. Intervjuer obicno trazi da znas zasto je XOR bezbedniji od sabiranja.</div>
-<h3 class="sub-sub-title">Fibonacci (n-ti clan)</h3>
-<p class="body-text"><strong>Zadatak:</strong> Vrati n-ti Fibonacci broj (0, 1, 1, 2, 3, 5, 8, ...). F(0) = 0, F(1) = 1.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static long Fibonacci(int n)
-{
-    if (n &lt; 0) throw new ArgumentOutOfRangeException(nameof(n));
-    long previous = 0, current = 1;
-    // After n steps, previous holds F(n)
-    for (int i = 0; i &lt; n; i++)
-    {
-        long next = previous + current;
-        previous = current;
-        current = next;
-    }
-    return previous;
-}</pre></div>
-<div class="note">Iterativno resenje je O(n) vreme i O(1) memorija. Rekurzivno <code>F(n-1) + F(n-2)</code> je O(2^n) i zato se pita "zasto je sporo?". <code>long</code> preplavljuje kod n = 93.</div>
-<h2 class="sub-title">25.4 Stringovi</h2>
-<h3 class="sub-sub-title">Obrni string</h3>
-<p class="body-text"><strong>Zadatak:</strong> Vrati string u obrnutom redosledu. Primer: "hello" daje "olleh".</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static string ReverseString(string input)
-{
-    if (input == null) throw new ArgumentNullException(nameof(input));
-    char[] chars = input.ToCharArray();
-    Array.Reverse(chars);
-    return new string(chars);
-}
-
-// Manual version: two pointers swap characters from both ends, O(n) time
-public static string ReverseManual(string input)
-{
-    if (input == null) throw new ArgumentNullException(nameof(input));
-    char[] chars = input.ToCharArray();
-    int left = 0, right = chars.Length - 1;
-    while (left &lt; right)
-    {
-        (chars[left], chars[right]) = (chars[right], chars[left]);
-        left++;
-        right--;
-    }
-    return new string(chars);
-}</pre></div>
-<div class="note">Ako kazu "bez ugradjenih metoda", ide rucna verzija. Zamke: <code>result += c</code> u petlji je O(n^2) (koristi <code>StringBuilder</code> ili char niz), a obrtanje po <code>char</code>-u lomi surrogate parove (emoji); za pun Unicode treba <code>StringInfo</code> / <code>TextElementEnumerator</code>.</div>
-<h3 class="sub-sub-title">Palindrom</h3>
-<p class="body-text"><strong>Zadatak:</strong> Proveri da li je tekst palindrom, ignorisuci velika/mala slova i znakove koji nisu slova ili cifre. Primer: "A man, a plan, a canal: Panama" je palindrom.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static bool IsPalindrome(string input)
-{
-    if (input == null) throw new ArgumentNullException(nameof(input));
-    int left = 0, right = input.Length - 1;
-    while (left &lt; right)
-    {
-        // Skip characters that are not letters or digits
-        if (!char.IsLetterOrDigit(input[left])) { left++; continue; }
-        if (!char.IsLetterOrDigit(input[right])) { right--; continue; }
-        if (char.ToLowerInvariant(input[left]) != char.ToLowerInvariant(input[right])) return false;
-        left++;
-        right--;
-    }
-    return true;
-}</pre></div>
-<div class="note">Dva pokazivaca ne prave novi string (O(1) memorija), za razliku od "obrni pa uporedi". Prvo pitaj da li se razmaci, interpunkcija i velika slova ignorisu. Edge case-ovi: prazan string, jedan znak i tekst od samih znakova interpunkcije.</div>
-<h3 class="sub-sub-title">Obrni redosled reci</h3>
-<p class="body-text"><strong>Zadatak:</strong> Obrni redosled reci u recenici. Primer: "the sky is blue" daje "blue is sky the".</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static string ReverseWords(string sentence)
-{
-    if (sentence == null) throw new ArgumentNullException(nameof(sentence));
-    // RemoveEmptyEntries also collapses repeated and leading/trailing spaces
-    string[] words = sentence.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-    Array.Reverse(words);
-    return string.Join(" ", words);
-}</pre></div>
-<div class="note">Cesta greska: <code>Split(' ')</code> bez <code>RemoveEmptyEntries</code> ostavlja prazne reci kad ima duplih razmaka. Pitanje za intervjuera: ostaju li viskovi razmaka ili se skupljaju?</div>
-<h3 class="sub-sub-title">Prebroj samoglasnike</h3>
-<p class="body-text"><strong>Zadatak:</strong> Vrati broj samoglasnika u stringu. Primer: "Beautiful" daje 5.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static int CountVowels(string input)
-{
-    if (input == null) throw new ArgumentNullException(nameof(input));
-    const string vowels = "aeiouAEIOU";
-    int count = 0;
-    foreach (char c in input)
-    {
-        if (vowels.IndexOf(c) &gt;= 0) count++;
-    }
-    return count;
-}</pre></div>
-<div class="note">LINQ varijanta: <code>input.Count(c =&gt; "aeiouAEIOU".Contains(c))</code>. Pitaj da li se "y" racuna i da li je poredjenje case-sensitive; alternativa je <code>char.ToLowerInvariant</code> pa jedan skup malih slova.</div>
-<h3 class="sub-sub-title">Ucestalost znakova</h3>
-<p class="body-text"><strong>Zadatak:</strong> Prebroj koliko se puta svaki znak pojavljuje u stringu. Primer: "hello" daje h:1, e:1, l:2, o:1.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static Dictionary&lt;char, int&gt; CharFrequency(string input)
-{
-    if (input == null) throw new ArgumentNullException(nameof(input));
-    var counts = new Dictionary&lt;char, int&gt;();
-    foreach (char c in input)
-    {
-        // TryGetValue leaves current at 0 when the key is missing
-        counts.TryGetValue(c, out int current);
-        counts[c] = current + 1;
-    }
-    return counts;
-}
-
-// LINQ variant: shorter, same result
-public static Dictionary&lt;char, int&gt; CharFrequencyLinq(string input)
-{
-    if (input == null) throw new ArgumentNullException(nameof(input));
-    return input.GroupBy(c =&gt; c).ToDictionary(g =&gt; g.Key, g =&gt; g.Count());
-}</pre></div>
-<div class="note">Ovaj obrazac (<code>TryGetValue</code> pa upis) je osnova za skoro sve zadatke o duplikatima. <code>counts[c]++</code> baca <code>KeyNotFoundException</code> za novi kljuc, pa se ne koristi bez provere. Da li je "a" isto sto i "A" je pitanje koje treba postaviti.</div>
-<h3 class="sub-sub-title">Prvi znak koji se ne ponavlja</h3>
-<p class="body-text"><strong>Zadatak:</strong> Vrati prvi znak koji se u stringu pojavljuje tacno jednom, ili <code>null</code> ako takvog nema. Primer: "swiss" daje "w".</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static char? FirstNonRepeatingChar(string input)
-{
-    if (input == null) throw new ArgumentNullException(nameof(input));
-    var counts = new Dictionary&lt;char, int&gt;();
-    foreach (char c in input)
-    {
-        counts.TryGetValue(c, out int current);
-        counts[c] = current + 1;
-    }
-    // A second pass over the input keeps the original order
-    foreach (char c in input)
-    {
-        if (counts[c] == 1) return c;
-    }
-    return null;
-}</pre></div>
-<div class="note">Dva prolaza, O(n) vreme i memorija. Vracanje <code>char?</code> je bolje od "magicne" vrednosti kao sto je <code>'\0'</code>. Redosled se cuva prolaskom kroz originalni string, a ne kroz recnik.</div>
-<h3 class="sub-sub-title">Anagrami</h3>
-<p class="body-text"><strong>Zadatak:</strong> Proveri da li su dva stringa anagrami (isti znaci u drugom redosledu). Primer: "listen" i "silent" jesu, "hello" i "world" nisu.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static bool AreAnagrams(string first, string second)
-{
-    if (first == null || second == null) return false;
-    if (first.Length != second.Length) return false;
-    var counts = new Dictionary&lt;char, int&gt;();
-    foreach (char c in first)
-    {
-        counts.TryGetValue(c, out int current);
-        counts[c] = current + 1;
-    }
-    foreach (char c in second)
-    {
-        // A missing or exhausted letter means the strings differ
-        if (!counts.TryGetValue(c, out int current) || current == 0) return false;
-        counts[c] = current - 1;
-    }
-    return true;
-}</pre></div>
-<div class="note">Alternativa je sortiranje oba stringa pa poredjenje (<code>first.OrderBy(c =&gt; c).SequenceEqual(second.OrderBy(c =&gt; c))</code>), kratko ali O(n log n). Provera duzine na pocetku je jeftin izlaz. Pitaj: case-sensitive? Razmaci se ignorisu?</div>
-<h3 class="sub-sub-title">Kompresija stringa (run-length)</h3>
-<p class="body-text"><strong>Zadatak:</strong> Kompresuj uzastopne znakove u znak i broj ponavljanja. Primer: "aabcccccaaa" daje "a2b1c5a3".</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static string CompressString(string input)
-{
-    if (input == null) throw new ArgumentNullException(nameof(input));
-    if (input.Length == 0) return input;
-    var result = new StringBuilder();
-    int runLength = 1;
-    for (int i = 1; i &lt;= input.Length; i++)
-    {
-        // The extra final iteration flushes the last run
-        if (i &lt; input.Length &amp;&amp; input[i] == input[i - 1])
-        {
-            runLength++;
-        }
-        else
-        {
-            result.Append(input[i - 1]).Append(runLength);
-            runLength = 1;
-        }
-    }
-    return result.ToString();
-}</pre></div>
-<div class="note">Trik je da petlja ide do <code>i &lt;= input.Length</code> kako bi se poslednja serija upisala. Za "abc" rezultat je "a1b1c1", duzi od originala; cest je dodatni zahtev "vrati original ako kompresija nije kraca". <code>StringBuilder</code> umesto <code>+=</code> je poenta zadatka.</div>
-<h3 class="sub-sub-title">Ukloni duplirane znakove</h3>
-<p class="body-text"><strong>Zadatak:</strong> Ukloni ponovljene znakove, zadrzavajuci prvo pojavljivanje i redosled. Primer: "programming" daje "progamin".</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static string RemoveDuplicateChars(string input)
-{
-    if (input == null) throw new ArgumentNullException(nameof(input));
-    var seen = new HashSet&lt;char&gt;();
-    var result = new StringBuilder();
-    foreach (char c in input)
-    {
-        // HashSet.Add returns false when the element is already present
-        if (seen.Add(c)) result.Append(c);
-    }
-    return result.ToString();
-}</pre></div>
-<div class="note"><code>HashSet.Add</code> istovremeno proverava i dodaje, pa nema posebnog <code>Contains</code>. LINQ jednolinijsko: <code>new string(input.Distinct().ToArray())</code>.</div>
-<h2 class="sub-title">25.5 Nizovi i duplikati</h2>
-<h3 class="sub-sub-title">Pronadji duplikate u nizu</h3>
-<p class="body-text"><strong>Zadatak:</strong> Vrati vrednosti koje se u nizu pojavljuju vise od jednom (svaku samo jednom). Primer: { 1, 2, 3, 2, 4, 5, 5 } daje { 2, 5 }.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static List&lt;int&gt; FindDuplicates(int[] numbers)
-{
-    if (numbers == null) throw new ArgumentNullException(nameof(numbers));
-    var seen = new HashSet&lt;int&gt;();
-    var duplicates = new HashSet&lt;int&gt;();
-    foreach (int n in numbers)
-    {
-        // Add returns false on the second and every later occurrence
-        if (!seen.Add(n)) duplicates.Add(n);
-    }
-    return duplicates.ToList();
-}</pre></div>
-<div class="note">Jedan prolaz, O(n) vreme i memorija. Naivno resenje sa dve petlje je O(n^2), i to je tipican "prvi pokusaj" koji intervjuer trazi da poboljsas. LINQ: <code>numbers.GroupBy(x =&gt; x).Where(g =&gt; g.Count() &gt; 1).Select(g =&gt; g.Key)</code>. Redosled rezultata nije garantovan.</div>
-<h3 class="sub-sub-title">Prebroj duplikate</h3>
-<p class="body-text"><strong>Zadatak:</strong> Za svaku vrednost koja se ponavlja vrati koliko se puta pojavljuje. Primer: { 1, 2, 3, 2, 4, 5, 5, 5 } daje 2 puta 2 i 3 puta 5.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static Dictionary&lt;int, int&gt; CountDuplicates(int[] numbers)
-{
-    if (numbers == null) throw new ArgumentNullException(nameof(numbers));
-    return numbers
-        .GroupBy(n =&gt; n)
-        .Where(group =&gt; group.Count() &gt; 1)
-        .ToDictionary(group =&gt; group.Key, group =&gt; group.Count());
-}
-
-// Manual version with a Dictionary, same result
-public static Dictionary&lt;int, int&gt; CountDuplicatesManual(int[] numbers)
-{
-    if (numbers == null) throw new ArgumentNullException(nameof(numbers));
-    var counts = new Dictionary&lt;int, int&gt;();
-    foreach (int n in numbers)
-    {
-        counts.TryGetValue(n, out int current);
-        counts[n] = current + 1;
-    }
-    // Keep only the values seen more than once
-    return counts
-        .Where(pair =&gt; pair.Value &gt; 1)
-        .ToDictionary(pair =&gt; pair.Key, pair =&gt; pair.Value);
-}</pre></div>
-<div class="note">Ovo je uopstenje zadatka iznad: umesto <code>bool</code> cuvamo broj pojavljivanja. LINQ verzija je kratka, a rucna pokazuje da razumes sta <code>GroupBy</code> radi ispod haube. Ako trebaju samo vrednosti sa najvecim brojem ponavljanja, dodaj <code>OrderByDescending(pair =&gt; pair.Value)</code>.</div>
-<h3 class="sub-sub-title">Ukloni duplikate iz niza</h3>
-<p class="body-text"><strong>Zadatak:</strong> Vrati niz bez duplikata, zadrzavajuci redosled prvog pojavljivanja. Primer: { 3, 1, 3, 2, 1 } daje { 3, 1, 2 }.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static int[] RemoveDuplicates(int[] numbers)
-{
-    if (numbers == null) throw new ArgumentNullException(nameof(numbers));
-    var seen = new HashSet&lt;int&gt;();
-    var result = new List&lt;int&gt;();
-    foreach (int n in numbers)
-    {
-        if (seen.Add(n)) result.Add(n);
-    }
-    return result.ToArray();
-}</pre></div>
-<div class="note">Jednolinijsko je <code>numbers.Distinct().ToArray()</code>. U praksi cuva redosled prvog pojavljivanja, ali dokumentacija to ne garantuje, dok rucna verzija garantuje. Ako je niz vec sortiran, dovoljan je jedan prolaz sa dva pokazivaca bez dodatne memorije.</div>
-<h3 class="sub-sub-title">Drugi najveci element</h3>
-<p class="body-text"><strong>Zadatak:</strong> Vrati drugi najveci (razlicit od najveceg) element bez sortiranja, ili <code>null</code> ako ne postoji. Primer: { 3, 1, 4, 1, 5, 9 } daje 5.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static int? SecondLargest(int[] numbers)
-{
-    if (numbers == null) throw new ArgumentNullException(nameof(numbers));
-    int? largest = null;
-    int? second = null;
-    foreach (int n in numbers)
-    {
-        if (largest == null || n &gt; largest)
-        {
-            second = largest;
-            largest = n;
-        }
-        // Strictly smaller than largest: equal values must not count as the second largest
-        else if (n &lt; largest &amp;&amp; (second == null || n &gt; second))
-        {
-            second = n;
-        }
-    }
-    return second;
-}</pre></div>
-<div class="note">Jedan prolaz, O(n), bez sortiranja (koje je O(n log n)). Edge case-ovi: niz od jednog elementa, svi elementi isti (<code>{ 5, 5, 5 }</code> nema drugi najveci) i negativni brojevi. Zato je povratni tip <code>int?</code>.</div>
-<h3 class="sub-sub-title">Nedostajuci broj od 1 do N</h3>
-<p class="body-text"><strong>Zadatak:</strong> Niz sadrzi brojeve od 1 do N, ali jedan nedostaje. Pronadji ga. Primer: { 1, 2, 4, 5 } za N = 5 daje 3.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static int FindMissingNumber(int[] numbers, int n)
-{
-    if (numbers == null) throw new ArgumentNullException(nameof(numbers));
-    // Sum of 1..n by the arithmetic series formula; long avoids overflow for large n
-    long expectedSum = (long)n * (n + 1L) / 2;
-    long actualSum = 0;
-    foreach (int value in numbers) actualSum += value;
-    return (int)(expectedSum - actualSum);
-}</pre></div>
-<div class="note">Formula <code>n * (n + 1) / 2</code> daje O(n) vreme i O(1) memoriju, bez sortiranja i skupa. Radi samo kad nedostaje tacno jedan broj; ako ih moze nedostajati vise, koristi <code>HashSet</code>. Alternativa je XOR svih brojeva.</div>
-<h3 class="sub-sub-title">Two Sum</h3>
-<p class="body-text"><strong>Zadatak:</strong> Vrati indekse dva elementa ciji je zbir jednak cilju. Primer: { 2, 7, 11, 15 } i cilj 9 daje indekse 0 i 1.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static int[] TwoSum(int[] numbers, int target)
-{
-    if (numbers == null) throw new ArgumentNullException(nameof(numbers));
-    // Maps a value to the index where it was seen
-    var seen = new Dictionary&lt;int, int&gt;();
-    for (int i = 0; i &lt; numbers.Length; i++)
-    {
-        int complement = target - numbers[i];
-        if (seen.TryGetValue(complement, out int j)) return new[] { j, i };
-        // Assign instead of Add so a repeated value does not throw
-        seen[numbers[i]] = i;
-    }
-    return Array.Empty&lt;int&gt;();
-}</pre></div>
-<div class="note">Naivno su dve ugnjezdene petlje, O(n^2). Recnik daje O(n) tako sto za svaki element trazi njegov komplement medju vec vidjenima. Pitanja: moze li isti element dva puta? sta ako ima vise parova? sta ako nema nijednog (ovde prazan niz)?</div>
-<h3 class="sub-sub-title">Pomeri nule na kraj</h3>
-<p class="body-text"><strong>Zadatak:</strong> Pomeri sve nule na kraj niza (u istom nizu), ocuvavsi redosled ostalih elemenata. Primer: { 0, 1, 0, 3, 12 } postaje { 1, 3, 12, 0, 0 }.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static void MoveZeroesToEnd(int[] numbers)
-{
-    if (numbers == null) throw new ArgumentNullException(nameof(numbers));
-    // insertAt is the next slot for a non-zero value
-    int insertAt = 0;
-    for (int i = 0; i &lt; numbers.Length; i++)
-    {
-        if (numbers[i] != 0)
-        {
-            numbers[insertAt] = numbers[i];
-            insertAt++;
-        }
-    }
-    // Everything after the last non-zero value becomes zero
-    for (int i = insertAt; i &lt; numbers.Length; i++)
-    {
-        numbers[i] = 0;
-    }
-}</pre></div>
-<div class="note">In-place resenje: O(n) vreme i O(1) memorija, bez novog niza. Ovo je obrazac dva pokazivaca (citanje i upis) koji se pojavljuje u mnogo zadataka. Cesto pitanje je da li se redosled nenultih elemenata mora ocuvati (ovde da).</div>
-<h2 class="sub-title">25.6 Zadaci iz QA prakse</h2>
-<p class="body-text">Kod QA automation pozicija cesto dobijes zadatak koji lici na tvoj svakodnevni posao, ne cist algoritam. Ova cetiri pokrivaju provere UI-ja, poredjenje podataka, izvestaje i stabilnost testova.</p>
-<h3 class="sub-sub-title">Da li je kolona sortirana (assert nad UI grid-om)</h3>
-<p class="body-text"><strong>Zadatak:</strong> Proveri da li su vrednosti (npr. tekst jedne kolone grid-a) sortirane rastuce ili opadajuce. Ovo je svakodnevni QA zadatak: test klikne zaglavlje kolone pa proverava redosled.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static bool IsSorted&lt;T&gt;(IEnumerable&lt;T&gt; values, bool descending = false) where T : IComparable&lt;T&gt;
-{
-    if (values == null) throw new ArgumentNullException(nameof(values));
-    bool isFirst = true;
-    T previous = default(T);
-    foreach (T current in values)
-    {
-        if (!isFirst)
-        {
-            int comparison = previous.CompareTo(current);
-            // Ascending fails when previous is greater, descending when previous is smaller
-            if (descending ? comparison &lt; 0 : comparison &gt; 0) return false;
-        }
-        previous = current;
-        isFirst = false;
-    }
-    return true;
-}</pre></div>
-<div class="note">Jedan prolaz, bez kopiranja i sortiranja. Za tekst pazi na poredjenje: <code>string.CompareTo</code> zavisi od kulture, a UI grid moze sortirati drugacije (velika/mala slova, srpska slova), pa test moze lazno pasti. Tada koristi isti <code>IComparer</code> kao aplikacija. Jednake susedne vrednosti su u redu (nije striktno).</div>
-<h3 class="sub-sub-title">Uporedi ocekivanu i stvarnu listu</h3>
-<p class="body-text"><strong>Zadatak:</strong> Uporedi ocekivane vrednosti sa onim sto UI prikazuje i vrati sta nedostaje i sta je visak. Redosled i duplikati se ignorisu.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static (List&lt;string&gt; Missing, List&lt;string&gt; Unexpected) CompareLists(IEnumerable&lt;string&gt; expected, IEnumerable&lt;string&gt; actual)
-{
-    var expectedSet = new HashSet&lt;string&gt;(expected);
-    var actualSet = new HashSet&lt;string&gt;(actual);
-    // Missing: expected but not shown. Unexpected: shown but not expected
-    // Where keeps the order in which the items appear in the original lists
-    var missing = expected.Where(item =&gt; !actualSet.Contains(item)).Distinct().ToList();
-    var unexpected = actual.Where(item =&gt; !expectedSet.Contains(item)).Distinct().ToList();
-    return (missing, unexpected);
-}</pre></div>
-<div class="note">Dobar QA odgovor vraca obe strane razlike, ne samo <code>bool</code>, jer poruka o gresci "nedostaje: A; visak: D" ubrzava debug. Ako redosled bitan, koristi <code>SequenceEqual</code>; ako su bitni duplikati, poredi brojeve pojavljivanja (zadatak "Prebroj duplikate").</div>
-<h3 class="sub-sub-title">Broj palih testova po suite-u (parsiranje loga)</h3>
-<p class="body-text"><strong>Zadatak:</strong> Ulaz su linije oblika <code>Suite|Test|Status</code>. Vrati koliko testova je palo po svakom suite-u; neispravne linije preskoci. Ovo je mala verzija tvog jutarnjeg triage-a.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static Dictionary&lt;string, int&gt; CountFailuresPerSuite(IEnumerable&lt;string&gt; lines)
-{
-    if (lines == null) throw new ArgumentNullException(nameof(lines));
-    return lines
-        .Select(line =&gt; line.Split('|'))
-        // Skip malformed lines instead of crashing in the middle of a report
-        .Where(parts =&gt; parts.Length == 3)
-        .Where(parts =&gt; parts[2].Trim().Equals("Failed", StringComparison.OrdinalIgnoreCase))
-        .GroupBy(parts =&gt; parts[0].Trim())
-        .ToDictionary(group =&gt; group.Key, group =&gt; group.Count());
-}</pre></div>
-<div class="note">Suite bez padova se ne pojavljuje u rezultatu; ako izvestaj treba da ih prikaze, prvo grupisi sve linije pa broj palih racunaj unutar grupe. Ako se trazi rang, dodaj <code>OrderByDescending(pair =&gt; pair.Value)</code>. Isti obrazac radi za tvoje <code>.trx</code> rezultate.</div>
-<h3 class="sub-sub-title">Retry pomocna metoda</h3>
-<p class="body-text"><strong>Zadatak:</strong> Napisi generic metodu koja ponavlja akciju do zadatog broja pokusaja i vraca rezultat; ako svi pokusaji padnu, izuzetak se propagira.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public static T Retry&lt;T&gt;(Func&lt;T&gt; action, int maxAttempts, TimeSpan delay)
-{
-    if (action == null) throw new ArgumentNullException(nameof(action));
-    if (maxAttempts &lt; 1) throw new ArgumentOutOfRangeException(nameof(maxAttempts));
-    for (int attempt = 1; ; attempt++)
-    {
-        try
-        {
-            return action();
-        }
-        // The filter is false on the last attempt, so the original exception propagates unchanged
-        catch (Exception ex) when (attempt &lt; maxAttempts)
-        {
-            Console.WriteLine($"Attempt {attempt} of {maxAttempts} failed: {ex.Message}");
-            Thread.Sleep(delay);
-        }
-    }
-}</pre></div>
-<div class="note">Povezuje se sa flaky testovima (Sekcija 11): retry <em>krije</em> uzrok, pa se ponavlja samo za poznate prolazne greske (npr. <code>StaleElementReferenceException</code>), ne za svaki <code>Exception</code>, i uvek se loguje (Sekcija 18.7). <code>catch ... when</code> cuva originalni stack trace, za razliku od <code>throw ex</code>.</div>
-<h2 class="sub-title">25.7 Testiranje sopstvenog resenja</h2>
-<p class="body-text">Pre nego sto kazes da je zadatak gotov, predlozi ili napisi testove. To je ono sto QA inzenjera izdvaja od developera koji samo resi zadatak. Oblik iz tvog svakodnevnog rada:</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>public class ReverseStringTests
-{
-    [Theory]
-    [InlineData("hello", "olleh")]
-    [InlineData("", "")]
-    [InlineData("a", "a")]
-    [InlineData("ab", "ba")]
-    public void ReverseString_ReturnsExpected(string input, string expected)
-    {
-        Assert.Equal(expected, Solutions.ReverseString(input));
-    }
-
-    [Fact]
-    public void ReverseString_Null_ThrowsArgumentNullException()
-    {
-        Assert.Throws&lt;ArgumentNullException&gt;(() =&gt; Solutions.ReverseString(null));
-    }
-}</pre></div>
-<div class="note">Naziv testa prati konvenciju Method_State_Expected (Sekcija 18.4), <code>[Theory]</code> + <code>[InlineData]</code> pokriva vise ulaza jednom metodom (Sekcija 18.3), a <code>Assert.Throws</code> proverava da guard klauza radi.</div>
-<div class="tbl-wrap"><table><thead><tr><th>Ulaz</th><th>Sta proveriti</th></tr></thead><tbody>
-<tr><td>null i prazan ulaz</td><td>Baca li metoda ocekivani izuzetak, ili vraca prazan rezultat? Ugovor mora biti jasan.</td></tr>
-<tr><td>Jedan element / jedan znak</td><td>Petlje sa <code>left &lt; right</code> ili <code>i - 1</code> cesto pucaju bas ovde.</td></tr>
-<tr><td>Svi elementi isti</td><td>Duplikati, drugi najveci, kompresija (jedna serija).</td></tr>
-<tr><td>Negativni brojevi i nula</td><td>Zbir cifara, prost broj, drugi najveci.</td></tr>
-<tr><td>Granice tipa (<code>int.MaxValue</code>, <code>int.MinValue</code>)</td><td>Preplavljivanje pri sabiranju, mnozenju i <code>Math.Abs</code>.</td></tr>
-<tr><td>Velika i mala slova, razmaci, interpunkcija</td><td>Palindrom, anagram, ucestalost znakova.</td></tr>
-<tr><td>Vec sortiran / obrnut ulaz</td><td>IsSorted, nedostajuci broj, uklanjanje duplikata.</td></tr>
-<tr><td>Veliki ulaz</td><td>Da li je resenje O(n), ili zavisi od ugnjezdene petlje?</td></tr>
+<div class="note">Kompletan set pitanja u STAR formatu je u Sekciji 23 (Deo III). Ovde je bitno da za svaku pricu znas jedan broj i jednu lekciju.</div>
+<h2 class="sub-title">25.3 Kad ne znas alat ili tehnologiju</h2>
+<p class="body-text">Formula od tri koraka: (1) iskreno reci nivo, (2) napravi most ka onome sto znas, (3) pokazi da brzo ucis. Nikad ne glumi znanje i nikad ne zavrsavaj na "nisam radio".</p>
+<div class="tbl-wrap"><table><thead><tr><th>Ako pitaju za</th><th>Most iz tvog iskustva</th></tr></thead><tbody>
+<tr><td>Python + pytest</td><td>pytest je ono sto ti je xUnit (fixtures ~ konstruktor/IClassFixture, parametrize ~ Theory/InlineData). Selenium API je isti, samo sintaksa se menja. requests biblioteka ~ RestSharp.</td></tr>
+<tr><td>AWS</td><td>Azure ekvivalenti: EC2 ~ Virtual Machines, S3 ~ Blob Storage, RDS ~ Azure SQL (managed baza), Lambda ~ Azure Functions, CloudWatch ~ Azure Monitor, SQS ~ Service Bus/Queue Storage. Pipelines i CI koncept su isti.</td></tr>
+<tr><td>JMeter / k6 / Locust</td><td>Performance principi vec primenjujes: response time iz Network taba, spori API pozivi i workflow-i. Alat je nov, koncepti nisu (Sekcija 20).</td></tr>
+<tr><td>Backend / API testiranje (ako je UI tvoj jaci deo)</td><td>Na svakom change request-u radis HTTP verifikaciju kroz Network tab i SQL cross-check; Postman + RestSharp (Sekcija 15).</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">25.8 Slozenost i potpitanja</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Slozenost</th><th>Primer iz ovih zadataka</th></tr></thead><tbody>
-<tr><td>O(1)</td><td>Pristup elementu niza po indeksu; <code>Dictionary</code> i <code>HashSet</code> Add/Contains (prosecno).</td></tr>
-<tr><td>O(n)</td><td>Jedan prolaz: CountVowels, FindDuplicates sa HashSet-om, TwoSum sa recnikom.</td></tr>
-<tr><td>O(n log n)</td><td>Sortiranje (<code>OrderBy</code>, <code>Array.Sort</code>); anagram poredjenjem sortiranih stringova.</td></tr>
-<tr><td>O(n^2)</td><td>Ugnjezdene petlje (naivno trazenje duplikata); <code>+=</code> na stringu u petlji.</td></tr>
+<p class="body-text"><strong>Primer odgovora:</strong> "C# koristim svakodnevno, Python profesionalno jos nisam, ali sam ga ucio — sintaksu, pytest i requests. Koncepti se direktno prenose: pytest mi je xUnit, requests je RestSharp, POM je isti. Najveca razlika je sintaksa, ne nacin razmisljanja, i ocekujem da budem produktivan brzo."</p>
+<div class="note">Ne govori "to nije bitno" niti krivi ranije poslodavce za rupu. Nivo, most, brzina ucenja — ni manje ni vise.</div>
+<h2 class="sub-title">25.4 "Kako bi testirao ovo?" — live vezba</h2>
+<p class="body-text">Cest format: podele ekran sa formom (ili ti kazu "testiraj olovku") i gledaju kako razmisljas, ne koliko slucajeva nabrojis. Redosled je bitniji od kolicine.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Korak</th><th>Sta radis / kazes</th></tr></thead><tbody>
+<tr><td>1. Razjasni</td><td>Sta ovo radi? Koja polja su obavezna? Ko je korisnik/rola? Kreira, menja ili brise? Sta je ocekivani rezultat?</td></tr>
+<tr><td>2. Happy path</td><td>Validan unos, uspesno cuvanje.</td></tr>
+<tr><td>3. Negativni i granicni</td><td>Prazna polja, los format, min/max duzina, specijalni karakteri, duplikat.</td></tr>
+<tr><td>4. Ponasanje UI-ja</td><td>Cancel, refresh, back dugme, dupli klik na Save.</td></tr>
+<tr><td>5. Iza UI-ja</td><td>Network tab: metoda, URL, payload, status, response, vreme; da li je zahtev poslat jednom ili vise puta.</td></tr>
+<tr><td>6. Nefunkcionalno</td><td>Kratko pomeni: pristupacnost, performanse, bezbednost (sta bi jos proverio da ima vremena).</td></tr>
 </tbody></table></div>
-<div class="tbl-wrap"><table><thead><tr><th>Potpitanje</th><th>Okvir odgovora</th></tr></thead><tbody>
-<tr><td>"Moze li brze?"</td><td>Menjam memoriju za vreme: HashSet ili Dictionary umesto ugnjezdene petlje (FindDuplicates sa O(n^2) na O(n)).</td></tr>
-<tr><td>"A sa manje memorije?"</td><td>Resenje u mestu ili dva pokazivaca (ReverseManual, MoveZeroesToEnd). Ako je ulaz sortiran, duplikati se hvataju poredjenjem suseda.</td></tr>
-<tr><td>"Sta ako je ulaz ogroman?"</td><td>Proveri da je O(n), koristi StringBuilder umesto <code>+=</code>, i <code>IEnumerable</code> kad moze da se obradjuje redom, bez ucitavanja svega u memoriju.</td></tr>
-<tr><td>"Case-insensitive? Unicode?"</td><td><code>StringComparison.OrdinalIgnoreCase</code> ili <code>ToLowerInvariant</code>; obrtanje po <code>char</code>-u lomi surrogate parove (emoji).</td></tr>
-<tr><td>"Sta ako je ulaz null?"</td><td>Guard klauza sa <code>ArgumentNullException</code>, ili prazan rezultat ako tako kazu zahtevi. Pitaj sta je ugovor metode.</td></tr>
-<tr><td>"Kako bi ovo testirao?"</td><td>Edge case-ovi iz 25.7 i xUnit Theory.</td></tr>
+<p class="body-text"><strong>Recenica koja ostavlja utisak:</strong> "U automatizaciji ne proveravam samo UI. Ako Save pokaze uspeh, zelim da potvrdim da je backend prihvatio zahtev, da je payload tacan i da podatak ostaje posle ponovnog citanja. UI moze da laze — Network tab ne."</p>
+<h2 class="sub-title">25.5 Pitanja o vlasnistvu nad automatizacijom</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Pitanje</th><th>Okvir odgovora</th></tr></thead><tbody>
+<tr><td>Kako bi pristupio automatizaciji novog sistema?</td><td>Razumi sistem (arhitektura, tokovi podataka, kriticne putanje) → proceni sta vec postoji → gap analiza → strategija (sta prvo, koji framework, CI/CD) → mali proof of concept jednog end-to-end toka → skaliranje.</td></tr>
+<tr><td>Sta bi automatizovao prvo?</td><td>Najveci rizik + najveca ucestalost: tamo gde bug kosta najvise i gde se test ponavlja svaki release. Forme i manje kriticni UI dolaze posle.</td></tr>
+<tr><td>Kako predlazes poboljsanja?</td><td>Pokreni postojeci suite i izmeri (pass rate, flaky rate, rupe u pokrivenosti), pa predstavi timu sa ROI-jem: "ova rucna provera traje 30 min po release-u, automatizacija vraca X sati mesecno". Vrednost se komunicira, ne pise u tisini.</td></tr>
+<tr><td>Bio bi jedina automation osoba — kako to vodis?</td><td>Prioritizacija po vrednosti, dokumentovanje onoga sto gradis, proaktivno statusiranje. Tvoj dokaz: samostalno vlasnistvo nad jednim od 22 nightly protokola.</td></tr>
 </tbody></table></div>
+<div class="note">Argumenti za ulaganje u automatizaciju (kako ubediti menadzment) imaju svoje mesto u Sekciji 23, Deo III.</div>
+<h2 class="sub-title">25.6 Pitanja koja ti postavljas intervjueru</h2>
+<p class="body-text">Bez pitanja deluje da te ne zanima. Pripremi 4-5, biraj prema tome sa kim razgovaras (menadzer, QA lead, developer).</p>
+<div class="tbl-wrap"><table><thead><tr><th>Tema</th><th>Primeri pitanja</th></tr></thead><tbody>
+<tr><td>Uloga</td><td>Koliki procenat posla je produkcioni kod, a koliki test automatizacija? Kako izgleda tipican sprint za QA? Ko je vlasnik flaky testova?</td></tr>
+<tr><td>Proces</td><td>Kako izgleda CI pipeline i koliko traje suite? Kada QA ulazi u proces — na refinement-u ili kad je build gotov? Kako se odlucuje sta se automatizuje?</td></tr>
+<tr><td>Tim</td><td>Koliko je QA-eva u odnosu na developere? Ko radi code review test koda? Kakav je odnos QA-Dev-PM — da li se QA ukljucuje u planiranje ili samo dobija gotov zahtev?</td></tr>
+<tr><td>Kvalitet</td><td>Kako merite kvalitet — kroz koje metrike (defect leakage, coverage, MTTR)? Sta je trenutno najveca bolna tacka u kvalitetu proizvoda?</td></tr>
+<tr><td>Rast i ocekivanja</td><td>Kako izgleda uspeh u prvih 90 dana? Koje su mogucnosti rasta (senior, lead, SDET putanja)?</td></tr>
+</tbody></table></div>
+<div class="note">Plata, beneficije i rad od kuce cekaju krajnji krug ili HR razgovor. Prva runda je za pokazivanje interesa za posao.</div>
+<h2 class="sub-title">25.7 Odbrana CV-a — svaka tvrdnja je pitanje</h2>
+<p class="body-text">Intervjuer cita CV pored tebe i bira stavke koje ce da pritisne. Za svaku tvrdnju treba da imas tri stvari: definiciju svojim recima, jedan konkretan primer i broj. Tabela mapira tvrdnje iz tvog CV-a na verovatna potpitanja i na mesto u dokumentu gde je osnova odgovora.</p>
+<div class="tbl-wrap tall"><table><thead><tr><th>Tvrdnja iz CV-a</th><th>Verovatno potpitanje</th><th>Osnova u dokumentu</th></tr></thead><tbody>
+<tr><td>Sole owner of 1 of 22 parallel nightly regression protocols, daily failure triage</td><td>Kako izgleda tvoje jutro? Kako razdvajas pravu regresiju od pokvarene skripte i problema okruzenja? Sta radis kad padne 30 testova?</td><td>Sekcija 6.5 (Bug Triage); Sekcija 24 ("Kako izgleda tvoj dnevni triage?")</td></tr>
+<tr><td>Authored ~40% of the assertions in the inherited regression suite</td><td>Kako si usao u tudji kod? Sta si napisao, a sta samo menjao? Kako znas da je 40%?</td><td>Sekcija 19 (arhitektura framework-a); 24.8</td></tr>
+<tr><td>342 changesets: new scripts, attribute mappings, cross-stream merges</td><td>Sta je changeset kod vas? Sta je cross-stream merge? Kako resavas konflikte?</td><td>Sekcija 16.7 do 16.10 (verzionisanje); 24.8</td></tr>
+<tr><td>Full-cycle validation of change requests (test plan, HTTP/API, documentation review, manual, then automation)</td><td>Provedi me kroz jedan change request od pocetka do kraja. Kad odlucujes da nesto automatizujes?</td><td>Sekcija 7 (test plan); 15 (API); 13.8 (Network tab); 11 (kada automatizovati)</td></tr>
+<tr><td>Validated AI-powered PLM features (Copilot assistant, data extraction)</td><td>Kako testiras nedeterministican odgovor? Sta je halucinacija u tvom testu?</td><td>24.12; Sekcija 22.6; 10.7</td></tr>
+<tr><td>Stabilize flaky scripts (locators, waits, retry, test-data isolation)</td><td>Najcesci uzrok? Primer iz prakse? Da li retry sakriva pravi bag?</td><td>Sekcija 11 (flaky); 13.3 (waits); Sekcija 24 (pitanja o flaky testovima)</td></tr>
+<tr><td>Azure Pipelines — Standard Build, Gated Build, Deploy</td><td>Razlika izmedju Standard i Gated? Sta ide u gate, a sta u nightly?</td><td>Sekcija 16.6; 16.10</td></tr>
+<tr><td>SQL (MSSQL, Oracle), pgAdmin, API-to-database validation</td><td>Napisi JOIN. Kako proveravas da je API upis stigao u bazu? MSSQL vs. PostgreSQL?</td><td>Sekcija 10.5, 10.9, 10.10</td></tr>
+<tr><td>Appium (Android, C#)</td><td>Kako pokreces test na uredjaju? Sta je drugacije u odnosu na Selenium? Koliko je to produkciono iskustvo?</td><td>Sekcija 21. Ako je vise ucenje nego produkcija, reci to iskreno (24.3)</td></tr>
+<tr><td>Compliance Control System: token auth (rotation, session expiration), PostgreSQL</td><td>Kako testiras rotaciju tokena i istek sesije?</td><td>Sekcija 15.8; 10.10</td></tr>
+<tr><td>Internal Knowledge Sharing Platform: UI automation built from scratch</td><td>Kako si postavio framework od nule? Sta si uradio prvo i zasto?</td><td>Sekcija 14 (POM); 18 (arhitektura)</td></tr>
+<tr><td>Built 2 custom Copilot agents (Microsoft Agent Builder)</td><td>Opisi jednog agenta: cilj, instrukcije, ogranicenja, kako si ga testirao.</td><td>Sekcija 22.8; 24.12</td></tr>
+<tr><td>Certifikati: Test Techniques, SQL for Testers, Agile Testing</td><td>Sta si konkretno primenio iz toga u radu?</td><td>Sekcija 4 (tehnike); 10.9; 8 (Agile)</td></tr>
+</tbody></table></div>
+<div class="note">Pravilo: ako ne mozes da objasnis stavku sa CV-a u dve recenice i jednim primerom, ili je izbaci iz CV-a ili je nauci pre intervjua. Nista ne skodi vise od tvrdnje koja se raspadne na trecem potpitanju.</div>
+<h2 class="sub-title">25.8 Brojevi iz CV-a koje moras da objasnis</h2>
+<p class="body-text">Brojevi su snaga CV-a, ali samo ako izdrze potpitanje. Izvedene vrednosti u tabeli su moja racunica iz CV-a — proveri ih sa stvarnim podacima.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Broj</th><th>Sta moras da znas da objasnis</th></tr></thead><tbody>
+<tr><td>1 od 22 nightly protokola</td><td>Jednom recenicom: sta je "protokol" kod vas (npr. skup suita koji se nocu izvrsava nad jednom konfiguracijom — zameni tacnom definicijom). Intervjuer ne zna vas recnik.</td></tr>
+<tr><td>47 suita, ~5000 asercija</td><td>Asercija nije test: znaj i koliko je testova, ne samo asercija. Prosek je oko 106 asercija po suite-u (5000 / 47); ako je stvarno drugacije, znaj zasto. Znaj i koliko traje run i koliko u proseku padne.</td></tr>
+<tr><td>4-5 okruzenja, razlicite verzije proizvoda</td><td>Kako isti test radi na razlicitim verzijama (uslovno preskakanje, verzija u konfiguraciji, feature flag). Osnova: Sekcija 10.6.</td></tr>
+<tr><td>~40% asercija u nasledjenom suite-u</td><td>Kako si dosao do broja (istorija izmena) ili iskreno "priblizno, na osnovu istorije izmena". Nepouzdan broj je gori od nikakvog.</td></tr>
+<tr><td>342 changeset-a od marta 2025.</td><td>Izvedeno: oko 4 nedeljno. Znaj strukturu: koliko novih skripti, koliko attribute mapping-a, koliko merge-ova. Osnova: Sekcija 16.10.</td></tr>
+<tr><td>524 change request-a u 19 meseci</td><td>Izvedeno: oko 27 mesecno, oko 6 nedeljno. Definisi "tested and closed" (sta znaci zatvoren), koliki deo je imao automation coverage i koji je bio najsloziji.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">25.9 PLM u 30 sekundi</h2>
+<p class="body-text">Intervjuer cesto ne poznaje tvoj domen. Ako ga izgubis u prvoj recenici, izgubio si i sve brojeve posle nje. Pripremi dve recenice koje svako razume.</p>
+<p class="body-text"><strong>Srpski:</strong> "PLM (Product Lifecycle Management) je enterprise platforma u kojoj kompanija drzi podatke o proizvodu — specifikacije i atribute — na jednom mestu kroz ceo zivotni ciklus proizvoda i povezuje ih sa spoljnim sistemima. Kod nas razlicite role vide i menjaju razlicite podatke, a proizvod postoji u vise verzija paralelno, pa isti regression pokrecemo na 4-5 okruzenja."</p>
+<p class="body-text"><strong>English:</strong> "PLM stands for Product Lifecycle Management. It's an enterprise platform where a company keeps its product data — specifications, attributes — in one place across the whole product lifecycle, and connects it to third-party systems. In our case different roles see and edit different data, and several product versions run in parallel, so we run the same regression on four or five environments."</p>
+<p class="body-text">Zatim odgovori na pitanje koje sledi: <em>zasto je to zanimljivo za testiranje?</em></p>
+<div class="tbl-wrap"><table><thead><tr><th>Osobina domena</th><th>Sta to znaci za testiranje</th></tr></thead><tbody>
+<tr><td>Puno podataka i formi (specifikacije, atributi)</td><td>Validacija podataka i mapiranja, ne samo klikanje po ekranima.</td></tr>
+<tr><td>Role i permission matrica</td><td>Isti ekran, drugaciji sadrzaj po roli — svaki test treba da zna pod kojom rolom radi.</td></tr>
+<tr><td>Vise verzija paralelno</td><td>Isti regression puta broj okruzenja; test mora da tolerise razlike izmedju verzija.</td></tr>
+<tr><td>Integracije sa trecim stranama</td><td>HTTP/API provere iza UI-ja (Network tab, Postman).</td></tr>
+<tr><td>AI funkcionalnosti</td><td>Nedeterministican izlaz — testiraju se invarijante, ne tacan tekst (24.12).</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">25.10 Pitanja o karijeri i "rupama" u CV-u</h2>
+<p class="body-text">Ova pitanja ne testiraju znanje nego procenu i iskrenost. Odgovor mora da bude kratak (do 30 sekundi), stvaran i okrenut ka napred. Ne izmisljam tvoje razloge — mesta u zagradama popuni svojim.</p>
+<div class="tbl-wrap tall"><table><thead><tr><th>Pitanje</th><th>Okvir odgovora</th></tr></thead><tbody>
+<tr><td>Zasto QA, a ne razvoj? (diploma je iz elektrotehnike i racunarstva)</td><td>Pravi razlog [upisi svoj] + dokaz da to nije bekstvo od koda: svakodnevno pises C# automatizaciju (342 changeset-a). Pokazi da je izbor, ne zamena.</td></tr>
+<tr><td>Zasto menjas posao?</td><td>Uvek "ka necemu", nikad "od nekoga". Jedan konkretan razlog [npr. dublje backend/API testiranje, vise vlasnistva] + zahvalnost na onome sto si naucio. Bez zalbi na tim ili poslodavca.</td></tr>
+<tr><td>Zasto si otisao iz Qinshift-a posle tri godine?</td><td>Ista formula. Naglasi sta si tamo izgradio (test planovi, smoke/sanity/regression od nule) i sta te je odvelo u enterprise PLM.</td></tr>
+<tr><td>Sta je bilo izmedju diplome (2020.) i prvog posla (12/2021)?</td><td>CV to ne pokazuje, pa ce neko primetiti. Pripremi jednu-dve iskrene recenice [sta si radio ili ucio], bez izvinjavanja, i vrati razgovor na Qinshift. Bolje da odgovor smislis unapred nego da improvizujes.</td></tr>
+<tr><td>Gde se vidis za 3-5 godina?</td><td>Pravac (senior, lead, SDET) povezan sa vrednoscu koju donosis: vlasnistvo nad test strategijom, mentorstvo, sire tehnicko polje (backend, performance). Ne "na tvojoj poziciji".</td></tr>
+<tr><td>Kakva su ti ocekivanja u vezi plate?</td><td>Odgovori opsegom zasnovanim na trzistu i obimu uloge, ne jednim brojem. Ako je rano: "prvo bih zeleo da razumem obim uloge — koji je budzetirani opseg?". Istrazi opsege pre razgovora.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">25.11 Intervju na engleskom</h2>
+<p class="body-text">CV navodi engleski kao "professional working proficiency (daily written communication)". Pisani engleski nije isto sto i govorni: intervjui za medjunarodne timove idu naglas, pod pritiskom. Najvece rizike smanjuje samo vezba naglas — bar pitch i tri STAR price.</p>
+<p class="body-text"><strong>English pitch (60-90 s), built from your CV:</strong> "I'm a QA Automation Engineer at Trace One, working on an enterprise PLM web application. I'm the sole owner of one of our 22 parallel nightly regression protocols — 47 suites and around 5,000 assertions running on four or five environments with different product versions — and I triage its failures every morning, separating real regressions from broken scripts and environment issues. Before that I spent three years at Qinshift building Selenium and C# automation and doing API and SQL validation. Recently I've also been validating AI-powered features, such as a Copilot assistant grounded on product data. I'm looking for a role where [what draws you to this position]."</p>
+<div class="tbl-wrap"><table><thead><tr><th>Situacija</th><th>Fraza</th></tr></thead><tbody>
+<tr><td>Kupujes vreme</td><td>"That's a good question — let me think for a second." / "Let me structure my answer."</td></tr>
+<tr><td>Trazis razjasnjenje</td><td>"Just to make sure I understand — are you asking about X or Y?" / "Could you give me an example of the scenario?"</td></tr>
+<tr><td>Nisi culo</td><td>"Sorry, could you repeat that?" / "Could you say that a bit more slowly?"</td></tr>
+<tr><td>Struktura odgovora</td><td>"There are three things I'd look at. First... Second... Finally..."</td></tr>
+<tr><td>Iskren gap</td><td>"I haven't used X directly, but I've worked with Y, which is very similar. For example..."</td></tr>
+<tr><td>Ne znas sintaksu</td><td>"I'd need to check the documentation for the exact syntax, but conceptually it works like this..."</td></tr>
+<tr><td>Opis tvog rada</td><td>"Every morning I triage the nightly failures: first I check whether it reproduces, then whether the cause is the application, the script, or the environment."</td></tr>
+<tr><td>STAR okviri</td><td>"The situation was..." / "My responsibility was..." / "What I did was..." / "As a result..."</td></tr>
+<tr><td>Zavrsetak odgovora</td><td>"Does that answer your question, or should I go deeper on any part?"</td></tr>
+</tbody></table></div>
+<div class="note">Izgovor termina koji se cesto kvari: cache = "cash", queue = "kyoo", SQL moze i "sequel" i "S-Q-L", Selenium = "suh-LEE-nee-um", Azure = "AZH-er" (americki). Odgovaraj kratkim recenicama; bolje jasan jednostavan engleski nego slozen koji se raspadne na pola.</div>
+<h2 class="sub-title">25.12 Kako pricas o AI iskustvu</h2>
+<p class="body-text">AI je najistaknutiji deo tvog CV-a i zato najverovatniji pravac potpitanja. Ocekuje se dubina, ne samo pominjanje alata. Osnova je Sekcija 22.6; ovde je okvir kako to izgovoris.</p>
+<div class="tbl-wrap tall"><table><thead><tr><th>Sta si radio (CV)</th><th>Sta proveravas i kako znas da je ispravno</th></tr></thead><tbody>
+<tr><td>Copilot asistent zasnovan na podacima proizvoda — tacnost odgovora</td><td>Poredis sa izvorom istine, to jest podacima u samom sistemu. Proveravas cinjenice, a ne formulaciju, jer odgovor nije isti pri svakom pokretanju.</td></tr>
+<tr><td>Halucinacije</td><td>Pitanja na koja odgovor u podacima ne postoji. Ispravno ponasanje je "ne znam" ili odbijanje. Odgovor koji navodi nesto sto u sistemu ne postoji je pad, ma koliko ubedljivo zvucao.</td></tr>
+<tr><td>Out-of-scope provere</td><td>Pitanja van domena asistenta — mora da odbije ili preusmeri, ne da improvizuje.</td></tr>
+<tr><td>Permission-bound upiti</td><td>Isti upit pod razlicitim rolama; odgovor ne sme da otkrije podatke koje ta rola ne sme da vidi. Najvredniji test, jer je to problem autorizacije, a ne halucinacije.</td></tr>
+<tr><td>Data extraction (Excel upload)</td><td>Tacnost mapiranja svakog polja (ocekivano vs. dobijeno), malformed podaci (prazne celije, pogresan format, duplirane kolone, visak redova) i submit-to-form tok: mapirani podaci zavrsavaju ispravno u formi. Osnova: Sekcija 10.7.</td></tr>
+<tr><td>2 custom Copilot agenta (Agent Builder)</td><td>Opisi jednog: cilj, scoped system instrukcije, ograniceni izvori, multimodalni ulaz i kako si proverio da ne izlazi iz svog scope-a. Osnova: Sekcija 22.8.</td></tr>
+</tbody></table></div>
+<div class="tbl-wrap"><table><thead><tr><th>Potpitanje</th><th>Kratak odgovor</th></tr></thead><tbody>
+<tr><td>Kako testiras nedeterministican izlaz?</td><td>Asertujem invarijante (cinjenice iz izvora, format, granice dozvola), ne tacan tekst. Isti prompt pokrecem vise puta i koristim prag umesto egzaktnog poklapanja.</td></tr>
+<tr><td>Kako znas da model halucinira?</td><td>Poredim sa izvorom istine u sistemu. Sve sto je navedeno a ne postoji u podacima je halucinacija.</td></tr>
+<tr><td>Koji je najveci rizik?</td><td>Curenje podataka preko granica dozvola. Zato isti upit uvek testiram pod vise rola.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">25.13 Pre, tokom i posle intervjua</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Faza</th><th>Checklista</th></tr></thead><tbody>
+<tr><td>Vece pre</td><td>Prodji pitanja iz Sekcije 24 naglas (kviz mod); ponovi pricu o sebi naglas, i na engleskom (24.11); prodji tabelu odbrane CV-a (24.7); resi naglas 3-4 zadatka iz Sekcije 26; osvezi 2-3 SQL upita (JOIN, GROUP BY, subquery); proveri kameru, mikrofon i link; pripremi CV, beleske i papir.</td></tr>
+<tr><td>Tokom</td><td>Misli naglas; trazi razjasnjenje pre odgovora; kad ne znas: "ne znam to, ali evo kako bih do odgovora dosao"; svako tvrdjenje pokusaj da potkrepis primerom iz rada.</td></tr>
+<tr><td>Posle</td><td>Odmah zapisi sva pitanja i gde si zapeo (to postaje novo pitanje u Sekciji 23); posalji kratak zahvalni mejl u roku od 24h.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">25.14 Zasto ovaj alat — spremi odbranu izbora</h2>
+<p class="body-text">"Zasto koristis X, a ne Y" je standardno pitanje na mid/senior intervjuu. Odgovor koji vredi ima tri dela: zasto bas taj alat, kada ga NE bi koristio, i sta je alternativa i zasto tada nije izabrana. "Tako je bilo kad sam dosla" nije odgovor.</p>
+<div class="tbl-wrap tall"><table><thead><tr><th>Alat</th><th>Zasto bas taj</th><th>Kad NE bih koristio</th><th>Alternativa i zasto ne (sada)</th></tr></thead><tbody>
+<tr><td>Selenium WebDriver</td><td>Zreo, W3C standard, radi sa svakim browser-om, veliki ekosistem i community za enterprise UI koji nema poseban Selenium/Playwright test tim.</td><td>Za nov projekat bez postojece baze koda i tima koji vec zna Selenium.</td><td>Playwright (poredjenje u Sekciji 26.14) — auto-wait i manje flaky-ja, ali migracija postojeceg suite-a nije opravdana samo zbog toga.</td></tr>
+<tr><td>xUnit</td><td>Nova instanca test klase po testu (11.6) — sprecava slucajno deljenje stanja, sto direktno smanjuje flaky rate.</td><td>Kad tim vec ima veliki NUnit suite — migracija retko vredi truda.</td><td>NUnit — validan izbor, samo drugaciji setup model ([SetUp]/[TearDown] umesto konstruktora).</td></tr>
+<tr><td>C#</td><td>Isti jezik kao i aplikacija koju testiram — nema context-switch-a, lakse citanje production koda pri debug-u.</td><td>Ako je tim/aplikacija Python ili Java — tada test jezik prati stack tima.</td><td>Python + pytest — laksi ulaz i vise gotovih biblioteka za brzi POC, ali gubi se direktna veza sa .NET stack-om aplikacije.</td></tr>
+<tr><td>Azure DevOps (Pipelines + Test Plans)</td><td>Enterprise .NET tim vec koristi Azure za repo i work item-e — jedan alat za sve, manje prebacivanja konteksta.</td><td>Manji/open-source tim bez Microsoft ekosistema.</td><td>Jenkins/GitHub Actions — fleksibilniji i besplatniji za male timove, ali gubi tesnu integraciju sa Boards/Test Plans koju enterprise tim vec koristi.</td></tr>
+<tr><td>Postman + RestSharp</td><td>Postman za brzu rucnu/exploratory proveru API-ja, RestSharp za istu proveru unutar C# automatizacije — jedan alat za istrazivanje, drugi za trajnu pokrivenost.</td><td>Ako tim treba contract testing sa potrosacima (Pact) — Postman/RestSharp to ne pokrivaju.</td><td>curl/HTTPie za brze ad-hoc provere bez GUI-ja — koristan dodatak, ne zamena za regresionu pokrivenost.</td></tr>
+<tr><td>SQL (MSSQL / PostgreSQL)</td><td>UI moze da "lazira" uspeh — SQL provera potvrdjuje da je podatak stvarno stigao i ostao u bazi (Sekcija 10.5, 10.10).</td><td>Kad postoji pouzdan API endpoint koji vraca isti podatak — API provera je stabilnija od direktnog upita u bazu (manje krta na promenu seme).</td><td>Direktan API poziv umesto SQL-a gde je moguce — manje sprege sa strukturom baze.</td></tr>
+<tr><td>Appium</td><td>Isti C#/POM obrasci prenose se na mobile — nije novi mentalni model, samo novi drajver.</td><td>Ako je aplikacija cisto web/responsive bez native mobilne komponente.</td><td>Espresso/XCUITest (native) — brzi i stabilniji za jednu platformu, ali gube cross-platform prednost Appium-a.</td></tr>
+<tr><td>Page Object Model</td><td>Jedna promena u UI-ju znaci izmenu na jednom mestu, ne u desetinama testova (Sekcija 14).</td><td>Za mali, kratkozivi skript koji se pokrene jednom — dodatni sloj apstrakcije se ne isplati.</td><td>Screenplay pattern — fleksibilniji za slozene tokove, ali strmija kriva ucenja za tim koji tek pocinje.</td></tr>
+</tbody></table></div>
+<div class="note">Ako intervjuer pita za alat koji NISI birala (npr. nasledjen projekat), to je i dalje dobar odgovor: "Ovo je bilo uspostavljeno pre mene. Da sam birala danas, i dalje bih [alat] jer... ali evo gde bih razmislila drugacije: ..."</div>
+<h2 class="sub-title">25.15 "Kako bi testirao X" — radjeni primeri</h2>
+<p class="body-text">Isti okvir kao u 24.4, primenjen na najcesce postavljane klasike. Cilj nije da se ovo nauci napamet, vec da se vidi kako se okvir od 6 koraka primenjuje u praksi za razlicite tipove "X".</p>
+<div class="tbl-wrap tall"><table><thead><tr><th>"Testiraj X"</th><th>Kljucni koraci (skraceno)</th></tr></thead><tbody>
+<tr><td>Lift (klasicna "netehnicka" vezba)</td><td>Razjasni: koliko spratova, koliko putnika, koji tip zgrade? Happy path: poziv, dolazak, vozi do sprata, vrata se otvore. Granicno: max tezina/broj putnika, poziv sa vise spratova istovremeno, vrata blokirana predmetom. Ponasanje: dugme za hitne slucajeve, alarm, nestanak struje (backup, da li se lift zaglavi). Bezbednost: senzor preopterecenja, interfon. Performanse: vreme cekanja u sat vrhu.</td></tr>
+<tr><td>Login forma</td><td>Razjasni: koji tip auth (password, SSO, 2FA)? Happy path: validan email/password. Negativno: pogresan password, nepostojeci email, prazna polja, SQL injection pokusaj u polju. Granicno: max duzina password-a, case-sensitivity email-a. Ponasanje: "zapamti me", lockout posle N pokusaja, forgot password tok. Iza UI-ja: da li se token vraca ispravno, da li password ide plain-text u payload-u (bezbednost).</td></tr>
+<tr><td>Search / pretraga</td><td>Razjasni: pretraga po cemu (naziv, ID, tag)? Happy path: tacan termin vraca ocekivan rezultat. Negativno: prazan upit, nepostojeci termin (empty state), specijalni karakteri. Granicno: jedan rezultat vs. hiljade, paginacija. Ponasanje: sortiranje, filteri kombinovani sa pretragom, debounce (da li se poziv salje na svaki taster ili nakon pauze). Performanse: vreme odgovora na veliki dataset.</td></tr>
+<tr><td>API endpoint (npr. POST /users)</td><td>Razjasni: koja polja su obavezna, koji je response shape, koji status kodovi su ocekivani? Happy path: validan payload -&gt; 201 + Location header. Negativno: nedostaju obavezna polja -&gt; 400, nevalidan format -&gt; 400/422, bez auth tokena -&gt; 401. Granicno: max duzina stringa, duplikat (409). Sigurnosno: da li druga rola moze da kreira/vidi tudje podatke. Idempotentnost: da li duplo poslat isti zahtev pravi duplikat.</td></tr>
+<tr><td>File upload</td><td>Razjasni: koji formati/velicina su dozvoljeni, gde fajl zavrsava (storage, baza)? Happy path: validan fajl ocekivanog formata i velicine. Negativno: pogresan format, fajl preko max velicine, prazan fajl, korumpiran fajl. Granicno: tacno na granici velicine, fajl sa specijalnim karakterima u imenu. Ponasanje: progress indicator, cancel usred upload-a, duplo kliknut submit. Iza UI-ja: da li se fajl stvarno zapisao na storage-u i da li je metapodatak (ime, velicina) tacan u bazi.</td></tr>
+</tbody></table></div>
+<h2 class="sub-title">25.16 Moje slabosti — pripremi iskren odgovor</h2>
+<p class="body-text">"Koja ti je najveca slabost" nema dobar generican odgovor — lazna skromnost ("previse sam posvecena poslu") zvuci uvezbano. Dobra struktura: konkretna, stvarna slabost + sta trenutno radis po tom pitanju. Popuni zagrade svojim odgovorima pre intervjua, ne ostavljaj za trenutak kad te pitaju.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Deo</th><th>Sta ide tu</th></tr></thead><tbody>
+<tr><td>Slabost</td><td>[Konkretna, stvarna oblast — npr. dublje poznavanje performance testinga, javni nastup, delegiranje]. Ne bezbednosna fraza kao "radim previse".</td></tr>
+<tr><td>Kako se to pokazalo</td><td>[Kratak, konkretan primer situacije gde je to bilo primetno — bez drame, samo cinjenica].</td></tr>
+<tr><td>Sta trenutno radis</td><td>[Konkretan korak koji vec preduzimas — kurs, praksa, trazenje feedback-a]. Sekcija 25.3 je dobar izvor ako je slabost tehnicka (nepoznat alat/tehnologija).</td></tr>
+</tbody></table></div>
+<p class="body-text"><strong>Format odgovora:</strong> "[Slabost] mi nije jaka strana — [kratak primer]. Trenutno na tome radim tako sto [konkretan korak], i vec vidim [mali napredak ako postoji]."</p>
+<div class="note">Izbegavaj: vestine kljucne za posao na koji konkurises (npr. "ne volim automatizaciju" na automation poziciji), i lazno-skromne odgovore koji zvuce kao prikrivena pohvala.</div>
+<h2 class="sub-title">25.17 Post-intervju dnevnik</h2>
+<p class="body-text">Ovo je sablon, ne gotov sadrzaj — popunjava se posle svakog intervjua, sto pre dok je svez. Vremenom postaje najkorisniji deo dokumenta jer pokazuje TVOJE stvarne rupe, ne generic listu.</p>
+<div class="tbl-wrap tall"><table><thead><tr><th>Pitanje</th><th>Sta sam odgovorio</th><th>Sta je trebalo</th><th>Sta nauciti / gde u dokumentu</th></tr></thead><tbody>
+<tr><td>[primer] "Kako bi testirao rate limiting na API-ju?"</td><td>[primer] Pomenula sam samo 429 status kod, nisam elaborirala.</td><td>[primer] Trebalo je pomenuti i retry-after header, razliku po korisniku vs. globalno, i kako se to testira (burst requests).</td><td>[primer] Prosiriti Sekciju 15 sa rate limiting scenarijom.</td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<div class="note">Kad se ovde nakupi par slicnih rupa (npr. vise puta zapnes na performance testiranju), to je signal da tu temu treba stvarno da naucis, ne samo da upises u dnevnik.</div>
+<h2 class="sub-title">25.18 Lessons learned — decision log</h2>
+<p class="body-text">Ovo je najvredniji deo dokumenta na duge staze — sopstvena istorija onoga sto je puklo i zasto, i odluka koje si donela i zasto. Za razliku od 24.17 (koji hvata praznine u ZNANJU), ovo hvata praznine u ISKUSTVU — konkretne incidente koji postaju gotove STAR price (Sekcija 24) i konkretni dokazi za "zasto ovaj alat" (Sekcija 25.14). Prve tri stavke su primeri formata (iz stvarnih tehnickih nalaza), ostatak popunjavas sam kako se desava.</p>
+<div class="tbl-wrap tall"><table><thead><tr><th>Sta je puklo / odluka</th><th>Zasto (root cause)</th><th>Kako je reseno / lekcija</th></tr></thead><tbody>
+<tr><td>[primer] DevExpress dropdown vracao pogresnu stavku</td><td>[primer] Pretraga po celom DOM-u je pogadjala elemente iz skrivenog/kesiranog overlay-a, ne trenutno vidljivog.</td><td>[primer] Lookup ogranicen (scoped) na overlay identifikovan preko <code>style</code> koji sadrzi "display: inline-block". Lekcija: kod komponentnih biblioteka nikad ne pretpostaviti da je u DOM-u samo jedna instanca kontrole.</td></tr>
+<tr><td>[primer] Python string escape je tiho lomio generisani JS</td><td>[primer] <code>\b</code> u Python string-u se interpretira kao backspace (<code>\x08</code>), ne "word boundary" — kad se ubaci u JS preko template string-a, kod se cita drugacije nego sto izgleda u izvoru.</td><td>[primer] Raw string-ovi (<code>r"..."</code>) ili eksplicitno escape-ovanje pri generisanju JS iz Python-a. Lekcija: bag u generisanom kodu prvo proveri u ALATU koji generise, ne u samom generisanom kodu.</td></tr>
+<tr><td>[primer] xUnit paralelizacija izazvala nove flaky testove</td><td>[primer] Testovi u razlicitim kolekcijama su delili isti test podatak (isti SpecId) — race condition, ne bag u aplikaciji.</td><td>[primer] Izolacija podataka (unikatan sufiks po test run-u) uvedena PRE ukljucivanja paralelizacije, ne posle. Lekcija: paralelizacija otkriva postojece propuste u izolaciji, ne pravi nove — signal da izolacija nije bila dovoljno stroga ni ranije.</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<div class="note">Redovno (npr. jednom mesecno) prelistaj ovu tabelu pre nego sto trazis novi posao — najjace STAR price dolaze odavde, ne iz uopstenih primera.</div>

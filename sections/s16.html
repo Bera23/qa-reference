@@ -50,7 +50,7 @@ env:
 
 # Variable Groups: kreira se jednom, referencira u vise pipeline-ova
 # Secret variables su enkriptovane i ne prikazuju se u logovima</pre></div>
-<div class="note">U pipeline-u se izvrsavaju Selenium UI testovi (Sekcija 13), API testovi (Sekcija 15) i unit testovi — sve strukturirano po framework arhitekturi iz Sekcije 18.</div>
+<div class="note">U pipeline-u se izvrsavaju Selenium UI testovi (Sekcija 13), API testovi (Sekcija 15) i unit testovi — sve strukturirano po framework arhitekturi iz Sekcije 19.</div>
 <h2 class="sub-title">16.5 Best practices za testove u CI/CD-u</h2>
 <ul><li class="bullet-item">Testovi moraju biti deterministicki — isti ulaz, isti rezultat uvek.</li>
 <li class="bullet-item">Paralelizacija: grupisati testove da se izvrsavaju paralelno.</li>
@@ -148,3 +148,34 @@ public class SpecificationTests { ... }
 <tr><td>Review</td><td>Pull Request.</td><td>Code review nad shelveset-om ili changeset-om.</td></tr>
 </tbody></table></div>
 <div class="note">Sekcija 16.6 opisuje Gated Build kroz Git PR. Cilj je isti i u TFVC-u — nista ne ulazi u glavnu granu dok gate ne prodje — samo je mehanizam drugaciji (gated check-in umesto branch policy-ja). Zato u gate ide samo brz, stabilan smoke set, a pun regression ostaje u nightly-ju.</div>
+<h2 class="sub-title">16.11 CI/CD platforme — most ka GitHub Actions, GitLab CI, Jenkins</h2>
+<p class="body-text">Ako pitaju za platformu koju nisi koristila, koncepti se direktno prenose — samo se drugacije zovu i drugacije konfigurisu. Isto pravilo kao za AWS/Azure (Sekcija 25.3): nivo, most, brzina ucenja.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Azure Pipelines pojam</th><th>GitHub Actions</th><th>GitLab CI</th><th>Jenkins</th></tr></thead><tbody>
+<tr><td>Pipeline definicija</td><td>Workflow (<code>.github/workflows/*.yml</code>)</td><td><code>.gitlab-ci.yml</code></td><td>Jenkinsfile (deklarativni ili scripted)</td></tr>
+<tr><td>Stage</td><td>Job</td><td>Stage</td><td>Stage</td></tr>
+<tr><td>Task/Step</td><td>Step</td><td>Job (unutar stage-a)</td><td>Step</td></tr>
+<tr><td>Agent/Pool</td><td>Runner</td><td>Runner</td><td>Agent/Node</td></tr>
+<tr><td>Variable Group / Secrets</td><td>Secrets (repo/org nivo)</td><td>CI/CD Variables</td><td>Credentials store</td></tr>
+<tr><td>Trigger na PR</td><td><code>on: pull_request</code></td><td><code>rules: merge_requests</code></td><td>Multibranch pipeline / webhook</td></tr>
+<tr><td>Artifact</td><td><code>actions/upload-artifact</code></td><td><code>artifacts:</code> u job-u</td><td><code>archiveArtifacts</code></td></tr>
+<tr><td>Scheduled run (nightly)</td><td><code>on: schedule (cron)</code></td><td><code>rules: if $CI_PIPELINE_SOURCE == "schedule"</code></td><td>Cron trigger u job konfiguraciji</td></tr>
+</tbody></table></div>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre># GitHub Actions — ekvivalent YAML pipeline-a iz 16.3, konceptualno identican
+name: nightly-regression
+on:
+  schedule:
+    - cron: '0 2 * * *'
+jobs:
+  regression:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with: { dotnet-version: '8.0.x' }
+      - name: Run tests
+        run: dotnet test --logger trx
+      - name: Publish results
+        uses: actions/upload-artifact@v4
+        with: { name: test-results, path: '**/*.trx' }</pre></div>
+<div class="note">Isti mentalni model kao Azure Pipelines: checkout -> setup runtime -> run tests -> publish rezultate. Ono sto se najcesce pita: "koji CI alat si koristila" nije test tvog znanja o tom alatu, vec da li razumes STA pipeline treba da radi bez obzira na sintaksu.</div>

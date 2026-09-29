@@ -19,7 +19,7 @@ chmod 755 script.sh   # owner: read+write+execute, ostali: read+execute</pre></d
 ssh -i ~/.ssh/id_rsa user@host           # sa konkretnim privatnim kljucem
 scp report.trx user@host:/tmp/           # kopiranje fajla NA udaljenu masinu
 scp user@host:/var/log/app.log ./       # kopiranje fajla SA udaljene masine (npr. logovi za analizu)</pre></div>
-<div class="note">Tipican scenario: test padne samo na CI agentu, ne lokalno (videti Sekciju 23). SSH na agenta i provera logova/resursa direktno na masini je prvi korak pre nego sto se sumnja na sam test kod.</div>
+<div class="note">Tipican scenario: test padne samo na CI agentu, ne lokalno (videti Sekciju 24). SSH na agenta i provera logova/resursa direktno na masini je prvi korak pre nego sto se sumnja na sam test kod.</div>
 <h2 class="sub-title">17.5 Environment varijable</h2>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>export BASE_URL="https://qa.plm.com"     # postavljanje env varijable za trenutnu sesiju
 echo $BASE_URL                           # ispis vrednosti

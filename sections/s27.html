@@ -1,0 +1,80 @@
+<p class="body-text">Koncepti iza svakog od ovih formata su objasnjeni u svojim sekcijama (test case u 5, bug report u 6, test plan u 7) — ovo su prazni sabloni za direktno kopiranje, bez teorije.</p>
+<h2 class="sub-title">27.1 Bug report — prazan template</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Title: [Komponenta] - [Kratak opis problema] - [Uslov pod kojim se javlja]
+
+Environment: [Browser/verzija, OS, test okruzenje, verzija aplikacije]
+
+Preconditions: [Sta mora biti tacno pre koraka - rola, postojeci podatak, stanje sistema]
+
+Steps to Reproduce:
+1. [Korak]
+2. [Korak]
+3. [Korak]
+
+Actual Result: [Sta se stvarno desilo]
+
+Expected Result: [Sta je trebalo da se desi]
+
+Severity: [Blocker / Critical / Major / Minor / Trivial]
+Priority: [High / Medium / Low]
+
+Attachments: [Screenshot, video, log, HAR fajl]</pre></div>
+<div class="note">Puna definicija Severity/Priority nivoa i primeri dobrog naslova su u Sekciji 6.</div>
+<h2 class="sub-title">27.2 Test plan — prazan template</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>1. Test Plan Identifier: [Naziv/verzija]
+
+2. Scope
+   In scope: [Sta se testira]
+   Out of scope: [Sta se NE testira i zasto]
+
+3. Test Items: [Feature-i/moduli koji se testiraju]
+
+4. Approach: [Nivoi testiranja, tehnike, manuelno vs. automatizovano]
+
+5. Entry Criteria: [Sta mora biti spremno pre pocetka testiranja]
+6. Exit Criteria: [Kada se testiranje smatra zavrsenim]
+
+7. Environment: [Okruzenja, test podaci, potrebni pristupi]
+
+8. Resursi i raspored: [Ko testira sta, procena vremena]
+
+9. Rizici: [Rizik] - [Verovatnoca] - [Uticaj] - [Mitigacija]
+
+10. Deliverables: [Test case-ovi, izvestaji, defect log]</pre></div>
+<div class="note">Razlika izmedju test strategije (visok nivo, vazi za vise projekata) i test plana (konkretan, za jedan projekat/release) je u Sekciji 7.1.</div>
+<h2 class="sub-title">27.3 Test case — prazan template</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Title: [Modul]_[Sta se testira]_[Ocekivani ishod]
+
+Preconditions: [Sta mora biti tacno pre izvrsavanja - rola, podaci, stanje]
+
+Steps:
+1. [Korak]
+2. [Korak]
+3. [Korak]
+
+Expected Result: [Precizno i verifikabilno - ne "radi ispravno"]
+
+Priority: [High / Medium / Low]
+Type: [Smoke / Sanity / Regression / Functional]</pre></div>
+<div class="note">Sta cini test case dobrim (atomican, nezavisan, ponovljiv) je u Sekciji 5.2.</div>
+<h2 class="sub-title">27.4 Checklist za code review test koda</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[ ] Naziv testa prati konvenciju (Method_State_Expected, Sekcija 19.4)
+[ ] Test je atoman - proverava jednu stvar, ne vise nepovezanih asercija
+[ ] Nema Thread.Sleep - koristi Explicit Wait (13.3)
+[ ] Test podaci su izolovani - ne deli podatke sa drugim testovima (10.2)
+[ ] Nema hardkodovanih vrednosti koje bi trebalo da budu u konfiguraciji (env URL, kredencijali)
+[ ] Cleanup/teardown postoji ako test kreira podatke
+[ ] Asercije proveravaju STVARNU posledicu akcije, ne samo da UI nije bacio gresku
+[ ] Nema praznih catch blokova bez loga (19.7)
+[ ] Test prolazi lokalno I u CI okruzenju
+[ ] Ako je flaky-prone (npr. animacija, async ucitavanje) - ima odgovarajucu wait strategiju, ne retry kao prvi izbor</pre></div>
+<h2 class="sub-title">27.5 Checklist za release</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>[ ] Regression suite prosao na target okruzenju
+[ ] Svi Blocker/Critical defekti zatvoreni ili svesno odlozeni uz potpis PO-a
+[ ] Smoke test na produkcionoj (ili produkciji-najslicnijoj) konfiguraciji
+[ ] Migracije podataka testirane na kopiji produkcionih podataka, ne samo na test setu
+[ ] Rollback plan postoji i proveren
+[ ] Release notes azurirani (sta je novo, sta je fix, poznati problemi)
+[ ] Monitoring/alerting aktivan za novu funkcionalnost pre nego sto ode live
+[ ] Tim koji radi support obavesten sta se menja</pre></div>
+<div class="note">Environment checklist za pripremu SAMOG test okruzenja (ne release-a) je poseban i nalazi se u Sekciji 10.8.</div>

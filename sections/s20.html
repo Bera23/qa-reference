@@ -1,103 +1,86 @@
-<h2 class="sub-title">20.1 Sta je Appium i kako funkcionise</h2>
-<p class="body-text">Appium je open-source alat za automatizaciju mobilnih aplikacija. Koristi WebDriver protokol — ista arhitektura kao Selenium, ali sa mobilnim driver-ima.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>  [Test kod (C#/Java/Python)]
-          |  WebDriver API pozivi
-          v
-  [Appium Server]
-          |  XCUITest (iOS) / UIAutomator2 (Android)
-          v
-  [Realni uredjaj / Emulator]</pre></div>
-<h2 class="sub-title">20.2 Tipovi mobilnih aplikacija</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Tip</th><th>Opis</th><th>Appium podrska</th></tr></thead><tbody>
-<tr><td>Native</td><td>Pisana u Swift/Kotlin, koristi native UI komponente.</td><td>Puna podrska. Pristup svim native elementima.</td></tr>
-<tr><td>Hybrid</td><td>Web view unutar native shell-a. React Native, Ionic.</td><td>Puna podrska. Context switching izmedju native i web.</td></tr>
-<tr><td>Mobile Web</td><td>Browser aplikacija — Safari, Chrome na mobilnom.</td><td>Podrska kroz mobile browser driver.</td></tr>
+<h2 class="sub-title">20.1 Tipovi performance testiranja</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Tip</th><th>Definicija</th><th>Kada koristiti</th></tr></thead><tbody>
+<tr><td>Load testing</td><td>Sistem se testira na ocekivanom normalnom opterecenju.</td><td>Redovno, pre svakog release-a.</td></tr>
+<tr><td>Stress testing</td><td>Sistem se gura iznad kapaciteta da bi se videlo kako puca i kako se oporavlja.</td><td>Kada treba utvrditi tacku loma sistema.</td></tr>
+<tr><td>Spike testing</td><td>Nagli kratki skok opterecenja (flash sale, viralni content).</td><td>Ocekivani nagli rast korisnika.</td></tr>
+<tr><td>Endurance/Soak</td><td>Sistem se drzi pod normalnim opterecenjem duzi period — trazi memory leak-ove i degradaciju performansi.</td><td>Detektovanje degradacije tokom vremena.</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">20.3 Appium C# — setup i osnovni test</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Capabilities i driver inicijalizacija (Android)
-var options = new AppiumOptions();
-options.PlatformName = "Android";
-options.AutomationName = "UIAutomator2";
-options.DeviceName = "emulator-5554";
-options.App = "/path/to/app.apk";
-
-var driver = new AndroidDriver(
-    new Uri("http://localhost:4723"), options);
-
-// Lociranje elementa i interakcija
-var loginBtn = driver.FindElement(
-    MobileBy.AccessibilityId("loginButton"));
-loginBtn.Click();
-
-// Assertion (xUnit)
-var welcomeMsg = driver.FindElement(
-    MobileBy.AccessibilityId("welcomeLabel"));
-Assert.Equal("Dobrodosli", welcomeMsg.Text);</pre></div>
-<div class="note">Ista WebDriver arhitektura kao Selenium (videti Sekciju 13) — poznavanje lokator strategija i wait mehanizama se direktno prenosi.</div>
-<h2 class="sub-title">20.4 Lokatori u Appium-u</h2>
-<div class="tbl-wrap"><table><thead><tr><th>Lokator</th><th>iOS</th><th>Android</th></tr></thead><tbody>
-<tr><td>Accessibility ID</td><td>accessibilityIdentifier atribut</td><td>content-desc atribut — preporuceni</td></tr>
-<tr><td>XPath</td><td>Dostupan, ali sporiji</td><td>Dostupan, ali sporiji</td></tr>
-<tr><td>Class Name</td><td>XCUIElementTypeButton</td><td>android.widget.Button</td></tr>
-<tr><td>ID</td><td>Bez direktnog ekvivalenta</td><td>Resource ID (com.app:id/btn)</td></tr>
+<h2 class="sub-title">20.2 Kljucne metrike</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Metrika</th><th>Opis</th></tr></thead><tbody>
+<tr><td>Response Time</td><td>Vreme od zahteva do prvog byte-a odgovora (TTFB).</td></tr>
+<tr><td>Throughput</td><td>Broj zahteva koje sistem obradjuje u jedinici vremena (req/s).</td></tr>
+<tr><td>Error Rate</td><td>Procenat failovanih zahteva. Cilj: < 1%.</td></tr>
+<tr><td>Percentili (p95, p99)</td><td>95% i 99% zahteva se obradjuje za manje od X ms. Bolji od proseka.</td></tr>
+<tr><td>Concurrent Users</td><td>Broj simultanih korisnika koje sistem moze da podnese.</td></tr>
 </tbody></table></div>
-<h2 class="sub-title">20.5 Gesture akcije u C#</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// Swipe gore (scroll down)
-var size = driver.Manage().Window.Size;
-var finger = new PointerInputDevice(PointerKind.Touch, "finger");
-var swipe = new ActionSequence(finger);
-swipe.AddAction(finger.CreatePointerMove(
-    CoordinateOrigin.Viewport, size.Width / 2, size.Height * 3 / 4));
-swipe.AddAction(finger.CreatePointerDown(MouseButton.Left));
-swipe.AddAction(finger.CreatePointerMove(
-    CoordinateOrigin.Viewport, size.Width / 2, size.Height / 4,
-    TimeSpan.FromMilliseconds(500)));
-swipe.AddAction(finger.CreatePointerUp(MouseButton.Left));
-driver.PerformActions(new List&lt;ActionSequence&gt; { swipe });
+<h2 class="sub-title">20.3 k6 — moderni load testing alat</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>import http from 'k6/http';
+import { check, sleep } from 'k6';
 
-// Tap na koordinate
-var tap = new ActionSequence(finger);
-tap.AddAction(finger.CreatePointerMove(
-    CoordinateOrigin.Viewport, 200, 400));
-tap.AddAction(finger.CreatePointerDown(MouseButton.Left));
-tap.AddAction(finger.CreatePointerUp(MouseButton.Left));
-driver.PerformActions(new List&lt;ActionSequence&gt; { tap });</pre></div>
-<h2 class="sub-title">20.6 Page Object Model za mobilne aplikacije</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// POM za Appium — isti princip kao web (videti Sekciju 14)
-public class LoginScreen
-{
- private readonly AndroidDriver _driver;
+export const options = {
+  stages: [
+    { duration: '2m', target: 100 },  // ramp up
+    { duration: '5m', target: 100 },  // stay at 100 users
+    { duration: '2m', target: 0 },    // ramp down
+  ],
+  thresholds: {
+    http_req_duration: ['p(95)<2000'],  // 95% pod 2s
+    http_req_failed:   ['rate<0.01'],   // error rate < 1%
+  },
+};
 
- private AppiumElement UsernameField =>
-  _driver.FindElement(MobileBy.AccessibilityId("username"));
- private AppiumElement PasswordField =>
-  _driver.FindElement(MobileBy.AccessibilityId("password"));
- private AppiumElement LoginButton =>
-  _driver.FindElement(MobileBy.AccessibilityId("loginBtn"));
-
- public LoginScreen(AndroidDriver driver) => _driver = driver;
-
- public HomeScreen LoginAs(string user, string pass)
- {
-  UsernameField.SendKeys(user);
-  PasswordField.SendKeys(pass);
-  LoginButton.Click();
-  return new HomeScreen(_driver);
- }
+export default function () {
+  const res = http.get('https://api.myapp.com/users');
+  check(res, { 'status is 200': (r) => r.status === 200 });
+  sleep(1);
 }</pre></div>
-<h2 class="sub-title">20.7 Realni uredaji vs. Emulatori</h2>
-<div class="tbl-wrap"><table><thead><tr><th></th><th>Emulatori / Simulatori</th><th>Realni uredaji</th></tr></thead><tbody>
-<tr><td>Brzina setup-a</td><td>Brzo, bez hardvera</td><td>Zahteva fizicki pristup</td></tr>
-<tr><td>Tacnost</td><td>Dobra za funkcionalne testove</td><td>Neophodna za hardware, senzore, performanse</td></tr>
-<tr><td>Cena</td><td>Besplatno</td><td>Kupovina ili cloud (BrowserStack, Sauce Labs)</td></tr>
-<tr><td>Interruptions</td><td>Ne simulira pozive, SMS</td><td>Realni interruptions</td></tr>
-<tr><td>Preporuka</td><td>Regression, funkcionalni testovi</td><td>Release testing, performance, UAT</td></tr>
+<h2 class="sub-title">20.4 k6 vs JMeter — poredjenje</h2>
+<div class="tbl-wrap"><table><thead><tr><th></th><th>k6</th><th>JMeter</th></tr></thead><tbody>
+<tr><td>Skriptovanje</td><td>JavaScript (ES6+)</td><td>XML + GUI</td></tr>
+<tr><td>Kriva ucenja</td><td>Niska za developere</td><td>Visa, GUI-driven</td></tr>
+<tr><td>CI/CD integracija</td><td>Odlicna (CLI first)</td><td>Dobra (plugins)</td></tr>
+<tr><td>Izvestaji</td><td>k6 Cloud, Grafana</td><td>HTML izvestaji, plugins</td></tr>
+<tr><td>Open source</td><td>Da (Grafana Labs)</td><td>Da (Apache)</td></tr>
 </tbody></table></div>
-<div class="note">Cloud device farme (BrowserStack, Sauce Labs, AWS Device Farm) nude stotine realnih uredaja bez kupovine — idealno za cross-device testing.</div>
-<h2 class="sub-title">20.8 Specificnosti mobilnog testiranja</h2>
-<ul><li class="bullet-item">Razlicite rezolucije i gustine piksela — testirati na vise uredjaja.</li>
-<li class="bullet-item">Interruptions: pozivi, notifikacije, low battery — sistem mora da se ponasa predvidivo.</li>
-<li class="bullet-item">Network conditions — testirati na 3G, 4G, offline modu.</li>
-<li class="bullet-item">Permissions — kamera, lokacija, kontakti — testirati scenarije odbijanja dozvola.</li>
-<li class="bullet-item">Orientation — portrait i landscape mod.</li>
+<div class="note">Preporuka: k6 za timove koji pisu kod i rade u CI/CD; JMeter za timove sa GUI navikama ili legacy projektima.</div>
+<h2 class="sub-title">20.5 NBomber — load testing u C# / .NET</h2>
+<p class="body-text">NBomber je .NET-native load testing framework — testovi se pisu u C#, u istom solution-u sa Selenium/API testovima (videti Sekciju 19).</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// NBomber scenario — load test za API endpoint (xUnit integracija)
+var scenario = Scenario.Create("get_users", async context =>
+{
+    var client = new HttpClient();
+    var response = await client.GetAsync("https://api.myapp.com/users");
+
+    return response.IsSuccessStatusCode
+        ? Response.Ok()
+        : Response.Fail();
+})
+.WithLoadSimulations(
+    Simulation.RampingInject(rate: 50, interval: TimeSpan.FromSeconds(1),
+                             during: TimeSpan.FromMinutes(2)),
+    Simulation.Inject(rate: 50, interval: TimeSpan.FromSeconds(1),
+                      during: TimeSpan.FromMinutes(5)),
+    Simulation.RampingInject(rate: 0, interval: TimeSpan.FromSeconds(1),
+                             during: TimeSpan.FromMinutes(1))
+);
+
+NBomberRunner
+    .RegisterScenarios(scenario)
+    .WithReportFolder("reports")
+    .Run();</pre></div>
+<h2 class="sub-title">20.6 k6 vs NBomber — kada sta koristiti</h2>
+<div class="tbl-wrap"><table><thead><tr><th></th><th>k6</th><th>NBomber</th></tr></thead><tbody>
+<tr><td>Jezik</td><td>JavaScript (ES6+)</td><td>C# / F#</td></tr>
+<tr><td>Ekosistem</td><td>Standalone CLI</td><td>NuGet paket, deo .NET solution-a</td></tr>
+<tr><td>Idealan za</td><td>DevOps/JS timove, brze ad-hoc testove</td><td>QA timove koji vec rade u C# (Selenium, RestSharp)</td></tr>
+<tr><td>CI/CD</td><td>CLI first, odlicna integracija</td><td>dotnet test, ista infra kao funkcionalni testovi</td></tr>
+<tr><td>Izvestaji</td><td>k6 Cloud, Grafana, JSON</td><td>HTML, Markdown, CSV, custom sinks</td></tr>
+</tbody></table></div>
+<div class="note">Za .NET QA timove NBomber ima kljucnu prednost: isti jezik, isti toolchain, isti CI/CD pipeline — bez prebacivanja konteksta na JavaScript.</div>
+<h2 class="sub-title">20.7 QA uloga u performance testiranju</h2>
+<ul><li class="bullet-item">Definisanje realisticnih SLA sa stakeholderima pre testiranja.</li>
+<li class="bullet-item">Kreiranje reprezentativnih load scenarija — ne samo 'svi rade isti zahtev'.</li>
+<li class="bullet-item">Analiza rezultata: identifikovanje bottleneck-a (DB, API, mreza, memorija).</li>
+<li class="bullet-item">Baseline testing: merenje pre i posle svake relevantne izmene.</li>
+<li class="bullet-item">Performance regression u CI/CD-u sa failure thresholds.</li>
 </ul>
