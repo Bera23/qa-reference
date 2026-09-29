@@ -71,8 +71,16 @@ dist/                 — build output; this is what gets pushed and served by G
   original text. Chaining `.replace()` calls re-scans markup it just injected (e.g. a string pattern
   matched `class="kw"`) and silently corrupts the visible code. After touching it, check that
   `pre.textContent` is identical before/after highlighting on every code block, not just that spans balance.
-- No test suite / linter for this project. Verification = build succeeds + manual click-through
-  of nav/search/bookmarks/theme toggle/prev-next on a couple of generated pages before pushing.
+- `npm install && npm test` — builds `dist/` then runs every `tests/*.test.js` against it with
+  jsdom (a devDependency; `build.js` itself still has zero dependencies). No test framework, no
+  CI — `tests/run.js` just runs each file as a child process and aggregates pass/fail. Each file
+  is self-contained (`node tests/whatever.test.js` also works on its own) and ends with
+  `summary()` from `tests/helpers.js`, which is what sets the exit code `run.js` checks.
+- Add a test when you add a feature with real interaction logic (filters, stats, anything with a
+  closure or a multi-step flow) — that's exactly the class of bug plain click-through won't catch
+  (see the Deo-tracking closure bug in `tests/quiz-stats.test.js`'s comments for a worked
+  example). Skip it for content-only edits; `npm test`'s syntax-highlighter/lang-badges/page-smoke
+  files already re-run against whatever content changed, since they scan the whole built site.
 
 ## Workflow Preferences (this project specifically)
 

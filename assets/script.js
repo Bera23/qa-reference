@@ -544,6 +544,13 @@ function initLangBadges() {
 // Per-question self-assessment, keyed by a stable slug of the question TEXT (same
 // principle as slugify() for anchors/bookmarks) so results survive question reordering.
 function quizStatsKey(questionText) { return 'q-' + slugify(questionText); }
+// INVARIANT: every view (stats panel, weak-points filter, export) reads getQuizStats() fresh,
+// straight from localStorage, on each call — there is no intermediate cache anywhere in this
+// feature. That is WHY resetQuizQuestion/resetAllQuizStats need no separate "invalidate the
+// other views" step: there's nothing else to invalidate. If a cache is ever added here (e.g.
+// for a very large question bank), every one of those call sites must be updated to read
+// through it, and tests/quiz-stats.test.js's reset-propagation checks are what will catch it
+// if one is missed.
 function getQuizStats() { return store.getJSON('qa_quiz_stats', {}); }
 function saveQuizStats(stats) { store.set('qa_quiz_stats', JSON.stringify(stats)); }
 function recordQuizAnswer(key, questionText, deo, wasCorrect) {
