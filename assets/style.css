@@ -146,6 +146,11 @@ body.qa-page h2.sub-title{border-left:4px solid var(--accent);padding-left:12px;
 .deo-jump-btn{font-family:'Courier New',monospace;font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--accent);background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:7px 14px;cursor:pointer;transition:background .15s,color .15s,border-color .15s;}
 .deo-jump-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 body.qa-page h2.sub-title{scroll-margin-top:104px;}
+/* Collapsible Deo groups (section 24, built by initDeoCollapse): tap a Deo header to hide/show all its questions. */
+.deo-collapsible{cursor:pointer;}
+.deo-hidden{display:none;}
+body.qa-page h2.sub-title.deo-collapsible::before{content:'▾';flex:0 0 auto;color:var(--accent);font-size:13px;margin-right:6px;}
+body.qa-page h2.sub-title.deo-collapsed::before{content:'▸';}
 .bullet-item{color:var(--text);margin:3px 0 3px 16px;line-height:1.65;list-style:none;}
 .bullet-item::before{content:"•";color:var(--accent);margin-right:8px;font-weight:700;}
 

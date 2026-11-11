@@ -313,7 +313,7 @@
 <h3 class="sub-sub-title">Zahtevi se promene usred sprinta — kako se prilagodjavas?</h3>
 <p class="body-text"><strong>Situation:</strong> Tokom sprinta, PO je promenio pravilo validacije na formi koju sam vec pola pokrio test case-ovima i delimicno automatizovao.</p>
 <p class="body-text"><strong>Task:</strong> Prilagoditi test pokrivenost novom pravilu bez da tiho apsorbujem dodatni obim posla u isti rok.</p>
-<p class="body-text"><strong>Action:</strong> Proverio sam koji test case-ovi i koji automatizovani testovi su pogodjeni promenom, procenio dodatni effort, i to komunicirao PO-u i developeru pre nego sto sam pocelo prepravku — novi scenario ide u prioritet jer je svez i rizican, dok deo regresionih provera koje nisu direktno pogodjene cekaju sledeci nightly run umesto da ih forsiram u isti dan.</p>
+<p class="body-text"><strong>Action:</strong> Proverio sam koji test case-ovi i koji automatizovani testovi su pogodjeni promenom, procenio dodatni effort, i to komunicirao PO-u i developeru pre nego sto sam poceo prepravku — novi scenario ide u prioritet jer je svez i rizican, dok deo regresionih provera koje nisu direktno pogodjene cekaju sledeci nightly run umesto da ih forsiram u isti dan.</p>
 <p class="body-text"><strong>Result:</strong> Promena je pokrivena bez da je ugrozila ostatak sprinta. PO je dobio realnu procenu umesto tihog kasnjenja koje bi se otkrilo tek na kraju sprinta.</p>
 
 <h3 class="sub-sub-title">Automatizacija je propustila bag koji je manuelno testiranje uhvatilo — zasto?</h3>
@@ -331,14 +331,14 @@
 <h3 class="sub-sub-title">Koji je najteziji bag koji si nasao — i kako si ga pratio unazad?</h3>
 <p class="body-text"><strong>Situation:</strong> Povremen defekt — podatak bi se ponekad sacuvao pogresno, ali samo kad je korisnik brzo prelazio izmedju dva polja na formi, i nije se reprodukovao po komandi.</p>
 <p class="body-text"><strong>Task:</strong> Pronaci uzrok necega sto se ne ponavlja dosledno, pre nego sto stigne u produkciju.</p>
-<p class="body-text"><strong>Action:</strong> Prvo sam iskljucila slucajnost — proverila da li se desava na odredjenoj kombinaciji polja ili bilo gde. Kad sam suzila na dva konkretna polja, otvorila sam DevTools Network tab i usporila konekciju (throttling) da vidim redosled zahteva. Ispostavilo se da su dva async poziva za cuvanje polja trkala jedan drugog — race condition, ne bag u samoj validaciji.</p>
-<p class="body-text"><strong>Result:</strong> Prijavila sam bag sa tacnim koracima za reprodukciju (throttled network + brzo kucanje) i objasnjenjem race condition-a, sto je developerima odmah dalo pravac za fix umesto nagadjanja. Pouka: kad se bag "ne ponavlja dosledno", pre nego sto ga proglasim flaky-jem, prvo proverim da li je u pitanju tajming, ne slucajnost.</p>
+<p class="body-text"><strong>Action:</strong> Prvo sam iskljucio slucajnost — proverio da li se desava na odredjenoj kombinaciji polja ili bilo gde. Kad sam suzio na dva konkretna polja, otvorio sam DevTools Network tab i usporio konekciju (throttling) da vidim redosled zahteva. Ispostavilo se da su dva async poziva za cuvanje polja trkala jedan drugog — race condition, ne bag u samoj validaciji.</p>
+<p class="body-text"><strong>Result:</strong> Prijavio sam bag sa tacnim koracima za reprodukciju (throttled network + brzo kucanje) i objasnjenjem race condition-a, sto je developerima odmah dalo pravac za fix umesto nagadjanja. Pouka: kad se bag "ne ponavlja dosledno", pre nego sto ga proglasim flaky-jem, prvo proverim da li je u pitanju tajming, ne slucajnost.</p>
 
 <h3 class="sub-sub-title">Da li postoji odluka u testiranju koju bi danas doneo drugacije?</h3>
-<p class="body-text"><strong>Situation:</strong> Rano u radu na regresionom suite-u, birala sam da dodajem nove automatizovane testove sto brze, da povecam broj pokrivenih scenarija.</p>
+<p class="body-text"><strong>Situation:</strong> Rano u radu na regresionom suite-u, birao sam da dodajem nove automatizovane testove sto brze, da povecam broj pokrivenih scenarija.</p>
 <p class="body-text"><strong>Task:</strong> Balans izmedju brzine dodavanja pokrivenosti i stabilnosti onoga sto vec postoji.</p>
-<p class="body-text"><strong>Action:</strong> Nisam dovoljno rano ulozila vreme u deljene helper metode i konzistentnu wait strategiju — svaki test je pomalo drugacije cekao elemente. Kad je broj testova narastao, flaky rate je narastao sa njim, i trebalo je vise vremena da se to naknadno konsoliduje nego da je uradjeno od pocetka.</p>
-<p class="body-text"><strong>Result:</strong> Danas bih prvo ulozila vreme u stabilan temelj (BasePage, retry helper, konzistentan wait pattern) i tek onda sirila broj testova brzo — pouka koju sam prenela i mladjim kolegama kad su pocinjali sopstvene suite-ove.</p>
+<p class="body-text"><strong>Action:</strong> Nisam dovoljno rano ulozio vreme u deljene helper metode i konzistentnu wait strategiju — svaki test je pomalo drugacije cekao elemente. Kad je broj testova narastao, flaky rate je narastao sa njim, i trebalo je vise vremena da se to naknadno konsoliduje nego da je uradjeno od pocetka.</p>
+<p class="body-text"><strong>Result:</strong> Danas bih prvo ulozio vreme u stabilan temelj (BasePage, retry helper, konzistentan wait pattern) i tek onda sirio broj testova brzo — pouka koju sam preneo i mladjim kolegama kad su pocinjali sopstvene suite-ove.</p>
 
 <h2 class="sub-title">Deo IV — Opsta / HR / screening pitanja</h2>
 <p class="body-text">Nontehnicka pitanja sa recruiter/HR screeninga — cilj poziva nije da polozis tehnicki, nego da te ne filtriraju. Za dublju strategiju (odbrana CV-a, uokviravanje slabosti) vidi sekciju 25. Model odgovori su vezani za stvarno iskustvo; prilagodi ih firmi pre svakog poziva.</p>
