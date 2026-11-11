@@ -339,3 +339,48 @@
 <p class="body-text"><strong>Task:</strong> Balans izmedju brzine dodavanja pokrivenosti i stabilnosti onoga sto vec postoji.</p>
 <p class="body-text"><strong>Action:</strong> Nisam dovoljno rano ulozila vreme u deljene helper metode i konzistentnu wait strategiju — svaki test je pomalo drugacije cekao elemente. Kad je broj testova narastao, flaky rate je narastao sa njim, i trebalo je vise vremena da se to naknadno konsoliduje nego da je uradjeno od pocetka.</p>
 <p class="body-text"><strong>Result:</strong> Danas bih prvo ulozila vreme u stabilan temelj (BasePage, retry helper, konzistentan wait pattern) i tek onda sirila broj testova brzo — pouka koju sam prenela i mladjim kolegama kad su pocinjali sopstvene suite-ove.</p>
+
+<h2 class="sub-title">Deo IV — Opsta / HR / screening pitanja</h2>
+<p class="body-text">Nontehnicka pitanja sa recruiter/HR screeninga — cilj poziva nije da polozis tehnicki, nego da te ne filtriraju. Za dublju strategiju (odbrana CV-a, uokviravanje slabosti) vidi sekciju 25. Model odgovori su vezani za stvarno iskustvo; prilagodi ih firmi pre svakog poziva.</p>
+
+<h3 class="sub-sub-title">Reci nesto o sebi.</h3>
+<p class="body-text"><strong>Sta traze:</strong> 60-90 sekundi, ne ceo CV — ko si, trenutni fokus i zasto si na ovom pozivu. Proveravaju komunikaciju i da li umes da prioritizujes.</p>
+<p class="body-text"><strong>Model odgovor:</strong> "QA inzenjer sam sa 4+ godine iskustva, trenutno u Trace One na enterprise PLM i compliance proizvodima. Ownujem jedan od nightly regression protokola i zatvorio sam 851 change request-a od pocetka 2025 — radim i manual i automation (C#/Selenium, POM, xUnit, Azure Pipelines) i API testiranje, plus testiranje AI feature-a za ekstrakciju podataka. Dnevno radim failure triage gde razdvajam realne regresije od pokvarenih skripti i environment problema. Trazim [razlog vezan za rolu/firmu] i zato me zanima ova pozicija."</p>
+
+<h3 class="sub-sub-title">Zasto napustas trenutni posao?</h3>
+<p class="body-text"><strong>Sta traze:</strong> crvene zastavice — da li bezis od problema ili od ljudi. Nikad lose o trenutnoj firmi.</p>
+<p class="body-text"><strong>Model odgovor:</strong> "Ne bezim od Trace One — tamo sam naucio enterprise QA i preuzeo ownership nad regression protokolom. Trazim sledeci korak: [vise automation-a kao jezgro role / drugi domen / moderniji test stack], a ovde to vidim. Vise me vuce ka tome gde idem nego od cega odlazim."</p>
+<p class="body-text"><strong>Taktika:</strong> uvek uokviri pozitivno ("ka cemu idem"), bez kritike kolega, menadzmenta ili plate kao razloga.</p>
+
+<h3 class="sub-sub-title">Zasto bas nasa firma?</h3>
+<p class="body-text"><strong>Sta traze:</strong> da li si istrazio firmu ili sibas prijave masovno.</p>
+<p class="body-text"><strong>Model odgovor (template):</strong> pre poziva nadji 2-3 konkretne stvari o firmi — proizvod/domen, tech stack, kultura ili skorasnja vest — i povezi ih sa onim sto trazis. "Video sam da radite [proizvod/domen] na [stack]; to se poklapa sa mojim C#/automation iskustvom, i [konkretan razlog: product firma / domen / nacin rada] mi je bitan." Generika tipa 'volim kvalitet' je crvena lampica.</p>
+
+<h3 class="sub-sub-title">Koje su ti najvece snage?</h3>
+<p class="body-text"><strong>Sta traze:</strong> relevantne snage sa dokazom, ne listu prideva.</p>
+<p class="body-text"><strong>Model odgovor:</strong> "Najjaca strana mi je sto ne samo pisem testove nego ih drzim verodostojnim — dnevni triage gde razdvajam app, automation i environment probleme, i stabilizacija flaky skripti kroz locatore, wait-ove i retry. Druga je testiranje AI feature-a (tacnost ekstrakcije, RBAC, fallback) — jos uvek retko iskustvo. Treca: naviknut sam na ownership, drzim kritican regression protokol bez mikromenadzmenta."</p>
+
+<h3 class="sub-sub-title">Koja ti je najveca slabost?</h3>
+<p class="body-text"><strong>Sta traze:</strong> samosvest i konkretan rad na slabosti — ne laznu skromnost ("previse sam perfekcionista") ni rupu koja blokira rolu.</p>
+<p class="body-text"><strong>Model odgovor:</strong> "Dugo sam merio premalo svog rada — radio sam triage i stabilizaciju bez brojki, pa mi je bilo tesko da pokazem uticaj. Sad gradim tooling koji klasifikuje svaki fail i dnevni log, da imam merljiv trag. Pored toga: radim C#/Selenium, nemam Playwright u produkciji — ucim ga jer raste u oglasima." Biraj slabost koja je stvarna ali ne-blokirajuca za konkretnu rolu.</p>
+
+<h3 class="sub-sub-title">Gde se vidis za 3-5 godina?</h3>
+<p class="body-text"><strong>Sta traze:</strong> da li ostajes i da li je ambicija realna i uskladjena sa rolom.</p>
+<p class="body-text"><strong>Model odgovor:</strong> "Dublje u test automation i arhitekturu — ownership framework-a i CI/CD, mozda mentorstvo mladjih QE. Ne bezim od hands-on rada; hocu da rastem u dubinu i tehnicki autoritet, ne nuzno u cisti menadzment."</p>
+
+<h3 class="sub-sub-title">Kolika su ti ocekivanja za platu?</h3>
+<p class="body-text"><strong>Sta traze:</strong> da li se uklapas u budzet role. Ovo je filter, ne pravi pregovor — pregovor dolazi sa ponudom.</p>
+<p class="body-text"><strong>Taktika:</strong> prvo pokusaj da oni kazu prvi — "koji je vas opseg za ovu rolu?". Ako moras prvi, daj raspon (ne fiksno) baziran na trzistu i tipu role, i vezi ga za ceo paket (bonus, benefiti, hybrid).</p>
+<p class="body-text"><strong>Model odgovor:</strong> "Otvoren sam i gledam ceo paket. Okvirno, za [automation/manual] rolu ovog nivoa u Beogradu, negde [raspon] neto — ali rado prvo cujem vas opseg za poziciju."</p>
+
+<h3 class="sub-sub-title">Zasto da bas tebe zaposlimo?</h3>
+<p class="body-text"><strong>Sta traze:</strong> tvoj diferencijator u odnosu na druge kandidate.</p>
+<p class="body-text"><strong>Model odgovor:</strong> "Retko ko spaja tri stvari: produkcijski C#/Selenium automation, hands-on manual i API testiranje, i testiranje AI feature-a. Uz to ownujem kritican regression protokol i zatvorio sam 851 CR-ova — naviknut sam na odgovornost i samostalan rad, ne treba mi mikromenadzment da isporucim."</p>
+
+<h3 class="sub-sub-title">Imas li pitanja za nas?</h3>
+<p class="body-text"><strong>Sta traze:</strong> zainteresovanost i ozbiljnost. "Nemam pitanja" je crvena lampica.</p>
+<p class="body-text"><strong>Model odgovor:</strong> uvek imaj 2-3 spremna. Dobra: "Kako izgleda ostatak procesa — koliko krugova?" / "Koji tacno test stack tim koristi danas?" / "Zasto je pozicija otvorena — rast tima ili zamena?" / "Kako merite uspeh QA u prvih 6 meseci?" Cuvaj platu i benefite za kraj ili sledeci krug, osim ako ih oni otvore.</p>
+
+<h3 class="sub-sub-title">Koji ti je otkazni rok i kad mozes da pocnes?</h3>
+<p class="body-text"><strong>Sta traze:</strong> logistika — kad si realno dostupan i da li ti odgovara format (hybrid/on-site/lokacija).</p>
+<p class="body-text"><strong>Model odgovor:</strong> reci tacan otkazni rok (proveri ugovor pre poziva) i budi jasan oko dostupnosti i formata rada. "Otkazni rok mi je [X]; mogu da pocnem [kad]. Hybrid/on-site u [lokacija] mi odgovara." Ako je nesto fleksibilno ili ima uslov, reci odmah.</p>
