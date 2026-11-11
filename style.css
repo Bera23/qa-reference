@@ -132,6 +132,13 @@ h2.sub-title{scroll-margin-top:48px;}
 .anchor:hover{color:var(--accent);}
 h3.sub-sub-title{font-size:calc(var(--fs,15px)*0.9);font-weight:600;color:var(--h3c);padding-top:16px;margin-bottom:7px;font-family:'Courier New',monospace;letter-spacing:.02em;}
 .body-text{color:var(--text);margin-bottom:10px;line-height:1.78;text-align:justify;}
+/* --- Q&A redesign (section 24 only: .qa-question is set by initQuizMode, body.qa-page scopes the Deo headers). Overrides the mono/undersized h3.sub-sub-title so the prompt reads as the focal point, not weaker than its own answer. --- */
+#content h3.qa-question{font-family:'Georgia','Times New Roman',serif;font-size:calc(var(--fs,15px)*1.08);font-weight:600;letter-spacing:normal;color:var(--h2c);line-height:1.4;margin:20px 0 0;padding:13px 36px 12px 16px;border-left:3px solid var(--accent);background:var(--bg2);border-radius:7px;transition:background .15s,border-color .15s,color .15s;}
+#content h3.qa-question:hover{background:var(--bg3);border-left-color:var(--accent2);color:var(--accent2);}
+#content .qa-question::after{right:14px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--accent);}
+#content .qa-item{margin-bottom:9px;}
+#content .qa-item .qa-answer{padding-left:16px;margin-top:10px;}
+body.qa-page h2.sub-title{border-left:4px solid var(--accent);padding-left:12px;border-radius:0 4px 4px 0;background:linear-gradient(90deg,rgba(79,142,247,.08),transparent);}
 .bullet-item{color:var(--text);margin:3px 0 3px 16px;line-height:1.65;list-style:none;}
 .bullet-item::before{content:"•";color:var(--accent);margin-right:8px;font-weight:700;}
 
@@ -148,6 +155,8 @@ h3.sub-sub-title{font-size:calc(var(--fs,15px)*0.9);font-weight:600;color:var(--
 /* ── Code block ──────────── */
 .code-block{background:var(--code-bg);border:1px solid #2a3a50;border-left:3px solid var(--accent);border-radius:6px;padding:14px 16px;margin:12px 0;overflow-x:auto;position:relative;}
 .code-block pre{font-family:'Courier New',monospace;font-size:calc(var(--fs,15px)*0.8667);color:var(--code-text);line-height:1.65;white-space:pre;}
+/* Inline code in prose must wrap, not push page width (long Selenium/API chains caused horizontal page scroll on mobile). Does not affect .code-block pre, which keeps white-space:pre. */
+.body-text code{overflow-wrap:anywhere;word-break:break-word;}
 .copy-btn{position:absolute;top:8px;right:8px;background:#1e2d40;border:1px solid #2a3a50;color:var(--text3);font-size:10.5px;padding:3px 9px;border-radius:4px;cursor:pointer;font-family:'Courier New',monospace;opacity:0;transition:all .2s;}
 .code-block:hover .copy-btn{opacity:1;}
 .copy-btn:hover{color:var(--text);}

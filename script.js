@@ -580,6 +580,7 @@ function initQuizMode() {
   if (!window.QA_PAGE || !/Pitanja i odgovori/.test(window.QA_PAGE.title || '')) return;
   const content = document.getElementById('content');
   if (!content) return;
+  document.body.classList.add('qa-page');  // scopes Q&A-only styling (Deo headers) to section 24
   const headers = Array.from(content.querySelectorAll('h3.sub-sub-title'));
   if (headers.length === 0) return;
 
