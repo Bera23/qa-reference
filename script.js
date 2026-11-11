@@ -125,7 +125,7 @@ function initDeoJump() {
     btn.className = 'deo-jump-btn';
     btn.textContent = label;
     btn.addEventListener('click', () => {
-      if (h2.classList.contains('deo-collapsed')) h2.click();  // expand the target Deo before jumping to it
+      if (h2.classList.contains('deo-collapsed')) setDeoCollapsed(h2, false);  // expand the target Deo before jumping to it
       h2.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
     nav.appendChild(btn);
@@ -133,30 +133,31 @@ function initDeoJump() {
   content.insertBefore(nav, subs[0]);
 }
 
-// Make each Deo header (h2.sub-title) collapse/expand everything under it (its intro + all its
-// questions), up to the next Deo. Section 24 only. Default = all collapsed on load.
+// Collapse scope = the Deo's own intro paragraph + its question cards only. Stop at the next Deo OR
+// at the first element that is neither — so the LAST Deo never swallows the related-sections /
+// prev-next nav / footer that follow it. Module-level so deep-link navigation can expand too.
+function setDeoCollapsed(h2, collapsed) {
+  h2.classList.toggle('deo-collapsed', collapsed);
+  let el = h2.nextElementSibling;
+  while (el && !el.matches('h2.sub-title') && (el.matches('.qa-item') || el.matches('.body-text'))) {
+    el.classList.toggle('deo-hidden', collapsed);
+    el = el.nextElementSibling;
+  }
+}
+
+// Make each Deo header (h2.sub-title) collapse/expand everything under it. Section 24 only.
+// Default = all collapsed on load.
 function initDeoCollapse() {
   if (!window.QA_PAGE || !/Pitanja i odgovori/.test(window.QA_PAGE.title || '')) return;
   const content = document.getElementById('content');
   if (!content) return;
   const subs = Array.from(content.querySelectorAll('h2.sub-title'));
   if (!subs.length) return;
-  // Collapse scope = the Deo's own intro paragraph + its question cards only. Stop at the next Deo
-  // OR at the first element that is neither — so the LAST Deo never swallows the related-sections /
-  // prev-next nav / footer that follow it.
-  const setCollapsed = (h2, collapsed) => {
-    h2.classList.toggle('deo-collapsed', collapsed);
-    let el = h2.nextElementSibling;
-    while (el && !el.matches('h2.sub-title') && (el.matches('.qa-item') || el.matches('.body-text'))) {
-      el.classList.toggle('deo-hidden', collapsed);
-      el = el.nextElementSibling;
-    }
-  };
   subs.forEach(h2 => {
     h2.classList.add('deo-collapsible');
     h2.setAttribute('role', 'button');
     h2.setAttribute('tabindex', '0');
-    const flip = () => setCollapsed(h2, !h2.classList.contains('deo-collapsed'));
+    const flip = () => setDeoCollapsed(h2, !h2.classList.contains('deo-collapsed'));
     h2.addEventListener('click', e => {
       if (e.target.closest('a, button')) return;  // don't toggle when tapping the #anchor or ★bookmark
       flip();
@@ -164,7 +165,7 @@ function initDeoCollapse() {
     h2.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
     });
-    setCollapsed(h2, true);  // default: everything collapsed on load
+    setDeoCollapsed(h2, true);  // default: everything collapsed on load
   });
 }
 // ═══════════════════════════════════════════════════════
@@ -212,7 +213,10 @@ function scrollToHash() {
     const legacy = /^h-(\d+)$/.exec(id);
     if (legacy) target = document.querySelectorAll('h2.sub-title')[Number(legacy[1])];
   }
-  if (target) target.scrollIntoView();
+  if (target) {
+    if (target.classList.contains('deo-collapsed')) setDeoCollapsed(target, false);  // open the Deo a deep link points at
+    target.scrollIntoView();
+  }
 }
 // ═══════════════════════════════════════════════════════
 // BOOKMARK BUTTONS on h2
@@ -347,7 +351,11 @@ function goToBookmark(page, slug) {
   if (!url) return;                                 // that page no longer exists
   if (page === currentPageKey()) {
     const el = document.getElementById(slug);
-    if (el) { el.scrollIntoView(); closeBmPanel(); }
+    if (el) {
+      if (el.classList.contains('deo-collapsed')) setDeoCollapsed(el, false);  // open the bookmarked Deo
+      el.scrollIntoView();
+      closeBmPanel();
+    }
     return;
   }
   window.location.href = url + '#' + encodeURIComponent(slug);
@@ -374,8 +382,15 @@ function renderSearchTags() {
   const box = document.getElementById('search-tags');
   if (!box || !searchIndex) return;
   const allTags = [...new Set(searchIndex.flatMap(s => s.tags || []))].sort();
-  box.innerHTML = allTags.map(t =>
-    '<button type="button" class="search-tag" onclick="runTagSearch(\'' + t + '\')">#' + escapeHtml(t) + '</button>').join('');
+  box.textContent = '';
+  allTags.forEach(t => {
+    const b = document.createElement('button');   // DOM + listener, not an interpolated inline onclick,
+    b.type = 'button';                             // so a tag with a quote/backslash can't break the handler
+    b.className = 'search-tag';
+    b.textContent = '#' + t;
+    b.addEventListener('click', () => runTagSearch(t));
+    box.appendChild(b);
+  });
 }
 function runTagSearch(tag) {
   const input = document.getElementById('search');
