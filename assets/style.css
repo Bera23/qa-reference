@@ -151,6 +151,9 @@ body.qa-page h2.sub-title{scroll-margin-top:104px;}
 .deo-hidden{display:none;}
 body.qa-page h2.sub-title.deo-collapsible::before{content:'▾';flex:0 0 auto;color:var(--accent);font-size:13px;margin-right:6px;}
 body.qa-page h2.sub-title.deo-collapsed::before{content:'▸';}
+/* In quiz mode a collapsed Deo must not keep its questions hidden; the quiz filter (qa-filtered) still hides non-selected — its rule is placed after, so at equal specificity it wins. */
+#content.quiz-active .qa-item.deo-hidden{display:block;}
+#content.quiz-active .qa-item.qa-filtered{display:none;}
 .bullet-item{color:var(--text);margin:3px 0 3px 16px;line-height:1.65;list-style:none;}
 .bullet-item::before{content:"•";color:var(--accent);margin-right:8px;font-weight:700;}
 
