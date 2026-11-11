@@ -112,7 +112,7 @@ function initDeoJump() {
   const content = document.getElementById('content');
   if (!content) return;
   const subs = Array.from(content.querySelectorAll('h2.sub-title'));
-  if (subs.length < 2) return;
+  if (subs.length < 2) return;  // a one-chip jump bar is pointless; collapse (initDeoCollapse) still runs for a single Deo
   const nav = document.createElement('nav');
   nav.className = 'deo-jump';
   nav.setAttribute('aria-label', 'Deo navigacija');
@@ -138,6 +138,7 @@ function initDeoJump() {
 // prev-next nav / footer that follow it. Module-level so deep-link navigation can expand too.
 function setDeoCollapsed(h2, collapsed) {
   h2.classList.toggle('deo-collapsed', collapsed);
+  h2.setAttribute('aria-expanded', String(!collapsed));
   let el = h2.nextElementSibling;
   while (el && !el.matches('h2.sub-title') && (el.matches('.qa-item') || el.matches('.body-text'))) {
     el.classList.toggle('deo-hidden', collapsed);
@@ -155,7 +156,8 @@ function initDeoCollapse() {
   if (!subs.length) return;
   subs.forEach(h2 => {
     h2.classList.add('deo-collapsible');
-    h2.setAttribute('role', 'button');
+    // Not role="button": the header carries its own ★/# controls, and a button must not nest other
+    // interactive elements. Focusable + aria-expanded (kept in sync by setDeoCollapsed) conveys the toggle.
     h2.setAttribute('tabindex', '0');
     const flip = () => setDeoCollapsed(h2, !h2.classList.contains('deo-collapsed'));
     h2.addEventListener('click', e => {
@@ -1024,7 +1026,7 @@ function filterGlosar(q) {
 // horizontal scroll / taps aren't hijacked into a page navigation.
 // ═══════════════════════════════════════════════════════
 (function initSwipeNav() {
-  const EXCLUDE = '.code-block, .tbl-wrap, #sidebar, #bm-panel, #quickref, #overflow-menu';
+  const EXCLUDE = '.code-block, .tbl-wrap, #sidebar, #bm-panel, #quickref, #overflow-menu, .deo-jump';
   let startX = 0, startY = 0, tracking = false;
 
   document.addEventListener('touchstart', e => {
