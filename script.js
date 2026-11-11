@@ -99,7 +99,7 @@ function migrateStorage() {
 // can no longer abort the rest of the page initialisation.
 document.addEventListener('DOMContentLoaded', () => {
   const steps = [migrateStorage, addAnchorLinks, addBookmarkButtons, restoreState, initSyntaxHighlight,
-    initLangBadges, initQuizMode, initDeoJump, initRelatedSections, updateBmCount, initNavHeights, () => filterGlosar(''), loadSearchIndex, scrollToHash];
+    initLangBadges, initQuizMode, initDeoJump, initDeoCollapse, initRelatedSections, updateBmCount, initNavHeights, () => filterGlosar(''), loadSearchIndex, scrollToHash];
   steps.forEach(step => {
     try { step(); } catch (err) { console.error('Init step failed:', step.name || '(anonymous)', err); }
   });
@@ -128,6 +128,36 @@ function initDeoJump() {
     nav.appendChild(btn);
   });
   content.insertBefore(nav, subs[0]);
+}
+
+// Make each Deo header (h2.sub-title) collapse/expand everything under it (its intro + all its
+// questions), up to the next Deo. Section 24 only. Default = expanded (unchanged behaviour).
+function initDeoCollapse() {
+  if (!window.QA_PAGE || !/Pitanja i odgovori/.test(window.QA_PAGE.title || '')) return;
+  const content = document.getElementById('content');
+  if (!content) return;
+  const subs = Array.from(content.querySelectorAll('h2.sub-title'));
+  if (!subs.length) return;
+  subs.forEach(h2 => {
+    h2.classList.add('deo-collapsible');
+    h2.setAttribute('role', 'button');
+    h2.setAttribute('tabindex', '0');
+    const toggle = () => {
+      const collapsed = h2.classList.toggle('deo-collapsed');
+      let el = h2.nextElementSibling;
+      while (el && !(el.matches && el.matches('h2.sub-title'))) {
+        el.classList.toggle('deo-hidden', collapsed);
+        el = el.nextElementSibling;
+      }
+    };
+    h2.addEventListener('click', e => {
+      if (e.target.closest('a, button')) return;  // don't toggle when tapping the #anchor or ★bookmark
+      toggle();
+    });
+    h2.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+  });
 }
 // ═══════════════════════════════════════════════════════
 // ANCHOR LINKS on h2
@@ -990,7 +1020,9 @@ function filterGlosar(q) {
     tracking = false;
     const dx = e.changedTouches[0].clientX - startX;
     const dy = e.changedTouches[0].clientY - startY;
-    if (Math.abs(dx) < 90 || Math.abs(dy) > 60) return;   // needs a clear horizontal swipe
+    // Needs a deliberate, horizontal-dominant swipe — otherwise a vertical scroll with slight
+    // sideways drift was navigating to the next/prev section mid-read.
+    if (Math.abs(dx) < 110 || Math.abs(dy) > 45 || Math.abs(dx) < Math.abs(dy) * 2) return;
     const page = window.QA_PAGE || {};
     if (dx < 0 && page.nextUrl) window.location.href = page.nextUrl;
     else if (dx > 0 && page.prevUrl) window.location.href = page.prevUrl;
