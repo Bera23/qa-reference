@@ -113,3 +113,35 @@ SQL (MSSQL/Oracle), enterprise PLM domain, AI-feature QA (Copilot grounding/hall
 permission checks). Deo II (automation) content should stay aligned with these real tools and
 practices rather than drifting into generic textbook coverage. Communication in Serbian
 (ekavica), Claude Pro subscription.
+
+## Git access & deploy (for Claude sessions) — learned 2026-11-11
+
+How a Claude session reaches this repo:
+
+- **Read:** anonymous. `git clone` / `fetch` of the public repo works with no setup (the session's git
+  proxy serves public reads directly).
+- **Push:** needs BOTH of these, or the proxy returns HTTP 403 (`Claude doesn't have GitHub access to
+  bera23/qa-reference...`):
+  1. The **Claude GitHub App** installed on the repo — https://github.com/apps/claude/installations/select_target
+     → account `bera23` → grant it `qa-reference` (or all repos). Connecting the GitHub account in
+     claude.ai settings alone is NOT enough; the App must have this repo.
+  2. `add_repo(owner="bera23", repo="qa-reference", access="push")` called in the session.
+- A plain `git push` on a repo the session hasn't attached for push 403s ("not in this session's
+  authorized repository set").
+
+**Deploy — two branches:**
+
+- `master` = source (`dist/` is gitignored here). Commit source, then `git push origin master`.
+- `gh-pages` = the built site GitHub Pages serves. After `node build.js`, push `dist/` to it via a
+  worktree. From a shallow single-branch clone `origin/gh-pages` may not exist, so go through
+  `FETCH_HEAD`:
+  ```
+  git fetch --depth=50 origin gh-pages
+  git branch -f gh-pages FETCH_HEAD
+  git worktree add /tmp/ghp gh-pages
+  rm -rf /tmp/ghp/*; cp -r dist/. /tmp/ghp/
+  cd /tmp/ghp && git add -A && git commit -m "Deploy: ..." && git push origin gh-pages
+  cd - && git worktree remove /tmp/ghp --force
+  ```
+  `rm -rf /tmp/ghp/*` keeps dotfiles (e.g. a `.nojekyll`) and clears stale built files. Live site
+  updates ~1-2 min after the gh-pages push.

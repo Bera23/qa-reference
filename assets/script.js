@@ -99,11 +99,36 @@ function migrateStorage() {
 // can no longer abort the rest of the page initialisation.
 document.addEventListener('DOMContentLoaded', () => {
   const steps = [migrateStorage, addAnchorLinks, addBookmarkButtons, restoreState, initSyntaxHighlight,
-    initLangBadges, initQuizMode, initRelatedSections, updateBmCount, initNavHeights, () => filterGlosar(''), loadSearchIndex, scrollToHash];
+    initLangBadges, initQuizMode, initDeoJump, initRelatedSections, updateBmCount, initNavHeights, () => filterGlosar(''), loadSearchIndex, scrollToHash];
   steps.forEach(step => {
     try { step(); } catch (err) { console.error('Init step failed:', step.name || '(anonymous)', err); }
   });
 });
+
+// Sticky in-page jump bar for the Q&A page (section 24): one chip per Deo (I/II/III/IV) so the
+// long list of questions is navigable without scrolling. Scoped to the "Pitanja i odgovori" page.
+function initDeoJump() {
+  if (!window.QA_PAGE || !/Pitanja i odgovori/.test(window.QA_PAGE.title || '')) return;
+  const content = document.getElementById('content');
+  if (!content) return;
+  const subs = Array.from(content.querySelectorAll('h2.sub-title'));
+  if (subs.length < 2) return;
+  const nav = document.createElement('nav');
+  nav.className = 'deo-jump';
+  nav.setAttribute('aria-label', 'Deo navigacija');
+  const topbar = document.getElementById('topbar');
+  if (topbar) nav.style.top = topbar.offsetHeight + 'px';  // stick just under the (also sticky) topbar
+  subs.forEach(h2 => {
+    const label = (h2.dataset.title || h2.textContent).split('—')[0].replace(/[#★¶]/g, '').trim();
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'deo-jump-btn';
+    btn.textContent = label;
+    btn.addEventListener('click', () => h2.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    nav.appendChild(btn);
+  });
+  content.insertBefore(nav, subs[0]);
+}
 // ═══════════════════════════════════════════════════════
 // ANCHOR LINKS on h2
 // ═══════════════════════════════════════════════════════

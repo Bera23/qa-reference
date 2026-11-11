@@ -22,7 +22,7 @@ const { loadPage, ready, wait, check, summary } = require('./helpers');
   check('75+ quiz items built', items.length >= 75, `(${items.length})`);
   check('every item has a data-key', items.every(i => i.dataset.key && i.dataset.key.startsWith('q-')));
   check('all keys unique', new Set(items.map(i => i.dataset.key)).size === items.length);
-  check('Deo I/II/III all present among items', ['Deo I', 'Deo II', 'Deo III'].every(p => items.some(i => i.dataset.deo.startsWith(p))));
+  check('Deo I/II/III/IV all present among items', ['Deo I', 'Deo II', 'Deo III', 'Deo IV'].every(p => items.some(i => i.dataset.deo.startsWith(p))));
   check('rate buttons exist per item (2 each)', items[0].querySelectorAll('.qa-rate-btn').length === 2);
 
   // ── enter quiz mode, rate a few questions ───────────────────────────────
@@ -63,8 +63,8 @@ const { loadPage, ready, wait, check, summary } = require('./helpers');
   lastItem.querySelector('h3').click();
   lastItem.querySelector('.qa-rate-btn.incorrect').click();
   const statsAfterLast = JSON.parse(window.localStorage.getItem('qa_quiz_stats'));
-  check('last question on the page gets Deo III, not leaked onto earlier items',
-    statsAfterLast[lastItem.dataset.key].deo === 'Deo III — Behavioral / Situaciona pitanja', statsAfterLast[lastItem.dataset.key].deo);
+  check('last question on the page gets Deo IV, not leaked onto earlier items',
+    statsAfterLast[lastItem.dataset.key].deo === 'Deo IV — Opsta / HR / screening pitanja', statsAfterLast[lastItem.dataset.key].deo);
   check('rating the last question did not retroactively change item0 deo',
     JSON.parse(window.localStorage.getItem('qa_quiz_stats'))[k0].deo === 'Deo I — Manuelno testiranje');
 
