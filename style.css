@@ -221,7 +221,7 @@ body.qa-page h2.sub-title.deo-collapsed::before{content:'▸';}
 .tbl-wrap{margin:18px 0;border-radius:14px;border:1px solid var(--border);overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.3),0 10px 24px -18px rgba(0,0,0,.45);}
 .tbl-wrap.tall{max-height:480px;overflow-y:auto;}
 table{width:100%;border-collapse:collapse;font-size:calc(var(--fs,15px)*0.9);}
-thead th{background:var(--tbl-head);color:var(--text);font-weight:600;text-align:left;padding:11px 14px;border-bottom:1px solid var(--border);font-size:calc(var(--fs,15px)*0.82);letter-spacing:.02em;overflow-wrap:anywhere;}
+thead th{background:var(--tbl-head);color:var(--text);font-weight:600;text-align:left;padding:11px 14px;border-bottom:1px solid var(--border);font-size:calc(var(--fs,15px)*0.82);letter-spacing:.02em;overflow-wrap:break-word;}
 .tbl-wrap.tall thead{position:sticky;top:0;z-index:5;}
 tbody tr{transition:background .12s;}
 tbody tr:hover{background:color-mix(in srgb,var(--accent) 12%,transparent);}
