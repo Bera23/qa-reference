@@ -68,17 +68,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
 .tb-btn:hover{background:var(--bg3);border-color:var(--accent);color:var(--text);}
 
 /* ── Overflow menu ─────── */
-#overflow-menu{display:none;position:absolute;top:calc(100% + 8px);right:0;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;min-width:210px;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.45);}
+#overflow-menu{display:none;position:absolute;top:calc(100% + 10px);right:0;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:8px;min-width:234px;z-index:300;box-shadow:0 14px 34px -10px rgba(0,0,0,.6);}
 #overflow-menu.open{display:block;}
-.ov-label{font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
-.ov-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
-.ov-divider{height:1px;background:var(--border);margin:8px 0;}
-.ov-item{display:block;width:100%;text-align:left;background:none;border:none;color:var(--text2);font-size:13px;padding:7px 10px;border-radius:5px;cursor:pointer;transition:all .15s;font-family:inherit;}
-.ov-item:hover{background:var(--bg3);color:var(--text);}
+.ov-label{font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.11em;padding:5px 8px 7px;}
+.ov-row{display:flex;align-items:center;gap:8px;padding:0 8px 8px;}
+.ov-divider{height:1px;background:var(--border);margin:6px 8px;}
+.ov-item{display:flex;align-items:center;gap:9px;width:100%;text-align:left;background:none;border:none;color:var(--text2);font-size:13px;padding:9px 10px;border-radius:9px;cursor:pointer;transition:background .13s,color .13s;font-family:var(--font);}
+.ov-item:hover{background:color-mix(in srgb,var(--accent) 9%,transparent);color:var(--text);}
 .fs-group{display:flex;align-items:center;gap:4px;}
-.fs-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:13px;width:28px;height:28px;border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;padding:0;}
-.fs-btn:hover{border-color:var(--accent);color:var(--text);}
-.fs-display{font-family:var(--mono);font-size:10px;color:var(--text3);min-width:24px;text-align:center;}
+.fs-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:14px;font-weight:600;width:36px;height:34px;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;padding:0;font-family:var(--font);}
+.fs-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff;}
+.fs-display{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text2);flex:1;text-align:center;}
 
 /* ── DEO banner ─────────── */
 .deo-banner{background:linear-gradient(135deg,#0f3460 0%,#1a1a2e 100%);border-left:4px solid var(--accent);padding:12px 20px;margin:40px 0 0;border-radius:4px;font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#aed0ff;}
