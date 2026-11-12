@@ -2,7 +2,7 @@
  * The cache version and the precache list below are placeholders that build.js fills in
  * (content hash + file list), so every content change produces a new cache and old
  * caches are deleted on activate. Do not write the placeholder tokens anywhere else. */
-const CACHE = 'qa-ref-38dddc4378';
+const CACHE = 'qa-ref-051a52fe38';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -79,8 +79,11 @@ async function handle(req) {
     return network.catch(async () =>
       (req.mode === 'navigate' && await caches.match('index.html')) || Response.error());
   }
+  // A cached copy exists: prefer a FRESH OK response, but fall back to cache on error, timeout,
+  // OR a non-ok status (so a transient 404/5xx never replaces a good cached page).
+  const fresh = network.then(res => (res && res.ok) ? res : cached);
   return Promise.race([
-    network,
+    fresh,
     new Promise(resolve => setTimeout(() => resolve(cached), NETWORK_TIMEOUT_MS)),
   ]).catch(() => cached);
 }
