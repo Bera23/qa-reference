@@ -118,7 +118,7 @@
 <div class="deo-banner">DEO II — AUTOMATSKO TESTIRANJE</div>
 <div class="section" id="s16">
 <h1 class="sec-title" id="t-s16">⚙️ 16. CI/CD integracija<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~7 min citanja</span><button class="mark-read-btn" id="mrb-s16" onclick="markRead('s16')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~9 min citanja</span><button class="mark-read-btn" id="mrb-s16" onclick="markRead('s16')">Oznaci kao procitano</button></div>
 <h2 class="sub-title">16.1 Sta je CI/CD i uloga QA-a</h2>
 <p class="body-text">CI (Continuous Integration) je praksa automatskog build-ovanja i testiranja koda pri svakom commit-u. CD (Continuous Delivery) prosiruje CI automatskim deploy-om na visa okruzenja.</p>
 <p class="body-text">QA uloga: automatizovani testovi su gatekeeper koji sprecava isporuku defektnog koda. Svaki failovani test blokira pipeline.</p>
@@ -269,7 +269,32 @@ public class SpecificationTests { ... }
 <tr><td>Review</td><td>Pull Request.</td><td>Code review nad shelveset-om ili changeset-om.</td></tr>
 </tbody></table></div>
 <div class="note">Sekcija 16.6 opisuje Gated Build kroz Git PR. Cilj je isti i u TFVC-u — nista ne ulazi u glavnu granu dok gate ne prodje — samo je mehanizam drugaciji (gated check-in umesto branch policy-ja). Zato u gate ide samo brz, stabilan smoke set, a pun regression ostaje u nightly-ju.</div>
-<h2 class="sub-title">16.11 CI/CD platforme — most ka GitHub Actions, GitLab CI, Jenkins</h2>
+<h2 class="sub-title">16.11 Branching strategije</h2>
+<p class="body-text">Koju branching strategiju tim koristi direktno menja tvoj test ritam — koliko je main stabilan, kad i kako testovi trce, koliko okruzenja postoji. Na intervjuu se ne ocekuje da "zagovaras" jednu, nego da znas koju tim koristi i sta ona znaci za QA.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Strategija</th><th>Kako radi</th><th>QA posledica</th></tr></thead><tbody>
+<tr><td>Trunk-based</td><td>Svi rade na main-u ili vrlo kratkim granama (merge isti dan), nezavrseno se krije iza feature flag-ova.</td><td>Main je stalno "ziv" — oslonac na jaku, brzu automatizaciju i flag-ove; regresija se vrti cesto i mora biti brza.</td></tr>
+<tr><td>GitHub Flow</td><td>Jedna main grana uvek deployable; feature grana + PR; merge znaci spreman za deploy.</td><td>Gated build / branch policy na PR (16.6) je glavna kapija; CI mora biti brz da ne koci merge.</td></tr>
+<tr><td>GitFlow</td><td>Odvojene develop, main i release/hotfix grane.</td><td>Vise okruzenja (develop=QA, release=staging); duzi ciklus; pun regression na release grani pre merge-a u main.</td></tr>
+</tbody></table></div>
+<p class="body-text">Nema univerzalno "najbolje": trunk-based trazi zrelu automatizaciju i feature flag-ove, GitFlow daje kontrolu ali je sporiji, GitHub Flow je sredina. Trace One Gated Build (16.6) se uklapa u GitHub-Flow obrazac — kapija na PR-u pre ulaska u glavnu granu.</p>
+
+<h2 class="sub-title">16.12 git bisect — nalazenje commit-a koji je oborio test</h2>
+<p class="body-text">Test je ranije prolazio, sad pada, a izmedju ima desetine commit-a — <code>git bisect</code> binarnom pretragom nalazi tacan commit krivac u log2(N) koraka umesto rucne provere jednog po jednog. Direktno QA-korisno za regresiju.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre># Rucno: ti pokrecas test u svakom koraku
+git bisect start
+git bisect bad                 # trenutni commit pada
+git bisect good v2.4.0         # poznati commit gde je test prolazio
+# git te prebaci na sredinu -> pokreni test -> oznaci:
+#   git bisect good   (test prosao)   ili   git bisect bad   (pao)
+# ponavlja dok ne izdvoji prvi "bad" commit
+git bisect reset               # vrati se na pocetno stanje
+
+# Automatski: bisect sam pokrece komandu (exit 0 = good, != 0 = bad)
+git bisect start HEAD v2.4.0
+git bisect run dotnet test --filter "FullyQualifiedName~CheckoutTests"</pre></div>
+<div class="warning">Bisect pretpostavlja deterministican rezultat — kod flaky testa (nedeterministicki good/bad) izdvojice pogresan commit. Prvo stabilizuj test ili ga u bisect skripti pokreni vise puta i tretiraj kao "bad" samo ako padne konzistentno.</div>
+
+<h2 class="sub-title">16.13 CI/CD platforme — most ka GitHub Actions, GitLab CI, Jenkins</h2>
 <p class="body-text">Ako pitaju za platformu koju nisi koristio, koncepti se direktno prenose — samo se drugacije zovu i drugacije konfigurisu. Isto pravilo kao za AWS/Azure (Sekcija 26.3): nivo, most, brzina ucenja.</p>
 <div class="tbl-wrap"><table><thead><tr><th>Azure Pipelines pojam</th><th>GitHub Actions</th><th>GitLab CI</th><th>Jenkins</th></tr></thead><tbody>
 <tr><td>Pipeline definicija</td><td>Workflow (<code>.github/workflows/*.yml</code>)</td><td><code>.gitlab-ci.yml</code></td><td>Jenkinsfile (deklarativni ili scripted)</td></tr>
