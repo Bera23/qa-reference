@@ -16,9 +16,11 @@
 ## Project Goal
 
 A personal QA/test-automation reference document (Serbian language, ekavica) covering manual
-testing (Deo I, 10 topics) and automation (Deo II, 18 topics: C#/OOP/Selenium/API/CI-CD/Linux/Debugging-observability/
-Framework/Appium/AI-testing, plus glossary, Q&A, interview strategy, live coding, templates and cheat sheet) — written to match Uros's real day-to-day work (see "User" below) so it doubles as
-active interview/refresher study material, not generic textbook content.
+testing (Deo I, 10 topics), automation (Deo II, 12 topics: C#/OOP/Selenium/API/CI-CD/Linux/
+Debugging-observability/Framework/Appium/AI-testing) and interview & reference material (Deo III,
+6 topics: glossary, Q&A, interview strategy, live coding, templates, cheat sheet) — written to
+match Uros's real day-to-day work (see "User" below) so it doubles as active interview/refresher
+study material, not generic textbook content.
 
 **Status (2026-07-30): implemented and live** at https://bera23.github.io/qa-reference/. Original
 direction was to restructure into a small multi-page static site built from per-topic source
