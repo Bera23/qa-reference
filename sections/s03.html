@@ -5,6 +5,7 @@
 <tr><td>System Testing</td><td>Celokupan sistem prema funkcionalnim i nefunkcionalnim zahtevima.</td><td>QA</td><td>Selenium, Cypress, Playwright</td></tr>
 <tr><td>Acceptance Testing</td><td>Validacija od strane krajnjeg korisnika ili Product Owner-a.</td><td>Business / QA</td><td>Manuelno, BDD alati</td></tr>
 </tbody></table></div>
+<div class="note"><strong>End-to-End (E2E)</strong> nije peti nivo u klasicnoj piramidi, nego scope: prolazi kompletan korisnicki tok kroz vise sistema i integracija (UI → API → baza → eksterni servis → nazad), kao pravi korisnik. Razlika od System testinga — System testira jednu aplikaciju prema njenim zahtevima; E2E namerno prelazi granice sistema da potvrdi da ceo lanac radi zajedno. Primer: checkout koji dodiruje UI, payment gateway, inventory servis i mejl notifikaciju.</div>
 <h2 class="sub-title">3.2 Black-box, White-box, Grey-box testiranje</h2>
 <div class="tbl-wrap"><table><thead><tr><th>Pristup</th><th>Opis</th><th>Tipicna primena</th></tr></thead><tbody>
 <tr><td>Black-box</td><td>Tester ne zna nista o internoj implementaciji. Testira se samo ulaz i izlaz.</td><td>Funkcionalno testiranje, UAT, exploratory.</td></tr>
