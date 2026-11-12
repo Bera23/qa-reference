@@ -347,6 +347,18 @@ body.light .warning{background:color-mix(in srgb,#fbbf24 15%,#fff);color:#334155
 }
 
 /* ── Print ────────────────── */
+@media(max-width:768px){
+  /* Wide (3+ col) tables reflow to stacked cards — one row per card, each field labelled with its
+     column header — so nothing needs horizontal scrolling on a phone. */
+  .responsive-table thead{display:none;}
+  .responsive-table table,.responsive-table tbody,.responsive-table tr,.responsive-table td{display:block;width:100%;}
+  .responsive-table tbody tr{padding:12px 0 14px;border-bottom:1px solid var(--border);}
+  .responsive-table tbody tr:last-child{border-bottom:none;}
+  .responsive-table td{padding:6px 15px 0;border:none;line-height:1.55;}
+  .responsive-table td::before{content:attr(data-label);display:block;font-weight:600;color:var(--accent2);font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:1px;}
+  .responsive-table td:first-child{padding:2px 15px 4px;color:var(--text);font-weight:700;font-size:14px;}
+  .responsive-table td:first-child::before{display:none;}
+}
 @media print{
   #sidebar,#topbar,#progress-bar,#back-top,#bm-panel,#menu-btn,
   #read-exit,.copy-btn,.bm-btn,.mark-read-btn,.section-nav,#quickref,.lang-badge,.quiz-toggle-btn,.quiz-toolbar,#related-sections{display:none!important;}
