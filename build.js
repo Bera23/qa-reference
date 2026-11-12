@@ -208,6 +208,10 @@ function copyAssets() {
   fs.mkdirSync(path.join(DIST_DIR, 'icons'), { recursive: true });
   fs.readdirSync(path.join(ASSETS_DIR, 'icons')).forEach(f =>
     fs.copyFileSync(path.join(ASSETS_DIR, 'icons', f), path.join(DIST_DIR, 'icons', f)));
+  // Local web fonts (Inter + JetBrains Mono woff2) — bundled so the PWA renders offline.
+  fs.mkdirSync(path.join(DIST_DIR, 'fonts'), { recursive: true });
+  fs.readdirSync(path.join(ASSETS_DIR, 'fonts')).forEach(f =>
+    fs.copyFileSync(path.join(ASSETS_DIR, 'fonts', f), path.join(DIST_DIR, 'fonts', f)));
 }
 
 // Service worker: precache list is derived from the SAME sources the build just produced
@@ -216,7 +220,8 @@ function copyAssets() {
 function buildServiceWorker(sections) {
   const files = ['index.html', ...sections.map(s => `${s.id}.html`),
     'style.css', 'script.js', 'search-index.json', 'manifest.json',
-    ...fs.readdirSync(path.join(ASSETS_DIR, 'icons')).map(f => `icons/${f}`)];
+    ...fs.readdirSync(path.join(ASSETS_DIR, 'icons')).map(f => `icons/${f}`),
+    ...fs.readdirSync(path.join(ASSETS_DIR, 'fonts')).map(f => `fonts/${f}`)];
   const hash = crypto.createHash('sha1');
   files.forEach(f => { hash.update(f); hash.update(fs.readFileSync(path.join(DIST_DIR, f))); });
   const version = hash.digest('hex').slice(0, 10);
