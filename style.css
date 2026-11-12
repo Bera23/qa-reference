@@ -307,6 +307,10 @@ body.reading #read-exit{display:block;}
 /* ── Share toast ─────────── */
 #share-toast{position:fixed;bottom:70px;right:24px;background:var(--read-clr);color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;}
 #share-toast.show{opacity:1;}
+#update-toast{position:fixed;bottom:70px;left:24px;display:none;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--accent);color:var(--text);padding:10px 12px 10px 15px;border-radius:12px;font-size:13px;z-index:320;box-shadow:0 12px 32px -10px rgba(0,0,0,.6);}
+#update-toast.show{display:flex;}
+#update-toast button{background:var(--accent);border:none;color:#fff;font-family:var(--font);font-size:12.5px;font-weight:600;padding:6px 13px;border-radius:8px;cursor:pointer;transition:background .15s;}
+#update-toast button:hover{background:var(--accent2);}
 
 /* ── Light theme ─────────── */
 body.light{--bg:#f6f8fc;--bg2:#fff;--bg3:#eef1f8;--border:#dce3ef;--accent:#5566f0;--accent2:#4453d8;--text:#1e293b;--text2:#334155;--text3:#425063;--h1c:#0f172a;--h2c:#1a56db;--h3c:#2563eb;--code-bg:#0d1117;--code-text:#e6edf3;--tbl-head:#dbeafe;--tbl-alt:#f0f6ff;}

@@ -17,6 +17,7 @@
 <div id="progress-bar"></div>
 <button id="read-exit" onclick="toggleReadingMode()">✕ Izlaz</button>
 <div id="share-toast">🔗 Link kopiran!</div>
+<div id="update-toast"><span>✨ Nova verzija dostupna</span><button type="button" onclick="location.reload()">Osvezi</button></div>
 
 <div id="bm-panel">
   <h3>Bookmarks <button id="bm-close" onclick="closeBmPanel()" aria-label="Zatvori">✕</button></h3>
@@ -268,7 +269,7 @@ public class SpecificationTests { ... }
 </tbody></table></div>
 <div class="note">Sekcija 16.6 opisuje Gated Build kroz Git PR. Cilj je isti i u TFVC-u — nista ne ulazi u glavnu granu dok gate ne prodje — samo je mehanizam drugaciji (gated check-in umesto branch policy-ja). Zato u gate ide samo brz, stabilan smoke set, a pun regression ostaje u nightly-ju.</div>
 <h2 class="sub-title">16.11 CI/CD platforme — most ka GitHub Actions, GitLab CI, Jenkins</h2>
-<p class="body-text">Ako pitaju za platformu koju nisi koristila, koncepti se direktno prenose — samo se drugacije zovu i drugacije konfigurisu. Isto pravilo kao za AWS/Azure (Sekcija 25.3): nivo, most, brzina ucenja.</p>
+<p class="body-text">Ako pitaju za platformu koju nisi koristio, koncepti se direktno prenose — samo se drugacije zovu i drugacije konfigurisu. Isto pravilo kao za AWS/Azure (Sekcija 25.3): nivo, most, brzina ucenja.</p>
 <div class="tbl-wrap"><table><thead><tr><th>Azure Pipelines pojam</th><th>GitHub Actions</th><th>GitLab CI</th><th>Jenkins</th></tr></thead><tbody>
 <tr><td>Pipeline definicija</td><td>Workflow (<code>.github/workflows/*.yml</code>)</td><td><code>.gitlab-ci.yml</code></td><td>Jenkinsfile (deklarativni ili scripted)</td></tr>
 <tr><td>Stage</td><td>Job</td><td>Stage</td><td>Stage</td></tr>
@@ -297,7 +298,7 @@ jobs:
       - name: Publish results
         uses: actions/upload-artifact@v4
         with: { name: test-results, path: '**/*.trx' }</pre></div>
-<div class="note">Isti mentalni model kao Azure Pipelines: checkout -> setup runtime -> run tests -> publish rezultate. Ono sto se najcesce pita: "koji CI alat si koristila" nije test tvog znanja o tom alatu, vec da li razumes STA pipeline treba da radi bez obzira na sintaksu.</div>
+<div class="note">Isti mentalni model kao Azure Pipelines: checkout -> setup runtime -> run tests -> publish rezultate. Ono sto se najcesce pita: "koji CI alat si koristio" nije test tvog znanja o tom alatu, vec da li razumes STA pipeline treba da radi bez obzira na sintaksu.</div>
 
 <div class="section-nav"><a class="snav-btn" href="s15.html"><span class="snav-label">← Prethodna</span><span class="snav-title">15. API testiranje</span></a><a class="snav-btn next" href="s17.html"><span class="snav-label">Sledeca →</span><span class="snav-title">17. Linux osnove za QA</span></a></div>
 </div>

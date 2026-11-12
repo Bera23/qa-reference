@@ -1143,6 +1143,18 @@ function filterGlosar(q) {
 // ═══════════════════════════════════════════════════════
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW registration failed:', err));
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener('statechange', () => {
+          // A new build finished installing while an old SW still controls this tab -> offer a reload.
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+            const t = document.getElementById('update-toast');
+            if (t) t.classList.add('show');
+          }
+        });
+      });
+    }).catch(err => console.warn('SW registration failed:', err));
   });
 }

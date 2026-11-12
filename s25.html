@@ -17,6 +17,7 @@
 <div id="progress-bar"></div>
 <button id="read-exit" onclick="toggleReadingMode()">✕ Izlaz</button>
 <div id="share-toast">🔗 Link kopiran!</div>
+<div id="update-toast"><span>✨ Nova verzija dostupna</span><button type="button" onclick="location.reload()">Osvezi</button></div>
 
 <div id="bm-panel">
   <h3>Bookmarks <button id="bm-close" onclick="closeBmPanel()" aria-label="Zatvori">✕</button></h3>
@@ -267,7 +268,7 @@
 <tr><td>Posle</td><td>Odmah zapisi sva pitanja i gde si zapeo (to postaje novo pitanje u Sekciji 23); posalji kratak zahvalni mejl u roku od 24h.</td></tr>
 </tbody></table></div>
 <h2 class="sub-title">25.14 Zasto ovaj alat — spremi odbranu izbora</h2>
-<p class="body-text">"Zasto koristis X, a ne Y" je standardno pitanje na mid/senior intervjuu. Odgovor koji vredi ima tri dela: zasto bas taj alat, kada ga NE bi koristio, i sta je alternativa i zasto tada nije izabrana. "Tako je bilo kad sam dosla" nije odgovor.</p>
+<p class="body-text">"Zasto koristis X, a ne Y" je standardno pitanje na mid/senior intervjuu. Odgovor koji vredi ima tri dela: zasto bas taj alat, kada ga NE bi koristio, i sta je alternativa i zasto tada nije izabrana. "Tako je bilo kad sam dosao" nije odgovor.</p>
 <div class="tbl-wrap tall"><table><thead><tr><th>Alat</th><th>Zasto bas taj</th><th>Kad NE bih koristio</th><th>Alternativa i zasto ne (sada)</th></tr></thead><tbody>
 <tr><td>Selenium WebDriver</td><td>Zreo, W3C standard, radi sa svakim browser-om, veliki ekosistem i community za enterprise UI koji nema poseban Selenium/Playwright test tim.</td><td>Za nov projekat bez postojece baze koda i tima koji vec zna Selenium.</td><td>Playwright (poredjenje u Sekciji 26.14) — auto-wait i manje flaky-ja, ali migracija postojeceg suite-a nije opravdana samo zbog toga.</td></tr>
 <tr><td>xUnit</td><td>Nova instanca test klase po testu (11.6) — sprecava slucajno deljenje stanja, sto direktno smanjuje flaky rate.</td><td>Kad tim vec ima veliki NUnit suite — migracija retko vredi truda.</td><td>NUnit — validan izbor, samo drugaciji setup model ([SetUp]/[TearDown] umesto konstruktora).</td></tr>
@@ -278,7 +279,7 @@
 <tr><td>Appium</td><td>Isti C#/POM obrasci prenose se na mobile — nije novi mentalni model, samo novi drajver.</td><td>Ako je aplikacija cisto web/responsive bez native mobilne komponente.</td><td>Espresso/XCUITest (native) — brzi i stabilniji za jednu platformu, ali gube cross-platform prednost Appium-a.</td></tr>
 <tr><td>Page Object Model</td><td>Jedna promena u UI-ju znaci izmenu na jednom mestu, ne u desetinama testova (Sekcija 14).</td><td>Za mali, kratkozivi skript koji se pokrene jednom — dodatni sloj apstrakcije se ne isplati.</td><td>Screenplay pattern — fleksibilniji za slozene tokove, ali strmija kriva ucenja za tim koji tek pocinje.</td></tr>
 </tbody></table></div>
-<div class="note">Ako intervjuer pita za alat koji NISI birala (npr. nasledjen projekat), to je i dalje dobar odgovor: "Ovo je bilo uspostavljeno pre mene. Da sam birala danas, i dalje bih [alat] jer... ali evo gde bih razmislila drugacije: ..."</div>
+<div class="note">Ako intervjuer pita za alat koji NISI birao (npr. nasledjen projekat), to je i dalje dobar odgovor: "Ovo je bilo uspostavljeno pre mene. Da sam birao danas, i dalje bih [alat] jer... ali evo gde bih razmislio drugacije: ..."</div>
 <h2 class="sub-title">25.15 "Kako bi testirao X" — radjeni primeri</h2>
 <p class="body-text">Isti okvir kao u 24.4, primenjen na najcesce postavljane klasike. Cilj nije da se ovo nauci napamet, vec da se vidi kako se okvir od 6 koraka primenjuje u praksi za razlicite tipove "X".</p>
 <div class="tbl-wrap tall"><table><thead><tr><th>"Testiraj X"</th><th>Kljucni koraci (skraceno)</th></tr></thead><tbody>
