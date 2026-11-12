@@ -99,7 +99,7 @@ function migrateStorage() {
 // can no longer abort the rest of the page initialisation.
 document.addEventListener('DOMContentLoaded', () => {
   const steps = [migrateStorage, addAnchorLinks, addBookmarkButtons, restoreState, initSyntaxHighlight,
-    initLangBadges, initQuizMode, initDeoJump, initDeoCollapse, initRelatedSections, updateBmCount, initNavHeights, () => filterGlosar(''), loadSearchIndex, scrollToHash];
+    initLangBadges, initNumChips, initQuizMode, initDeoJump, initDeoCollapse, initRelatedSections, updateBmCount, initNavHeights, () => filterGlosar(''), loadSearchIndex, scrollToHash];
   steps.forEach(step => {
     try { step(); } catch (err) { console.error('Init step failed:', step.name || '(anonymous)', err); }
   });
@@ -611,6 +611,24 @@ function initLangBadges() {
     badge.className = 'lang-badge';
     badge.textContent = hit.lang;
     block.insertBefore(badge, block.firstChild);
+  });
+}
+
+// Split a leading "13.1" / "4.2" number out of a numbered heading into its own styled chip (design
+// only). Runs after anchors/bookmarks, so the heading's first child is still its plain text node;
+// headings without a leading number (Deo headers, questions) are left untouched.
+function initNumChips() {
+  document.querySelectorAll('#content h2.sub-title, #content h3.sub-sub-title').forEach(h => {
+    if (h.querySelector('.num')) return;
+    const tn = h.firstChild;
+    if (!tn || tn.nodeType !== 3) return;
+    const m = tn.textContent.match(/^\s*(\d+(?:\.\d+)*)\s+([\s\S]*)$/);
+    if (!m) return;
+    const chip = document.createElement('span');
+    chip.className = 'num';
+    chip.textContent = m[1];
+    tn.textContent = m[2];
+    h.insertBefore(chip, tn);
   });
 }
 

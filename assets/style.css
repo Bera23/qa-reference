@@ -85,7 +85,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
 
 /* ── Sections ───────────── */
 .section{padding-top:16px;}
-h1.sec-title{font-size:26px;font-weight:700;color:var(--h1c);padding:24px 0 10px;border-bottom:2px solid var(--accent);margin-bottom:8px;font-family:var(--font);letter-spacing:-.02em;}
+h1.sec-title{font-size:32px;font-weight:800;color:var(--h1c);padding:22px 0 14px;border-bottom:1px solid var(--border);margin-bottom:10px;font-family:var(--font);letter-spacing:-.025em;line-height:1.15;}
 .read-badge{font-size:10px;font-weight:400;font-family:var(--mono);background:var(--read-clr);color:#fff;padding:2px 7px;border-radius:10px;letter-spacing:.05em;display:none;margin-left:8px;vertical-align:middle;}
 .read-badge.visible{display:inline;}
 .section-meta{display:flex;align-items:center;gap:14px;margin-bottom:18px;font-family:var(--mono);font-size:11px;color:var(--text3);}
@@ -135,13 +135,16 @@ h1.sec-title{font-size:26px;font-weight:700;color:var(--h1c);padding:24px 0 10px
 .related-list a:hover{border-color:var(--accent);color:var(--accent);}
 .doc-version{margin-top:28px;padding-top:14px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text3);}
 .doc-version code{color:var(--text2);}
-h2.sub-title{font-size:calc(var(--fs,15px)*1.1);font-weight:600;color:var(--h2c);padding-top:26px;margin-bottom:8px;font-family:var(--font);border-bottom:1px solid var(--border);padding-bottom:5px;display:flex;align-items:center;gap:6px;}
+h2.sub-title{font-size:calc(var(--fs,15px)*1.22);font-weight:700;color:var(--text);padding-top:30px;margin-bottom:12px;font-family:var(--font);border-bottom:1px solid var(--border);padding-bottom:9px;display:flex;align-items:center;gap:10px;letter-spacing:-.01em;}
 .anchor{font-size:12px;color:var(--text3);text-decoration:none;opacity:0;transition:opacity .2s;font-family:var(--mono);margin-left:auto;}
 h2.sub-title:hover .anchor{opacity:1;}
 /* The topbar is sticky (~64px). Without this, jumping to #anchor / a bookmark / a search hit puts the heading under it. */
 h2.sub-title{scroll-margin-top:48px;}
 .anchor:hover{color:var(--accent);}
-h3.sub-sub-title{font-size:calc(var(--fs,15px)*0.9);font-weight:600;color:var(--h3c);padding-top:16px;margin-bottom:7px;font-family:var(--mono);letter-spacing:.02em;}
+h3.sub-sub-title{font-size:calc(var(--fs,15px)*1.0);font-weight:600;color:var(--text);padding-top:20px;margin-bottom:9px;font-family:var(--font);letter-spacing:-.005em;}
+.sub-title .num,.sub-sub-title .num{font-family:var(--mono);font-weight:600;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent);border-radius:7px;line-height:1;letter-spacing:0;}
+h2.sub-title .num{font-size:calc(var(--fs,15px)*0.78);padding:3px 9px;flex:0 0 auto;}
+h3.sub-sub-title .num{display:inline-block;font-size:calc(var(--fs,15px)*0.74);padding:2px 7px;margin-right:8px;transform:translateY(-1px);}
 .body-text{color:var(--text);margin-bottom:10px;line-height:1.78;text-align:justify;}
 /* --- Q&A redesign (section 24 only: .qa-question is set by initQuizMode, body.qa-page scopes the Deo headers). Overrides the mono/undersized h3.sub-sub-title so the prompt reads as the focal point, not weaker than its own answer. --- */
 #content h3.qa-question{font-family:var(--font);font-size:calc(var(--fs,15px)*1.08);font-weight:600;letter-spacing:normal;color:var(--h2c);line-height:1.4;margin:20px 0 0;padding:13px 36px 12px 16px;border-left:3px solid var(--accent);background:var(--bg2);border-radius:7px;transition:background .15s,border-color .15s,color .15s;}
@@ -149,7 +152,7 @@ h3.sub-sub-title{font-size:calc(var(--fs,15px)*0.9);font-weight:600;color:var(--
 #content .qa-question::after{right:14px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--accent);}
 #content .qa-item{margin-bottom:9px;}
 #content .qa-item .qa-answer{padding-left:16px;margin-top:10px;}
-body.qa-page h2.sub-title{border-left:4px solid var(--accent);padding-left:12px;border-radius:0 4px 4px 0;background:linear-gradient(90deg,rgba(79,142,247,.08),transparent);}
+body.qa-page h2.sub-title{border-left:4px solid var(--accent);padding-left:12px;border-radius:0 4px 4px 0;background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,transparent),transparent);}
 /* Toolbar / meta buttons: bigger tap target + contrast + subtle fill (were 11px / 3px padding / text3 — cramped and tiny to tap on mobile). Mono identity and hover/active/done states kept. */
 .mark-read-btn,.quiz-toggle-btn,.quiz-toolbar-btn{font-size:12px;padding:7px 13px;color:var(--text2);background:var(--bg2);}
 /* Deo jump bar (section 24 only, built by initDeoJump): sticky chips to reach Deo I/II/III/IV in a long Q&A list. top is set inline from topbar height. */
@@ -308,8 +311,8 @@ body.light .warning{background:color-mix(in srgb,#fbbf24 15%,#fff);color:#334155
   #topbar-meta,#breadcrumb{display:none;}
   #topbar-right{gap:3px;}
   .tb-btn{padding:5px 7px;font-size:12px;}
-  h1.sec-title{font-size:21px;}
-  h2.sub-title{font-size:calc(var(--fs,15px)*1);}
+  h1.sec-title{font-size:25px;}
+  h2.sub-title{font-size:calc(var(--fs,15px)*1.12);}
   .code-block pre{font-size:calc(var(--fs,15px)*0.7667);white-space:pre-wrap;word-break:break-word;}
   table{font-size:12px;}
   .glosar-item{flex-direction:column;gap:3px;}
