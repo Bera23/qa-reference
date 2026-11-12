@@ -52,7 +52,7 @@
       <a class="nav-item" href="s10.html"><span class="nav-icon">🗄️</span><span class="nav-item-text">10. Test okruzenje i podaci</span><span class="nav-check" onclick="toggleRead(event,'s10')"></span></a>
     </div>
     <div class="nav-deo-wrap">
-      <span class="nav-deo">DEO II — Automatizacija <span class="nav-deo-progress" data-ids="s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21,s22"></span></span>
+      <span class="nav-deo">DEO II — Automatizacija <span class="nav-deo-progress" data-ids="s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21,s22,s23"></span></span>
       <button class="nav-collapse" onclick="toggleGroup('g2')">▾</button>
     </div>
     <div class="nav-group" id="g2">
@@ -68,18 +68,19 @@
       <a class="nav-item" href="s20.html"><span class="nav-icon">📈</span><span class="nav-item-text">20. Performance testing</span><span class="nav-check" onclick="toggleRead(event,'s20')"></span></a>
       <a class="nav-item" href="s21.html"><span class="nav-icon">📱</span><span class="nav-item-text">21. Mobile testing (Appium)</span><span class="nav-check" onclick="toggleRead(event,'s21')"></span></a>
       <a class="nav-item" href="s22.html"><span class="nav-icon">🧠</span><span class="nav-item-text">22. AI u testiranju</span><span class="nav-check" onclick="toggleRead(event,'s22')"></span></a>
+      <a class="nav-item" href="s23.html"><span class="nav-icon">🗃️</span><span class="nav-item-text">23. SQL / Database testing</span><span class="nav-check" onclick="toggleRead(event,'s23')"></span></a>
     </div>
     <div class="nav-deo-wrap">
-      <span class="nav-deo">DEO III — Intervju i referenca <span class="nav-deo-progress" data-ids="s23,s24,s25,s26,s27,s28"></span></span>
+      <span class="nav-deo">DEO III — Intervju i referenca <span class="nav-deo-progress" data-ids="s24,s25,s26,s27,s28,s29"></span></span>
       <button class="nav-collapse" onclick="toggleGroup('g3')">▾</button>
     </div>
     <div class="nav-group" id="g3">
-      <a class="nav-item" href="s23.html"><span class="nav-icon">📚</span><span class="nav-item-text">23. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s23')"></span></a>
-      <a class="nav-item" href="s24.html"><span class="nav-icon">🎤</span><span class="nav-item-text">24. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s24')"></span></a>
-      <a class="nav-item" href="s25.html"><span class="nav-icon">💼</span><span class="nav-item-text">25. Intervju strategija</span><span class="nav-check" onclick="toggleRead(event,'s25')"></span></a>
-      <a class="nav-item" href="s26.html"><span class="nav-icon">⌨️</span><span class="nav-item-text">26. Live coding (C#)</span><span class="nav-check" onclick="toggleRead(event,'s26')"></span></a>
-      <a class="nav-item" href="s27.html"><span class="nav-icon">📄</span><span class="nav-item-text">27. Templates</span><span class="nav-check" onclick="toggleRead(event,'s27')"></span></a>
-      <a class="nav-item" href="s28.html"><span class="nav-icon">⚡</span><span class="nav-item-text">28. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s28')"></span></a>
+      <a class="nav-item" href="s24.html"><span class="nav-icon">📚</span><span class="nav-item-text">24. Glosar</span><span class="nav-check" onclick="toggleRead(event,'s24')"></span></a>
+      <a class="nav-item" href="s25.html"><span class="nav-icon">🎤</span><span class="nav-item-text">25. Pitanja i odgovori</span><span class="nav-check" onclick="toggleRead(event,'s25')"></span></a>
+      <a class="nav-item" href="s26.html"><span class="nav-icon">💼</span><span class="nav-item-text">26. Intervju strategija</span><span class="nav-check" onclick="toggleRead(event,'s26')"></span></a>
+      <a class="nav-item" href="s27.html"><span class="nav-icon">⌨️</span><span class="nav-item-text">27. Live coding (C#)</span><span class="nav-check" onclick="toggleRead(event,'s27')"></span></a>
+      <a class="nav-item" href="s28.html"><span class="nav-icon">📄</span><span class="nav-item-text">28. Templates</span><span class="nav-check" onclick="toggleRead(event,'s28')"></span></a>
+      <a class="nav-item" href="s29.html"><span class="nav-icon">⚡</span><span class="nav-item-text">29. Cheat Sheet</span><span class="nav-check" onclick="toggleRead(event,'s29')"></span></a>
     </div>
   </nav>
 </div>
@@ -269,7 +270,7 @@ public class SpecificationTests { ... }
 </tbody></table></div>
 <div class="note">Sekcija 16.6 opisuje Gated Build kroz Git PR. Cilj je isti i u TFVC-u — nista ne ulazi u glavnu granu dok gate ne prodje — samo je mehanizam drugaciji (gated check-in umesto branch policy-ja). Zato u gate ide samo brz, stabilan smoke set, a pun regression ostaje u nightly-ju.</div>
 <h2 class="sub-title">16.11 CI/CD platforme — most ka GitHub Actions, GitLab CI, Jenkins</h2>
-<p class="body-text">Ako pitaju za platformu koju nisi koristio, koncepti se direktno prenose — samo se drugacije zovu i drugacije konfigurisu. Isto pravilo kao za AWS/Azure (Sekcija 25.3): nivo, most, brzina ucenja.</p>
+<p class="body-text">Ako pitaju za platformu koju nisi koristio, koncepti se direktno prenose — samo se drugacije zovu i drugacije konfigurisu. Isto pravilo kao za AWS/Azure (Sekcija 26.3): nivo, most, brzina ucenja.</p>
 <div class="tbl-wrap"><table><thead><tr><th>Azure Pipelines pojam</th><th>GitHub Actions</th><th>GitLab CI</th><th>Jenkins</th></tr></thead><tbody>
 <tr><td>Pipeline definicija</td><td>Workflow (<code>.github/workflows/*.yml</code>)</td><td><code>.gitlab-ci.yml</code></td><td>Jenkinsfile (deklarativni ili scripted)</td></tr>
 <tr><td>Stage</td><td>Job</td><td>Stage</td><td>Stage</td></tr>
