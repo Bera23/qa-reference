@@ -44,13 +44,7 @@ Dobro:
 <li class="bullet-item">Radi se o end-to-end flow verifikaciji (npr. celokupan checkout proces kao smoke TC).</li>
 </ul>
 <h2 class="sub-title">5.6 RTM — Requirements Traceability Matrix</h2>
-<p class="body-text">RTM mapira zahteve na test case-ove i defekte. Omogucava odgovor na pitanje: 'Koji zahtevi su pokriveni testovima i koji imaju otvorene defekte?'</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Zahtev ID | Opis                        | TC ID(s)       | Status      | Defekti
-----------+-----------------------------+----------------+-------------+---------
-REQ-001   | Korisnik moze da se uloguje | TC-001,TC-002, | In Progress | BUG-045
-          |                             | TC-003,TC-004  |             |
-REQ-002   | Reset passworda             | TC-010, TC-011 | Pass        | -
-REQ-003   | Sesija istice nakon 30 min  | TC-015         | Blocked     | BUG-051</pre></div>
+<p class="body-text">U kontekstu pisanja TC-ova bitno je jedno pravilo: svaki test case vezi za zahtev koji pokriva, da bi RTM (tabela zahtev → TC → defekt) ostala tacna i da bi se videle rupe u pokrivenosti. Pun prikaz RTM-a — tabela sa primerom, koristi (coverage / gap detekcija / impact analiza) i napomena da ga ADO/JIRA grade automatski — je u Sekciji 9.7.</p>
 <h2 class="sub-title">5.7 Primer test case-a</h2>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Title:         Login sa validnim email-om i passwordom preusmjerava na dashboard
 
@@ -69,3 +63,20 @@ Expected Result:
   - Korisnik je preusmeren na /dashboard
   - Header prikazuje korisnicko ime ili avatar
   - Ne prikazuje se poruka o gresci</pre></div>
+
+<h2 class="sub-title">5.8 Parametrizovani (data-driven) test case</h2>
+<p class="body-text">Kad su koraci isti a menja se samo ulaz (login sa nekoliko razlicitih email formata), ne pisi vise skoro identicnih TC-ova — pisi jedan parametrizovani: isti koraci + tabela ulaza i ocekivanih izlaza. Setove biras tehnikama iz Sekcije 4 (EP, BVA, Decision Table), ne nasumicno.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Title: Login validacija email formata — prikazuje odgovarajucu gresku
+
+Steps (za svaki red):
+  1. Uneti &lt;email&gt; u Email polje
+  2. Uneti validan password
+  3. Kliknuti Login
+
+| # | email           | Expected Result                        |
+|---|-----------------|----------------------------------------|
+| 1 | (prazno)        | "Email is required"                    |
+| 2 | user@           | "Invalid email format"                 |
+| 3 | user@test.com   | Prelazak na dashboard (happy path)     |
+| 4 | USER@TEST.COM   | Prelazak na dashboard (case-insensitive)|</pre></div>
+<p class="body-text">U automatizaciji je to isti koncept: xUnit <code>[Theory]</code> + <code>[InlineData]</code> (ili <code>[MemberData]</code> za vece setove), a u ADO Test Plans parametri na manuelnom TC-u (9.5). Prednost: jedan TC za odrzavanje i jasna pokrivenost ulaza; zamka: ako setovi nisu dobro izabrani, dobijas lazan osecaj pokrivenosti.</p>
