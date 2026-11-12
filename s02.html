@@ -118,7 +118,7 @@
 <div class="deo-banner">DEO I — MANUALNO TESTIRANJE</div>
 <div class="section" id="s02">
 <h1 class="sec-title" id="t-s02">🔄 2. SDLC i STLC<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~3 min citanja</span><button class="mark-read-btn" id="mrb-s02" onclick="markRead('s02')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~4 min citanja</span><button class="mark-read-btn" id="mrb-s02" onclick="markRead('s02')">Oznaci kao procitano</button></div>
 <h2 class="sub-title">2.1 SDLC — faze i QA uloga</h2>
 <div class="tbl-wrap"><table><thead><tr><th>SDLC Faza</th><th>QA Aktivnost</th></tr></thead><tbody>
 <tr><td>Requirements</td><td>Review zahteva, identifikacija ambiguiteta, procena testabilnosti.</td></tr>
@@ -168,6 +168,16 @@
 <tr><td>Spiral</td><td>Kombinuje iterativni razvoj sa formalnom analizom rizika na pocetku svake faze.</td><td>Koristi se u velikim/kriticnim projektima (npr. aerospace, medicinski uredjaji) gde je risk-based testing (Sekcija 7.3) formalizovan deo procesa.</td></tr>
 </tbody></table></div>
 <div class="note">V-Model (2.2) nije zaseban SDLC model vec nacin da se testiranje eksplicitno mapira na Waterfall faze — cesto se pita zajedno u intervjuu, ali su to dva razlicita koncepta (SDLC model vs. mapiranje testiranja na taj model).</div>
+
+<h2 class="sub-title">2.7 Shift-Right testiranje</h2>
+<p class="body-text">Shift-Right je pandan Shift-Left-u (2.3): umesto da testiranje pomera <em>unapred</em> (pre koda), pomera ga <em>udesno</em> — u produkciju, na realni saobracaj i realne korisnike posle deploy-a. Razlog: neki problemi se vide samo u produkciji — prava skala, prave integracije, realno ponasanje korisnika i podaci koje nijedno test okruzenje ne reprodukuje verno.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Aspekt</th><th>Shift-Left</th><th>Shift-Right</th></tr></thead><tbody>
+<tr><td>Kada</td><td>Pre i tokom razvoja</td><td>Posle deploy-a, u produkciji</td></tr>
+<tr><td>Cilj</td><td>Spreciti defekte rano</td><td>Uhvatiti ono sto promakne, skratiti vreme detekcije (MTTD)</td></tr>
+<tr><td>Primer</td><td>Req review, unit, static analiza</td><td>Canary, monitoring, feature flags</td></tr>
+</tbody></table></div>
+<p class="body-text">Tehnike Shift-Right-a: <strong>monitoring i observability</strong> (logs, metrics, traces, alerting — Sekcija 18), <strong>canary / progresivni rollout</strong> (nova verzija prvo malom % korisnika, pa sire ako je stabilno), <strong>feature flags</strong> (funkcija se pali/gasi bez novog deploy-a — instant rollback), <strong>A/B testiranje</strong>, <strong>sinteticki monitoring</strong> (skriptovani "korisnik" stalno pokrece kriticne tokove u prod), i <strong>chaos engineering</strong> (namerno rusenje komponenti da se proveri otpornost).</p>
+<div class="note">Shift-Left i Shift-Right se dopunjuju, ne iskljucuju: Shift-Left smanjuje broj defekata koji uopste stignu do produkcije, Shift-Right hvata ono sto ipak promakne i skracuje vreme do detekcije. Oba se oslanjaju na CI/CD (Sekcija 16) — canary i feature flags su deo deploy pipeline-a.</div>
 
 <div class="section-nav"><a class="snav-btn" href="s01.html"><span class="snav-label">← Prethodna</span><span class="snav-title">1. Osnove i terminologija</span></a><a class="snav-btn next" href="s03.html"><span class="snav-label">Sledeca →</span><span class="snav-title">3. Tipovi i nivoi testiranja</span></a></div>
 </div>
