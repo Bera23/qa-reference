@@ -6,7 +6,7 @@
 const { loadPage, ready, check, summary } = require('./helpers');
 
 (async () => {
-  const dom = loadPage('s24.html', {
+  const dom = loadPage('s25.html', {
     beforeParse: w => {
       w.URL.createObjectURL = b => { w.__lastBlob = b; return 'blob:mock'; };
       w.URL.revokeObjectURL = () => {};

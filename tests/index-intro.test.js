@@ -14,9 +14,9 @@ const { readDist, loadPage, ready, check, summary } = require('./helpers');
   check('no related-sections box on the index page itself', !d.getElementById('related-sections'));
 
   // The mini-map table cites 25.17/25.18 for the journal/lessons-learned pair — regression test
-  // for the mistake caught during review (an earlier draft said "24.17", which doesn't exist).
-  check('mini-map does not reference a non-existent 24.17', !d.body.textContent.includes('24.17'));
-  check('mini-map correctly cites 25.17 and 25.18', d.body.textContent.includes('25.17') && d.body.textContent.includes('25.18'));
+  // for the mistake caught during review (an earlier draft said "25.17", stale after the renumber).
+  check('mini-map does not reference a stale 25.17', !d.body.textContent.includes(' 25.17'));
+  check('mini-map correctly cites 26.17 and 26.18', d.body.textContent.includes('26.17') && d.body.textContent.includes('26.18'));
 
   summary();
 })();

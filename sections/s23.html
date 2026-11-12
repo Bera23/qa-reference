@@ -1,161 +1,96 @@
-<p class="body-text">Alfabetski pregled kljucnih termina. Koristite pretragu ispod za brzo pronalazenje.</p>
-<div class="glosar-search-wrap"><input type="text" id="glosar-search" placeholder="Filtriraj termine..." oninput="filterGlosar(this.value)"><span id="glosar-count"></span></div>
-<div id="glosar-content">
-<div class="glosar-letter-group" data-letter="A"><div class="glosar-letter">A</div>
-<div class="glosar-item"><span class="glosar-term">Acceptance Criteria</span><span class="glosar-def">Uslovi koje user story mora ispuniti da bi bio prihvacen od Product Owner-a.</span></div>
-<div class="glosar-item"><span class="glosar-term">Acceptance Testing (UAT)</span><span class="glosar-def">Testiranje od strane krajnjih korisnika ili PO-a sa ciljem validacije poslovnih zahteva.</span></div>
-<div class="glosar-item"><span class="glosar-term">Accessibility Testing</span><span class="glosar-def">Testiranje pristupacnosti aplikacije za korisnike sa invaliditetom — keyboard navigacija, screen reader, kontrast, WCAG standardi.</span></div>
-<div class="glosar-item"><span class="glosar-term">Ad-hoc Testing</span><span class="glosar-def">Neformalno, bez dokumentacije i plana. Za razliku od exploratory testiranja, nema ni charter.</span></div>
-<div class="glosar-item"><span class="glosar-term">Agile</span><span class="glosar-def">Iterativni pristup razvoju softvera sa kratkim sprintovima i kontinualnim isporukama.</span></div>
-<div class="glosar-item"><span class="glosar-term">Allure</span><span class="glosar-def">Open-source alat za generisanje HTML test izvestaja sa timeline-om i screenshot integracijom.</span></div>
-<div class="glosar-item"><span class="glosar-term">Appium</span><span class="glosar-def">Open-source alat za automatizaciju mobilnih aplikacija koji koristi WebDriver protokol.</span></div>
-<div class="glosar-item"><span class="glosar-term">Applitools Eyes</span><span class="glosar-def">AI-powered alat za vizuelnu regresiju. Koristi ML da razlikuje bitne vizuelne promene od nebitnih (anti-aliasing, font rendering).</span></div>
-<div class="glosar-item"><span class="glosar-term">Assertion</span><span class="glosar-def">Provera da li je stvarni rezultat jednak ocekivanom. Osnova svakog automatizovanog testa.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="B"><div class="glosar-letter">B</div>
-<div class="glosar-item"><span class="glosar-term">BDD</span><span class="glosar-def">Behavior-Driven Development — pristup koji koristi Given/When/Then format za opis ponasanja.</span></div>
-<div class="glosar-item"><span class="glosar-term">Black-box Testing</span><span class="glosar-def">Testiranje bez uvida u internu implementaciju — samo ulaz i izlaz.</span></div>
-<div class="glosar-item"><span class="glosar-term">Blocker</span><span class="glosar-def">Defekt koji sprecava dalje testiranje ili koristenje sistema. Nema workaround-a.</span></div>
-<div class="glosar-item"><span class="glosar-term">BVA</span><span class="glosar-def">Boundary Value Analysis — tehnika koja testira vrednosti na granicama particija.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="C"><div class="glosar-letter">C</div>
-<div class="glosar-item"><span class="glosar-term">Changeset</span><span class="glosar-def">Jedinica rada u Git-u — obicno 2-4 fajla: lokator update + Page Object fix + test scenario azuriranje.</span></div>
-<div class="glosar-item"><span class="glosar-term">CI/CD</span><span class="glosar-def">Continuous Integration / Continuous Delivery — automatizovano build, test i deploy.</span></div>
-<div class="glosar-item"><span class="glosar-term">Contract Testing</span><span class="glosar-def">Testiranje da li consumer i provider API imaju usaglaseni kontrakt (Pact framework).</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="D"><div class="glosar-letter">D</div>
-<div class="glosar-item"><span class="glosar-term">Data-driven Testing</span><span class="glosar-def">Isti test scenario se izvrsava sa razlicitim skupovima ulaznih podataka.</span></div>
-<div class="glosar-item"><span class="glosar-term">Defect</span><span class="glosar-def">Diskrepancija izmedju stvarnog i ocekivanog ponasanja sistema.</span></div>
-<div class="glosar-item"><span class="glosar-term">Defect Density</span><span class="glosar-def">Broj defekata po jedinici velicine funkcionalnosti. Metrika kvaliteta koda.</span></div>
-<div class="glosar-item"><span class="glosar-term">Defect Leakage</span><span class="glosar-def">Procenat defekata koji su prosli QA a nadjeni su na produkciji.</span></div>
-<div class="glosar-item"><span class="glosar-term">Definition of Done</span><span class="glosar-def">Lista kriterijuma koje user story mora ispuniti da bi bio proglaseni Done.</span></div>
-<div class="glosar-item"><span class="glosar-term">DevTools</span><span class="glosar-def">Browser Developer Tools (F12) — Network, Console, Elements tab-ovi za QA debugging i inspekciju HTTP zahteva.</span></div>
-<div class="glosar-item"><span class="glosar-term">Definition of Ready</span><span class="glosar-def">Lista kriterijuma koje user story mora ispuniti pre ulaska u sprint.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="E"><div class="glosar-letter">E</div>
-<div class="glosar-item"><span class="glosar-term">E2E Testing</span><span class="glosar-def">End-to-end testiranje — simulacija kompletnog korisnickog toka kroz sistem.</span></div>
-<div class="glosar-item"><span class="glosar-term">Entry Criteria</span><span class="glosar-def">Uslovi koji moraju biti ispunjeni da bi faza testiranja mogla da pocne.</span></div>
-<div class="glosar-item"><span class="glosar-term">EP</span><span class="glosar-def">Equivalence Partitioning — tehnika koja deli ulazni skup na particije.</span></div>
-<div class="glosar-item"><span class="glosar-term">Error</span><span class="glosar-def">Ljudska greska — pogresan pretpostavka ili propust developera u kodu.</span></div>
-<div class="glosar-item"><span class="glosar-term">Escaped Defects</span><span class="glosar-def">Defekti koje su pronasli korisnici na produkciji. Kljucna KPI za QA tim.</span></div>
-<div class="glosar-item"><span class="glosar-term">ETL</span><span class="glosar-def">Extract-Transform-Load — proces ekstrakcije, transformacije i ucitavanja podataka. U QA kontekstu: testiranje import/export workflow-a (Excel upload, CSV, field mapping).</span></div>
-<div class="glosar-item"><span class="glosar-term">Exit Criteria</span><span class="glosar-def">Uslovi cijim ispunjenjem se testiranje smatra zavrsenim.</span></div>
-<div class="glosar-item"><span class="glosar-term">Exploratory Testing</span><span class="glosar-def">Simultano ucenje, dizajniranje i izvrsavanje testova bez unapred definisanih koraka.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="F"><div class="glosar-letter">F</div>
-<div class="glosar-item"><span class="glosar-term">Failure</span><span class="glosar-def">Vidljivi simptom defekta u runtime-u — sistem se ponasa drugacije od ocekivanog.</span></div>
-<div class="glosar-item"><span class="glosar-term">Feature Flag</span><span class="glosar-def">Boolean konfiguracija koja ukljucuje/iskljucuje funkcionalnost per environment. Koristi se za multi-version env management.</span></div>
-<div class="glosar-item"><span class="glosar-term">Flaky Test</span><span class="glosar-def">Test koji naizmenicno prolazi i pada bez promene koda.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="G"><div class="glosar-letter">G</div>
-<div class="glosar-item"><span class="glosar-term">GDPR</span><span class="glosar-def">General Data Protection Regulation — EU regulativa za zastitu licnih podataka. Test podaci moraju biti anonimizovani.</span></div>
-<div class="glosar-item"><span class="glosar-term">Grey-box Testing</span><span class="glosar-def">Delimicno poznavanje internih detalja sistema. Najcesci scenario u praksi.</span></div>
-<div class="glosar-item"><span class="glosar-term">Gated Build</span><span class="glosar-def">CI pipeline koji se triggeruje na Pull Request i blokira merge ako smoke/sanity testovi padnu. PR validation gate.</span></div>
-<div class="glosar-item"><span class="glosar-term">Git</span><span class="glosar-def">Distribuirani version control sistem. QA koristi za branching, commit, PR review automation koda.</span></div>
-<div class="glosar-item"><span class="glosar-term">Grounding</span><span class="glosar-def">U AI kontekstu: svojstvo da se odgovor oslanja na stvarne, verifikovane izvore podataka umesto na fabricirane cinjenice.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="H"><div class="glosar-letter">H</div>
-<div class="glosar-item"><span class="glosar-term">Hallucination</span><span class="glosar-def">AI generise plausibilan ali netacan sadrzaj — nepostojece cinjenice, API endpoint-e ili podatke. Kriticno za QA AI feature-a.</span></div>
-<div class="glosar-item"><span class="glosar-term">Happy Path</span><span class="glosar-def">Idealni scenario — svi ulazi su validni, korisnik radi ono sto se ocekuje.</span></div>
-<div class="glosar-item"><span class="glosar-term">Healenium</span><span class="glosar-def">AI alat koji automatski azurira Selenium lokatore kada se UI promeni, smanjujuci odrzavanje testova.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="I"><div class="glosar-letter">I</div>
-<div class="glosar-item"><span class="glosar-term">Ice Cream Cone</span><span class="glosar-def">Anti-pattern test piramide: previse E2E testova, premalo unit testova. Testovi su spori, krhki i skupi.</span></div>
-<div class="glosar-item"><span class="glosar-term">Idempotent</span><span class="glosar-def">Operacija koja daje isti rezultat bez obzira na broj ponavljanja. GET, PUT i DELETE su idempotentne HTTP metode.</span></div>
-<div class="glosar-item"><span class="glosar-term">IEEE 829</span><span class="glosar-def">Standard za dokumentaciju sofverskog testiranja — struktura test plana.</span></div>
-<div class="glosar-item"><span class="glosar-term">Integration Testing</span><span class="glosar-def">Testiranje interakcije izmedju dve ili vise komponenti sistema.</span></div>
-<div class="glosar-item"><span class="glosar-term">ISTQB</span><span class="glosar-def">International Software Testing Qualifications Board — globalna QA sertifikaciona organizacija.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="J"><div class="glosar-letter">J</div>
-<div class="glosar-item"><span class="glosar-term">JIRA</span><span class="glosar-def">Atlassian alat za defect tracking, sprint management i project tracking. Issue Types: Bug, Task, Story, Epic.</span></div>
-<div class="glosar-item"><span class="glosar-term">JQL</span><span class="glosar-def">JIRA Query Language — structured query za filtriranje issue-a (npr. <code>type = Bug AND status != Closed AND priority = High</code>).</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="K"><div class="glosar-letter">K</div>
-<div class="glosar-item"><span class="glosar-term">k6</span><span class="glosar-def">Open-source alat za performance (load) testiranje. Skripte se pisu u JavaScript-u.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="L"><div class="glosar-letter">L</div>
-<div class="glosar-item"><span class="glosar-term">Load Testing</span><span class="glosar-def">Performance testiranje na ocekivanom normalnom opterecenju sistema.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="M"><div class="glosar-letter">M</div>
-<div class="glosar-item"><span class="glosar-term">MC/DC</span><span class="glosar-def">Modified Condition/Decision Coverage — svaki uslov u odluci nezavisno utice na ishod. Najstrozija white-box tehnika pokrivanja.</span></div>
-<div class="glosar-item"><span class="glosar-term">Mock</span><span class="glosar-def">Zamena realne zavisnosti koja verifikuje i kako je pozvana, ne samo sta vraca.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="N"><div class="glosar-letter">N</div>
-<div class="glosar-item"><span class="glosar-term">NBomber</span><span class="glosar-def">.NET-native load testing framework. Testovi se pisu u C#, u istom solution-u sa Selenium/API testovima.</span></div>
-<div class="glosar-item"><span class="glosar-term">Newman</span><span class="glosar-def">CLI alat za pokretanje Postman kolekcija u CI/CD pipeline-u.</span></div>
-<div class="glosar-item"><span class="glosar-term">NUnit</span><span class="glosar-def">.NET test framework sa [Test], [TestCase] atributima. Alternativa: xUnit sa [Fact], [Theory].</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="O"><div class="glosar-letter">O</div>
-<div class="glosar-item"><span class="glosar-term">OpenAPI / Swagger</span><span class="glosar-def">Specifikacija za opisivanje REST API-ja. Swagger UI omogucava interaktivno testiranje endpoint-a, a OpenAPI spec sluzi za schema validaciju.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="P"><div class="glosar-letter">P</div>
-<div class="glosar-item"><span class="glosar-term">Page Factory</span><span class="glosar-def">Alternativni nacin definisanja lokatorima u POM-u sa [FindsBy] atributima. Ne preporucuje se u novim projektima.</span></div>
-<div class="glosar-item"><span class="glosar-term">Page Object Model</span><span class="glosar-def">Design pattern koji enkapsulira UI lokatore i interakcije za stranicu u posebnu klasu.</span></div>
-<div class="glosar-item"><span class="glosar-term">Pairwise Testing</span><span class="glosar-def">Tehnika koja smanjuje broj test kombinacija pokrivanjem svih parova parametara.</span></div>
-<div class="glosar-item"><span class="glosar-term">Percy</span><span class="glosar-def">BrowserStack vizuelna regresija integrisana sa CI/CD pipeline-om. Svaki PR dobija vizuelni diff review.</span></div>
-<div class="glosar-item"><span class="glosar-term">PII</span><span class="glosar-def">Personally Identifiable Information — licni podaci koji se moraju anonimizovati u testovima.</span></div>
-<div class="glosar-item"><span class="glosar-term">Priority</span><span class="glosar-def">Hitnost korekcije defekta sa poslovnog aspekta (High/Medium/Low).</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="Q"><div class="glosar-letter">Q</div>
-<div class="glosar-item"><span class="glosar-term">QA</span><span class="glosar-def">Quality Assurance — proaktivni proces poboljsavanja procesa da bi se sprecilo nastajanje defekata.</span></div>
-<div class="glosar-item"><span class="glosar-term">QC</span><span class="glosar-def">Quality Control — reaktivna aktivnost pronalazenja defekata u gotovom proizvodu.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="R"><div class="glosar-letter">R</div>
-<div class="glosar-item"><span class="glosar-term">p95 / p99</span><span class="glosar-def">Percentili response time-a: 95% (99%) zahteva se obradjuje za manje od X ms. Bolji od proseka za merenje performansi.</span></div>
-<div class="glosar-item"><span class="glosar-term">RBAC</span><span class="glosar-def">Role-Based Access Control — autorizacija zasnovana na ulogama. Kriticno testirati i na UI i na API nivou.</span></div>
-<div class="glosar-item"><span class="glosar-term">RACI</span><span class="glosar-def">Matrica odgovornosti: Responsible, Accountable, Consulted, Informed.</span></div>
-<div class="glosar-item"><span class="glosar-term">Regression Testing</span><span class="glosar-def">Provera da nove izmene nisu narusile postojecu funkcionalnost.</span></div>
-<div class="glosar-item"><span class="glosar-term">REST</span><span class="glosar-def">Representational State Transfer — arhitekturalni stil za dizajn web API-ja.</span></div>
-<div class="glosar-item"><span class="glosar-term">RestSharp</span><span class="glosar-def">C# HTTP klijent za API testiranje. Native .NET alternativa za Postman/Newman u automatizovanim testovima.</span></div>
-<div class="glosar-item"><span class="glosar-term">Retesting</span><span class="glosar-def">Ponovo izvrsavanje konkretnog TC koji je prethodno failovao, nakon bugfix-a.</span></div>
-<div class="glosar-item"><span class="glosar-term">Risk-based Testing</span><span class="glosar-def">Prioritizacija testova na osnovu verovatnoce i uticaja potencijalnog defekta.</span></div>
-<div class="glosar-item"><span class="glosar-term">RTM</span><span class="glosar-def">Requirements Traceability Matrix — tabela koja mapira zahteve na test case-ove i defekte.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="S"><div class="glosar-letter">S</div>
-<div class="glosar-item"><span class="glosar-term">Sanity Testing</span><span class="glosar-def">Fokusirana verifikacija konkretne promene bez punog regression run-a.</span></div>
-<div class="glosar-item"><span class="glosar-term">SDET</span><span class="glosar-def">Software Development Engineer in Test — QA koji pise produkcioni kod i framework.</span></div>
-<div class="glosar-item"><span class="glosar-term">Screenplay Pattern</span><span class="glosar-def">Alternativa POM-u za kompleksne scenarije. Modelira interakcije kao User + Abilities + Tasks + Questions.</span></div>
-<div class="glosar-item"><span class="glosar-term">Security Testing</span><span class="glosar-def">Testiranje sistema na ranjivosti — SQL injection, XSS, autentifikacija, autorizacija. OWASP Top 10 kao referenca.</span></div>
-<div class="glosar-item"><span class="glosar-term">Selenium</span><span class="glosar-def">Open-source framework za automatizaciju web browser-a.</span></div>
-<div class="glosar-item"><span class="glosar-term">Severity</span><span class="glosar-def">Tehnicki uticaj defekta na sistem (Blocker/Critical/Major/Minor/Trivial).</span></div>
-<div class="glosar-item"><span class="glosar-term">Smoke Testing</span><span class="glosar-def">Povrsinska provera kriticnih funkcionalnosti — Go/No-Go odluka za dalji QA.</span></div>
-<div class="glosar-item"><span class="glosar-term">Soak Testing</span><span class="glosar-def">Endurance test — sistem pod normalnim opterecenjem duzi period. Trazi memory leak-ove i degradaciju performansi.</span></div>
-<div class="glosar-item"><span class="glosar-term">Spike Testing</span><span class="glosar-def">Testiranje reakcije sistema na nagli kratki skok opterecenja (flash sale, viralni content).</span></div>
-<div class="glosar-item"><span class="glosar-term">Spy</span><span class="glosar-def">Omotac oko realne implementacije koji belezi pozive za naknadnu verifikaciju.</span></div>
-<div class="glosar-item"><span class="glosar-term">State Transition Testing</span><span class="glosar-def">Tehnika koja modelira ponasanje sistema kao skup stanja i prelaza izmedju njih.</span></div>
-<div class="glosar-item"><span class="glosar-term">Static Testing</span><span class="glosar-def">Testiranje bez izvrsavanja softvera — code review, inspekcija dokumentacije.</span></div>
-<div class="glosar-item"><span class="glosar-term">Stress Testing</span><span class="glosar-def">Performance testiranje sistema iznad normalnog kapaciteta.</span></div>
-<div class="glosar-item"><span class="glosar-term">Stub</span><span class="glosar-def">Lazna implementacija koja vraca predefinisani odgovor bez logike.</span></div>
-<div class="glosar-item"><span class="glosar-term">System Testing</span><span class="glosar-def">Testiranje celokupnog sistema kao jedinstvene celine prema zahtevima.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="T"><div class="glosar-letter">T</div>
-<div class="glosar-item"><span class="glosar-term">Test Basis</span><span class="glosar-def">Sve sto se koristi kao osnova za dizajn test case-ova: zahtevi, kod, standardi.</span></div>
-<div class="glosar-item"><span class="glosar-term">Test Pyramid</span><span class="glosar-def">Strategija rasporeda testova: mnogo unit (brzi), srednje integration, malo E2E (spori). Suprotnost: Ice Cream Cone.</span></div>
-<div class="glosar-item"><span class="glosar-term">Test Case</span><span class="glosar-def">Dokumentovan skup koraka, ulaznih podataka i ocekivanih rezultata.</span></div>
-<div class="glosar-item"><span class="glosar-term">Test Coverage</span><span class="glosar-def">Procenat test basis-a (zahteva, koda, funkcionalnosti) pokriven testovima.</span></div>
-<div class="glosar-item"><span class="glosar-term">Test Harness</span><span class="glosar-def">Infrastruktura koja podrzava izvrsavanje testova: runner, stubs, drivers, konfiguracija.</span></div>
-<div class="glosar-item"><span class="glosar-term">Test Oracle</span><span class="glosar-def">Mehanizam kojim se odredjuje da li je rezultat testa ispravan.</span></div>
-<div class="glosar-item"><span class="glosar-term">Test Plan</span><span class="glosar-def">Dokument koji definise scope, pristup, resurse i raspored testiranja.</span></div>
-<div class="glosar-item"><span class="glosar-term">Three Amigos</span><span class="glosar-def">Sesija izmedju PO, developera i QA-a pre razvoja feature-a za razjasnjavanje zahteva.</span></div>
-<div class="glosar-item"><span class="glosar-term">Throughput</span><span class="glosar-def">Broj zahteva koje sistem obradjuje u jedinici vremena (req/s). Kljucna performance metrika.</span></div>
-<div class="glosar-item"><span class="glosar-term">TTFB</span><span class="glosar-def">Time To First Byte — vreme od zahteva do prvog byte-a odgovora. Meri server-side latency.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="U"><div class="glosar-letter">U</div>
-<div class="glosar-item"><span class="glosar-term">UAT</span><span class="glosar-def">User Acceptance Testing — testiranje od strane krajnjih korisnika ili Product Owner-a.</span></div>
-<div class="glosar-item"><span class="glosar-term">Unit Testing</span><span class="glosar-def">Testiranje individualne funkcije ili metode u izolaciji.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="V"><div class="glosar-letter">V</div>
-<div class="glosar-item"><span class="glosar-term">V-Model</span><span class="glosar-def">SDLC model koji eksplicitno mapira svaku razvojnu fazu na odgovarajuci nivo testiranja.</span></div>
-<div class="glosar-item"><span class="glosar-term">Validation</span><span class="glosar-def">Provera da li sistem ispunjava stvarne potrebe korisnika.</span></div>
-<div class="glosar-item"><span class="glosar-term">Verification</span><span class="glosar-def">Provera da li je sistem izradjen u skladu sa specifikacijom.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="W"><div class="glosar-letter">W</div>
-<div class="glosar-item"><span class="glosar-term">WCAG</span><span class="glosar-def">Web Content Accessibility Guidelines — standard za pristupacnost web sadrzaja.</span></div>
-<div class="glosar-item"><span class="glosar-term">WebDriver</span><span class="glosar-def">W3C standard protokol koji Selenium koristi za komunikaciju sa browser-om.</span></div>
-<div class="glosar-item"><span class="glosar-term">White-box Testing</span><span class="glosar-def">Testiranje sa punim uvidom u internu implementaciju — kod, arhitekturu, logiku.</span></div>
-</div>
-<div class="glosar-letter-group" data-letter="X"><div class="glosar-letter">X</div>
-<div class="glosar-item"><span class="glosar-term">xUnit</span><span class="glosar-def">.NET test framework sa [Fact] i [Theory]/[InlineData] atributima. Modernija alternativa NUnit-u, konstruktor za setup, IDisposable za teardown.</span></div>
-<div class="glosar-item"><span class="glosar-term">XPath</span><span class="glosar-def">Jezik za navigaciju kroz XML/HTML dokument — jedan od Selenium lokator tipova.</span></div>
-</div>
-</div>
+<h2 class="sub-title">23.1 Zasto SQL za QA</h2>
+<p class="body-text">UI i API ti pokazuju sta aplikacija <em>tvrdi</em> da se desilo. Baza ti pokazuje sta se <em>stvarno</em> desilo. Veliki deo ozbiljnog testiranja je upravo taj jaz: sacuvas zapis kroz UI, dobijes zeleni toast "Saved", a u bazi je polje ostalo null, status se nije promenio, ili je upisan duplikat. Bez SQL provere taj bag prolazi jer je UI asercija zadovoljena.</p>
+<p class="body-text">Za QA, SQL se koristi u cetiri tipicne situacije: <strong>provera stanja</strong> posle UI/API akcije (da li je upis tacan), <strong>priprema test podataka</strong> (naci ili napraviti zapis koji zadovoljava preduslov), <strong>debug</strong> (zasto je test pao — sta je u bazi u tom trenutku), i <strong>reconciliation</strong> (da li API odgovor odgovara izvoru istine u bazi). Ne treba ti DBA nivo — treba ti pouzdan SELECT, JOIN-ovi, agregacije i svest o zamkama izmedju baza.</p>
+<div class="note">U PLM / enterprise domenu podaci su povezani kroz vise tabela (stavka, verzija, atribut, veza, audit log). "Da li je sacuvano" skoro nikad nije jedna tabela — zato su JOIN-ovi (23.3) i provera posle akcije (23.5) centralne vestine, ne SELECT * nad jednom tabelom.</div>
+
+<h2 class="sub-title">23.2 SELECT osnove za proveru podataka</h2>
+<p class="body-text">Redosled izvrsavanja nije redosled pisanja. Pises SELECT ... FROM ... WHERE ... GROUP BY ... HAVING ... ORDER BY, ali baza logicki radi FROM &rarr; WHERE &rarr; GROUP BY &rarr; HAVING &rarr; SELECT &rarr; ORDER BY. Zato alias iz SELECT-a ne mozes koristiti u WHERE (jos ne postoji), ali mozes u ORDER BY.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>-- Naci zapis koji si upravo sacuvao kroz UI
+SELECT id, name, status, modified_on, modified_by
+FROM item
+WHERE name = 'TEST-ITEM-042'
+  AND status IN ('Draft', 'In Review')
+  AND modified_on &gt;= '2026-11-12'
+ORDER BY modified_on DESC;</pre></div>
+<p class="body-text">Filteri koji se stalno koriste u QA proverama: <code>IS NULL</code> / <code>IS NOT NULL</code> (nikad <code>= NULL</code> — vratice prazan skup jer je NULL "nepoznato", ne vrednost), <code>LIKE 'TEST-%'</code> za prefiks test podataka, <code>BETWEEN</code> za opsege, <code>IN (...)</code> umesto gomile OR-ova. Uvek stavi <code>ORDER BY</code> kad proveravas "poslednji" zapis — bez njega redosled nije garantovan.</p>
+<div class="warning">NULL se siri kroz izraze: <code>WHERE discount &lt;&gt; 0</code> NE vraca redove gde je discount NULL, iako NULL ocigledno nije 0. Ako proveravas "sve sto nije 0", moras eksplicitno: <code>WHERE discount &lt;&gt; 0 OR discount IS NULL</code>. Ovo je cest izvor laznih "nema rezultata" u QA proverama.</div>
+
+<h2 class="sub-title">23.3 JOIN-ovi — povezivanje tabela</h2>
+<p class="body-text"><strong>INNER JOIN</strong> vraca samo redove koji imaju par u obe tabele. <strong>LEFT JOIN</strong> vraca sve iz leve tabele, a NULL gde nema para desno. Za QA je LEFT JOIN cesto vredniji: njime hvatas <em>sta nedostaje</em>.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>-- Stavke koje NEMAJU nijednu verziju (sirocici posle bag-a u kreiranju)
+SELECT i.id, i.name
+FROM item i
+LEFT JOIN item_version v ON v.item_id = i.id
+WHERE v.id IS NULL;</pre></div>
+<p class="body-text">Taj <code>WHERE desna_tabela.id IS NULL</code> posle LEFT JOIN-a je klasican "anti-join" obrazac — nalazi redove bez para. Koristan za: stavke bez obaveznog atributa, korisnike bez role, narudzbine bez stavki.</p>
+<div class="warning">Uslov na desnu tabelu LEFT JOIN-a ne sme u WHERE ako hoces da zadrzis sve leve redove — WHERE se primenjuje posle join-a i izbacuje NULL redove, cime LEFT JOIN postaje INNER. Takav uslov ide u ON: <code>LEFT JOIN item_version v ON v.item_id = i.id AND v.is_latest = 1</code>. WHERE na desnoj tabeli koristis namerno samo za anti-join (IS NULL).</div>
+
+<h2 class="sub-title">23.4 Agregacije i otkrivanje duplikata</h2>
+<p class="body-text"><code>COUNT</code>, <code>SUM</code>, <code>MIN/MAX</code> uz <code>GROUP BY</code> su alat broj jedan za data-integrity provere. Najcesca: <strong>da li postoje duplikati</strong> tamo gde ne bi smeli.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>-- Duplikati po poslovnom kljucu (treba da bude jedinstven)
+SELECT name, COUNT(*) AS cnt
+FROM item
+GROUP BY name
+HAVING COUNT(*) &gt; 1
+ORDER BY cnt DESC;</pre></div>
+<p class="body-text">Razlika koju pitaju na intervjuu: <code>WHERE</code> filtrira <em>redove pre</em> grupisanja, <code>HAVING</code> filtrira <em>grupe posle</em>. "Nadji imena sa vise od jednog zapisa" je po definiciji uslov nad grupom &rarr; HAVING. I pazi: <code>COUNT(*)</code> broji redove ukljucujuci NULL, <code>COUNT(kolona)</code> ignorise NULL u toj koloni — razlika koja menja rezultat.</p>
+
+<h2 class="sub-title">23.5 Provera stanja baze posle UI/API akcije</h2>
+<p class="body-text">Ovo je najvredniji obrazac u celoj sekciji. Automatizovani test cesto proverava samo da se pojavila success poruka — a to je slab dokaz. Jaka asercija proverava na dva nivoa: <strong>UI stanje posle refresh-a</strong> i <strong>vrednost u bazi</strong>.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>// C# — posle Save akcije u UI, potvrdi u bazi (Dapper/ADO.NET)
+// Ne proveravaj samo toast "Saved" — proveri izvor istine.
+string sql = @"SELECT status FROM item WHERE id = @id";
+var statusInDb = connection.QuerySingleOrDefault&lt;string&gt;(sql, new { id = itemId });
+
+Assert.Equal("In Review", statusInDb);   // DB je stvarno azuriran
+// + UI asercija posle refresh-a da se slaze sa bazom</pre></div>
+<p class="body-text">Pravila za ovaj obrazac: (1) citaj bazu <em>posle</em> sto je akcija potvrdjena, ne u trci sa async upisom — sacekaj uslov, ne thread.sleep; (2) proveri tacno polje koje akcija menja, ne samo "red postoji"; (3) ako postoji audit/history tabela, proveri i nju (ko, kada, stara vs nova vrednost) jer tamo cesto ispliva bag koji glavna tabela sakrije.</p>
+<div class="note">Veza na manuelno testiranje: ista logika kao "proveri na svakom nivou" iz <strong>Sekcije 10.5</strong>. SQL provera je samo najnizi, najpouzdaniji nivo te iste piramide — ispod UI-ja i API-ja.</div>
+
+<h2 class="sub-title">23.6 API-to-DB validacija</h2>
+<p class="body-text">Kad testiras API (Postman/RestSharp), odgovor je ono sto servis <em>vraca</em> — a ne nuzno ono sto je u bazi. Reconciliation test uporedjuje to dvoje: pozovi endpoint, pa proveri da polja iz JSON odgovora odgovaraju redu u bazi. Hvata bagove gde API kesira staru vrednost, mapira pogresno polje, ili vraca izracunatu vrednost koja se razilazi sa cuvanim stanjem.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>-- Posle POST /items koji vrati {"id": 5012, "status": "Draft"}
+-- Potvrdi da baza stvarno drzi isto stanje:
+SELECT id, status, created_on
+FROM item
+WHERE id = 5012;
+-- Ocekivano: status = 'Draft', created_on ~ vreme poziva</pre></div>
+<p class="body-text">Tipicni nalazi: API vraca <code>status: "Active"</code> a u bazi je enum <code>1</code> koji se mapira pogresno; API vraca formatiran datum a baza cuva UTC pa se razilaze za timezone; soft-delete gde API sakrije red ali <code>is_deleted = 1</code> i dalje stoji u bazi (pa "obrisani" podaci curle u drugi izvestaj).</p>
+
+<h2 class="sub-title">23.7 Zamke: MSSQL vs Oracle vs PostgreSQL</h2>
+<p class="body-text">Isti SQL ne radi isto na sve tri baze. U enterprise okruzenju gde backend moze biti SQL Server ili Oracle (a dev/lokalno nekad PostgreSQL), ovo su razlike koje realno zezaju test upite:</p>
+<div class="tbl-wrap"><table><thead><tr><th>Tema</th><th>SQL Server (MSSQL)</th><th>Oracle</th><th>PostgreSQL</th></tr></thead><tbody>
+<tr><td>Poredjenje stringova</td><td>Case-insensitive po defaultu (zavisi od collation)</td><td>Case-sensitive</td><td>Case-sensitive</td></tr>
+<tr><td>Prazan string vs NULL</td><td>'' je prazan string</td><td>'' se tretira kao NULL (!)</td><td>'' je prazan string</td></tr>
+<tr><td>Limit N redova</td><td>SELECT TOP 10 / OFFSET-FETCH</td><td>FETCH FIRST 10 ROWS ONLY (ili ROWNUM)</td><td>LIMIT 10</td></tr>
+<tr><td>Spajanje stringova</td><td>+ ili CONCAT</td><td>|| ili CONCAT</td><td>|| ili CONCAT</td></tr>
+<tr><td>Navodnici za identifikator</td><td>[kolona]</td><td>"kolona" (i pravi case-sensitive!)</td><td>"kolona"</td></tr>
+<tr><td>NULL = 0  zamena</td><td>ISNULL(x, 0)</td><td>NVL(x, 0)</td><td>COALESCE(x, 0)</td></tr>
+<tr><td>Trenutno vreme</td><td>GETDATE()</td><td>SYSDATE</td><td>NOW()</td></tr>
+</tbody></table></div>
+<div class="warning">Oracle tretira prazan string kao NULL — <code>WHERE comment = ''</code> na Oracle-u nikad ne vraca redove, moras <code>WHERE comment IS NULL</code>. Test upit koji radi lokalno na PostgreSQL moze cutke vratiti prazan skup na Oracle QA okruzenju. <code>COALESCE</code> radi na sve tri i prenosiviji je od ISNULL/NVL.</div>
+
+<h2 class="sub-title">23.8 Transakcije i test podaci</h2>
+<p class="body-text">Testovi koji pisu u bazu moraju da oc(iste za sobom, inace sledeci run kreira duplikate ili pada na "vec postoji". Dve strategije: (1) <strong>setup/teardown</strong> — kreiras poznat zapis pre testa, brises ga posle; (2) <strong>rollback</strong> — sve u transakciji koja se na kraju ponisti, pa baza ostaje netaknuta.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>-- Rucna provera bez trajne izmene: pokreni, pogledaj, ponisti
+BEGIN TRANSACTION;
+
+UPDATE item SET status = 'Approved' WHERE id = 5012;
+SELECT status FROM item WHERE id = 5012;   -- vidi efekat
+
+ROLLBACK;   -- vrati sve; baza kao da se nista nije desilo</pre></div>
+<p class="body-text">Pravila higijene test podataka: koristi prepoznatljiv prefiks (<code>TEST-</code>, <code>QA-</code>) da ih lako nadjes i obrises; nikad ne diraj deljene reference podatke rucnim UPDATE-om na deljenom okruzenju; <code>DELETE</code> uvek sa <code>WHERE</code> (i proveri ga prvo kao <code>SELECT</code> sa istim WHERE). Na deljenoj bazi radije SELECT i rollback nego trajni UPDATE.</p>
+<div class="warning"><code>UPDATE</code>/<code>DELETE</code> bez <code>WHERE</code> menja CELU tabelu. Pre svakog destruktivnog upita, pokreni isti filter kao SELECT i pogledaj koliko redova pogadja. Na deljenom QA okruzenju jedan DELETE bez WHERE je incident, ne bag.</div>
+
+<h2 class="sub-title">23.9 Cesta intervju pitanja</h2>
+<p class="body-text">Kratki, tacni odgovori — bez nabubanih definicija:</p>
+<div class="tbl-wrap"><table><thead><tr><th>Pitanje</th><th>Sustina odgovora</th></tr></thead><tbody>
+<tr><td>WHERE vs HAVING</td><td>WHERE filtrira redove pre grupisanja; HAVING filtrira grupe posle. Uslov nad COUNT/SUM ide u HAVING.</td></tr>
+<tr><td>INNER vs LEFT JOIN</td><td>INNER samo parovi u obe tabele; LEFT svi levi + NULL gde nema para. Anti-join (LEFT + IS NULL) nalazi sta nedostaje.</td></tr>
+<tr><td>Kako nadjes duplikate</td><td>GROUP BY po kljucu, HAVING COUNT(*) &gt; 1.</td></tr>
+<tr><td>Zasto = NULL ne radi</td><td>NULL je nepoznato, ne vrednost. Koristi IS NULL / IS NOT NULL.</td></tr>
+<tr><td>DELETE vs TRUNCATE vs DROP</td><td>DELETE brise redove (sa WHERE, logovano, moze rollback); TRUNCATE brise sve brzo, bez WHERE; DROP uklanja celu tabelu (strukturu).</td></tr>
+<tr><td>Kako kao QA koristis SQL</td><td>Provera stanja posle UI/API akcije, priprema test podataka, debug pri padu testa, API-to-DB reconciliation.</td></tr>
+<tr><td>COUNT(*) vs COUNT(kolona)</td><td>COUNT(*) broji sve redove; COUNT(kolona) ignorise NULL u toj koloni.</td></tr>
+</tbody></table></div>
+<div class="note">Kad branis CV: "SQL (MSSQL/Oracle/PostgreSQL) data validation" znaci tacno ovo — ne pisanje aplikativnih upita, nego provera da UI i API govore istinu o tome sta je u bazi. Primer: bag gde je UI prijavio uspeh a status u bazi nije promenjen, uhvacen SQL asercijom na dva nivoa (23.5).</div>

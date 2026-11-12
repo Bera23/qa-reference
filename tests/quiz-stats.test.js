@@ -2,7 +2,7 @@
 const { loadPage, ready, wait, check, summary } = require('./helpers');
 
 (async () => {
-  const dom = loadPage('s24.html', {
+  const dom = loadPage('s25.html', {
     beforeParse: w => {
       // Blob/createObjectURL polyfill for the export test — jsdom's own localStorage works fine
       // with a real https:// url passed to JSDOM(), no polyfill needed for that part.
