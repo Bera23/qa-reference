@@ -4,6 +4,7 @@
 <tr><td>Test Summary Report</td><td>Takticki — pise se na kraju test ciklusa ili sprinta. Namenjen timu i project manager-u.</td></tr>
 <tr><td>Test Closure Report</td><td>Strateski — pise se na kraju release-a. Namenjen stakeholderima i menadzmentu.</td></tr>
 </tbody></table></div>
+<p class="body-text">Sadrzaj po tipu: Execution Report u 9.2, a Summary i Closure Report u 9.8.</p>
 <h2 class="sub-title">9.2 Test Execution Report — sadrzaj</h2>
 <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Test Execution Report — Sprint 14, Dan 3
 
@@ -108,3 +109,34 @@ type = Bug AND priority IN (Critical, Blocker)
 type = Bug AND labels = production-found
   AND createdDate >= startOfMonth()</pre></div>
 <div class="note">JIRA i Azure DevOps nisu medjusobno iskljucivi — na nekim projektima JIRA sluzi za defect tracking dok Azure DevOps drzi pipeline i test plans.</div>
+
+<h2 class="sub-title">9.7 Requirements Traceability Matrix (RTM)</h2>
+<p class="body-text">RTM je tabela koja mapira svaki zahtev / User Story na test case-ove koji ga pokrivaju, i dalje na defekte nadjene kroz te testove. Odgovara na jedno pitanje koje metrike same ne mogu: <strong>da li je sve pokriveno i gde su rupe</strong>.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Req ID</th><th>Zahtev</th><th>Test Case(s)</th><th>Status</th><th>Defekti</th></tr></thead><tbody>
+<tr><td>REQ-01</td><td>Login validnim kredencijalima</td><td>TC-01, TC-02</td><td>Pass</td><td>—</td></tr>
+<tr><td>REQ-02</td><td>Zakljucavanje naloga posle 5 pokusaja</td><td>TC-05</td><td>Fail</td><td>BUG-114</td></tr>
+<tr><td>REQ-03</td><td>Reset lozinke mejlom</td><td>—</td><td>Not covered</td><td>— (rupa u pokrivenosti)</td></tr>
+</tbody></table></div>
+<p class="body-text">Tri konkretne koristi: <strong>coverage</strong> (ima li svaki zahtev bar jedan TC), <strong>gap detekcija</strong> (zahtev bez TC-a je rupa — REQ-03 gore), i <strong>impact analiza</strong> (kad se zahtev promeni, odmah vidis koje TC-ove treba revidirati). Traceability je <em>forward</em> (zahtev → TC), <em>backward</em> (TC → zahtev); kad postoje oba, matrica je bidirekciona i potpuna.</p>
+<div class="note">U praksi se rucna Excel RTM pravi retko — ADO (9.5, requirements coverage) i JIRA (9.6, Story↔Bug linkovi) je grade automatski iz veza izmedju work item-a. Na intervjuu je bitan koncept i to da znas da ga alati automatizuju; rucna tabela ostaje za manje ili regulisane (npr. medicinske/finansijske) projekte gde se trazi eksplicitan dokaz pokrivenosti.</div>
+
+<h2 class="sub-title">9.8 Test Summary i Closure Report — sadrzaj</h2>
+<p class="body-text">Dopuna na 9.1/9.2: Execution Report (9.2) je operativni dnevni snimak; Summary i Closure se pisu redje i gledaju sire.</p>
+<p class="body-text"><strong>Test Summary Report</strong> — kraj test ciklusa ili sprinta, za tim i PM-a:</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Test Summary Report — Sprint 14
+
+Obim:        moduli Login, Checkout, Avatar upload
+Rezultat:    52 TC | Pass 48 (92%) | Fail 3 | Blocked 1
+Defekti:     1 Critical (BUG-114), 2 Minor — svi otvoreni
+Rizik:       sesija ne istice (BUG-114) — bezbednosni, blokira sign-off
+Preporuka:   ne release-ovati dok BUG-114 nije fixovan i retestiran</pre></div>
+<p class="body-text"><strong>Test Closure Report</strong> — kraj release-a, za menadzment i stakeholdere:</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Test Closure Report — Release 3.2
+
+Pokrivenost:    96% zahteva (3 od 78 bez TC-a — dokumentovano i prihvaceno)
+Defekti:        61 ukupno | 58 zatvoreno | 3 deferred u 3.3
+Defect leakage: 2 escaped (3.3%) — ispod cilja (5%)
+Reopen rate:    11%
+Lessons learned: flaky LOV testovi stabilizovani; dodati smoke za payment
+Sign-off:       QA Lead + Product Owner, [datum]</pre></div>
+<div class="note">Pravilo: sto je izvestaj strateskiji (Execution → Summary → Closure), to manje sirovih brojeva a vise zakljucaka, rizika i preporuka — isti princip "cinjenice + preporuka + opcije" kao u 9.4.</div>
