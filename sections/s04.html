@@ -91,3 +91,37 @@ Alternativni tokovi:
 <tr><td>C3: Zapis je zakljucan od strane drugog korisnika</td></tr>
 </tbody></table></div>
 <div class="note">U praksi se retko crta pun graf rucno — koristi se kad Decision Table postane nepregledna (previse uslova sa preklapajucom logikom) da se prvo razjasni logika, pa se test case-ovi izvode iz nje. Za vecinu enterprise formi Decision Table (4.3) je dovoljna i brza za odrzavanje.</div>
+
+<h2 class="sub-title">4.11 Exploratory testing — sta je i kada</h2>
+<p class="body-text">Exploratory testing je <strong>istovremeno ucenje aplikacije, dizajn testova i izvrsavanje</strong> — sledeci potez biras na osnovu onoga sto si upravo video. Za razliku od tehnika 4.1-4.10 (koje unapred izvode test case-ove iz specifikacije), ovde se test dizajn desava u hodu. Kljucna zabluda na intervjuu: exploratory <em>nije</em> "nasumicno klikanje" ni ad hoc — strukturu mu daju <strong>cilj (charter)</strong> i <strong>time-box</strong> (4.12).</p>
+<p class="body-text">Kada se koristi: nove ili izmenjene funkcije sa tankom ili nedostajucom specifikacijom; posle scripted prolaza, da uhvati ono sto unapred napisani scenariji ne pokrivaju; istraga buga (reprodukcija, trazenje granica problema); rizicne oblasti pod vremenskim pritiskom gde nema vremena za pun set test case-ova.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Aspekt</th><th>Scripted</th><th>Exploratory</th></tr></thead><tbody>
+<tr><td>Kada dizajniras test</td><td>Unapred, iz specifikacije</td><td>U toku izvrsavanja</td></tr>
+<tr><td>Jaca strana</td><td>Ponovljivost, regresija, dokaz pokrivenosti</td><td>Brzina, otkrivanje neocekivanog, rano u razvoju</td></tr>
+<tr><td>Slaba strana</td><td>Propusti ono sto niko nije predvideo</td><td>Teze ponoviti i revidirati bez beleski</td></tr>
+</tbody></table></div>
+<p class="body-text">Nisu suprotstavljeni — zrela QA praksa koristi oba: scripted za regresiju i pokrivenost, exploratory za rizik i neocekivano. AI funkcija za ekstrakciju podataka je tipican exploratory target: neocekivani ulazi, cudni formati dokumenata i kombinacije koje unapred napisani test case-ovi ne predvide (vezano za <strong>Sekciju 22</strong>, AI u testiranju).</p>
+
+<h2 class="sub-title">4.12 Session-based test management (SBTM) i charter</h2>
+<p class="body-text">SBTM cini exploratory <strong>merljivim i izvestljivim</strong> — odgovor na "kako znas da si nesto uradio ako nema test case-ova". Rad se deli na time-box-ovane sesije (obicno 60-120 min), svaka sa charter-om (cilj), beleskama i kratkim debrief-om.</p>
+<p class="body-text">Charter je jedna recenica koja usmerava sesiju, po obrascu <em>istrazi [target] koristeci [resurse] da otkrijes [informaciju/rizik]</em>:</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">copy</button><pre>Charter: Istrazi import Excel fajla u modul stavki
+koristeci fajlove razlicitih velicina, kodiranja i
+nevalidnih kolona, da otkrijes kako se sistem ponasa
+na losem ulazu (poruke, delimicni import, rollback).
+
+Time-box: 90 min
+Oblasti: validacija kolona, duplikati, prazne celije,
+         veliki fajl (5k+ redova), specijalni znakovi</pre></div>
+<p class="body-text">Sta se belezi tokom sesije: pokrivene oblasti, nadjeni bagovi, pitanja i rizici, i gde je vreme otislo (setup vs testiranje vs istraga buga). Debrief je kratak pregled sa lead-om ili timom — sta je pokriveno, sta ostaje, koji su novi rizici. Na intervjuu ovo pokazuje da umes exploratory da ucinis odgovornim i prenosivim, a ne "samo kliktanje".</p>
+
+<h2 class="sub-title">4.13 Heuristike i turneje (tours)</h2>
+<p class="body-text">Heuristike ubrzavaju otkrivanje — umesto da lutas, primenjujes gotove obrasce gde se bagovi tipicno kriju. "Turneja" je obilazak aplikacije iz jednog ugla:</p>
+<div class="tbl-wrap"><table><thead><tr><th>Turneja</th><th>Ugao</th></tr></thead><tbody>
+<tr><td>Feature tour</td><td>Prodji sve funkcije redom — mapa onoga sto uopste postoji</td></tr>
+<tr><td>Data tour</td><td>Razni tipovi i granice podataka — prazno, maksimum, specijalni znakovi, pogresan tip</td></tr>
+<tr><td>CRUD tour</td><td>Create, Read, Update, Delete nad istim zapisom — konzistentnost stanja</td></tr>
+<tr><td>Interruption tour</td><td>Prekini sredinom akcije — refresh, Back dugme, logout, mrezni prekid</td></tr>
+<tr><td>Goldilocks</td><td>Premalo / previse / tacno — ispod, iznad i na granici dozvoljenog</td></tr>
+</tbody></table></div>
+<p class="body-text">Oracle (sta je ispravno ponasanje) najcesce je konzistentnost: sa prethodnim ponasanjem, sa konkurentskim proizvodom, sa specifikacijom, sa "nikad/uvek" pravilima. Za AI ekstrakciju primeni Data tour (razni formati dokumenata), Interruption tour (prekid tokom ekstrakcije) i Goldilocks (prazan dokument, ogroman dokument) — tu izlaze edge case-ovi tacnosti koje scripted test ne hvata.</p>
