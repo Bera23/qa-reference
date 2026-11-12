@@ -2,7 +2,7 @@
  * The cache version and the precache list below are placeholders that build.js fills in
  * (content hash + file list), so every content change produces a new cache and old
  * caches are deleted on activate. Do not write the placeholder tokens anywhere else. */
-const CACHE = 'qa-ref-051a52fe38';
+const CACHE = 'qa-ref-bfce02af28';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -40,7 +40,15 @@ const PRECACHE = [
   "./manifest.json",
   "./icons/icon-180.png",
   "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  "./icons/icon-512.png",
+  "./fonts/inter-latin-400-normal.woff2",
+  "./fonts/inter-latin-500-normal.woff2",
+  "./fonts/inter-latin-600-normal.woff2",
+  "./fonts/inter-latin-700-normal.woff2",
+  "./fonts/inter-latin-800-normal.woff2",
+  "./fonts/jetbrains-mono-latin-400-normal.woff2",
+  "./fonts/jetbrains-mono-latin-500-normal.woff2",
+  "./fonts/jetbrains-mono-latin-600-normal.woff2"
 ];
 const NETWORK_TIMEOUT_MS = 4000;   // on a slow/"lie-fi" connection fall back to the cached copy
 
