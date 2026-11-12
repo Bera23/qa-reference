@@ -118,7 +118,7 @@
 <div class="deo-banner">DEO I — MANUALNO TESTIRANJE</div>
 <div class="section" id="s09">
 <h1 class="sec-title" id="t-s09">📊 9. Test dokumentacija<span class="read-badge">✓ Procitano</span></h1>
-<div class="section-meta"><span class="read-time">⏱ ~4 min citanja</span><button class="mark-read-btn" id="mrb-s09" onclick="markRead('s09')">Oznaci kao procitano</button></div>
+<div class="section-meta"><span class="read-time">⏱ ~5 min citanja</span><button class="mark-read-btn" id="mrb-s09" onclick="markRead('s09')">Oznaci kao procitano</button></div>
 <h2 class="sub-title">9.1 Tipovi test izvestaja</h2>
 <div class="tbl-wrap"><table><tbody>
 <tr><td>Test Execution Report</td><td>Operativni — pise se tokom ili odmah nakon izvrsavanja testova. Namenjen QA timu i tech lead-u.</td></tr>
@@ -177,6 +177,17 @@ Princip: QA daje cinjenice + preporuku + opcije. Stakeholder donosi odluku.</pre
 <tr><td>Charts</td><td>Vizuelizacija rezultata — pie chart pass/fail, trend kroz vreme.</td></tr>
 <tr><td>Traceability</td><td>Direktna veza izmedju Test Case work item-a i User Story / Bug work item-a.</td></tr>
 </tbody></table></div>
+<p class="body-text"><strong>Tri tipa suite-ova</strong> odredjuju kako se test case-ovi pune u suite — razlika koju je dobro znati na intervjuu jer pokazuje da ne koristis samo static liste:</p>
+<div class="tbl-wrap"><table><thead><tr><th>Tip suite-a</th><th>Kako se puni</th><th>Kada</th></tr></thead><tbody>
+<tr><td>Static</td><td>Rucno dodajes TC-ove</td><td>Fiksni set — smoke, kriticni put</td></tr>
+<tr><td>Requirement-based</td><td>Vuce TC-ove vezane za User Story / zahtev</td><td>Pokrivenost po zahtevu, traceability</td></tr>
+<tr><td>Query-based</td><td>Dinamicki, po query-ju nad work item-ima (npr. svi TC sa tagom regression)</td><td>Zivi set koji se sam azurira kad dodas TC</td></tr>
+</tbody></table></div>
+<p class="body-text"><strong>Shared steps i parametri</strong> — ponavljajuce korake (login, navigacija do modula) izdvojis u <em>shared step</em> koji se referencira iz vise TC-ova; promena na jednom mestu se siri svuda. Parametri prave data-driven manuelni test: isti koraci se izvrse za svaki red parametarskog seta (vise ulaza bez kopiranja TC-a).</p>
+<p class="body-text"><strong>Konfiguracije</strong> vezuju TC za matricu okruzenja (Chrome/Edge, OS, verzija) — isti test case se izvrsava i prati po konfiguraciji, pa coverage jasno pokazuje gde je testirano a gde nije.</p>
+<p class="body-text"><strong>Test run u praksi:</strong> svaki korak dobija outcome (Passed / Failed / Blocked / Not applicable). Iz pogodjenog koraka bug se prijavljuje direktno — ADO automatski zakaci korake, parametre i screenshot u Bug work item, pa je reprodukcija vec napisana. Posle fix-a pokrene se samo "rerun failed", ne ceo suite.</p>
+<p class="body-text"><strong>Vezivanje automatizacije:</strong> automatizovani test (xUnit/Selenium) se poveze sa Test Case work item-om, pa se pokrece iz Azure Pipeline-a i rezultat se vraca u Test Plan — isti izvestaj pokriva i manuelne i automatizovane TC-ove. Tako gated/standard build moze da obori release ako vezani testovi padnu, a status u Test Plan-u ostaje jedan izvor istine.</p>
+<div class="note">Traceability u praksi: iz User Story vidis koji TC-ovi je pokrivaju i koji su prosli (requirements coverage), a iz Test Case-a skacesh na zahtev i na bagove nadjene u njegovim run-ovima. Azure DevOps Test Plans je naslednik starog TFS-a / Microsoft Test Manager-a (MTM) — ako na intervjuu padne "TFS", misli se na istu liniju alata.</div>
 <h2 class="sub-title">9.6 JIRA — defect tracking i sprint workflow</h2>
 <p class="body-text">JIRA je najrasprostranjeni alat za bug tracking i Agile project management. Za razliku od Azure DevOps Test Plans (9.5), JIRA se koristi primarno za defect tracking i sprint upravljanje, ne za izvrsavanje testova.</p>
 <div class="tbl-wrap"><table><thead><tr><th>JIRA koncept</th><th>Opis</th></tr></thead><tbody>
