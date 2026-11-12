@@ -24,7 +24,7 @@
 
 <h3 class="sub-sub-title">Koji su glavni SDLC modeli?</h3>
 <p class="body-text"><strong>Definicija:</strong> Waterfall — linearne sekvencijalne faze, testiranje na kraju. Agile — kratke iteracije, kontinualna isporuka, QA ukljucen od prvog dana. Iterative — sistem raste u ciklusima, regression raste sa svakim ciklusom. Spiral — iterativan razvoj plus formalna analiza rizika na pocetku svake faze.</p>
-<p class="body-text"><strong>U praksi:</strong> "Radim u Agile/Scrum okruzenju — QA je ukljucen od Sprint Refinement-a, ne cekam da developer zavrsi da bih pocela da testiram. Najveca razlika u odnosu na Waterfall koji sam ucila u teoriji: regression suite nije nesto sto se radi jednom na kraju, vec svaki sprint dodaje na postojeci automatizovan set koji mora ostati brz i pouzdan."</p>
+<p class="body-text"><strong>U praksi:</strong> "Radim u Agile/Scrum okruzenju — QA je ukljucen od Sprint Refinement-a, ne cekam da developer zavrsi da bih poceo da testiram. Najveca razlika u odnosu na Waterfall koji sam ucio u teoriji: regression suite nije nesto sto se radi jednom na kraju, vec svaki sprint dodaje na postojeci automatizovan set koji mora ostati brz i pouzdan."</p>
 
 <h3 class="sub-sub-title">Objasni V-Model.</h3>
 <p class="body-text"><strong>Definicija:</strong> V-Model je SDLC model koji eksplicitno mapira svaku razvojnu fazu na odgovarajuci nivo testiranja. Leva strana V-a su faze razvoja (zahtevi → dizajn → kodiranje), desna strana su faze testiranja (unit → integration → system → acceptance).</p>
@@ -190,7 +190,7 @@
 
 <h3 class="sub-sub-title">MSSQL vs. PostgreSQL — na sta pazis kad prelazis sa jedne na drugu?</h3>
 <p class="body-text"><strong>Definicija:</strong> Query logika (JOIN, GROUP BY, subquery) je identicna na oba sistema — razlike su u sintaksi funkcija (GETDATE() vs NOW(), TOP vs LIMIT, IDENTITY vs SERIAL) i C# konektoru (SqlConnection vs NpgsqlConnection).</p>
-<p class="body-text"><strong>U praksi:</strong> "Trenutno radim sa MSSQL i Oracle na PLM-u, ali sam ranije radila API-to-DB validaciju protiv PostgreSQL-a pgAdmin-om. Najveca zamka koja me je jednom uhvatila: case-sensitivity identifikatora. MSSQL je case-insensitive po default-u, Postgres je case-sensitive ako je identifikator pod navodnicima — upit koji prolazi na QA (MSSQL) okruzenju moze tiho da vraca prazan rezultat na Postgres produkciji."</p>
+<p class="body-text"><strong>U praksi:</strong> "Trenutno radim sa MSSQL i Oracle na PLM-u, ali sam ranije radio API-to-DB validaciju protiv PostgreSQL-a pgAdmin-om. Najveca zamka koja me je jednom uhvatila: case-sensitivity identifikatora. MSSQL je case-insensitive po default-u, Postgres je case-sensitive ako je identifikator pod navodnicima — upit koji prolazi na QA (MSSQL) okruzenju moze tiho da vraca prazan rezultat na Postgres produkciji."</p>
 
 <h3 class="sub-sub-title">Sta je Data-driven Testing?</h3>
 <p class="body-text"><strong>Definicija:</strong> Isti test scenario se izvrsava sa razlicitim skupovima ulaznih podataka. U xUnit-u se implementira sa [Theory] i [InlineData] atributima. Izvori podataka: inline, JSON, CSV, baza.</p>
