@@ -302,8 +302,6 @@
 <p class="body-text">Ovo je sablon, ne gotov sadrzaj — popunjava se posle svakog intervjua, sto pre dok je svez. Vremenom postaje najkorisniji deo dokumenta jer pokazuje TVOJE stvarne rupe, ne generic listu.</p>
 <div class="tbl-wrap tall"><table><thead><tr><th>Pitanje</th><th>Sta sam odgovorio</th><th>Sta je trebalo</th><th>Sta nauciti / gde u dokumentu</th></tr></thead><tbody>
 <tr><td>[primer] "Kako bi testirao rate limiting na API-ju?"</td><td>[primer] Pomenula sam samo 429 status kod, nisam elaborirala.</td><td>[primer] Trebalo je pomenuti i retry-after header, razliku po korisniku vs. globalno, i kako se to testira (burst requests).</td><td>[primer] Prosiriti Sekciju 15 sa rate limiting scenarijom.</td></tr>
-<tr><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td></td><td></td><td></td></tr>
 </tbody></table></div>
 <div class="note">Kad se ovde nakupi par slicnih rupa (npr. vise puta zapnes na performance testiranju), to je signal da tu temu treba stvarno da naucis, ne samo da upises u dnevnik.</div>
 <h2 class="sub-title">25.18 Lessons learned — decision log</h2>
@@ -312,8 +310,6 @@
 <tr><td>[primer] DevExpress dropdown vracao pogresnu stavku</td><td>[primer] Pretraga po celom DOM-u je pogadjala elemente iz skrivenog/kesiranog overlay-a, ne trenutno vidljivog.</td><td>[primer] Lookup ogranicen (scoped) na overlay identifikovan preko <code>style</code> koji sadrzi "display: inline-block". Lekcija: kod komponentnih biblioteka nikad ne pretpostaviti da je u DOM-u samo jedna instanca kontrole.</td></tr>
 <tr><td>[primer] Python string escape je tiho lomio generisani JS</td><td>[primer] <code>\b</code> u Python string-u se interpretira kao backspace (<code>\x08</code>), ne "word boundary" — kad se ubaci u JS preko template string-a, kod se cita drugacije nego sto izgleda u izvoru.</td><td>[primer] Raw string-ovi (<code>r"..."</code>) ili eksplicitno escape-ovanje pri generisanju JS iz Python-a. Lekcija: bag u generisanom kodu prvo proveri u ALATU koji generise, ne u samom generisanom kodu.</td></tr>
 <tr><td>[primer] xUnit paralelizacija izazvala nove flaky testove</td><td>[primer] Testovi u razlicitim kolekcijama su delili isti test podatak (isti SpecId) — race condition, ne bag u aplikaciji.</td><td>[primer] Izolacija podataka (unikatan sufiks po test run-u) uvedena PRE ukljucivanja paralelizacije, ne posle. Lekcija: paralelizacija otkriva postojece propuste u izolaciji, ne pravi nove — signal da izolacija nije bila dovoljno stroga ni ranije.</td></tr>
-<tr><td></td><td></td><td></td></tr>
-<tr><td></td><td></td><td></td></tr>
 </tbody></table></div>
 <div class="note">Redovno (npr. jednom mesecno) prelistaj ovu tabelu pre nego sto trazis novi posao — najjace STAR price dolaze odavde, ne iz uopstenih primera.</div>
 

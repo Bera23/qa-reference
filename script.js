@@ -99,7 +99,7 @@ function migrateStorage() {
 // can no longer abort the rest of the page initialisation.
 document.addEventListener('DOMContentLoaded', () => {
   const steps = [migrateStorage, addAnchorLinks, addBookmarkButtons, restoreState, initSyntaxHighlight,
-    initLangBadges, initNumChips, initQuizMode, initDeoJump, initDeoCollapse, initPageToc, initRelatedSections, updateBmCount, initNavHeights, () => filterGlosar(''), loadSearchIndex, scrollToHash];
+    initLangBadges, initNumChips, initQuizMode, initDeoJump, initDeoCollapse, initPageToc, initResponsiveTables, initRelatedSections, updateBmCount, initNavHeights, () => filterGlosar(''), loadSearchIndex, scrollToHash];
   steps.forEach(step => {
     try { step(); } catch (err) { console.error('Init step failed:', step.name || '(anonymous)', err); }
   });
@@ -168,6 +168,20 @@ function initDeoCollapse() {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
     });
     setDeoCollapsed(h2, true);  // default: everything collapsed on load
+  });
+}
+
+// Label each wide (3+ column, thead) table's cells with their column header, so narrow screens can
+// render them as stacked "label: value" cards (CSS) instead of squeezing every column to fit.
+function initResponsiveTables() {
+  document.querySelectorAll('#content table').forEach(table => {
+    const heads = [...table.querySelectorAll('thead th')].map(th => th.textContent.trim());
+    if (heads.length < 3) return;
+    const wrap = table.closest('.tbl-wrap') || table;
+    wrap.classList.add('responsive-table');
+    table.querySelectorAll('tbody tr').forEach(tr => {
+      [...tr.children].forEach((td, i) => { if (heads[i]) td.setAttribute('data-label', heads[i]); });
+    });
   });
 }
 
