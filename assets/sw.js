@@ -41,8 +41,11 @@ async function handle(req) {
     return network.catch(async () =>
       (req.mode === 'navigate' && await caches.match('index.html')) || Response.error());
   }
+  // A cached copy exists: prefer a FRESH OK response, but fall back to cache on error, timeout,
+  // OR a non-ok status (so a transient 404/5xx never replaces a good cached page).
+  const fresh = network.then(res => (res && res.ok) ? res : cached);
   return Promise.race([
-    network,
+    fresh,
     new Promise(resolve => setTimeout(() => resolve(cached), NETWORK_TIMEOUT_MS)),
   ]).catch(() => cached);
 }

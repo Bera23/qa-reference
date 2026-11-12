@@ -60,12 +60,11 @@ function renderNavButton(section, direction) {
   return `<a class="${cls}" href="${section.id}.html"><span class="snav-label">${label}</span><span class="snav-title">${section.title}</span></a>`;
 }
 
+// Single pass over the template: a value that itself contains "{{KEY}}" is NOT re-scanned, so page
+// content can never accidentally trigger another placeholder. Unknown placeholders are left intact.
 function fillTemplate(template, values) {
-  let html = template;
-  for (const [key, value] of Object.entries(values)) {
-    html = html.split(`{{${key}}}`).join(value);
-  }
-  return html;
+  return template.replace(/\{\{(\w+)\}\}/g, (m, key) =>
+    Object.prototype.hasOwnProperty.call(values, key) ? values[key] : m);
 }
 
 function buildTopicPage(sections, index, template) {
@@ -81,7 +80,7 @@ function buildTopicPage(sections, index, template) {
     PAGE_TITLE: `${s.icon} ${s.title} — QA Referentni Dokument`,
     BREADCRUMB: `${s.icon} ${s.title}`,
     SIDEBAR_NAV: renderSidebarNav(sections, s.id),
-    DEO_BANNER: `<div class="deo-banner">${DEO_BANNER_TEXT[s.deo]}</div>`,
+    DEO_BANNER: `<div class="deo-banner">${DEO_BANNER_TEXT[s.deo] || ''}</div>`,
     ACTIVE_ID: s.id,
     ICON: s.icon,
     TOPIC_TITLE: s.title,
@@ -164,7 +163,7 @@ const TAG_RULES = [
   ['oop', ['oop', 'solid princip', 'inheritance', 'interface vs']],
   ['csharp', ['xunit', 'nunit', 'c#']],
   ['mobile', ['appium', 'mobilno testiranje', 'android']],
-  ['ai', ['copilot', 'halucinacij', 'veroatno vestacka', 'ai-powered', 'ai u testiranju']],
+  ['ai', ['copilot', 'halucinacij', 'verovatno vestacka', 'ai-powered', 'ai u testiranju']],
   ['security', ['owasp', 'sql injection', 'auth i security', 'bezbednosn']],
   ['performance', ['performance testing', 'load testing', 'k6', 'jmeter', 'nbomber']],
   ['agile', ['agile', 'scrum', 'sprint', 'definition of done']],
