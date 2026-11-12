@@ -99,7 +99,7 @@ function migrateStorage() {
 // can no longer abort the rest of the page initialisation.
 document.addEventListener('DOMContentLoaded', () => {
   const steps = [migrateStorage, addAnchorLinks, addBookmarkButtons, restoreState, initSyntaxHighlight,
-    initLangBadges, initNumChips, initQuizMode, initDeoJump, initDeoCollapse, initRelatedSections, updateBmCount, initNavHeights, () => filterGlosar(''), loadSearchIndex, scrollToHash];
+    initLangBadges, initNumChips, initQuizMode, initDeoJump, initDeoCollapse, initPageToc, initRelatedSections, updateBmCount, initNavHeights, () => filterGlosar(''), loadSearchIndex, scrollToHash];
   steps.forEach(step => {
     try { step(); } catch (err) { console.error('Init step failed:', step.name || '(anonymous)', err); }
   });
@@ -130,7 +130,7 @@ function initDeoJump() {
     });
     nav.appendChild(btn);
   });
-  content.insertBefore(nav, subs[0]);
+  subs[0].parentNode.insertBefore(nav, subs[0]);  // h2s live inside .section, not directly in #content
 }
 
 // Collapse scope = the Deo's own intro paragraph + its question cards only. Stop at the next Deo OR
@@ -169,6 +169,67 @@ function initDeoCollapse() {
     });
     setDeoCollapsed(h2, true);  // default: everything collapsed on load
   });
+}
+
+// Sticky "Na ovoj strani" sub-section TOC with scrollspy, for every numbered section (section 24
+// has its own Deo jump bar, so it's skipped). Collapsed by default: one line showing the current
+// sub-section; tap to open the full list and jump.
+function initPageToc() {
+  if (!window.QA_PAGE || /Pitanja i odgovori/.test(window.QA_PAGE.title || '')) return;
+  const content = document.getElementById('content');
+  if (!content) return;
+  const subs = [...content.querySelectorAll('h2.sub-title')].filter(h => h.id);
+  if (subs.length < 2) return;
+
+  const bar = document.createElement('nav');
+  bar.className = 'page-toc collapsed';
+  bar.setAttribute('aria-label', 'Na ovoj strani');
+  const topbar = document.getElementById('topbar');
+  if (topbar) bar.style.top = topbar.offsetHeight + 'px';
+  const head = document.createElement('button');
+  head.type = 'button';
+  head.className = 'ptoc-head';
+  head.setAttribute('aria-expanded', 'false');
+  head.innerHTML = '<span class="ptoc-ico">☰</span><span class="ptoc-label">Na ovoj strani</span><span class="ptoc-current"></span><span class="ptoc-caret">▾</span>';
+  const list = document.createElement('div');
+  list.className = 'ptoc-list';
+  const cur = head.querySelector('.ptoc-current');
+  const links = subs.map(h => {
+    const a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.className = 'ptoc-link';
+    a.textContent = (h.dataset.title || h.textContent).replace(/[#★¶]/g, '').trim();
+    a.dataset.id = h.id;
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      bar.classList.add('collapsed');
+      head.setAttribute('aria-expanded', 'false');
+      h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    list.appendChild(a);
+    return a;
+  });
+  head.addEventListener('click', () => {
+    const c = bar.classList.toggle('collapsed');
+    head.setAttribute('aria-expanded', String(!c));
+  });
+  bar.appendChild(head);
+  bar.appendChild(list);
+  subs[0].parentNode.insertBefore(bar, subs[0]);
+
+  cur.textContent = links[0].textContent;
+  links[0].classList.add('active');
+  const byId = Object.fromEntries(links.map(a => [a.dataset.id, a]));
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = byId[e.target.id];
+        if (a) { a.classList.add('active'); cur.textContent = a.textContent; }
+      }
+    });
+  }, { rootMargin: '-80px 0px -70% 0px' });
+  subs.forEach(h => io.observe(h));
 }
 // ═══════════════════════════════════════════════════════
 // ANCHOR LINKS on h2

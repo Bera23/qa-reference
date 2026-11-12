@@ -159,6 +159,19 @@ body.qa-page h2.sub-title{border-left:4px solid var(--accent);padding-left:12px;
 .deo-jump{position:sticky;z-index:40;display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 22px;padding:10px 0;background:var(--bg);border-bottom:1px solid var(--border);}
 .deo-jump-btn{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--accent);background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:7px 14px;cursor:pointer;transition:background .15s,color .15s,border-color .15s;}
 .deo-jump-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+/* "Na ovoj strani" sub-section TOC (initPageToc): sticky, collapsed by default, scrollspy-highlighted. */
+.page-toc{position:sticky;top:60px;z-index:38;margin:0 0 22px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 6px 20px -14px rgba(0,0,0,.5);}
+.ptoc-head{display:flex;align-items:center;gap:9px;width:100%;padding:11px 14px;background:transparent;border:none;cursor:pointer;color:var(--text);font-family:var(--font);font-size:13.5px;text-align:left;}
+.ptoc-ico{color:var(--accent);font-size:13px;flex-shrink:0;}
+.ptoc-label{font-weight:600;flex-shrink:0;}
+.ptoc-current{flex:1;min-width:0;color:var(--text3);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ptoc-caret{color:var(--text3);font-size:11px;transition:transform .2s;flex-shrink:0;}
+.page-toc.collapsed .ptoc-caret{transform:rotate(-90deg);}
+.ptoc-list{display:flex;flex-direction:column;border-top:1px solid var(--border);max-height:50vh;overflow-y:auto;}
+.page-toc.collapsed .ptoc-list{display:none;}
+.ptoc-link{padding:8px 15px;color:var(--text2);font-size:13px;line-height:1.4;border-left:2px solid transparent;transition:background .12s,color .12s;text-decoration:none;}
+.ptoc-link:hover{background:color-mix(in srgb,var(--accent) 8%,transparent);color:var(--text);}
+.ptoc-link.active{color:var(--accent2);border-left-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent);font-weight:600;}
 body.qa-page h2.sub-title{scroll-margin-top:104px;}
 /* Collapsible Deo groups (section 24, built by initDeoCollapse): tap a Deo header to hide/show all its questions. */
 .deo-collapsible{cursor:pointer;}
