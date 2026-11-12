@@ -195,11 +195,15 @@ function initPageToc() {
   list.className = 'ptoc-list';
   const cur = head.querySelector('.ptoc-current');
   const links = subs.map(h => {
+    const title = (h.dataset.title || h.textContent).replace(/[#★¶]/g, '').trim();
+    const num = ((h.querySelector('.num') || {}).textContent || '').trim();
     const a = document.createElement('a');
     a.href = '#' + h.id;
     a.className = 'ptoc-link';
-    a.textContent = (h.dataset.title || h.textContent).replace(/[#★¶]/g, '').trim();
     a.dataset.id = h.id;
+    a.dataset.label = title;
+    if (num) { const n = document.createElement('span'); n.className = 'ptoc-n'; n.textContent = num; a.appendChild(n); }
+    const t = document.createElement('span'); t.textContent = title; a.appendChild(t);
     a.addEventListener('click', e => {
       e.preventDefault();
       bar.classList.add('collapsed');
@@ -217,7 +221,7 @@ function initPageToc() {
   bar.appendChild(list);
   subs[0].parentNode.insertBefore(bar, subs[0]);
 
-  cur.textContent = links[0].textContent;
+  cur.textContent = links[0].dataset.label;
   links[0].classList.add('active');
   const byId = Object.fromEntries(links.map(a => [a.dataset.id, a]));
   const io = new IntersectionObserver(es => {
@@ -225,7 +229,7 @@ function initPageToc() {
       if (e.isIntersecting) {
         links.forEach(l => l.classList.remove('active'));
         const a = byId[e.target.id];
-        if (a) { a.classList.add('active'); cur.textContent = a.textContent; }
+        if (a) { a.classList.add('active'); cur.textContent = a.dataset.label; }
       }
     });
   }, { rootMargin: '-80px 0px -70% 0px' });
