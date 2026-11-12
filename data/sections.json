@@ -21,10 +21,10 @@
   {"id":"s20","title":"20. Performance testing","icon":"📈","deo":"II"},
   {"id":"s21","title":"21. Mobile testing (Appium)","icon":"📱","deo":"II"},
   {"id":"s22","title":"22. AI u testiranju","icon":"🧠","deo":"II"},
-  {"id":"s23","title":"23. Glosar","icon":"📚","deo":"II"},
-  {"id":"s24","title":"24. Pitanja i odgovori","icon":"🎤","deo":"II"},
-  {"id":"s25","title":"25. Intervju strategija","icon":"💼","deo":"II"},
-  {"id":"s26","title":"26. Live coding (C#)","icon":"⌨️","deo":"II"},
-  {"id":"s27","title":"27. Templates","icon":"📄","deo":"II"},
-  {"id":"s28","title":"28. Cheat Sheet","icon":"⚡","deo":"II"}
+  {"id":"s23","title":"23. Glosar","icon":"📚","deo":"III"},
+  {"id":"s24","title":"24. Pitanja i odgovori","icon":"🎤","deo":"III"},
+  {"id":"s25","title":"25. Intervju strategija","icon":"💼","deo":"III"},
+  {"id":"s26","title":"26. Live coding (C#)","icon":"⌨️","deo":"III"},
+  {"id":"s27","title":"27. Templates","icon":"📄","deo":"III"},
+  {"id":"s28","title":"28. Cheat Sheet","icon":"⚡","deo":"III"}
 ]

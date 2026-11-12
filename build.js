@@ -10,7 +10,7 @@ const TEMPLATE_PATH = path.join(ROOT, 'template.html');
 const ASSETS_DIR = path.join(ROOT, 'assets');
 const DIST_DIR = path.join(ROOT, 'dist');
 
-const DEO_BANNER_TEXT = { I: 'DEO I — MANUALNO TESTIRANJE', II: 'DEO II — AUTOMATSKO TESTIRANJE' };
+const DEO_BANNER_TEXT = { I: 'DEO I — MANUALNO TESTIRANJE', II: 'DEO II — AUTOMATSKO TESTIRANJE', III: 'DEO III — INTERVJU I REFERENCA' };
 
 function readSections() {
   return JSON.parse(fs.readFileSync(SECTIONS_JSON, 'utf8'));
@@ -50,7 +50,9 @@ ${rows}
   }
   const deoI = sections.filter(s => s.deo === 'I');
   const deoII = sections.filter(s => s.deo === 'II');
-  return renderGroup('g1', 'DEO I — Manualno', deoI) + '\n' + renderGroup('g2', 'DEO II — Automatizacija', deoII);
+  const deoIII = sections.filter(s => s.deo === 'III');
+  return renderGroup('g1', 'DEO I — Manualno', deoI) + '\n' + renderGroup('g2', 'DEO II — Automatizacija', deoII)
+    + '\n' + renderGroup('g3', 'DEO III — Intervju i referenca', deoIII);
 }
 
 function renderNavButton(section, direction) {
@@ -113,6 +115,7 @@ function buildIndexPage(sections, template) {
   }
   const deoI = sections.filter(s => s.deo === 'I');
   const deoII = sections.filter(s => s.deo === 'II');
+  const deoIII = sections.filter(s => s.deo === 'III');
   const intro = fs.readFileSync(path.join(ROOT, 'data', 'intro.html'), 'utf8');
   const { hash, date } = getBuildVersion();
   const versionLine = `<div class="doc-version">Verzija: ${hash ? `<code>${hash}</code> · ` : ''}azurirano: ${date}</div>`;
@@ -126,6 +129,10 @@ ${renderList(deoI)}
 <h3 class="sub-sub-title">Deo II — Automatizacija</h3>
 <ul>
 ${renderList(deoII)}
+</ul>
+<h3 class="sub-sub-title">Deo III — Intervju i referenca</h3>
+<ul>
+${renderList(deoIII)}
 </ul>
 ${versionLine}`;
 
